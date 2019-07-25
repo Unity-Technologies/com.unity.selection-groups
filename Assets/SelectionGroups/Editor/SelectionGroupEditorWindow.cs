@@ -9,15 +9,7 @@ public class SelectionGroupEditorWindow : EditorWindow
     ReorderableList list;
     SerializedObject serializedObject;
     SelectionGroups selectionGroups;
-
-    struct DropZone
-    {
-        public Rect rect;
-        public SerializedProperty property;
-    }
-
-    List<DropZone> dropZones = new List<DropZone>();
-
+    Vector2 scroll;
     void BuildListWidget()
     {
         selectionGroups = GameObject.FindObjectOfType<SelectionGroups>();
@@ -69,7 +61,6 @@ public class SelectionGroupEditorWindow : EditorWindow
     void OnDrawElement(Rect rect, int index, bool isActive, bool isFocused)
     {
         var item = list.serializedProperty.GetArrayElementAtIndex(index);
-        dropZones.Add(new DropZone() { rect = rect, property = item });
         if (isActive)
         {
             EditorGUI.PropertyField(rect, item, GUIContent.none);
@@ -89,17 +80,15 @@ public class SelectionGroupEditorWindow : EditorWindow
 
     void OnGUI()
     {
-        dropZones.Clear();
         if (selectionGroups == null || list == null) BuildListWidget();
+        scroll = EditorGUILayout.BeginScrollView(scroll);
         using (var cc = new EditorGUI.ChangeCheckScope())
         {
             list.DoLayoutList();
             if (cc.changed)
                 EditorUtility.SetDirty(selectionGroups);
         }
-        GUILayout.FlexibleSpace();
-        EditorGUILayout.HelpBox("Hold shift to add, alt to remove.", MessageType.Info);
-
+        EditorGUILayout.EndScrollView();
         if (focusedWindow == this)
             Repaint();
         // Repaint();

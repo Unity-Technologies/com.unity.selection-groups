@@ -8,30 +8,36 @@ public class SelectionGroupPropertyDrawer : PropertyDrawer
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         var rect = position;
-        var width = position.width / 2;
         var nameProperty = property.FindPropertyRelative("groupName");
         var objects = property.FindPropertyRelative("objects");
         position.width = position.width - 24;
         EditorGUI.PropertyField(position, nameProperty, label);
         position.x += position.width;
-        position.width = 20;
+        position.width = 18;
         position.height = 16;
-        position.x += 4;
+        position.x += 5;
+        position.y += 1;
         var ev = Event.current;
-        if (ev.shift)
+
+        if (EditorGUI.DropdownButton(position, GUIContent.none, FocusType.Passive))
         {
-            if (GUI.Button(position, "+"))
+            var menu = new GenericMenu();
+            menu.AddItem(new GUIContent("Add Selection to Group"), false, () => AddObjects(property, objects, Selection.objects));
+            menu.AddItem(new GUIContent("Remove Selection from Group"), false, () => RemoveObjects(property, objects, Selection.objects));
+            menu.AddItem(new GUIContent("Set Selection as Group"), false, () =>
             {
+                objects.ClearArray();
                 AddObjects(property, objects, Selection.objects);
-            }
-        }
-        else if (ev.alt)
-        {
-            if (GUI.Button(position, "-"))
+            });
+            menu.AddItem(new GUIContent("Clear Group"), false, () =>
             {
-                RemoveObjects(property, objects, Selection.objects);
-            }
+                objects.ClearArray();
+                property.serializedObject.ApplyModifiedProperties();
+                SelectObjects(objects);
+            });
+            menu.DropDown(position);
         }
+
 
         //Disabled for now, it interferes with ReorderableList
         //HandleDragEvents(rect, property);
@@ -49,6 +55,7 @@ public class SelectionGroupPropertyDrawer : PropertyDrawer
         uniqueObjects.ExceptWith(objects);
         PackProperty(objectsProperty, uniqueObjects);
         property.serializedObject.ApplyModifiedProperties();
+        SelectObjects(objectsProperty);
     }
 
     static void AddObjects(SerializedProperty property, SerializedProperty objectsProperty, Object[] objects)
