@@ -5,13 +5,27 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(SelectionGroup))]
 public class SelectionGroupPropertyDrawer : PropertyDrawer
 {
+    bool focus;
+
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         var rect = position;
         var nameProperty = property.FindPropertyRelative("groupName");
         var objects = property.FindPropertyRelative("objects");
         position.width = position.width - 24;
-        EditorGUI.PropertyField(position, nameProperty, label);
+        if (property.FindPropertyRelative("edit").boolValue)
+        {
+            if (focus)
+            {
+                GUI.FocusControl(property.propertyPath);
+                GUI.SetNextControlName(property.propertyPath);
+            }
+            EditorGUI.PropertyField(position, nameProperty, label);
+        }
+        else
+        {
+            EditorGUI.LabelField(position, nameProperty.stringValue);
+        }
         position.x += position.width;
         position.width = 18;
         position.height = 16;
@@ -34,6 +48,11 @@ public class SelectionGroupPropertyDrawer : PropertyDrawer
                 objects.ClearArray();
                 property.serializedObject.ApplyModifiedProperties();
                 SelectObjects(objects);
+            });
+            menu.AddItem(new GUIContent("Edit"), false, () =>
+            {
+                property.FindPropertyRelative("edit").boolValue = true;
+                focus = true;
             });
             menu.DropDown(position);
         }

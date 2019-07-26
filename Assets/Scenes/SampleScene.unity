@@ -630,16 +630,21 @@ MonoBehaviour:
   - groupName: New Group
     objects:
     - {fileID: 1535018344}
+    edit: 0
   - groupName: New Group
     objects: []
-  - groupName: New Group
-    objects: []
-  - groupName: New Group
+    edit: 0
+  - groupName: Xyzzy
+    objects:
+    - {fileID: 942528634}
+    edit: 0
+  - groupName: Plugh
     objects:
     - {fileID: 1683697444}
     - {fileID: 1017634628}
     - {fileID: 1535018344}
     - {fileID: 1354712751}
+    edit: 0
   - groupName: New Group
     objects:
     - {fileID: 1683697444}
@@ -650,76 +655,7 @@ MonoBehaviour:
     - {fileID: 942528634}
     - {fileID: 1103997627}
     - {fileID: 1135517759}
-  - groupName: New Group
-    objects:
-    - {fileID: 1135517759}
-    - {fileID: 1103997627}
-    - {fileID: 942528634}
-    - {fileID: 220544323}
-    - {fileID: 131394265}
-    - {fileID: 1354712751}
-    - {fileID: 1535018344}
-    - {fileID: 1683697444}
-  - groupName: New Group
-    objects:
-    - {fileID: 1135517759}
-    - {fileID: 1103997627}
-    - {fileID: 942528634}
-    - {fileID: 220544323}
-    - {fileID: 131394265}
-    - {fileID: 1354712751}
-    - {fileID: 1535018344}
-    - {fileID: 1683697444}
-  - groupName: New Group
-    objects:
-    - {fileID: 1135517759}
-    - {fileID: 1103997627}
-    - {fileID: 942528634}
-    - {fileID: 220544323}
-    - {fileID: 131394265}
-    - {fileID: 1354712751}
-    - {fileID: 1535018344}
-    - {fileID: 1683697444}
-  - groupName: New Group
-    objects:
-    - {fileID: 1135517759}
-    - {fileID: 1103997627}
-    - {fileID: 942528634}
-    - {fileID: 220544323}
-    - {fileID: 131394265}
-    - {fileID: 1354712751}
-    - {fileID: 1535018344}
-    - {fileID: 1683697444}
-  - groupName: New Group
-    objects:
-    - {fileID: 1135517759}
-    - {fileID: 1103997627}
-    - {fileID: 942528634}
-    - {fileID: 220544323}
-    - {fileID: 131394265}
-    - {fileID: 1354712751}
-    - {fileID: 1535018344}
-    - {fileID: 1683697444}
-  - groupName: New Group
-    objects:
-    - {fileID: 1135517759}
-    - {fileID: 1103997627}
-    - {fileID: 942528634}
-    - {fileID: 220544323}
-    - {fileID: 131394265}
-    - {fileID: 1354712751}
-    - {fileID: 1535018344}
-    - {fileID: 1683697444}
-  - groupName: New Group
-    objects:
-    - {fileID: 1135517759}
-    - {fileID: 1103997627}
-    - {fileID: 942528634}
-    - {fileID: 220544323}
-    - {fileID: 131394265}
-    - {fileID: 1354712751}
-    - {fileID: 1535018344}
-    - {fileID: 1683697444}
+    edit: 0
 --- !u!4 &1486730256
 Transform:
   m_ObjectHideFlags: 3

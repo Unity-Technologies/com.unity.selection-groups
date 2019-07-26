@@ -36,6 +36,7 @@ public class SelectionGroupEditorWindow : EditorWindow
         var objects = new List<Object>();
         selectionGroups.FetchObjects(list.index, objects);
         Selection.objects = objects.ToArray();
+        list.serializedProperty.GetArrayElementAtIndex(list.index).FindPropertyRelative("edit").boolValue = false;
     }
 
     void OnAdd(ReorderableList list)
@@ -53,9 +54,8 @@ public class SelectionGroupEditorWindow : EditorWindow
     {
     }
 
-    void OnSelectionChanged()
+    void OnSelectionChange()
     {
-        Debug.Log("osc");
     }
 
     void OnDrawElement(Rect rect, int index, bool isActive, bool isFocused)
@@ -86,7 +86,11 @@ public class SelectionGroupEditorWindow : EditorWindow
         {
             list.DoLayoutList();
             if (cc.changed)
+            {
                 EditorUtility.SetDirty(selectionGroups);
+                serializedObject.ApplyModifiedProperties();
+
+            }
         }
         EditorGUILayout.EndScrollView();
         if (focusedWindow == this)
