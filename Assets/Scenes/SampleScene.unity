@@ -351,7 +351,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: bc5887f4df4cbb0419d84a36e7846c67, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -555,7 +555,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: be1b452f483be404a861f2f450bbf640, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -644,17 +644,6 @@ MonoBehaviour:
     - {fileID: 1017634628}
     - {fileID: 1535018344}
     - {fileID: 1354712751}
-    edit: 0
-  - groupName: New Group
-    objects:
-    - {fileID: 1683697444}
-    - {fileID: 1535018344}
-    - {fileID: 1354712751}
-    - {fileID: 131394265}
-    - {fileID: 220544323}
-    - {fileID: 942528634}
-    - {fileID: 1103997627}
-    - {fileID: 1135517759}
     edit: 0
 --- !u!4 &1486730256
 Transform:

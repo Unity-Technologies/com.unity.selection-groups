@@ -95,7 +95,6 @@ public class SelectionGroupEditorWindow : EditorWindow
         EditorGUILayout.EndScrollView();
         if (focusedWindow == this)
             Repaint();
-        // Repaint();
     }
 
 
