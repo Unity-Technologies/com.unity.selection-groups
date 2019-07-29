@@ -21,6 +21,8 @@ public class ColorTweaker : MacroEditor
         }
     }
 
+    public override bool IsValidForSelection => materials.Count > 0;
+
     public override void OnGUI()
     {
         if (materials.Count > 0)

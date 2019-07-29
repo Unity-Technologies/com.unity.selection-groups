@@ -23,6 +23,8 @@ public class MacroRandomizer : MacroEditor
         }
     }
 
+    public override bool IsValidForSelection => materials.Count > 0 || transforms.Count > 0;
+
     public override void OnGUI()
     {
         if (materials.Count > 0)
@@ -35,6 +37,9 @@ public class MacroRandomizer : MacroEditor
             {
                 MutateColors();
             }
+        }
+        if (transforms.Count > 0)
+        {
             if (GUILayout.Button("Randomize Rotations"))
             {
                 RandomizeRotations();

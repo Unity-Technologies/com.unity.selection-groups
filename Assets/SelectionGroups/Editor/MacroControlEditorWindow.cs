@@ -55,9 +55,12 @@ public class MacroControlEditorWindow : EditorWindow
         {
             foreach (var macroEditor in macroEditors)
             {
-                GUILayout.Label(macroEditor.GetType().Name, EditorStyles.miniBoldLabel);
-                macroEditor.OnGUI();
-                GUILayout.Space(5);
+                if (macroEditor.IsValidForSelection)
+                {
+                    GUILayout.Label(macroEditor.GetType().Name, EditorStyles.miniBoldLabel);
+                    macroEditor.OnGUI();
+                    GUILayout.Space(5);
+                }
             }
             scroll = scrollScope.scrollPosition;
         }
