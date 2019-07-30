@@ -57,9 +57,12 @@ public class MacroControlEditorWindow : EditorWindow
             {
                 if (macroEditor.IsValidForSelection)
                 {
-                    GUILayout.Label(macroEditor.GetType().Name, EditorStyles.miniBoldLabel);
-                    macroEditor.OnGUI();
-                    GUILayout.Space(5);
+                    macroEditor.visible = GUILayout.Toggle(macroEditor.visible, macroEditor.GetType().Name, EditorStyles.toolbarDropDown);
+                    if (macroEditor.visible)
+                    {
+                        macroEditor.OnGUI();
+                        GUILayout.Space(5);
+                    }
                 }
             }
             scroll = scrollScope.scrollPosition;
