@@ -42,7 +42,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -88,7 +88,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 8224689657505296521}
-  normalsdShader: {fileID: 4800000, guid: fa9c403bf7a0e6f43bb4420a92badec5, type: 3}
+  shader: {fileID: 4800000, guid: fa9c403bf7a0e6f43bb4420a92badec5, type: 3}
 --- !u!1 &8224689656658088634
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,10 +176,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f3a6e8800658484eb70ff6cde70d0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainCamera: {fileID: 8224689657505296521}
+  shader: {fileID: 4800000, guid: c75c41d5095a57146a4b1fa9c113a153, type: 3}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  mainCamera: {fileID: 8224689657505296521}
-  objectIdShader: {fileID: 4800000, guid: c75c41d5095a57146a4b1fa9c113a153, type: 3}
 --- !u!1 &8224689657505296526
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,7 +295,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8224689657840807497}
-  m_LocalRotation: {x: -0.06101449, y: 0.15566036, z: -0.009633526, w: -0.98587745}
+  m_LocalRotation: {x: 0.061015576, y: -0.15566263, z: 0.009633904, w: 0.98587704}
   m_LocalPosition: {x: -0.6440952, y: 1.694658, z: -11.109856}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -305,7 +305,7 @@ Transform:
   - {fileID: 8224689656212165625}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 7.083, y: -17.945002, z: 0}
 --- !u!1 &8224689657891090057
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,7 +348,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -394,4 +394,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 8224689657505296521}
-  depthShader: {fileID: 4800000, guid: 96bc4634211b37b4d88245836656fa1e, type: 3}
+  shader: {fileID: 4800000, guid: 96bc4634211b37b4d88245836656fa1e, type: 3}

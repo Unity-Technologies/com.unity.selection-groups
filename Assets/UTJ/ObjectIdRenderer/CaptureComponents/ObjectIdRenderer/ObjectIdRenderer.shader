@@ -5,32 +5,32 @@
         [PerRendererData] _IdColor  ("ID Color", Color)  = (0.4, 0.4, 0.8, 0)
 	}
 
-	SubShader
-    {
-		Tags { "RenderType" = "Opaque" }
+	SubShader {
+        Tags { "RenderType"="Opaque" }
+        Pass {
+        CGPROGRAM
 
-		CGPROGRAM
-
-		#pragma surface surf Lambert
-
-        struct Input
-        {
-            float2 uv_MainTex;
-        };
-
-		sampler2D _MainTex;
+        #pragma vertex vert
+        #pragma fragment frag
+        #include "UnityCG.cginc"
+        
         float3 _IdColor;
 
-        void surf (Input IN, inout SurfaceOutput o)
-        {
-			half4 c = tex2D (_MainTex, IN.uv_MainTex);
-			o.Albedo = half3(0, 0, 0);
-            o.Alpha = c.a;
-//			o.Emission = half3(0, 0.5, 0);
-			o.Emission = _IdColor.rgb;
+        struct v2f {
+            float4 pos : SV_POSITION;
+        };
+
+        v2f vert (appdata_base v) {
+            v2f o;
+            o.pos = UnityObjectToClipPos(v.vertex);
+            return o;
         }
 
-		ENDCG
+        half4 frag(v2f i) : SV_Target {
+            return half4(_IdColor,1);
+        }
+        ENDCG
+        }
     }
 
 	Fallback "Diffuse"

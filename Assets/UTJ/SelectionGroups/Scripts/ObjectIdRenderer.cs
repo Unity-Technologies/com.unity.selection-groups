@@ -5,37 +5,20 @@ using UnityEngine.Rendering;
 
 namespace Utj.Film
 {
-    [ExecuteAlways]
-    [RequireComponent(typeof(Camera))]
-    public class SelectionGroupRenderer : MonoBehaviour
+    public class ObjectIdRenderer : ReplacementShaderRenderer
     {
         public Color backgroundColor = Color.black;
         public Color defaultColor = Color.white;
-        public Camera mainCamera;
-        public Shader objectIdShader;
-        new Camera camera;
 
-        void Reset()
+        protected override void Start()
         {
-            mainCamera = Camera.main;
-            objectIdShader = Shader.Find("Utj/ObjectIdRenderer");
+            base.Start();
+            camera.backgroundColor = backgroundColor;
+            ConfigureRendererComponents();
         }
 
-        void OnValidate()
+        void ConfigureRendererComponents()
         {
-            camera = GetComponent<Camera>();
-            if (mainCamera != null)
-            {
-                camera.CopyFrom(mainCamera);
-                camera.depth -= 1;
-                camera.clearFlags = CameraClearFlags.SolidColor;
-                camera.backgroundColor = backgroundColor;
-            }
-        }
-
-        void Start()
-        {
-            camera.SetReplacementShader(objectIdShader, null);
             var unselectedRenderers = new HashSet<Renderer>(FindObjectsOfType<Renderer>());
             var selectedRenderers = new HashSet<Renderer>();
             foreach (var selectionGroup in SelectionGroups.Instance.groups)
@@ -70,19 +53,6 @@ namespace Utj.Film
             renderer.GetPropertyBlock(mpb);
             mpb.SetColor("_IdColor", color);
             renderer.SetPropertyBlock(mpb);
-        }
-
-        void OnPreRender()
-        {
-            if (camera != null && mainCamera != null)
-            {
-                camera.transform.position = mainCamera.transform.position;
-                camera.transform.rotation = mainCamera.transform.rotation;
-                camera.rect = mainCamera.rect;
-                camera.fieldOfView = mainCamera.fieldOfView;
-                camera.nearClipPlane = mainCamera.nearClipPlane;
-                camera.farClipPlane = mainCamera.farClipPlane;
-            }
         }
 
     }
