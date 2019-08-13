@@ -43,7 +43,7 @@ namespace Utj.Film
             item.FindPropertyRelative("color").colorValue = Color.HSVToRGB(Random.value, 1, 1);
             var objectsProperty = item.FindPropertyRelative("objects");
             objectsProperty.ClearArray();
-            SelectionGroupPropertyDrawer.PackProperty(objectsProperty, Selection.objects);
+            SelectionGroupPropertyDrawer.PackProperty(item, objectsProperty, Selection.objects);
             serializedObject.ApplyModifiedProperties();
         }
 

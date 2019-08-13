@@ -8,6 +8,21 @@ namespace Utj.Film
         public List<SelectionGroup> groups = new List<SelectionGroup>();
 
         static SelectionGroups selectionGroups;
+
+        public void DisableLightGroups()
+        {
+            foreach (var g in groups)
+            {
+                if (g.isLightGroup)
+                {
+                    foreach (var i in g.GetComponents<Light>())
+                    {
+                        i.enabled = false;
+                    }
+                }
+            }
+        }
+
         public static SelectionGroups Instance
         {
             get

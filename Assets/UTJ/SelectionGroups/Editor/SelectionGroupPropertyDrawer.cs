@@ -16,6 +16,7 @@ namespace Utj.Film
             var colorProperty = property.FindPropertyRelative("color");
             var objects = property.FindPropertyRelative("objects");
             var editProperty = property.FindPropertyRelative("edit");
+            var isLightGroupProperty = property.FindPropertyRelative("isLightGroup");
             var ev = Event.current;
 
             var propertyId = property.propertyPath.GetHashCode();
@@ -47,6 +48,13 @@ namespace Utj.Film
                 rect.width = 8;
                 rect.height = 8;
                 rect.y += 5;
+
+                if (isLightGroupProperty.boolValue)
+                {
+                    rect.x -= 16;
+                    EditorGUI.LabelField(rect, EditorGUIUtility.IconContent("Light Icon", "This group contains Light components."));
+                    rect.x += 16;
+                }
                 EditorGUI.DrawRect(rect, colorProperty.colorValue);
             }
             position.x += position.width;
@@ -105,7 +113,7 @@ namespace Utj.Film
         {
             var uniqueObjects = new HashSet<Object>(UnpackProperty(objectsProperty));
             uniqueObjects.ExceptWith(objects);
-            PackProperty(objectsProperty, uniqueObjects);
+            PackProperty(property, objectsProperty, uniqueObjects);
             property.serializedObject.ApplyModifiedProperties();
             SelectObjects(objectsProperty);
         }
@@ -114,19 +122,27 @@ namespace Utj.Film
         {
             var uniqueObjects = new HashSet<Object>(UnpackProperty(objectsProperty));
             uniqueObjects.UnionWith(objects);
-            PackProperty(objectsProperty, uniqueObjects);
+            PackProperty(property, objectsProperty, uniqueObjects);
             property.serializedObject.ApplyModifiedProperties();
             SelectObjects(objectsProperty);
         }
 
-        internal static void PackProperty(SerializedProperty objects, IEnumerable<Object> uniqueObjects)
+        internal static void PackProperty(SerializedProperty property, SerializedProperty objects, IEnumerable<Object> uniqueObjects)
         {
             objects.ClearArray();
+            var isLightGroup = false;
             foreach (var g in uniqueObjects)
             {
+                if (g is Light) isLightGroup = true;
+                if (g is GameObject)
+                {
+                    if (((GameObject)g).GetComponents<Light>().Length > 0)
+                        isLightGroup = true;
+                }
                 objects.InsertArrayElementAtIndex(0);
                 objects.GetArrayElementAtIndex(0).objectReferenceValue = g;
             }
+            property.FindPropertyRelative("isLightGroup").boolValue = isLightGroup;
         }
 
         static Object[] UnpackProperty(SerializedProperty objects)

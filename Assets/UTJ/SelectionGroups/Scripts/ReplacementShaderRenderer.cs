@@ -21,7 +21,9 @@ namespace Utj.Film
             camera = GetComponent<Camera>();
             if (mainCamera != null)
             {
+                var depth = camera.depth;
                 camera.CopyFrom(mainCamera);
+                camera.depth = depth;
                 camera.clearFlags = CameraClearFlags.SolidColor;
                 camera.backgroundColor = Color.white * 0;
             }
