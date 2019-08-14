@@ -35,6 +35,10 @@ namespace Utj.Film
             list.serializedProperty.GetArrayElementAtIndex(list.index).FindPropertyRelative("edit").boolValue = false;
         }
 
+        void OnEnable()
+        {
+        }
+
         void OnAdd(ReorderableList list)
         {
             list.serializedProperty.InsertArrayElementAtIndex(list.serializedProperty.arraySize);

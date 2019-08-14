@@ -17,6 +17,7 @@ namespace Utj.Film
             var objects = property.FindPropertyRelative("objects");
             var editProperty = property.FindPropertyRelative("edit");
             var isLightGroupProperty = property.FindPropertyRelative("isLightGroup");
+            var queryProperty = property.FindPropertyRelative("selectionQuery").FindPropertyRelative("enabled");
             var ev = Event.current;
 
             var propertyId = property.propertyPath.GetHashCode();
@@ -45,15 +46,21 @@ namespace Utj.Film
                 rect.width -= 16;
                 EditorGUI.LabelField(rect, nameProperty.stringValue);
                 rect.x += rect.width;
-                rect.width = 8;
-                rect.height = 8;
-                rect.y += 5;
+                rect.width = 16;
+                rect.height = 16;
+                rect.y += 1;
 
                 if (isLightGroupProperty.boolValue)
                 {
                     rect.x -= 16;
                     EditorGUI.LabelField(rect, EditorGUIUtility.IconContent("Light Icon", "This group contains Light components."));
                     rect.x += 16;
+                }
+                if (queryProperty.boolValue)
+                {
+                    rect.x -= 32;
+                    EditorGUI.LabelField(rect, EditorGUIUtility.IconContent("d_FilterByType", "This group contains Light components."));
+                    rect.x += 32;
                 }
                 EditorGUI.DrawRect(rect, colorProperty.colorValue);
             }
@@ -84,6 +91,7 @@ namespace Utj.Film
                     activePropertyId = propertyId;
                     focus = true;
                 });
+                menu.AddItem(new GUIContent("Configure Dynamic Selection"), false, () => DynamicSelectionDialog.Open(property));
                 menu.DropDown(position);
             }
             if (ev.isKey)
@@ -100,7 +108,7 @@ namespace Utj.Film
             }
 
             //Disabled for now, it interferes with ReorderableList
-            //HandleDragEvents(rect, property);
+            // HandleDragEvents(position, property);
 
         }
 

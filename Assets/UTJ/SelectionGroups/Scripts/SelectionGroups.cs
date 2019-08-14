@@ -42,6 +42,9 @@ namespace Utj.Film
         {
             if (groups[index].objects != null)
                 objects.AddRange(groups[index].objects);
+            objects.AddRange(
+                groups[index].selectionQuery.Filter(GameObject.FindObjectsOfType<Transform>())
+            );
         }
 
         public void RemoveObjects(int index, Object[] objects)

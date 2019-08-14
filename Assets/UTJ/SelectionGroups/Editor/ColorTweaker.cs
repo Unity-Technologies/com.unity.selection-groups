@@ -12,6 +12,7 @@ namespace Utj.Film
 
         public override void OnSelectionChange()
         {
+            //SceneModeUtility.GetSelectedObjectsOfType()
             materials.Clear();
             foreach (var go in Selection.gameObjects)
             {

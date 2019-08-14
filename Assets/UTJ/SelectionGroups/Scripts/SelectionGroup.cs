@@ -13,6 +13,7 @@ namespace Utj.Film
         public bool edit;
         public bool isLightGroup;
         public string lightGroupName;
+        public DynamicSelectionQuery selectionQuery;
 
         public IEnumerable<T> GetComponents<T>() where T : Component
         {

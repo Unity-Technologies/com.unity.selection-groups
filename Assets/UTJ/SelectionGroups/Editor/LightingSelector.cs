@@ -7,13 +7,19 @@ namespace Utj.Film
     public class LightingSelector : MacroEditor
     {
         HashSet<string> layerNames = new HashSet<string>();
+        List<Renderer> renderers = new List<Renderer>();
+
+        public override bool IsValidForSelection => renderers.Count > 0;
 
 
         public override void OnSelectionChange()
         {
             layerNames.Clear();
+            renderers.Clear();
             foreach (var g in Selection.gameObjects)
             {
+                var r = g.GetComponent<Renderer>();
+                if (r != null) renderers.Add(r);
                 layerNames.Add(LayerMask.LayerToName(g.layer));
             }
         }
