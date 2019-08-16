@@ -12,6 +12,8 @@ namespace Utj.Film
         SerializedObject serializedObject;
         SelectionGroups selectionGroups;
         Vector2 scroll;
+        SerializedProperty activeSelection;
+
         void BuildListWidget()
         {
             selectionGroups = SelectionGroups.Instance;
@@ -22,9 +24,16 @@ namespace Utj.Film
             list.drawElementCallback = OnDrawElement;
             list.drawHeaderCallback = DoNothing;
             list.onAddCallback = OnAdd;
+            list.onRemoveCallback += OnRemove;
             list.headerHeight = 0;
             titleContent.text = "Selection Groups";
             list.onSelectCallback += OnSelect;
+        }
+
+        void OnRemove(ReorderableList list)
+        {
+            activeSelection = null;
+            list.serializedProperty.DeleteArrayElementAtIndex(list.index);
         }
 
         void OnSelect(ReorderableList list)
@@ -32,7 +41,8 @@ namespace Utj.Film
             var objects = new List<Object>();
             selectionGroups.FetchObjects(list.index, objects);
             Selection.objects = objects.ToArray();
-            list.serializedProperty.GetArrayElementAtIndex(list.index).FindPropertyRelative("edit").boolValue = false;
+            activeSelection = list.serializedProperty.GetArrayElementAtIndex(list.index);
+            activeSelection.FindPropertyRelative("edit").boolValue = false;
         }
 
         void OnEnable()
@@ -79,6 +89,15 @@ namespace Utj.Film
             using (var cc = new EditorGUI.ChangeCheckScope())
             {
                 list.DoLayoutList();
+
+                EditorGUILayout.EndScrollView();
+
+                if (activeSelection != null)
+                {
+                    GUILayout.BeginVertical("box");
+                    EditorGUILayout.PropertyField(activeSelection.FindPropertyRelative("attachments"), true);
+                    GUILayout.EndVertical();
+                }
                 if (cc.changed)
                 {
                     EditorUtility.SetDirty(selectionGroups);
@@ -86,7 +105,6 @@ namespace Utj.Film
 
                 }
             }
-            EditorGUILayout.EndScrollView();
             if (focusedWindow == this)
                 Repaint();
         }

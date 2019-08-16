@@ -149,7 +149,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1033971964}
-  m_RootOrder: 7
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 53.669003, z: 0}
 --- !u!108 &96184092
 Light:
@@ -240,7 +240,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1033971964}
-  m_RootOrder: 8
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 53.669003, z: 0}
 --- !u!108 &229539150
 Light:
@@ -347,7 +347,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4676460062562498, guid: 16c08e8c6f5695048b41d9cf8f2ff30b, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 16c08e8c6f5695048b41d9cf8f2ff30b, type: 3}
@@ -381,11 +381,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groups:
-  - groupName: Group 1
-    color: {r: 1, g: 0, b: 0, a: 1}
+  - groupName: Group A
+    color: {r: 1, g: 0, b: 0.6523719, a: 1}
     objects:
-    - {fileID: 1733262393}
-    - {fileID: 1094643788}
+    - {fileID: 8224689657399360078}
+    - {fileID: 8224689657399360077}
     edit: 0
     isLightGroup: 0
     lightGroupName: 
@@ -395,75 +395,295 @@ MonoBehaviour:
       requiredTypes: []
       requiredMaterials: []
       requiredShaders: []
-  - groupName: Group 2
-    color: {r: 0, g: 0.64864874, b: 1, a: 1}
-    objects:
-    - {fileID: 1314347430}
-    edit: 0
-    isLightGroup: 0
-    lightGroupName: 
-    selectionQuery:
-      enabled: 1
-      nameQuery: ne
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-  - groupName: Group 3
-    color: {r: 0, g: 0.23080158, b: 1, a: 1}
-    objects:
-    - {fileID: 2142582814}
-    - {fileID: 1260690707}
-    - {fileID: 1615585797}
-    - {fileID: 2109179963}
-    edit: 0
-    isLightGroup: 0
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-  - groupName: Light Group 1
-    color: {r: 0, g: 0.072787285, b: 1, a: 1}
-    objects:
-    - {fileID: 96184090}
-    - {fileID: 229539148}
-    edit: 0
-    isLightGroup: 1
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-  - groupName: Light Group 2
-    color: {r: 1, g: 0.7178415, b: 0, a: 1}
-    objects:
-    - {fileID: 718794092}
-    edit: 0
-    isLightGroup: 1
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-  - groupName: All Lights
-    color: {r: 0, g: 1, b: 0.6818862, a: 1}
+    attachments:
+    - {fileID: 8224689657399360080}
+    - {fileID: 8224689657399360079}
+    - {fileID: 102900000, guid: b39cb88c07e04424b9ecb01946454071, type: 3}
+    - {fileID: 96184092}
+    - {fileID: 2100000, guid: be1b452f483be404a861f2f450bbf640, type: 2}
+  - groupName: Group B
+    color: {r: 0, g: 1, b: 0.5803361, a: 1}
     objects: []
     edit: 0
     isLightGroup: 0
     lightGroupName: 
     selectionQuery:
       enabled: 1
-      nameQuery: Poi
+      nameQuery: 
       requiredTypes:
       - Light
       requiredMaterials: []
       requiredShaders: []
+    attachments: []
+  - groupName: Light Group A
+    color: {r: 0, g: 1, b: 0.4959383, a: 1}
+    objects:
+    - {fileID: 229539148}
+    - {fileID: 96184090}
+    edit: 0
+    isLightGroup: 1
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: Objects
+    color: {r: 0, g: 0.6739273, b: 1, a: 1}
+    objects:
+    - {fileID: 2109179963}
+    - {fileID: 1615585797}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: More Objects
+    color: {r: 1, g: 0, b: 0.85738754, a: 1}
+    objects:
+    - {fileID: 1555471559}
+    - {fileID: 1260690707}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: 'Objects #3'
+    color: {r: 0, g: 0.5687847, b: 1, a: 1}
+    objects:
+    - {fileID: 1314347430}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: New Group
+    color: {r: 0.7183559, g: 1, b: 0, a: 1}
+    objects:
+    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: New Group
+    color: {r: 0, g: 1, b: 0.8522887, a: 1}
+    objects:
+    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: New Group
+    color: {r: 0, g: 0.21062994, b: 1, a: 1}
+    objects:
+    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: New Group
+    color: {r: 0.42367482, g: 1, b: 0, a: 1}
+    objects:
+    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: New Group
+    color: {r: 0, g: 1, b: 0.30483532, a: 1}
+    objects:
+    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: New Group
+    color: {r: 0, g: 1, b: 0.50761414, a: 1}
+    objects:
+    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: New Group
+    color: {r: 0.6968267, g: 1, b: 0, a: 1}
+    objects:
+    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: New Group
+    color: {r: 0, g: 0.11410904, b: 1, a: 1}
+    objects:
+    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: New Group
+    color: {r: 0.6139989, g: 0, b: 1, a: 1}
+    objects:
+    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: New Group
+    color: {r: 0.029741287, g: 1, b: 0, a: 1}
+    objects:
+    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: New Group
+    color: {r: 0.534657, g: 0, b: 1, a: 1}
+    objects:
+    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: New Group
+    color: {r: 0.6353705, g: 1, b: 0, a: 1}
+    objects:
+    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: New Group
+    color: {r: 0, g: 0.44571495, b: 1, a: 1}
+    objects:
+    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: New Group
+    color: {r: 0.063620806, g: 1, b: 0, a: 1}
+    objects:
+    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
+  - groupName: New Group
+    color: {r: 0, g: 0.68249273, b: 1, a: 1}
+    objects:
+    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
+    edit: 0
+    isLightGroup: 0
+    lightGroupName: 
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
 --- !u!4 &601574060
 Transform:
   m_ObjectHideFlags: 3
@@ -627,23 +847,17 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 718794094}
-  - {fileID: 1094643789}
   - {fileID: 1314347434}
   - {fileID: 2142582818}
-  - {fileID: 1260690711}
   - {fileID: 1615585801}
   - {fileID: 2109179967}
   - {fileID: 96184091}
   - {fileID: 229539149}
+  - {fileID: 1094643789}
+  - {fileID: 1260690711}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1094643788 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1834207923114978, guid: 34b4650fd66a1cc41b86dcc5b7f4b4cb,
-    type: 3}
-  m_PrefabInstance: {fileID: 1555471558}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1094643789 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4826347460277354, guid: 34b4650fd66a1cc41b86dcc5b7f4b4cb,
@@ -772,7 +986,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1033971964}
-  m_RootOrder: 4
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1260690712
 MonoBehaviour:
@@ -861,7 +1075,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4826347460277354, guid: 34b4650fd66a1cc41b86dcc5b7f4b4cb, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1609304235633876, guid: 34b4650fd66a1cc41b86dcc5b7f4b4cb, type: 3}
       propertyPath: m_Layer
@@ -869,6 +1083,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34b4650fd66a1cc41b86dcc5b7f4b4cb, type: 3}
+--- !u!1 &1555471559 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1834207923114978, guid: 34b4650fd66a1cc41b86dcc5b7f4b4cb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1555471558}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1615585797
 GameObject:
   m_ObjectHideFlags: 0
@@ -961,7 +1181,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1033971964}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1615585802
 MonoBehaviour:
@@ -976,8 +1196,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lights:
-  - {fileID: 96184092}
   - {fileID: 229539150}
+  - {fileID: 96184092}
 --- !u!1 &1712499348
 GameObject:
   m_ObjectHideFlags: 3
@@ -1008,12 +1228,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1733262393 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1609304235633876, guid: 34b4650fd66a1cc41b86dcc5b7f4b4cb,
-    type: 3}
-  m_PrefabInstance: {fileID: 1555471558}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2100906335
 GameObject:
   m_ObjectHideFlags: 3
@@ -1136,7 +1350,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1033971964}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2109179968
 MonoBehaviour:
@@ -1151,8 +1365,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lights:
-  - {fileID: 96184092}
   - {fileID: 229539150}
+  - {fileID: 96184092}
 --- !u!1 &2142582814
 GameObject:
   m_ObjectHideFlags: 0
@@ -1245,7 +1459,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1033971964}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2142582819
 MonoBehaviour:
@@ -1331,3 +1545,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7b6e2bb02ffae84a82f985dba543ce2, type: 3}
+--- !u!1 &8224689657399360077 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8224689657505296526, guid: c7b6e2bb02ffae84a82f985dba543ce2,
+    type: 3}
+  m_PrefabInstance: {fileID: 8224689657399360076}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8224689657399360078 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8224689656658088634, guid: c7b6e2bb02ffae84a82f985dba543ce2,
+    type: 3}
+  m_PrefabInstance: {fileID: 8224689657399360076}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &8224689657399360079 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 8224689657505296521, guid: c7b6e2bb02ffae84a82f985dba543ce2,
+    type: 3}
+  m_PrefabInstance: {fileID: 8224689657399360076}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8224689657399360080 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8224689657505296522, guid: c7b6e2bb02ffae84a82f985dba543ce2,
+    type: 3}
+  m_PrefabInstance: {fileID: 8224689657399360076}
+  m_PrefabAsset: {fileID: 0}
