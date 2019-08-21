@@ -41,8 +41,8 @@ namespace Utj.Film
 
         static RecorderControllerSettingsExtensions()
         {
+            EditorSceneManager.sceneOpened -= OnSceneOpened;
             EditorSceneManager.sceneOpened += OnSceneOpened;
-            Debug.Log("Hello.");
         }
 
         static void OnSceneOpened(Scene scene, OpenSceneMode mode)
