@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -211,6 +211,12 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1 &146424027 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1609304235633876, guid: 34b4650fd66a1cc41b86dcc5b7f4b4cb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1555471558}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &229539148
 GameObject:
   m_ObjectHideFlags: 0
@@ -351,6 +357,56 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 16c08e8c6f5695048b41d9cf8f2ff30b, type: 3}
+--- !u!1 &580063484
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 580063486}
+  - component: {fileID: 580063485}
+  m_Layer: 0
+  m_Name: LoadRecorderSettings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &580063485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 580063484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0696850b828c6bc4a9abc0bba27947bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  preset: {fileID: 11400000, guid: fb0d7752af8472442a54d7abde1203d9, type: 2}
+--- !u!4 &580063486
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 580063484}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.047989316, y: 0.8942077, z: 0.713185}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &599871326 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8224689656212165624, guid: c7b6e2bb02ffae84a82f985dba543ce2,
+    type: 3}
+  m_PrefabInstance: {fileID: 8224689657399360076}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &601574058
 GameObject:
   m_ObjectHideFlags: 3
@@ -386,6 +442,7 @@ MonoBehaviour:
     objects:
     - {fileID: 8224689657399360078}
     - {fileID: 8224689657399360077}
+    - {fileID: 599871326}
     edit: 0
     isLightGroup: 0
     lightGroupName: 
@@ -402,7 +459,7 @@ MonoBehaviour:
     - {fileID: 96184092}
     - {fileID: 2100000, guid: be1b452f483be404a861f2f450bbf640, type: 2}
   - groupName: Group B
-    color: {r: 0, g: 1, b: 0.5803361, a: 1}
+    color: {r: 0.04387683, g: 0.5471698, b: 0.3359841, a: 1}
     objects: []
     edit: 0
     isLightGroup: 0
@@ -439,12 +496,15 @@ MonoBehaviour:
     isLightGroup: 0
     lightGroupName: 
     selectionQuery:
-      enabled: 0
+      enabled: 1
       nameQuery: 
-      requiredTypes: []
+      requiredTypes:
+      - Renderer
       requiredMaterials: []
       requiredShaders: []
-    attachments: []
+    attachments:
+    - {fileID: 2100000, guid: be1b452f483be404a861f2f450bbf640, type: 2}
+    - {fileID: 2100000, guid: bc5887f4df4cbb0419d84a36e7846c67, type: 2}
   - groupName: More Objects
     color: {r: 1, g: 0, b: 0.85738754, a: 1}
     objects:
@@ -475,207 +535,13 @@ MonoBehaviour:
       requiredShaders: []
     attachments: []
   - groupName: New Group
-    color: {r: 0.7183559, g: 1, b: 0, a: 1}
+    color: {r: 1, g: 0, b: 0.44290733, a: 1}
     objects:
-    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
+    - {fileID: 146424027}
+    - {fileID: 229539148}
+    - {fileID: 96184090}
     edit: 0
-    isLightGroup: 0
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-    attachments: []
-  - groupName: New Group
-    color: {r: 0, g: 1, b: 0.8522887, a: 1}
-    objects:
-    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
-    edit: 0
-    isLightGroup: 0
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-    attachments: []
-  - groupName: New Group
-    color: {r: 0, g: 0.21062994, b: 1, a: 1}
-    objects:
-    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
-    edit: 0
-    isLightGroup: 0
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-    attachments: []
-  - groupName: New Group
-    color: {r: 0.42367482, g: 1, b: 0, a: 1}
-    objects:
-    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
-    edit: 0
-    isLightGroup: 0
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-    attachments: []
-  - groupName: New Group
-    color: {r: 0, g: 1, b: 0.30483532, a: 1}
-    objects:
-    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
-    edit: 0
-    isLightGroup: 0
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-    attachments: []
-  - groupName: New Group
-    color: {r: 0, g: 1, b: 0.50761414, a: 1}
-    objects:
-    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
-    edit: 0
-    isLightGroup: 0
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-    attachments: []
-  - groupName: New Group
-    color: {r: 0.6968267, g: 1, b: 0, a: 1}
-    objects:
-    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
-    edit: 0
-    isLightGroup: 0
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-    attachments: []
-  - groupName: New Group
-    color: {r: 0, g: 0.11410904, b: 1, a: 1}
-    objects:
-    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
-    edit: 0
-    isLightGroup: 0
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-    attachments: []
-  - groupName: New Group
-    color: {r: 0.6139989, g: 0, b: 1, a: 1}
-    objects:
-    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
-    edit: 0
-    isLightGroup: 0
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-    attachments: []
-  - groupName: New Group
-    color: {r: 0.029741287, g: 1, b: 0, a: 1}
-    objects:
-    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
-    edit: 0
-    isLightGroup: 0
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-    attachments: []
-  - groupName: New Group
-    color: {r: 0.534657, g: 0, b: 1, a: 1}
-    objects:
-    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
-    edit: 0
-    isLightGroup: 0
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-    attachments: []
-  - groupName: New Group
-    color: {r: 0.6353705, g: 1, b: 0, a: 1}
-    objects:
-    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
-    edit: 0
-    isLightGroup: 0
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-    attachments: []
-  - groupName: New Group
-    color: {r: 0, g: 0.44571495, b: 1, a: 1}
-    objects:
-    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
-    edit: 0
-    isLightGroup: 0
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-    attachments: []
-  - groupName: New Group
-    color: {r: 0.063620806, g: 1, b: 0, a: 1}
-    objects:
-    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
-    edit: 0
-    isLightGroup: 0
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-    attachments: []
-  - groupName: New Group
-    color: {r: 0, g: 0.68249273, b: 1, a: 1}
-    objects:
-    - {fileID: 11500000, guid: eed78dfc412119f47a739f1d2ac0811e, type: 3}
-    edit: 0
-    isLightGroup: 0
+    isLightGroup: 1
     lightGroupName: 
     selectionQuery:
       enabled: 0
@@ -725,8 +591,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 9
   m_Type: 1
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 0.09
+  m_Color: {r: 1.1499999, g: 1.100392, b: 0.9650979, a: 1}
+  m_Intensity: 0
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -893,6 +759,97 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1255412282
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1255412284}
+  - component: {fileID: 1255412283}
+  m_Layer: 0
+  m_Name: Point Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!108 &1255412283
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1255412282}
+  m_Enabled: 1
+  serializedVersion: 9
+  m_Type: 2
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!4 &1255412284
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1255412282}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.047989316, y: 0.8942077, z: 0.713185}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1260690707
 GameObject:

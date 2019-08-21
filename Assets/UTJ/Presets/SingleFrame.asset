@@ -1,0 +1,1113 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!181963792 &-7797710496781767906
+Preset:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depth Camera
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: 06397f605c749fe4dbe2df4bbd1ef4a1,
+      type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: take
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: captureEveryNthFrame
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fileNameGenerator.m_Path.m_Root
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fileNameGenerator.m_Path.m_Leaf
+    value: /Recordings/Depth
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fileNameGenerator.m_Path.m_ForceAssetFolder
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fileNameGenerator.m_FileName
+    value: depth_<Frame>
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: outputFormat
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: captureAlpha
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.m_Selected
+    value: renderTextureSamplerSettings
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_CustomWidth
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_CustomHeight
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.imageHeight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.maxSupportedHeight
+    value: 4320
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_AspectRatio.m_CustomAspectX
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_AspectRatio.m_CustomAspectY
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_AspectRatio.m_ImageAspect
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.flipFinalOutput
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_CustomWidth
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_CustomHeight
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.imageHeight
+    value: 1080
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.maxSupportedHeight
+    value: 4320
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_AspectRatio.m_CustomAspectX
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_AspectRatio.m_CustomAspectY
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_AspectRatio.m_ImageAspect
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.source
+    value: 4
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.cameraTag
+    value: DepthCamera
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.flipFinalOutput
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.captureUI
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.source
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.cameraTag
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.flipFinalOutput
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.renderStereo
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.stereoSeparation
+    value: 0.065
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.mapSize
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.m_OutputWidth
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.m_OutputHeight
+    value: 2048
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureInputSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureInputSettings.renderTexture
+    value: 
+    objectReference: {fileID: 8400000, guid: de828d38604d9c243a1a72f2f80edc00, type: 2}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureInputSettings.flipFinalOutput
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.source
+    value: 4
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.m_RenderWidth
+    value: 1920
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.m_RenderHeight
+    value: 1080
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.m_OutputWidth
+    value: 1920
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.m_OutputHeight
+    value: 1080
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.outputAspectRatio.m_CustomAspectX
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.outputAspectRatio.m_CustomAspectY
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.outputAspectRatio.m_ImageAspect
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.superSampling
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.superKernelPower
+    value: 16
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.superKernelScale
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.cameraTag
+    value: DepthCamera
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.colorSpace
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.flipFinalOutput
+    value: 0
+    objectReference: {fileID: 0}
+--- !u!181963792 &-5882372926691116043
+Preset:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Global Settings
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: a0888db1d9f84d6da3b0d5de41f42c2d,
+      type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_RecordMode
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_FrameRatePlayback
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_FrameRateType
+    value: 4
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_CustomFrameRateValue
+    value: 30
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_StartFrame
+    value: 5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EndFrame
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_StartTime
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EndTime
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_CapFrameRate
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_RecorderSettings.Array.size
+    value: 0
+    objectReference: {fileID: 0}
+--- !u!181963792 &-3020743598058398921
+Preset:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Normals Camera
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: 06397f605c749fe4dbe2df4bbd1ef4a1,
+      type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: take
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: captureEveryNthFrame
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fileNameGenerator.m_Path.m_Root
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fileNameGenerator.m_Path.m_Leaf
+    value: /Recordings/Normals
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fileNameGenerator.m_Path.m_ForceAssetFolder
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fileNameGenerator.m_FileName
+    value: normals_<Frame>
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: outputFormat
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: captureAlpha
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.m_Selected
+    value: renderTextureSamplerSettings
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_CustomWidth
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_CustomHeight
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.imageHeight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.maxSupportedHeight
+    value: 4320
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_AspectRatio.m_CustomAspectX
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_AspectRatio.m_CustomAspectY
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_AspectRatio.m_ImageAspect
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.flipFinalOutput
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_CustomWidth
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_CustomHeight
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.imageHeight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.maxSupportedHeight
+    value: 4320
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_AspectRatio.m_CustomAspectX
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_AspectRatio.m_CustomAspectY
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_AspectRatio.m_ImageAspect
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.source
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.cameraTag
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.flipFinalOutput
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.captureUI
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.source
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.cameraTag
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.flipFinalOutput
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.renderStereo
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.stereoSeparation
+    value: 0.065
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.mapSize
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.m_OutputWidth
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.m_OutputHeight
+    value: 2048
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureInputSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureInputSettings.renderTexture
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureInputSettings.flipFinalOutput
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.source
+    value: 4
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.m_RenderWidth
+    value: 1920
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.m_RenderHeight
+    value: 1080
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.m_OutputWidth
+    value: 1920
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.m_OutputHeight
+    value: 1080
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.outputAspectRatio.m_CustomAspectX
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.outputAspectRatio.m_CustomAspectY
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.outputAspectRatio.m_ImageAspect
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.superSampling
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.superKernelPower
+    value: 16
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.superKernelScale
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.cameraTag
+    value: NormalsCamera
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.colorSpace
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.flipFinalOutput
+    value: 0
+    objectReference: {fileID: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5537212fe2c4414c9a0cdd7ba0728908, type: 3}
+  m_Name: SingleFrame
+  m_EditorClassIdentifier: 
+  m_Model: {fileID: -5882372926691116043}
+  m_RecorderPresets:
+  - {fileID: 2290353171374710355}
+  - {fileID: 4232654785739972555}
+  - {fileID: -7797710496781767906}
+  - {fileID: -3020743598058398921}
+--- !u!181963792 &2290353171374710355
+Preset:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Object Id
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: 06397f605c749fe4dbe2df4bbd1ef4a1,
+      type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: take
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: captureEveryNthFrame
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fileNameGenerator.m_Path.m_Root
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fileNameGenerator.m_Path.m_Leaf
+    value: /Recordings/ObjectID
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fileNameGenerator.m_Path.m_ForceAssetFolder
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fileNameGenerator.m_FileName
+    value: object_<Frame>
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: outputFormat
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: captureAlpha
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.m_Selected
+    value: renderTextureSamplerSettings
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_CustomWidth
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_CustomHeight
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.imageHeight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.maxSupportedHeight
+    value: 4320
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_AspectRatio.m_CustomAspectX
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_AspectRatio.m_CustomAspectY
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_AspectRatio.m_ImageAspect
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.flipFinalOutput
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_CustomWidth
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_CustomHeight
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.imageHeight
+    value: 1080
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.maxSupportedHeight
+    value: 4320
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_AspectRatio.m_CustomAspectX
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_AspectRatio.m_CustomAspectY
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_AspectRatio.m_ImageAspect
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.source
+    value: 4
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.cameraTag
+    value: ObjectIDCamera
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.flipFinalOutput
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.captureUI
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.source
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.cameraTag
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.flipFinalOutput
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.renderStereo
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.stereoSeparation
+    value: 0.065
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.mapSize
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.m_OutputWidth
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.m_OutputHeight
+    value: 2048
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureInputSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureInputSettings.renderTexture
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureInputSettings.flipFinalOutput
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.source
+    value: 4
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.m_RenderWidth
+    value: 1920
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.m_RenderHeight
+    value: 1080
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.m_OutputWidth
+    value: 1920
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.m_OutputHeight
+    value: 1080
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.outputAspectRatio.m_CustomAspectX
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.outputAspectRatio.m_CustomAspectY
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.outputAspectRatio.m_ImageAspect
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.superSampling
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.superKernelPower
+    value: 16
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.superKernelScale
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.cameraTag
+    value: ObjectIDCamera
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.colorSpace
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.flipFinalOutput
+    value: 0
+    objectReference: {fileID: 0}
+--- !u!181963792 &4232654785739972555
+Preset:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Game View
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: 06397f605c749fe4dbe2df4bbd1ef4a1,
+      type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: take
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: captureEveryNthFrame
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fileNameGenerator.m_Path.m_Root
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fileNameGenerator.m_Path.m_Leaf
+    value: /Recordings/GameView
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fileNameGenerator.m_Path.m_ForceAssetFolder
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fileNameGenerator.m_FileName
+    value: main_<Frame>
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: outputFormat
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: captureAlpha
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.m_Selected
+    value: renderTextureSamplerSettings
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_CustomWidth
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_CustomHeight
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.imageHeight
+    value: 1080
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.maxSupportedHeight
+    value: 4320
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_AspectRatio.m_CustomAspectX
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_AspectRatio.m_CustomAspectY
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.m_OutputResolution.m_AspectRatio.m_ImageAspect
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.gameViewInputSettings.flipFinalOutput
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_CustomWidth
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_CustomHeight
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.imageHeight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.maxSupportedHeight
+    value: 4320
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_AspectRatio.m_CustomAspectX
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_AspectRatio.m_CustomAspectY
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.m_OutputResolution.m_AspectRatio.m_ImageAspect
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.source
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.cameraTag
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.flipFinalOutput
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.cameraInputSettings.captureUI
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.source
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.cameraTag
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.flipFinalOutput
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.renderStereo
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.stereoSeparation
+    value: 0.065
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.mapSize
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.m_OutputWidth
+    value: 1024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.camera360InputSettings.m_OutputHeight
+    value: 2048
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureInputSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureInputSettings.renderTexture
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureInputSettings.flipFinalOutput
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.allowTransparency
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.source
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.m_RenderWidth
+    value: 1920
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.m_RenderHeight
+    value: 1080
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.m_OutputWidth
+    value: 1920
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.m_OutputHeight
+    value: 1080
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.outputAspectRatio.m_CustomAspectX
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.outputAspectRatio.m_CustomAspectY
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.outputAspectRatio.m_ImageAspect
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.superSampling
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.superKernelPower
+    value: 16
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.superKernelScale
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.cameraTag
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.colorSpace
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_ImageInputSelector.renderTextureSamplerSettings.flipFinalOutput
+    value: 0
+    objectReference: {fileID: 0}
