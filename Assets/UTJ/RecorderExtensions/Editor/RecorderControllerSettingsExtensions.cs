@@ -22,10 +22,10 @@ namespace Utj.Film
 
         static bool ApplyPreset(Object o)
         {
-            var w = EditorWindow.GetWindow<RecorderWindow>();
-            var p = AssetDatabase.GetAssetPath(o);
             if (o.GetType().Name == "RecorderControllerSettingsPreset")
             {
+                var w = EditorWindow.GetWindow<RecorderWindow>();
+                var p = AssetDatabase.GetAssetPath(o);
                 var method = w.GetType().GetMethod("ApplyPreset", BindingFlags.NonPublic | BindingFlags.Instance);
                 if (method == null)
                 {

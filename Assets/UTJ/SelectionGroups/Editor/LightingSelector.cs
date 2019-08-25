@@ -51,7 +51,7 @@ namespace Utj.Film
                         {
                             var sgm = g.GetComponent<SelectionGroupMember>();
                             if (sgm == null) sgm = g.AddComponent<SelectionGroupMember>();
-                            sgm.lights = i.GetComponents<Light>().ToArray();
+                            // sgm.lights = i.GetComponents<Light>().ToArray();
 
                         }
                     }

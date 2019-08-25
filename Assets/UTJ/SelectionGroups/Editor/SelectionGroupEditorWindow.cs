@@ -12,7 +12,7 @@ namespace Utj.Film
         SerializedObject serializedObject;
         SelectionGroups selectionGroups;
         Vector2 scroll;
-        SerializedProperty activeSelection;
+        SerializedProperty activeSelectionGroup;
 
         void BuildListWidget()
         {
@@ -23,6 +23,7 @@ namespace Utj.Film
             list = new ReorderableList(serializedObject, groups);
             list.drawElementCallback = OnDrawElement;
             list.drawHeaderCallback = DoNothing;
+            list.elementHeightCallback += ElementHeightCallback;
             list.onAddCallback = OnAdd;
             list.onRemoveCallback += OnRemove;
             list.headerHeight = 0;
@@ -30,19 +31,24 @@ namespace Utj.Film
             list.onSelectCallback += OnSelect;
         }
 
+        float ElementHeightCallback(int index)
+        {
+            var p = list.serializedProperty.GetArrayElementAtIndex(index);
+            return EditorGUI.GetPropertyHeight(p);
+        }
+
         void OnRemove(ReorderableList list)
         {
-            activeSelection = null;
+            activeSelectionGroup = null;
             list.serializedProperty.DeleteArrayElementAtIndex(list.index);
         }
 
         void OnSelect(ReorderableList list)
         {
-            var objects = new List<Object>();
-            selectionGroups.FetchObjects(list.index, objects);
-            Selection.objects = objects.ToArray();
-            activeSelection = list.serializedProperty.GetArrayElementAtIndex(list.index);
-            activeSelection.FindPropertyRelative("edit").boolValue = false;
+            activeSelectionGroup = list.serializedProperty.GetArrayElementAtIndex(list.index);
+            activeSelectionGroup.FindPropertyRelative("edit").boolValue = false;
+            SelectionGroupUtility.UpdateQueryResults(activeSelectionGroup);
+            Selection.objects = SelectionGroupUtility.FetchObjects(activeSelectionGroup);
         }
 
         void OnEnable()
@@ -57,7 +63,8 @@ namespace Utj.Film
             item.FindPropertyRelative("color").colorValue = Color.HSVToRGB(Random.value, 1, 1);
             var objectsProperty = item.FindPropertyRelative("objects");
             objectsProperty.ClearArray();
-            SelectionGroupPropertyDrawer.PackProperty(item, objectsProperty, Selection.objects);
+            SelectionGroupUtility.PackArrayProperty(objectsProperty, Selection.objects);
+            SelectionGroupUtility.UpdateUsageFlags(item);
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -92,10 +99,10 @@ namespace Utj.Film
 
                 EditorGUILayout.EndScrollView();
 
-                if (activeSelection != null)
+                if (activeSelectionGroup != null)
                 {
                     GUILayout.BeginVertical("box");
-                    EditorGUILayout.PropertyField(activeSelection.FindPropertyRelative("attachments"), true);
+                    EditorGUILayout.PropertyField(activeSelectionGroup.FindPropertyRelative("attachments"), true);
                     GUILayout.EndVertical();
                 }
                 if (cc.changed)

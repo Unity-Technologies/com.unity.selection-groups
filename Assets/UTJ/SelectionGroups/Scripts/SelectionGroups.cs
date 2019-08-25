@@ -7,62 +7,26 @@ namespace Utj.Film
     {
         public List<SelectionGroup> groups = new List<SelectionGroup>();
 
-        static SelectionGroups selectionGroups;
+        static SelectionGroups instance;
 
-        public void DisableLightGroups()
+        public SelectionGroup this[int index]
         {
-            foreach (var g in groups)
-            {
-                if (g.isLightGroup)
-                {
-                    foreach (var i in g.GetComponents<Light>())
-                    {
-                        i.enabled = false;
-                    }
-                }
-            }
+            get => groups[index];
         }
 
         public static SelectionGroups Instance
         {
             get
             {
-                selectionGroups = GameObject.FindObjectOfType<SelectionGroups>();
-                if (selectionGroups == null)
+                instance = GameObject.FindObjectOfType<SelectionGroups>();
+                if (instance == null)
                 {
                     var g = new GameObject("Hidden_SelectionGroups");
                     g.hideFlags = HideFlags.HideInInspector | HideFlags.HideInHierarchy;
-                    selectionGroups = g.AddComponent<SelectionGroups>();
+                    instance = g.AddComponent<SelectionGroups>();
                 }
-                return selectionGroups;
+                return instance;
             }
-        }
-
-        public void FetchObjects(int index, List<Object> objects)
-        {
-            if (groups[index].objects != null)
-                objects.AddRange(groups[index].objects);
-            objects.AddRange(
-                groups[index].selectionQuery.Filter(GameObject.FindObjectsOfType<Transform>())
-            );
-        }
-
-        public void RemoveObjects(int index, Object[] objects)
-        {
-            var group = groups[index].objects;
-            var uniqueObjects = new HashSet<Object>(group);
-            uniqueObjects.ExceptWith(objects);
-            group.Clear();
-            group.AddRange(uniqueObjects);
-        }
-
-        public void AddObjects(int index, Object[] objects)
-        {
-            var group = groups[index].objects;
-            var uniqueObjects = new HashSet<Object>(group);
-            uniqueObjects.UnionWith(objects);
-            group.Clear();
-            group.AddRange(uniqueObjects);
         }
     }
 }

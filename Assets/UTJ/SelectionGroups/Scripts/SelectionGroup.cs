@@ -10,24 +10,13 @@ namespace Utj.Film
         public string groupName;
         public Color color;
         public List<Object> objects;
+        public List<Object> queryResults;
         public bool edit;
         public bool isLightGroup;
         public string lightGroupName;
+        public bool showMembers;
         public DynamicSelectionQuery selectionQuery;
         public Object[] attachments;
-
-        public IEnumerable<T> GetComponents<T>() where T : Component
-        {
-            foreach (var i in objects)
-            {
-                if (i is T) yield return (T)i;
-                if (i is GameObject)
-                {
-                    foreach (var j in ((GameObject)i).GetComponents<T>())
-                        yield return j;
-                }
-            }
-        }
     }
 
 }
