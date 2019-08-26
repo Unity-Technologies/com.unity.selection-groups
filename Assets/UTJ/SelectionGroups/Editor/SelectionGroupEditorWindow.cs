@@ -61,11 +61,9 @@ namespace Utj.Film
             var item = list.serializedProperty.GetArrayElementAtIndex(list.serializedProperty.arraySize - 1);
             item.FindPropertyRelative("groupName").stringValue = "New Group";
             item.FindPropertyRelative("color").colorValue = Color.HSVToRGB(Random.value, 1, 1);
-            var objectsProperty = item.FindPropertyRelative("objects");
-            objectsProperty.ClearArray();
-            SelectionGroupUtility.PackArrayProperty(objectsProperty, Selection.objects);
-            SelectionGroupUtility.UpdateUsageFlags(item);
-            serializedObject.ApplyModifiedProperties();
+            item.serializedObject.ApplyModifiedProperties();
+            SelectionGroupUtility.ClearObjects(item);
+            SelectionGroupUtility.AddObjects(item, Selection.objects);
         }
 
         void DoNothing(Rect rect)
@@ -99,12 +97,7 @@ namespace Utj.Film
 
                 EditorGUILayout.EndScrollView();
 
-                if (activeSelectionGroup != null)
-                {
-                    GUILayout.BeginVertical("box");
-                    EditorGUILayout.PropertyField(activeSelectionGroup.FindPropertyRelative("attachments"), true);
-                    GUILayout.EndVertical();
-                }
+
                 if (cc.changed)
                 {
                     EditorUtility.SetDirty(selectionGroups);

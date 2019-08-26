@@ -25,18 +25,10 @@ namespace Utj.Film
             {
                 foreach (var i in selectionGroup.objects)
                 {
-                    if (i is Renderer)
+                    foreach (var r in ((GameObject)i).GetComponents<Renderer>())
                     {
-                        selectedRenderers.Add((Renderer)i);
-                        AddPropertyBlock((Renderer)i, selectionGroup.color);
-                    }
-                    else if (i is GameObject)
-                    {
-                        foreach (var r in ((GameObject)i).GetComponents<Renderer>())
-                        {
-                            selectedRenderers.Add(r);
-                            AddPropertyBlock(r, selectionGroup.color);
-                        }
+                        selectedRenderers.Add(r);
+                        AddPropertyBlock(r, selectionGroup.color);
                     }
                 }
             }

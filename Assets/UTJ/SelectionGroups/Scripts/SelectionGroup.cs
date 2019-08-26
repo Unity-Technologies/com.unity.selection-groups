@@ -9,8 +9,8 @@ namespace Utj.Film
     {
         public string groupName;
         public Color color;
-        public List<Object> objects;
-        public List<Object> queryResults;
+        public List<GameObject> objects;
+        public List<GameObject> queryResults;
         public bool edit;
         public bool isLightGroup;
         public string lightGroupName;

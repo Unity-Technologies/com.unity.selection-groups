@@ -321,7 +321,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1555367040677622, guid: 16c08e8c6f5695048b41d9cf8f2ff30b, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4676460062562498, guid: 16c08e8c6f5695048b41d9cf8f2ff30b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -443,9 +443,11 @@ MonoBehaviour:
     - {fileID: 8224689657399360078}
     - {fileID: 8224689657399360077}
     - {fileID: 599871326}
+    queryResults: []
     edit: 0
     isLightGroup: 0
     lightGroupName: 
+    showMembers: 1
     selectionQuery:
       enabled: 0
       nameQuery: 
@@ -460,10 +462,18 @@ MonoBehaviour:
     - {fileID: 2100000, guid: be1b452f483be404a861f2f450bbf640, type: 2}
   - groupName: Group B
     color: {r: 0.04387683, g: 0.5471698, b: 0.3359841, a: 1}
-    objects: []
+    objects:
+    - {fileID: 8224689657399360081}
+    - {fileID: 1260690707}
+    queryResults:
+    - {fileID: 1255412282}
+    - {fileID: 718794092}
+    - {fileID: 229539148}
+    - {fileID: 96184090}
     edit: 0
     isLightGroup: 0
     lightGroupName: 
+    showMembers: 1
     selectionQuery:
       enabled: 1
       nameQuery: 
@@ -472,29 +482,21 @@ MonoBehaviour:
       requiredMaterials: []
       requiredShaders: []
     attachments: []
-  - groupName: Light Group A
-    color: {r: 0, g: 1, b: 0.4959383, a: 1}
-    objects:
-    - {fileID: 229539148}
-    - {fileID: 96184090}
-    edit: 0
-    isLightGroup: 1
-    lightGroupName: 
-    selectionQuery:
-      enabled: 0
-      nameQuery: 
-      requiredTypes: []
-      requiredMaterials: []
-      requiredShaders: []
-    attachments: []
   - groupName: Objects
     color: {r: 0, g: 0.6739273, b: 1, a: 1}
-    objects:
+    objects: []
+    queryResults:
+    - {fileID: 2142582814}
     - {fileID: 2109179963}
     - {fileID: 1615585797}
+    - {fileID: 1314347430}
+    - {fileID: 1260690707}
+    - {fileID: 1555471559}
+    - {fileID: 146424027}
     edit: 0
     isLightGroup: 0
     lightGroupName: 
+    showMembers: 1
     selectionQuery:
       enabled: 1
       nameQuery: 
@@ -505,14 +507,33 @@ MonoBehaviour:
     attachments:
     - {fileID: 2100000, guid: be1b452f483be404a861f2f450bbf640, type: 2}
     - {fileID: 2100000, guid: bc5887f4df4cbb0419d84a36e7846c67, type: 2}
+  - groupName: Light Group A
+    color: {r: 0.3019608, g: 0.3019608, b: 0.3019608, a: 1}
+    objects:
+    - {fileID: 229539148}
+    - {fileID: 96184090}
+    queryResults: []
+    edit: 0
+    isLightGroup: 1
+    lightGroupName: 
+    showMembers: 1
+    selectionQuery:
+      enabled: 0
+      nameQuery: 
+      requiredTypes: []
+      requiredMaterials: []
+      requiredShaders: []
+    attachments: []
   - groupName: More Objects
     color: {r: 1, g: 0, b: 0.85738754, a: 1}
     objects:
     - {fileID: 1555471559}
     - {fileID: 1260690707}
+    queryResults: []
     edit: 0
     isLightGroup: 0
     lightGroupName: 
+    showMembers: 1
     selectionQuery:
       enabled: 0
       nameQuery: 
@@ -524,9 +545,11 @@ MonoBehaviour:
     color: {r: 0, g: 0.5687847, b: 1, a: 1}
     objects:
     - {fileID: 1314347430}
+    queryResults: []
     edit: 0
     isLightGroup: 0
     lightGroupName: 
+    showMembers: 1
     selectionQuery:
       enabled: 0
       nameQuery: 
@@ -540,9 +563,11 @@ MonoBehaviour:
     - {fileID: 146424027}
     - {fileID: 229539148}
     - {fileID: 96184090}
+    queryResults: []
     edit: 0
     isLightGroup: 1
     lightGroupName: 
+    showMembers: 1
     selectionQuery:
       enabled: 0
       nameQuery: 
@@ -864,7 +889,7 @@ GameObject:
   - component: {fileID: 1260690709}
   - component: {fileID: 1260690708}
   - component: {fileID: 1260690712}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1000,7 +1025,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1834207923114978, guid: 34b4650fd66a1cc41b86dcc5b7f4b4cb, type: 3}
       propertyPath: m_Layer
-      value: 11
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609304235633876, guid: 34b4650fd66a1cc41b86dcc5b7f4b4cb, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4826347460277354, guid: 34b4650fd66a1cc41b86dcc5b7f4b4cb, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1034,10 +1063,6 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 1609304235633876, guid: 34b4650fd66a1cc41b86dcc5b7f4b4cb, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34b4650fd66a1cc41b86dcc5b7f4b4cb, type: 3}
 --- !u!1 &1555471559 stripped
@@ -1059,7 +1084,7 @@ GameObject:
   - component: {fileID: 1615585799}
   - component: {fileID: 1615585798}
   - component: {fileID: 1615585802}
-  m_Layer: 13
+  m_Layer: 0
   m_Name: Plane (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1228,7 +1253,7 @@ GameObject:
   - component: {fileID: 2109179965}
   - component: {fileID: 2109179964}
   - component: {fileID: 2109179968}
-  m_Layer: 13
+  m_Layer: 0
   m_Name: Cylinder (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1337,7 +1362,7 @@ GameObject:
   - component: {fileID: 2142582816}
   - component: {fileID: 2142582815}
   - component: {fileID: 2142582819}
-  m_Layer: 13
+  m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1500,6 +1525,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8224689656658088628, guid: c7b6e2bb02ffae84a82f985dba543ce2,
+        type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7b6e2bb02ffae84a82f985dba543ce2, type: 3}
 --- !u!1 &8224689657399360077 stripped
@@ -1523,6 +1553,12 @@ Camera:
 --- !u!4 &8224689657399360080 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8224689657505296522, guid: c7b6e2bb02ffae84a82f985dba543ce2,
+    type: 3}
+  m_PrefabInstance: {fileID: 8224689657399360076}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8224689657399360081 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8224689657891090057, guid: c7b6e2bb02ffae84a82f985dba543ce2,
     type: 3}
   m_PrefabInstance: {fileID: 8224689657399360076}
   m_PrefabAsset: {fileID: 0}

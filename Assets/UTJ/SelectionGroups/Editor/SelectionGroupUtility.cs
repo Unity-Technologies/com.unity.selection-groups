@@ -8,30 +8,16 @@ namespace Utj.Film
 
     internal static class SelectionGroupUtility
     {
-        // public IEnumerable<T> GetComponents<T>() where T : Component
-        // {
-        //     foreach (var i in objects)
-        //     {
-        //         if (i is T) yield return (T)i;
-        //         if (i is GameObject)
-        //         {
-        //             foreach (var j in ((GameObject)i).GetComponents<T>())
-        //                 yield return j;
-        //         }
-        //     }
-        // }
 
-        internal static void UpdateUsageFlags(SerializedProperty property)
+        internal static void UpdateInternalState(SerializedProperty property)
         {
             var isLightGroup = false;
-            foreach (var g in IterateArrayProperty(property.FindPropertyRelative("objects"), property.FindPropertyRelative("queryResults")))
+            foreach (var i in IterateArrayProperty(property.FindPropertyRelative("objects"), property.FindPropertyRelative("queryResults")))
             {
-                if (g.objectReferenceValue is Light) isLightGroup = true;
-                if (g.objectReferenceValue is GameObject)
-                {
-                    if (((GameObject)g.objectReferenceValue).GetComponents<Light>().Length > 0)
-                        isLightGroup = true;
-                }
+                Light light;
+                var g = (GameObject)i.objectReferenceValue;
+                if (g != null && g.TryGetComponent<Light>(out light))
+                    isLightGroup = true;
             }
             property.FindPropertyRelative("isLightGroup").boolValue = isLightGroup;
             property.serializedObject.ApplyModifiedProperties();
@@ -47,22 +33,27 @@ namespace Utj.Film
             }
         }
 
-        internal static void PackArrayProperty(SerializedProperty arrayProperty, IEnumerable<Object> objects)
+        static void PackArrayProperty(SerializedProperty arrayProperty, IEnumerable<Object> objects)
         {
             arrayProperty.ClearArray();
             foreach (var g in objects)
             {
-                arrayProperty.InsertArrayElementAtIndex(0);
-                arrayProperty.GetArrayElementAtIndex(0).objectReferenceValue = g;
+                if (g != null)
+                {
+                    arrayProperty.InsertArrayElementAtIndex(0);
+                    arrayProperty.GetArrayElementAtIndex(0).objectReferenceValue = g;
+                }
             }
         }
 
-        internal static void UnpackArrayProperty(SerializedProperty arrayProperty, ICollection<Object> objects)
+        static void UnpackArrayProperty(SerializedProperty arrayProperty, ICollection<Object> objects)
         {
             var count = arrayProperty.arraySize;
             for (int i = 0; i < count; i++)
             {
-                objects.Add(arrayProperty.GetArrayElementAtIndex(i).objectReferenceValue);
+                var g = arrayProperty.GetArrayElementAtIndex(i).objectReferenceValue;
+                if (g != null)
+                    objects.Add(g);
             }
         }
 
@@ -99,8 +90,9 @@ namespace Utj.Film
                     }
                     if (requiredMaterials.Length > 0)
                     {
-                        var renderer = i.GetComponent<Renderer>();
-                        if (renderer == null) continue;
+                        Renderer renderer;
+                        if (!i.TryGetComponent<Renderer>(out renderer))
+                            continue;
                         var missingMaterials = false;
                         foreach (var m in requiredMaterials)
                         {
@@ -114,8 +106,9 @@ namespace Utj.Film
                     }
                     if (requiredShaders.Length > 0)
                     {
-                        var renderer = i.GetComponent<Renderer>();
-                        if (renderer == null) continue;
+                        Renderer renderer;
+                        if (!i.TryGetComponent<Renderer>(out renderer))
+                            continue;
                         var shaders = (from m in renderer.sharedMaterials select m.shader).ToArray();
                         var missingShaders = false;
                         foreach (var s in requiredShaders)
@@ -142,6 +135,8 @@ namespace Utj.Film
             hash.UnionWith(objects);
             PackArrayProperty(objectsProperty, hash);
             property.serializedObject.ApplyModifiedProperties();
+            UpdateInternalState(property);
+
         }
 
         internal static void RemoveObjects(SerializedProperty property, IList<Object> objects)
@@ -149,16 +144,19 @@ namespace Utj.Film
             var hash = new HashSet<Object>();
             var objectsProperty = property.FindPropertyRelative("objects");
             UnpackArrayProperty(objectsProperty, hash);
-            hash.IntersectWith(objects);
+            hash.ExceptWith(objects);
             PackArrayProperty(objectsProperty, hash);
             property.serializedObject.ApplyModifiedProperties();
+            UpdateInternalState(property);
         }
 
         internal static void ClearObjects(SerializedProperty property)
         {
             var objectsProperty = property.FindPropertyRelative("objects");
             objectsProperty.ClearArray();
+            property.FindPropertyRelative("selectionQuery").FindPropertyRelative("enabled").boolValue = false;
             property.serializedObject.ApplyModifiedProperties();
+            UpdateInternalState(property);
         }
 
         internal static UnityEngine.Object[] FetchObjects(SerializedProperty property)
@@ -168,6 +166,11 @@ namespace Utj.Film
             if (property.FindPropertyRelative("selectionQuery").FindPropertyRelative("enabled").boolValue)
                 UnpackArrayProperty(property.FindPropertyRelative("queryResults"), list);
             return list.ToArray();
+        }
+
+        internal static IEnumerable<SerializedProperty> FetchObjectProperties(SerializedProperty property)
+        {
+            return IterateArrayProperty(property.FindPropertyRelative("objects"));
         }
 
     }
