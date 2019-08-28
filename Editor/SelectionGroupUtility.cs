@@ -3,10 +3,10 @@ using UnityEditor;
 using UnityEngine;
 using System.Linq;
 
-namespace Utj.Film
+namespace Unity.SelectionGroups
 {
 
-    internal static class SelectionGroupUtility
+    internal static class EditorSelectionGroupUtility
     {
 
         internal static void UpdateInternalState(SerializedProperty property)
@@ -136,7 +136,6 @@ namespace Utj.Film
             PackArrayProperty(objectsProperty, hash);
             property.serializedObject.ApplyModifiedProperties();
             UpdateInternalState(property);
-
         }
 
         internal static void RemoveObjects(SerializedProperty property, IList<Object> objects)

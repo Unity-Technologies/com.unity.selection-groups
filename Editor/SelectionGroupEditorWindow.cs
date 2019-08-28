@@ -3,20 +3,20 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace Utj.Film
+namespace Unity.SelectionGroups
 {
     public class SelectionGroupEditorWindow : EditorWindow
     {
 
         ReorderableList list;
         SerializedObject serializedObject;
-        SelectionGroups selectionGroups;
+        SelectionGroupContainer selectionGroups;
         Vector2 scroll;
         SerializedProperty activeSelectionGroup;
 
         void BuildListWidget()
         {
-            selectionGroups = SelectionGroups.Instance;
+            selectionGroups = SelectionGroupContainer.Instance;
             EditorUtility.SetDirty(selectionGroups);
             serializedObject = new SerializedObject(selectionGroups);
             var groups = serializedObject.FindProperty("groups");
@@ -47,8 +47,8 @@ namespace Utj.Film
         {
             activeSelectionGroup = list.serializedProperty.GetArrayElementAtIndex(list.index);
             activeSelectionGroup.FindPropertyRelative("edit").boolValue = false;
-            SelectionGroupUtility.UpdateQueryResults(activeSelectionGroup);
-            Selection.objects = SelectionGroupUtility.FetchObjects(activeSelectionGroup);
+            EditorSelectionGroupUtility.UpdateQueryResults(activeSelectionGroup);
+            Selection.objects = EditorSelectionGroupUtility.FetchObjects(activeSelectionGroup);
         }
 
         void OnEnable()
@@ -62,8 +62,8 @@ namespace Utj.Film
             item.FindPropertyRelative("groupName").stringValue = "New Group";
             item.FindPropertyRelative("color").colorValue = Color.HSVToRGB(Random.value, 1, 1);
             item.serializedObject.ApplyModifiedProperties();
-            SelectionGroupUtility.ClearObjects(item);
-            SelectionGroupUtility.AddObjects(item, Selection.objects);
+            EditorSelectionGroupUtility.ClearObjects(item);
+            EditorSelectionGroupUtility.AddObjects(item, Selection.objects);
         }
 
         void DoNothing(Rect rect)
@@ -80,7 +80,7 @@ namespace Utj.Film
             EditorGUI.PropertyField(rect, item, GUIContent.none);
         }
 
-        [MenuItem("Window/Selection Groups")]
+        [MenuItem("Window/General/Selection Groups")]
         static void OpenWindow()
         {
             var window = EditorWindow.GetWindow<SelectionGroupEditorWindow>();

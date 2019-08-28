@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Utj.Film
+namespace Unity.SelectionGroups
 {
     [System.Serializable]
     public struct SelectionGroup

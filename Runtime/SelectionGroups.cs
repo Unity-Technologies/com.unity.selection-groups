@@ -1,29 +1,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utj.Film
+namespace Unity.SelectionGroups
 {
-    public class SelectionGroups : MonoBehaviour
+    public class SelectionGroupContainer : MonoBehaviour
     {
         public List<SelectionGroup> groups = new List<SelectionGroup>();
 
-        static SelectionGroups instance;
+        static SelectionGroupContainer instance;
 
         public SelectionGroup this[int index]
         {
             get => groups[index];
         }
 
-        public static SelectionGroups Instance
+        public static SelectionGroupContainer Instance
         {
             get
             {
-                instance = GameObject.FindObjectOfType<SelectionGroups>();
+                instance = GameObject.FindObjectOfType<SelectionGroupContainer>();
                 if (instance == null)
                 {
                     var g = new GameObject("Hidden_SelectionGroups");
                     g.hideFlags = HideFlags.HideInInspector | HideFlags.HideInHierarchy;
-                    instance = g.AddComponent<SelectionGroups>();
+                    instance = g.AddComponent<SelectionGroupContainer>();
                 }
                 return instance;
             }

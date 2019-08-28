@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 
-namespace Utj.Film
+namespace Unity.SelectionGroups
 {
     [System.Serializable]
     public struct DynamicSelectionQuery

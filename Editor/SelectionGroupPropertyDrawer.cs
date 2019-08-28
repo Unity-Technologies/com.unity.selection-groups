@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Utj.Film
+namespace Unity.SelectionGroups
 {
     [CustomPropertyDrawer(typeof(SelectionGroup))]
     public class SelectionGroupPropertyDrawer : PropertyDrawer
@@ -72,8 +72,8 @@ namespace Utj.Film
                 rect = position;
                 rect.x += 16;
                 rect.height = EditorGUIUtility.singleLineHeight;
-                SelectionGroupUtility.UpdateQueryResults(property);
-                foreach (var i in SelectionGroupUtility.FetchObjects(property))
+                EditorSelectionGroupUtility.UpdateQueryResults(property);
+                foreach (var i in EditorSelectionGroupUtility.FetchObjects(property))
                 {
                     if (i == null) continue;
                     rect.y += rect.height;
@@ -93,26 +93,26 @@ namespace Utj.Film
 
             menu.AddItem(new GUIContent("Add Selection to Group"), false, () =>
             {
-                SelectionGroupUtility.AddObjects(property, Selection.objects);
-                Selection.objects = SelectionGroupUtility.FetchObjects(property);
+                EditorSelectionGroupUtility.AddObjects(property, Selection.objects);
+                Selection.objects = EditorSelectionGroupUtility.FetchObjects(property);
             });
             menu.AddItem(new GUIContent("Remove Selection from Group"), false, () =>
             {
-                SelectionGroupUtility.RemoveObjects(property, Selection.objects);
-                Selection.objects = SelectionGroupUtility.FetchObjects(property);
+                EditorSelectionGroupUtility.RemoveObjects(property, Selection.objects);
+                Selection.objects = EditorSelectionGroupUtility.FetchObjects(property);
 
             });
             menu.AddItem(new GUIContent("Set Selection as Group"), false, () =>
             {
-                SelectionGroupUtility.ClearObjects(property);
-                SelectionGroupUtility.AddObjects(property, Selection.objects);
-                Selection.objects = SelectionGroupUtility.FetchObjects(property);
+                EditorSelectionGroupUtility.ClearObjects(property);
+                EditorSelectionGroupUtility.AddObjects(property, Selection.objects);
+                Selection.objects = EditorSelectionGroupUtility.FetchObjects(property);
 
             });
             menu.AddItem(new GUIContent("Clear Group"), false, () =>
             {
-                SelectionGroupUtility.ClearObjects(property);
-                Selection.objects = SelectionGroupUtility.FetchObjects(property);
+                EditorSelectionGroupUtility.ClearObjects(property);
+                Selection.objects = EditorSelectionGroupUtility.FetchObjects(property);
             });
             menu.AddItem(new GUIContent("Settings"), false, () =>
             {
@@ -199,7 +199,7 @@ namespace Utj.Film
 
         void PerformDrag(SerializedProperty property)
         {
-            SelectionGroupUtility.AddObjects(property, DragAndDrop.objectReferences);
+            EditorSelectionGroupUtility.AddObjects(property, DragAndDrop.objectReferences);
         }
     }
 }

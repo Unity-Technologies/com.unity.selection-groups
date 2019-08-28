@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Utj.Film
+namespace Unity.SelectionGroups
 {
     public class SelectionGroupDialog : EditorWindow
     {
