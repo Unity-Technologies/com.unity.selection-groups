@@ -4,6 +4,7 @@
     "com.unity.ext.nunit": "1.0.0",
     "com.unity.ide.vscode": "1.0.7",
     "com.unity.package-manager-ui": "2.2.0",
+    "com.unity.package-validation-suite": "0.7.2-preview",
     "com.unity.selection-groups": "0.0.1-preview",
     "com.unity.test-framework": "1.0.13",
     "com.unity.textmeshpro": "2.0.1",
