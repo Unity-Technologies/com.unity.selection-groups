@@ -1,0 +1,8 @@
+{
+  "displayName": "Selection Groups",
+  "name": "com.unity.selection-groups",
+  "unity": "2019.2",
+  "version": "0.0.1-preview",
+  "dependencies": {},
+  "description": "Provides editor tools for working with arbitrary groups of gameobjects along with the hierarchy window and inspector."
+}
