@@ -4,6 +4,7 @@ build/**
 node_modules/**
 Documentation/ApiDocs/**
 Documentation~/ApiDocs/**
+SelectionGroups~/**
 .DS_Store
 .npmrc
 .npmignore
