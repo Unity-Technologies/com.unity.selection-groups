@@ -17,6 +17,7 @@ namespace Unity.SelectionGroups
         public bool showMembers;
         public DynamicSelectionQuery selectionQuery;
         public Object[] attachments;
+        public Rect rect;
     }
 
 }

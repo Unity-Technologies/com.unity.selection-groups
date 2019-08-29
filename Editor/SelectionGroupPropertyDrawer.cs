@@ -22,6 +22,25 @@ namespace Unity.SelectionGroups
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            switch (Event.current.type)
+            {
+                case EventType.Repaint:
+                case EventType.MouseDown:
+                case EventType.MouseUp:
+                    HandleRepaintEvent(position, property);
+                    break;
+                case EventType.DragUpdated:
+                case EventType.DragExited:
+                case EventType.DragPerform:
+                    if (HandleDragEvents(position, property))
+                        Event.current.Use();
+                    break;
+            }
+
+        }
+
+        private void HandleRepaintEvent(Rect position, SerializedProperty property)
+        {
             var nameProperty = property.FindPropertyRelative("groupName");
             var colorProperty = property.FindPropertyRelative("color");
             var editProperty = property.FindPropertyRelative("edit");
@@ -36,7 +55,8 @@ namespace Unity.SelectionGroups
             {
                 SelectionGroupDialog.Open(property);
             }
-            rect = position;
+            property.FindPropertyRelative("rect").rectValue = position;
+
             rect.width -= 32;
             rect.height = EditorGUIUtility.singleLineHeight;
             EditorGUI.LabelField(rect, nameProperty.stringValue);
@@ -80,10 +100,6 @@ namespace Unity.SelectionGroups
                     DrawGameObjectWidget(rect, i);
                 }
             }
-
-            //Disabled for now, it interferes with ReorderableList
-            // HandleDragEvents(position, property);
-
         }
 
         private void ShowMenu(SerializedProperty property, Rect rect)
@@ -133,6 +149,7 @@ namespace Unity.SelectionGroups
             if (Selection.activeObject == o)
             {
                 GUI.Box(rect, "");
+
             }
             if (GUI.Button(rect, content, "label"))
             {
@@ -148,56 +165,39 @@ namespace Unity.SelectionGroups
         {
         }
 
-        void HandleDragEvents(Rect rect, SerializedProperty property)
+        bool HandleDragEvents(Rect position, SerializedProperty property)
         {
             var e = Event.current;
-            switch (e.type)
+            if (position.Contains(e.mousePosition))
             {
-                case EventType.MouseDown:
-                    StartDrag();
-                    e.Use();
-                    break;
-                case EventType.DragUpdated:
-                    UpdateDrag(rect);
-                    e.Use();
-                    break;
-                case EventType.DragExited:
-                    ExitDrag();
-                    e.Use();
-                    break;
-                case EventType.DragPerform:
-                    PerformDrag(property);
-                    e.Use();
-                    break;
+                switch (e.type)
+                {
+                    case EventType.DragUpdated:
+                        UpdateDrag(position);
+                        return true;
+                    case EventType.DragExited:
+                        ExitDrag();
+                        return true;
+                    case EventType.DragPerform:
+                        PerformDrag(position, property);
+                        return true;
+                }
             }
+            return false;
         }
 
-        void StartDrag()
-        {
-            DragAndDrop.PrepareStartDrag();
-            DragAndDrop.paths = new string[] { "woot." };
-            DragAndDrop.objectReferences = Selection.objects;
-            DragAndDrop.visualMode = DragAndDropVisualMode.Move;
-            DragAndDrop.StartDrag("Groups");
-        }
 
         void UpdateDrag(Rect rect)
         {
-            var pos = Event.current.mousePosition;
-            DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
-            if (rect.Contains(pos))
-            {
-                DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
-                DragAndDrop.AcceptDrag();
-                return;
-            }
+            DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+            DragAndDrop.AcceptDrag();
         }
 
         void ExitDrag()
         {
         }
 
-        void PerformDrag(SerializedProperty property)
+        void PerformDrag(Rect position, SerializedProperty property)
         {
             EditorSelectionGroupUtility.AddObjects(property, DragAndDrop.objectReferences);
         }

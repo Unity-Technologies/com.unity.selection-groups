@@ -13,10 +13,27 @@ namespace Unity.SelectionGroups
         SelectionGroupContainer selectionGroups;
         Vector2 scroll;
         SerializedProperty activeSelectionGroup;
+        Dictionary<string, List<SelectionGroupContainer>> index = new Dictionary<string, List<SelectionGroupContainer>>();
+
+
+        public static SelectionGroupContainer GetInstance()
+        {
+            {
+                var instance = GameObject.FindObjectOfType<SelectionGroupContainer>();
+                if (instance == null)
+                {
+                    var g = new GameObject("Hidden_SelectionGroups");
+                    g.hideFlags = HideFlags.HideInInspector | HideFlags.HideInHierarchy;
+                    instance = g.AddComponent<SelectionGroupContainer>();
+                }
+                return instance;
+            }
+        }
+
 
         void BuildListWidget()
         {
-            selectionGroups = SelectionGroupContainer.Instance;
+            selectionGroups = GetInstance();
             EditorUtility.SetDirty(selectionGroups);
             serializedObject = new SerializedObject(selectionGroups);
             var groups = serializedObject.FindProperty("groups");
@@ -27,8 +44,10 @@ namespace Unity.SelectionGroups
             list.onAddCallback = OnAdd;
             list.onRemoveCallback += OnRemove;
             list.headerHeight = 0;
-            titleContent.text = "Selection Groups";
             list.onSelectCallback += OnSelect;
+
+            titleContent.text = "Selection Groups";
+            list.showDefaultBackground = false;
         }
 
         float ElementHeightCallback(int index)
@@ -94,15 +113,11 @@ namespace Unity.SelectionGroups
             using (var cc = new EditorGUI.ChangeCheckScope())
             {
                 list.DoLayoutList();
-
                 EditorGUILayout.EndScrollView();
-
-
                 if (cc.changed)
                 {
                     EditorUtility.SetDirty(selectionGroups);
                     serializedObject.ApplyModifiedProperties();
-
                 }
             }
             if (focusedWindow == this)
