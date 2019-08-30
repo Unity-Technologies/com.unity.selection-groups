@@ -131,8 +131,8 @@ namespace Unity.SelectionGroups
                 var scene = SceneManager.GetActiveScene();
                 SceneManager.SetActiveScene(gameObject.scene);
                 container = new GameObject("Hidden_SelectionGroups").AddComponent<SelectionGroupContainer>();
+                container.gameObject.hideFlags = HideFlags.HideInInspector | HideFlags.HideInHierarchy;
                 SceneManager.SetActiveScene(scene);
-                // g.hideFlags = HideFlags.HideInInspector | HideFlags.HideInHierarchy;
             }
             //at this point, container references the correct instance in the correct scene.
             if (container.groups.TryGetValue(groupName, out SelectionGroup group))
