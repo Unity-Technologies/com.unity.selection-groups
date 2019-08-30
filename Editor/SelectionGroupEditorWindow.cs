@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEditorInternal;
@@ -15,7 +16,7 @@ namespace Unity.SelectionGroups
         SelectionGroupContainer selectionGroups;
         Vector2 scroll;
         SerializedProperty activeSelectionGroup;
-
+        float width;
 
         void OnEnable()
         {
@@ -66,13 +67,13 @@ namespace Unity.SelectionGroups
                 foreach (var n in names)
                 {
                     GUILayout.Space(EditorGUIUtility.singleLineHeight);
-                    var rect = GUILayoutUtility.GetRect(position.width, EditorGUIUtility.singleLineHeight);
+                    var rect = GUILayoutUtility.GetRect(1, EditorGUIUtility.singleLineHeight);
                     var dropRect = rect;
                     var showChildren = DrawGroupWidget(rect, n);
                     if (showChildren)
                     {
                         var members = EditorSelectionGroupUtility.GetGameObjects(n);
-                        rect = GUILayoutUtility.GetRect(position.width, (EditorGUIUtility.standardVerticalSpacing + EditorGUIUtility.singleLineHeight) * members.Count);
+                        rect = GUILayoutUtility.GetRect(1, (EditorGUIUtility.standardVerticalSpacing + EditorGUIUtility.singleLineHeight) * members.Count);
                         dropRect.yMax = rect.yMax;
                         DrawGroupMembers(rect, n, members, allowRemove: true);
                         var queryMembers = EditorSelectionGroupUtility.GetQueryObjects(n);
@@ -80,7 +81,7 @@ namespace Unity.SelectionGroups
                         {
                             var bg = GUI.backgroundColor;
                             GUI.backgroundColor = Color.yellow;
-                            rect = GUILayoutUtility.GetRect(position.width, (EditorGUIUtility.standardVerticalSpacing + EditorGUIUtility.singleLineHeight) * queryMembers.Count);
+                            rect = GUILayoutUtility.GetRect(1, (EditorGUIUtility.standardVerticalSpacing + EditorGUIUtility.singleLineHeight) * queryMembers.Count);
                             dropRect.yMax = rect.yMax;
                             DrawGroupMembers(rect, n, queryMembers, allowRemove: false);
                             GUI.backgroundColor = bg;
@@ -95,6 +96,7 @@ namespace Unity.SelectionGroups
                     EditorSelectionGroupUtility.CreateNewGroup("New Group");
                 }
                 GUILayout.Space(EditorGUIUtility.singleLineHeight * 0.5f);
+                var bottom = GUILayoutUtility.GetLastRect();
                 if (cc.changed)
                 {
                 }

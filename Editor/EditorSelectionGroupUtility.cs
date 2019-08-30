@@ -87,6 +87,10 @@ namespace Unity.SelectionGroups
             var actualName = CreateNewGroup(groupName);
             foreach (var i in GetGameObjects(groupName))
                 AddObjectToGroup(i, actualName);
+            var g = GetFirstGroup(groupName);
+            var n = GetFirstGroup(actualName);
+            n.selectionQuery = g.selectionQuery;
+            UpdateGroup(actualName, n);
         }
 
         public static void RenameGroup(string groupName, string newName)
