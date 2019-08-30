@@ -10,8 +10,8 @@ namespace Unity.SelectionGroups
     {
         public bool enabled;
         public string nameQuery;
-        public string[] requiredTypes;
-        public Material[] requiredMaterials;
-        public Shader[] requiredShaders;
+        public List<string> requiredTypes;
+        public List<Material> requiredMaterials;
+        public List<Shader> requiredShaders;
     }
 }

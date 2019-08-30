@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Unity.SelectionGroups
 {
@@ -13,90 +15,39 @@ namespace Unity.SelectionGroups
         SelectionGroupContainer selectionGroups;
         Vector2 scroll;
         SerializedProperty activeSelectionGroup;
-        Dictionary<string, List<SelectionGroupContainer>> index = new Dictionary<string, List<SelectionGroupContainer>>();
 
-
-        public static SelectionGroupContainer GetInstance()
-        {
-            {
-                var instance = GameObject.FindObjectOfType<SelectionGroupContainer>();
-                if (instance == null)
-                {
-                    var g = new GameObject("Hidden_SelectionGroups");
-                    g.hideFlags = HideFlags.HideInInspector | HideFlags.HideInHierarchy;
-                    instance = g.AddComponent<SelectionGroupContainer>();
-                }
-                return instance;
-            }
-        }
-
-
-        void BuildListWidget()
-        {
-            selectionGroups = GetInstance();
-            EditorUtility.SetDirty(selectionGroups);
-            serializedObject = new SerializedObject(selectionGroups);
-            var groups = serializedObject.FindProperty("groups");
-            list = new ReorderableList(serializedObject, groups);
-            list.drawElementCallback = OnDrawElement;
-            list.drawHeaderCallback = DoNothing;
-            list.elementHeightCallback += ElementHeightCallback;
-            list.onAddCallback = OnAdd;
-            list.onRemoveCallback += OnRemove;
-            list.headerHeight = 0;
-            list.onSelectCallback += OnSelect;
-
-            titleContent.text = "Selection Groups";
-            list.showDefaultBackground = false;
-        }
-
-        float ElementHeightCallback(int index)
-        {
-            var p = list.serializedProperty.GetArrayElementAtIndex(index);
-            return EditorGUI.GetPropertyHeight(p);
-        }
-
-        void OnRemove(ReorderableList list)
-        {
-            activeSelectionGroup = null;
-            list.serializedProperty.DeleteArrayElementAtIndex(list.index);
-        }
-
-        void OnSelect(ReorderableList list)
-        {
-            activeSelectionGroup = list.serializedProperty.GetArrayElementAtIndex(list.index);
-            activeSelectionGroup.FindPropertyRelative("edit").boolValue = false;
-            EditorSelectionGroupUtility.UpdateQueryResults(activeSelectionGroup);
-            Selection.objects = EditorSelectionGroupUtility.FetchObjects(activeSelectionGroup);
-        }
 
         void OnEnable()
         {
+            titleContent.text = "Selection Groups";
+            SelectionGroupContainer.onLoaded -= OnContainerLoaded;
+            SelectionGroupContainer.onLoaded += OnContainerLoaded;
         }
 
-        void OnAdd(ReorderableList list)
+        private void OnContainerLoaded(SelectionGroupContainer container)
         {
-            list.serializedProperty.InsertArrayElementAtIndex(list.serializedProperty.arraySize);
-            var item = list.serializedProperty.GetArrayElementAtIndex(list.serializedProperty.arraySize - 1);
-            item.FindPropertyRelative("groupName").stringValue = "New Group";
-            item.FindPropertyRelative("color").colorValue = Color.HSVToRGB(Random.value, 1, 1);
-            item.serializedObject.ApplyModifiedProperties();
-            EditorSelectionGroupUtility.ClearObjects(item);
-            EditorSelectionGroupUtility.AddObjects(item, Selection.objects);
+            foreach (var i in SelectionGroupContainer.instances.Values)
+            {
+                foreach (var g in i.groups.Values)
+                {
+                    g.ClearQueryResults();
+                }
+                EditorUtility.SetDirty(i);
+            }
         }
 
-        void DoNothing(Rect rect)
+        void OnDisable()
         {
+            SelectionGroupContainer.onLoaded -= OnContainerLoaded;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+
         }
 
         void OnSelectionChange()
         {
-        }
-
-        void OnDrawElement(Rect rect, int index, bool isActive, bool isFocused)
-        {
-            var item = list.serializedProperty.GetArrayElementAtIndex(index);
-            EditorGUI.PropertyField(rect, item, GUIContent.none);
         }
 
         [MenuItem("Window/General/Selection Groups")]
@@ -108,22 +59,174 @@ namespace Unity.SelectionGroups
 
         void OnGUI()
         {
-            if (selectionGroups == null || list == null) BuildListWidget();
+            var names = EditorSelectionGroupUtility.GetGroupNames();
             scroll = EditorGUILayout.BeginScrollView(scroll);
             using (var cc = new EditorGUI.ChangeCheckScope())
             {
-                list.DoLayoutList();
-                EditorGUILayout.EndScrollView();
+                foreach (var n in names)
+                {
+                    GUILayout.Space(EditorGUIUtility.singleLineHeight);
+                    var rect = GUILayoutUtility.GetRect(position.width, EditorGUIUtility.singleLineHeight);
+                    var dropRect = rect;
+                    var showChildren = DrawGroupWidget(rect, n);
+                    if (showChildren)
+                    {
+                        var members = EditorSelectionGroupUtility.GetGameObjects(n);
+                        rect = GUILayoutUtility.GetRect(position.width, (EditorGUIUtility.standardVerticalSpacing + EditorGUIUtility.singleLineHeight) * members.Count);
+                        dropRect.yMax = rect.yMax;
+                        DrawGroupMembers(rect, n, members, allowRemove: true);
+                        var queryMembers = EditorSelectionGroupUtility.GetQueryObjects(n);
+                        if (queryMembers.Count > 0)
+                        {
+                            var bg = GUI.backgroundColor;
+                            GUI.backgroundColor = Color.yellow;
+                            rect = GUILayoutUtility.GetRect(position.width, (EditorGUIUtility.standardVerticalSpacing + EditorGUIUtility.singleLineHeight) * queryMembers.Count);
+                            dropRect.yMax = rect.yMax;
+                            DrawGroupMembers(rect, n, queryMembers, allowRemove: false);
+                            GUI.backgroundColor = bg;
+                        }
+                    }
+                    if (HandleDragEvents(dropRect, n))
+                        Event.current.Use();
+                }
+                GUILayout.FlexibleSpace();
+                if (GUILayout.Button("Add Group"))
+                {
+                    EditorSelectionGroupUtility.CreateNewGroup("New Group");
+                }
+                GUILayout.Space(EditorGUIUtility.singleLineHeight * 0.5f);
                 if (cc.changed)
                 {
-                    EditorUtility.SetDirty(selectionGroups);
-                    serializedObject.ApplyModifiedProperties();
                 }
             }
+            EditorGUILayout.EndScrollView();
+
             if (focusedWindow == this)
                 Repaint();
         }
 
+        void DrawGroupMembers(Rect rect, string groupName, List<GameObject> members, bool allowRemove)
+        {
+            rect.height = EditorGUIUtility.singleLineHeight;
+            foreach (var i in members)
+            {
+                DrawGroupMemberWidget(rect, groupName, i, allowRemove);
+                rect.y += rect.height + EditorGUIUtility.standardVerticalSpacing;
+            }
+        }
 
+        private void DrawGroupMemberWidget(Rect rect, string groupName, GameObject g, bool allowRemove)
+        {
+            // GUIContent content;
+            var content = EditorGUIUtility.ObjectContent(g, typeof(GameObject));
+            // content.text = g.name;
+            if (Selection.activeGameObject == g)
+            {
+                GUI.Box(rect, string.Empty);
+            }
+            rect.x += 24;
+            if (GUI.Button(rect, content, "label"))
+            {
+                Selection.activeGameObject = g;
+                if (Event.current.button == 1)
+                {
+                    ShowGameObjectContextMenu(rect, groupName, g, allowRemove);
+                }
+            }
+        }
+
+        bool DrawGroupWidget(Rect rect, string groupName)
+        {
+            var group = EditorSelectionGroupUtility.GetFirstGroup(groupName);
+            var content = EditorGUIUtility.IconContent("LODGroup Icon");
+            content.text = groupName;
+            GUI.Box(rect, string.Empty);
+            using (var cc = new EditorGUI.ChangeCheckScope())
+            {
+                group.showMembers = EditorGUI.Foldout(rect, group.showMembers, content);
+                var colorRect = rect;
+                colorRect.x = colorRect.width - colorRect.height - 4;
+                colorRect.width = colorRect.height;
+                EditorGUI.DrawRect(colorRect, group.color);
+                if (cc.changed)
+                {
+                    EditorSelectionGroupUtility.UpdateGroup(groupName, group);
+                }
+            }
+            if (HandleMouseEvents(rect, groupName))
+                Event.current.Use();
+            return group.showMembers;
+        }
+
+        void ShowGameObjectContextMenu(Rect rect, string groupName, GameObject g, bool allowRemove)
+        {
+            Selection.activeGameObject = g;
+            var menu = new GenericMenu();
+            var content = new GUIContent("Remove From Group");
+            if (allowRemove)
+                menu.AddItem(content, false, () => EditorSelectionGroupUtility.RemoveObjectFromGroup(g, groupName));
+            else
+                menu.AddDisabledItem(content);
+            menu.DropDown(rect);
+        }
+
+        void ShowGroupContextMenu(Rect rect, string groupName)
+        {
+            var menu = new GenericMenu();
+            menu.AddItem(new GUIContent("Remove Group"), false, () => EditorSelectionGroupUtility.RemoveGroup(groupName));
+            menu.AddItem(new GUIContent("Duplicate Group"), false, () => EditorSelectionGroupUtility.DuplicateGroup(groupName));
+            menu.AddItem(new GUIContent("Configure Group"), false, () => SelectionGroupDialog.Open(groupName));
+            menu.DropDown(rect);
+        }
+
+        bool HandleMouseEvents(Rect position, string groupName)
+        {
+            var e = Event.current;
+            if (position.Contains(e.mousePosition))
+            {
+                switch (e.type)
+                {
+                    case EventType.MouseDown:
+                        ShowGroupContextMenu(position, groupName);
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        bool HandleDragEvents(Rect position, string groupName)
+        {
+            var e = Event.current;
+            if (position.Contains(e.mousePosition))
+            {
+                switch (e.type)
+                {
+                    case EventType.DragUpdated:
+                        UpdateDrag(position);
+                        return true;
+                    case EventType.DragExited:
+                        return true;
+                    case EventType.DragPerform:
+                        PerformDrag(position, groupName);
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        void UpdateDrag(Rect rect)
+        {
+            DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+            DragAndDrop.AcceptDrag();
+        }
+
+        void PerformDrag(Rect position, string groupName)
+        {
+            foreach (var i in DragAndDrop.objectReferences)
+            {
+                var g = i as GameObject;
+                if (g != null) EditorSelectionGroupUtility.AddObjectToGroup(g, groupName);
+            }
+        }
     }
 }

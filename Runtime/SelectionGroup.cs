@@ -1,23 +1,39 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
 namespace Unity.SelectionGroups
 {
     [System.Serializable]
-    public struct SelectionGroup
+    public struct SelectionGroup : ISerializationCallbackReceiver
     {
         public string groupName;
         public Color color;
-        public List<GameObject> objects;
-        public List<GameObject> queryResults;
-        public bool edit;
-        public bool isLightGroup;
-        public string lightGroupName;
+        public HashSet<GameObject> objects;
         public bool showMembers;
         public DynamicSelectionQuery selectionQuery;
-        public Object[] attachments;
+        public HashSet<GameObject> queryResults;
+        public List<Object> attachments;
         public Rect rect;
+
+        [SerializeField] GameObject[] _objects;
+
+        public void OnAfterDeserialize()
+        {
+            objects = new HashSet<GameObject>(_objects ?? new GameObject[0]);
+        }
+
+        public void OnBeforeSerialize()
+        {
+            if (objects != null)
+                _objects = objects.ToArray();
+        }
+
+        public void ClearQueryResults()
+        {
+            if (queryResults != null) queryResults.Clear();
+        }
     }
 
 }
