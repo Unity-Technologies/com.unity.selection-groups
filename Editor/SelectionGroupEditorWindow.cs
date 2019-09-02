@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -17,16 +18,53 @@ namespace Unity.SelectionGroups
         Vector2 scroll;
         SerializedProperty activeSelectionGroup;
         float width;
+        static SelectionGroupEditorWindow editorWindow;
 
-        void OnEnable()
+        static SelectionGroupEditorWindow()
         {
-            titleContent.text = "Selection Groups";
             SelectionGroupContainer.onLoaded -= OnContainerLoaded;
             SelectionGroupContainer.onLoaded += OnContainerLoaded;
         }
 
-        private void OnContainerLoaded(SelectionGroupContainer container)
+        void OnEnable()
         {
+            titleContent.text = "Selection Groups";
+            editorWindow = this;
+        }
+
+        void OnHierarchyChange()
+        {
+            foreach (var i in SelectionGroupContainer.instances.ToArray())
+            {
+                var scene = i.Key;
+                var container = i.Value;
+                foreach (var g in container.groups)
+                {
+                    var name = g.Key;
+                    var group = g.Value;
+                    foreach (var o in group.objects.ToArray())
+                    {
+                        if (o != null && o.scene != scene)
+                        {
+                            group.objects.Remove(o);
+                            SelectionGroupUtility.AddObjectToGroup(o, name);
+                        }
+                    }
+                }
+            }
+        }
+
+        static void OnContainerLoaded(SelectionGroupContainer container)
+        {
+            foreach (var name in container.groups.Keys.ToArray())
+            {
+                var mainGroup = SelectionGroupUtility.GetFirstGroup(name);
+                var importedGroup = container.groups[name];
+                importedGroup.color = mainGroup.color;
+                importedGroup.selectionQuery = mainGroup.selectionQuery;
+                importedGroup.showMembers = mainGroup.showMembers;
+                container.groups[name] = importedGroup;
+            }
             foreach (var i in SelectionGroupContainer.instances.Values)
             {
                 foreach (var g in i.groups.Values)
@@ -35,11 +73,13 @@ namespace Unity.SelectionGroups
                 }
                 EditorUtility.SetDirty(i);
             }
+            if (editorWindow != null) editorWindow.Repaint();
         }
 
         void OnDisable()
         {
             SelectionGroupContainer.onLoaded -= OnContainerLoaded;
+            editorWindow = null;
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -60,7 +100,7 @@ namespace Unity.SelectionGroups
 
         void OnGUI()
         {
-            var names = EditorSelectionGroupUtility.GetGroupNames();
+            var names = SelectionGroupUtility.GetGroupNames();
             scroll = EditorGUILayout.BeginScrollView(scroll);
             using (var cc = new EditorGUI.ChangeCheckScope())
             {
@@ -72,11 +112,11 @@ namespace Unity.SelectionGroups
                     var showChildren = DrawGroupWidget(rect, n);
                     if (showChildren)
                     {
-                        var members = EditorSelectionGroupUtility.GetGameObjects(n);
+                        var members = SelectionGroupUtility.GetGameObjects(n);
                         rect = GUILayoutUtility.GetRect(1, (EditorGUIUtility.standardVerticalSpacing + EditorGUIUtility.singleLineHeight) * members.Count);
                         dropRect.yMax = rect.yMax;
                         DrawGroupMembers(rect, n, members, allowRemove: true);
-                        var queryMembers = EditorSelectionGroupUtility.GetQueryObjects(n);
+                        var queryMembers = SelectionGroupUtility.GetQueryObjects(n);
                         if (queryMembers.Count > 0)
                         {
                             var bg = GUI.backgroundColor;
@@ -93,7 +133,7 @@ namespace Unity.SelectionGroups
                 GUILayout.FlexibleSpace();
                 if (GUILayout.Button("Add Group"))
                 {
-                    EditorSelectionGroupUtility.CreateNewGroup("New Group");
+                    SelectionGroupUtility.CreateNewGroup("New Group");
                 }
                 GUILayout.Space(EditorGUIUtility.singleLineHeight * 0.5f);
                 var bottom = GUILayoutUtility.GetLastRect();
@@ -139,7 +179,7 @@ namespace Unity.SelectionGroups
 
         bool DrawGroupWidget(Rect rect, string groupName)
         {
-            var group = EditorSelectionGroupUtility.GetFirstGroup(groupName);
+            var group = SelectionGroupUtility.GetFirstGroup(groupName);
             var content = EditorGUIUtility.IconContent("LODGroup Icon");
             content.text = groupName;
             GUI.Box(rect, string.Empty);
@@ -152,7 +192,7 @@ namespace Unity.SelectionGroups
                 EditorGUI.DrawRect(colorRect, group.color);
                 if (cc.changed)
                 {
-                    EditorSelectionGroupUtility.UpdateGroup(groupName, group);
+                    SelectionGroupUtility.UpdateGroup(groupName, group);
                 }
             }
             if (HandleMouseEvents(rect, groupName))
@@ -166,7 +206,7 @@ namespace Unity.SelectionGroups
             var menu = new GenericMenu();
             var content = new GUIContent("Remove From Group");
             if (allowRemove)
-                menu.AddItem(content, false, () => EditorSelectionGroupUtility.RemoveObjectFromGroup(g, groupName));
+                menu.AddItem(content, false, () => SelectionGroupUtility.RemoveObjectFromGroup(g, groupName));
             else
                 menu.AddDisabledItem(content);
             menu.DropDown(rect);
@@ -175,8 +215,8 @@ namespace Unity.SelectionGroups
         void ShowGroupContextMenu(Rect rect, string groupName)
         {
             var menu = new GenericMenu();
-            menu.AddItem(new GUIContent("Remove Group"), false, () => EditorSelectionGroupUtility.RemoveGroup(groupName));
-            menu.AddItem(new GUIContent("Duplicate Group"), false, () => EditorSelectionGroupUtility.DuplicateGroup(groupName));
+            menu.AddItem(new GUIContent("Remove Group"), false, () => SelectionGroupUtility.RemoveGroup(groupName));
+            menu.AddItem(new GUIContent("Duplicate Group"), false, () => SelectionGroupUtility.DuplicateGroup(groupName));
             menu.AddItem(new GUIContent("Configure Group"), false, () => SelectionGroupDialog.Open(groupName));
             menu.DropDown(rect);
         }
@@ -227,7 +267,7 @@ namespace Unity.SelectionGroups
             foreach (var i in DragAndDrop.objectReferences)
             {
                 var g = i as GameObject;
-                if (g != null) EditorSelectionGroupUtility.AddObjectToGroup(g, groupName);
+                if (g != null) SelectionGroupUtility.AddObjectToGroup(g, groupName);
             }
         }
     }

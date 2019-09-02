@@ -24,7 +24,7 @@ namespace Unity.SelectionGroups
         void Configure(string groupName)
         {
             this.groupName = groupName;
-            group = EditorSelectionGroupUtility.GetFirstGroup(groupName);
+            group = SelectionGroupUtility.GetFirstGroup(groupName);
             titleContent.text = "Selection Group Settings";
         }
 
@@ -68,12 +68,12 @@ namespace Unity.SelectionGroups
                 GUILayout.EndVertical();
                 if (cc.changed)
                 {
-                    EditorSelectionGroupUtility.UpdateGroup(groupName, group);
+                    SelectionGroupUtility.UpdateGroup(groupName, group);
                 }
             }
             if (Event.current.isKey && Event.current.keyCode == KeyCode.Escape)
             {
-                EditorSelectionGroupUtility.UpdateGroup(groupName, group);
+                SelectionGroupUtility.UpdateGroup(groupName, group);
                 Close();
             }
         }

@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 namespace Unity.SelectionGroups
 {
 
-    internal static class EditorSelectionGroupUtility
+    public static class SelectionGroupUtility
     {
         public static SelectionGroup GetFirstGroup(string name)
         {
@@ -43,15 +43,16 @@ namespace Unity.SelectionGroups
         public static string CreateNewGroup(string name)
         {
             var actualName = CreateUniqueName(name);
+            var color = Random.ColorHSV();
             foreach (var i in SelectionGroupContainer.instances.Values)
             {
-                i.groups[actualName] = new SelectionGroup() { groupName = actualName, objects = new HashSet<GameObject>(), color = Random.ColorHSV(), showMembers = true };
+                i.groups[actualName] = new SelectionGroup() { groupName = actualName, objects = new HashSet<GameObject>(), color = color, showMembers = true };
                 EditorUtility.SetDirty(i);
             }
             return actualName;
         }
 
-        public static string CreateUniqueName(string name)
+        static string CreateUniqueName(string name)
         {
             var actualName = name;
             var count = 1;
@@ -179,7 +180,7 @@ namespace Unity.SelectionGroups
                     objectSet.UnionWith(group.objects);
                 }
             }
-            var objects = objectSet.ToList();
+            var objects = (from o in objectSet where o != null select o).ToList();
             objects.Sort((a, b) => a.name.CompareTo(b.name));
             return objects;
         }

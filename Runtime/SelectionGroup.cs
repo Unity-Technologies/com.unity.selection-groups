@@ -35,5 +35,4 @@ namespace Unity.SelectionGroups
             if (queryResults != null) queryResults.Clear();
         }
     }
-
 }
