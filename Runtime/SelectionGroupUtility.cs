@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
@@ -35,7 +34,6 @@ namespace Unity.SelectionGroups
                     else
                         existingGroup.queryResults = null;
                     i.groups[group.groupName] = existingGroup;
-                    EditorUtility.SetDirty(i);
                 }
             }
         }
@@ -47,7 +45,6 @@ namespace Unity.SelectionGroups
             foreach (var i in SelectionGroupContainer.instances.Values)
             {
                 i.groups[actualName] = new SelectionGroup() { groupName = actualName, objects = new HashSet<GameObject>(), color = color, showMembers = true };
-                EditorUtility.SetDirty(i);
             }
             return actualName;
         }
@@ -103,7 +100,6 @@ namespace Unity.SelectionGroups
                     i.groups.Remove(groupName);
                     group.groupName = newName;
                     i.groups.Add(newName, group);
-                    EditorUtility.SetDirty(i);
                 }
             }
         }
@@ -113,7 +109,6 @@ namespace Unity.SelectionGroups
             foreach (var i in SelectionGroupContainer.instances.Values)
             {
                 i.groups.Remove(groupName);
-                EditorUtility.SetDirty(i);
             }
         }
 
@@ -149,7 +144,6 @@ namespace Unity.SelectionGroups
             if (container.groups.TryGetValue(groupName, out SelectionGroup group))
             {
                 group.objects.Add(gameObject);
-                EditorUtility.SetDirty(container);
                 return;
             }
 
@@ -158,7 +152,6 @@ namespace Unity.SelectionGroups
             var newGroup = new SelectionGroup() { groupName = groupName, objects = new HashSet<GameObject>() };
             newGroup.objects.Add(gameObject);
             container.groups.Add(groupName, newGroup);
-            EditorUtility.SetDirty(container);
         }
 
         public static void RemoveObjectFromGroup(GameObject gameObject, string groupName)
@@ -171,7 +164,6 @@ namespace Unity.SelectionGroups
                 if (i.groups.TryGetValue(groupName, out SelectionGroup group))
                 {
                     group.objects.Remove(gameObject);
-                    EditorUtility.SetDirty(i);
                 }
             }
         }

@@ -68,12 +68,16 @@ namespace Unity.SelectionGroups
                 GUILayout.EndVertical();
                 if (cc.changed)
                 {
+                    SelectionGroupEditorWindow.UndoRecordObject("Configure group settings");
                     SelectionGroupUtility.UpdateGroup(groupName, group);
+                    SelectionGroupEditorWindow.MarkAllContainersDirty();
                 }
             }
             if (Event.current.isKey && Event.current.keyCode == KeyCode.Escape)
             {
+                SelectionGroupEditorWindow.UndoRecordObject("Configure group settings");
                 SelectionGroupUtility.UpdateGroup(groupName, group);
+                SelectionGroupEditorWindow.MarkAllContainersDirty();
                 Close();
             }
         }

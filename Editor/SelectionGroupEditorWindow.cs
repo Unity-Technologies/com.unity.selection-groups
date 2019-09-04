@@ -34,6 +34,12 @@ namespace Unity.SelectionGroups
 
         void OnHierarchyChange()
         {
+            //This is required to preserve refences when a gameobject is moved between scenes in the editor.
+            SanitizeSceneReferences();
+        }
+
+        private static void SanitizeSceneReferences()
+        {
             foreach (var i in SelectionGroupContainer.instances.ToArray())
             {
                 var scene = i.Key;
@@ -48,6 +54,7 @@ namespace Unity.SelectionGroups
                         {
                             group.objects.Remove(o);
                             SelectionGroupUtility.AddObjectToGroup(o, name);
+                            EditorUtility.SetDirty(container);
                         }
                     }
                 }
@@ -67,6 +74,7 @@ namespace Unity.SelectionGroups
             }
             foreach (var i in SelectionGroupContainer.instances.Values)
             {
+                //clear all results so the queries can be refreshed with items from the new scene.
                 foreach (var g in i.groups.Values)
                 {
                     g.ClearQueryResults();
@@ -96,6 +104,17 @@ namespace Unity.SelectionGroups
         {
             var window = EditorWindow.GetWindow<SelectionGroupEditorWindow>();
             window.ShowUtility();
+        }
+
+        internal static void MarkAllContainersDirty()
+        {
+            foreach (var container in SelectionGroupContainer.instances.Values)
+                EditorUtility.SetDirty(container);
+        }
+
+        internal static void UndoRecordObject(string msg)
+        {
+            Undo.RecordObjects(SelectionGroupContainer.instances.Values.ToArray(), msg);
         }
 
         void OnGUI()
@@ -133,8 +152,10 @@ namespace Unity.SelectionGroups
                 GUILayout.FlexibleSpace();
                 if (GUILayout.Button("Add Group"))
                 {
+                    UndoRecordObject("New Selection Group");
                     var actualName = SelectionGroupUtility.CreateNewGroup("New Group");
                     SelectionGroupUtility.AddObjectToGroup(Selection.gameObjects, actualName);
+                    MarkAllContainersDirty();
                 }
                 GUILayout.Space(EditorGUIUtility.singleLineHeight * 0.5f);
                 var bottom = GUILayoutUtility.GetLastRect();
@@ -193,7 +214,9 @@ namespace Unity.SelectionGroups
                 EditorGUI.DrawRect(colorRect, group.color);
                 if (cc.changed)
                 {
+                    //saves the show members flag.
                     SelectionGroupUtility.UpdateGroup(groupName, group);
+                    MarkAllContainersDirty();
                 }
             }
             if (HandleMouseEvents(rect, groupName))
@@ -207,7 +230,12 @@ namespace Unity.SelectionGroups
             var menu = new GenericMenu();
             var content = new GUIContent("Remove From Group");
             if (allowRemove)
-                menu.AddItem(content, false, () => SelectionGroupUtility.RemoveObjectFromGroup(g, groupName));
+                menu.AddItem(content, false, () =>
+                {
+                    UndoRecordObject("Remove object from group");
+                    SelectionGroupUtility.RemoveObjectFromGroup(g, groupName);
+                    MarkAllContainersDirty();
+                });
             else
                 menu.AddDisabledItem(content);
             menu.DropDown(rect);
@@ -216,8 +244,18 @@ namespace Unity.SelectionGroups
         void ShowGroupContextMenu(Rect rect, string groupName)
         {
             var menu = new GenericMenu();
-            menu.AddItem(new GUIContent("Remove Group"), false, () => SelectionGroupUtility.RemoveGroup(groupName));
-            menu.AddItem(new GUIContent("Duplicate Group"), false, () => SelectionGroupUtility.DuplicateGroup(groupName));
+            menu.AddItem(new GUIContent("Remove Group"), false, () =>
+            {
+                UndoRecordObject("Remove group");
+                SelectionGroupUtility.RemoveGroup(groupName);
+                MarkAllContainersDirty();
+            });
+            menu.AddItem(new GUIContent("Duplicate Group"), false, () =>
+            {
+                UndoRecordObject("Duplicate group");
+                SelectionGroupUtility.DuplicateGroup(groupName);
+                MarkAllContainersDirty();
+            });
             menu.AddItem(new GUIContent("Configure Group"), false, () => SelectionGroupDialog.Open(groupName));
             menu.DropDown(rect);
         }
@@ -265,11 +303,16 @@ namespace Unity.SelectionGroups
 
         void PerformDrag(Rect position, string groupName)
         {
+            UndoRecordObject("Drop objects into group");
             foreach (var i in DragAndDrop.objectReferences)
             {
                 var g = i as GameObject;
-                if (g != null) SelectionGroupUtility.AddObjectToGroup(g, groupName);
+                if (g != null)
+                {
+                    SelectionGroupUtility.AddObjectToGroup(g, groupName);
+                }
             }
+            MarkAllContainersDirty();
         }
     }
 }
