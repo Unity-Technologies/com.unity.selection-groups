@@ -133,7 +133,8 @@ namespace Unity.SelectionGroups
                 GUILayout.FlexibleSpace();
                 if (GUILayout.Button("Add Group"))
                 {
-                    SelectionGroupUtility.CreateNewGroup("New Group");
+                    var actualName = SelectionGroupUtility.CreateNewGroup("New Group");
+                    SelectionGroupUtility.AddObjectToGroup(Selection.gameObjects, actualName);
                 }
                 GUILayout.Space(EditorGUIUtility.singleLineHeight * 0.5f);
                 var bottom = GUILayoutUtility.GetLastRect();

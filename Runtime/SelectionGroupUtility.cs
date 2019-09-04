@@ -127,6 +127,12 @@ namespace Unity.SelectionGroups
             return names.ToArray();
         }
 
+        public static void AddObjectToGroup(IList<GameObject> gameObjects, string groupName)
+        {
+            foreach (var g in gameObjects)
+                AddObjectToGroup(g, groupName);
+        }
+
         public static void AddObjectToGroup(GameObject gameObject, string groupName)
         {
             //Get the container from the appropriate scene
