@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -33,7 +33,7 @@ namespace Unity.SelectionGroups
             using (var cc = new EditorGUI.ChangeCheckScope())
             {
                 GUILayout.BeginVertical("box", GUILayout.Width(position.width));
-                group.groupName = EditorGUILayout.TextField("Group Name", group.groupName);
+                group.groupName = EditorGUILayout.DelayedTextField("Group Name", group.groupName);
                 group.color = EditorGUILayout.ColorField("Group Color", group.color);
                 GUILayout.Space(EditorGUIUtility.singleLineHeight);
                 GUILayout.EndVertical();
@@ -84,6 +84,7 @@ namespace Unity.SelectionGroups
 
         ReorderableList BuildMaterialList()
         {
+            if(group.selectionQuery.requiredMaterials == null) group.selectionQuery.requiredMaterials = new List<Material>();
             var materialList = new ReorderableList(group.selectionQuery.requiredMaterials, typeof(Material));
             materialList.onAddCallback = (list) => list.list.Add(null);
             materialList.drawElementCallback = (rect, index, isActive, isFocused) =>
@@ -103,6 +104,7 @@ namespace Unity.SelectionGroups
 
         ReorderableList BuildShaderList()
         {
+            if(group.selectionQuery.requiredShaders == null) group.selectionQuery.requiredShaders = new List<Shader>();
             var shaderList = new ReorderableList(group.selectionQuery.requiredShaders, typeof(Shader));
             shaderList.onAddCallback = (list) => list.list.Add(null);
             shaderList.drawElementCallback = (rect, index, isActive, isFocused) =>
@@ -122,6 +124,7 @@ namespace Unity.SelectionGroups
 
         ReorderableList BuildTypeList()
         {
+            if(group.selectionQuery.requiredTypes == null) group.selectionQuery.requiredTypes = new List<string>();
             var typeList = new ReorderableList(group.selectionQuery.requiredTypes, typeof(string));
             typeList.onAddCallback = (list) => list.list.Add(string.Empty);
             typeList.drawElementCallback = (rect, index, isActive, isFocused) =>
@@ -141,7 +144,8 @@ namespace Unity.SelectionGroups
 
         ReorderableList BuildAttachmentList()
         {
-            var attachmentList = new ReorderableList(group.attachments, typeof(UnityEngine.Object));
+            if(group.attachments == null) group.attachments = new List<Object>();
+            var attachmentList = new ReorderableList(group.attachments, typeof(Object));
             attachmentList.onAddCallback = (list) => list.list.Add(null);
             attachmentList.drawElementCallback = (rect, index, isActive, isFocused) =>
             {

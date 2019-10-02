@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
 
+
 namespace Unity.SelectionGroups
 {
 
@@ -10,7 +11,7 @@ namespace Unity.SelectionGroups
     {
         public static SelectionGroup GetFirstGroup(string name)
         {
-            foreach (var i in SelectionGroupContainer.instances.Values)
+            foreach (var i in SelectionGroupContainer.instanceMap.Values)
             {
                 if (i.groups.TryGetValue(name, out SelectionGroup group))
                     return group;
@@ -20,7 +21,7 @@ namespace Unity.SelectionGroups
 
         public static void UpdateGroup(string name, SelectionGroup group)
         {
-            foreach (var i in SelectionGroupContainer.instances.Values)
+            foreach (var i in SelectionGroupContainer.instanceMap.Values)
             {
                 if (i.groups.TryGetValue(name, out SelectionGroup existingGroup))
                 {
@@ -41,8 +42,8 @@ namespace Unity.SelectionGroups
         public static string CreateNewGroup(string name)
         {
             var actualName = CreateUniqueName(name);
-            var color = Random.ColorHSV();
-            foreach (var i in SelectionGroupContainer.instances.Values)
+            var color = Color.HSVToRGB(Random.value, Random.Range(0.7f, 1f), Random.Range(0.7f, 1f));
+            foreach (var i in SelectionGroupContainer.instanceMap.Values)
             {
                 i.groups[actualName] = new SelectionGroup() { groupName = actualName, objects = new HashSet<GameObject>(), color = color, showMembers = true };
             }
@@ -70,7 +71,7 @@ namespace Unity.SelectionGroups
 
         static bool IsUniqueGroupName(string groupName)
         {
-            foreach (var i in SelectionGroupContainer.instances.Values)
+            foreach (var i in SelectionGroupContainer.instanceMap.Values)
             {
                 if (i.groups.ContainsKey(groupName))
                 {
@@ -93,7 +94,7 @@ namespace Unity.SelectionGroups
 
         public static void RenameGroup(string groupName, string newName)
         {
-            foreach (var i in SelectionGroupContainer.instances.Values)
+            foreach (var i in SelectionGroupContainer.instanceMap.Values)
             {
                 if (i.groups.TryGetValue(groupName, out SelectionGroup group))
                 {
@@ -106,7 +107,7 @@ namespace Unity.SelectionGroups
 
         public static void RemoveGroup(string groupName)
         {
-            foreach (var i in SelectionGroupContainer.instances.Values)
+            foreach (var i in SelectionGroupContainer.instanceMap.Values)
             {
                 i.groups.Remove(groupName);
             }
@@ -115,29 +116,30 @@ namespace Unity.SelectionGroups
         public static IEnumerable<string> GetGroupNames()
         {
             var nameSet = new HashSet<string>();
-            foreach (var i in SelectionGroupContainer.instances.Values)
+            foreach (var i in SelectionGroupContainer.instanceMap.Values)
                 nameSet.UnionWith(i.groups.Keys);
             var names = nameSet.ToList();
             names.Sort();
             return names.ToArray();
         }
 
-        public static void AddObjectToGroup(IList<GameObject> gameObjects, string groupName)
+        public static void AddObjectToGroup(IList<Object> gameObjects, string groupName)
         {
             foreach (var g in gameObjects)
-                AddObjectToGroup(g, groupName);
+                if (g is GameObject && g != null)
+                    AddObjectToGroup((GameObject)g, groupName);
         }
 
         public static void AddObjectToGroup(GameObject gameObject, string groupName)
         {
             //Get the container from the appropriate scene
-            if (!SelectionGroupContainer.instances.TryGetValue(gameObject.scene, out SelectionGroupContainer container))
+            if (!SelectionGroupContainer.instanceMap.TryGetValue(gameObject.scene, out SelectionGroupContainer container))
             {
                 //if it doesn't exist, create it in the appropriate scene.
                 var scene = SceneManager.GetActiveScene();
                 SceneManager.SetActiveScene(gameObject.scene);
                 container = new GameObject("Hidden_SelectionGroups").AddComponent<SelectionGroupContainer>();
-                container.gameObject.hideFlags = HideFlags.HideInInspector | HideFlags.HideInHierarchy;
+                // container.gameObject.hideFlags = HideFlags.HideInInspector | HideFlags.HideInHierarchy;
                 SceneManager.SetActiveScene(scene);
             }
             //at this point, container references the correct instance in the correct scene.
@@ -156,10 +158,10 @@ namespace Unity.SelectionGroups
 
         public static void RemoveObjectFromGroup(GameObject gameObject, string groupName)
         {
-            if (!SelectionGroupContainer.instances.TryGetValue(gameObject.scene, out SelectionGroupContainer container))
+            if (!SelectionGroupContainer.instanceMap.TryGetValue(gameObject.scene, out SelectionGroupContainer container))
                 return;
 
-            foreach (var i in SelectionGroupContainer.instances.Values)
+            foreach (var i in SelectionGroupContainer.instanceMap.Values)
             {
                 if (i.groups.TryGetValue(groupName, out SelectionGroup group))
                 {
@@ -168,10 +170,20 @@ namespace Unity.SelectionGroups
             }
         }
 
+        public static List<GameObject> GetMembers(string groupName)
+        {
+            var objectSet = new HashSet<GameObject>();
+            objectSet.UnionWith(GetGameObjects(groupName));
+            objectSet.UnionWith(GetQueryObjects(groupName));
+            var objects = (from o in objectSet where o != null select o).ToList();
+            objects.Sort((a, b) => a.name.CompareTo(b.name));
+            return objects;
+        }
+
         public static List<GameObject> GetGameObjects(string groupName)
         {
             var objectSet = new HashSet<GameObject>();
-            foreach (var i in SelectionGroupContainer.instances.Values)
+            foreach (var i in SelectionGroupContainer.instanceMap.Values)
             {
                 if (i.groups.TryGetValue(groupName, out SelectionGroup group))
                 {
@@ -186,7 +198,7 @@ namespace Unity.SelectionGroups
         public static List<GameObject> GetQueryObjects(string groupName)
         {
             var objectSet = new HashSet<GameObject>();
-            foreach (var i in SelectionGroupContainer.instances.Values)
+            foreach (var i in SelectionGroupContainer.instanceMap.Values)
             {
                 if (i.groups.TryGetValue(groupName, out SelectionGroup group))
                 {
@@ -203,7 +215,6 @@ namespace Unity.SelectionGroups
                 }
             }
             var objects = objectSet.ToList();
-
             objects.Sort((a, b) => a.name.CompareTo(b.name));
             return objects;
         }
@@ -214,7 +225,7 @@ namespace Unity.SelectionGroups
             foreach (var i in GameObject.FindObjectsOfType<Transform>())
             {
                 if (i == null || i.gameObject == null) continue;
-                if (query.nameQuery != string.Empty)
+                if (!string.IsNullOrEmpty(query.nameQuery))
                 {
                     if (!i.gameObject.name.Contains(query.nameQuery)) continue;
                 }
@@ -223,7 +234,7 @@ namespace Unity.SelectionGroups
                     var missingTypes = false;
                     foreach (var typeName in query.requiredTypes)
                     {
-                        if (typeName.Trim() != string.Empty)
+                        if (!string.IsNullOrEmpty(typeName))
                         {
                             if (i.gameObject.GetComponent(typeName) == null)
                             {
@@ -254,5 +265,16 @@ namespace Unity.SelectionGroups
             return results;
         }
 
+        public static void LockGroup(string groupName)
+        {
+            foreach (var go in GetMembers(groupName))
+                go.hideFlags |= HideFlags.NotEditable;
+        }
+
+        public static void UnlockGroup(string groupName)
+        {
+            foreach (var go in GetMembers(groupName))
+                go.hideFlags &= ~HideFlags.NotEditable;
+        }
     }
 }

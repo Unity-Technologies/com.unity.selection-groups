@@ -15,7 +15,6 @@ namespace Unity.SelectionGroups
         public DynamicSelectionQuery selectionQuery;
         public HashSet<GameObject> queryResults;
         public List<Object> attachments;
-        public Rect rect;
 
         [SerializeField] GameObject[] _objects;
 

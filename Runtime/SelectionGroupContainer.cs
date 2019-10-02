@@ -9,7 +9,7 @@ namespace Unity.SelectionGroups
     [ExecuteInEditMode]
     public class SelectionGroupContainer : MonoBehaviour, ISerializationCallbackReceiver
     {
-        public static readonly Dictionary<Scene, SelectionGroupContainer> instances = new Dictionary<Scene, SelectionGroupContainer>();
+        public static readonly Dictionary<Scene, SelectionGroupContainer> instanceMap = new Dictionary<Scene, SelectionGroupContainer>();
         public static event System.Action<SelectionGroupContainer> onLoaded, onUnloaded;
 
         public Dictionary<string, SelectionGroup> groups = new Dictionary<string, SelectionGroup>();
@@ -19,13 +19,13 @@ namespace Unity.SelectionGroups
 
         void OnEnable()
         {
-            instances.Add(gameObject.scene, this);
+            instanceMap.Add(gameObject.scene, this);
             if (onLoaded != null) onLoaded(this);
         }
 
         void OnDisable()
         {
-            instances.Remove(gameObject.scene);
+            instanceMap.Remove(gameObject.scene);
             if (onUnloaded != null) onUnloaded(this);
         }
 
@@ -43,7 +43,7 @@ namespace Unity.SelectionGroups
                     groups[_groupsKeys[i]] = _groupsValues[i];
                 }
         }
-
+        public static IEnumerable<SelectionGroupContainer> Instances => instanceMap.Values;
         public SelectionGroup this[string index] => groups[index];
     }
 }

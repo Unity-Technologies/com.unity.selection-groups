@@ -7,10 +7,13 @@ using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 namespace Unity.SelectionGroups
 {
+
     public class SelectionGroupEditorWindow : EditorWindow
     {
+        private const int RIGHT_MOUSE_BUTTON = 1;
 
         ReorderableList list;
         SerializedObject serializedObject;
@@ -19,6 +22,8 @@ namespace Unity.SelectionGroups
         SerializedProperty activeSelectionGroup;
         float width;
         static SelectionGroupEditorWindow editorWindow;
+        Rect? hotRect = null;
+        string hotGroup = null;
 
         static SelectionGroupEditorWindow()
         {
@@ -40,7 +45,7 @@ namespace Unity.SelectionGroups
 
         private static void SanitizeSceneReferences()
         {
-            foreach (var i in SelectionGroupContainer.instances.ToArray())
+            foreach (var i in SelectionGroupContainer.instanceMap.ToArray())
             {
                 var scene = i.Key;
                 var container = i.Value;
@@ -72,13 +77,14 @@ namespace Unity.SelectionGroups
                 importedGroup.showMembers = mainGroup.showMembers;
                 container.groups[name] = importedGroup;
             }
-            foreach (var i in SelectionGroupContainer.instances.Values)
+            foreach (var i in SelectionGroupContainer.instanceMap.Values)
             {
                 //clear all results so the queries can be refreshed with items from the new scene.
                 foreach (var g in i.groups.Values)
                 {
                     g.ClearQueryResults();
                 }
+                container.gameObject.hideFlags = HideFlags.None;
                 EditorUtility.SetDirty(i);
             }
             if (editorWindow != null) editorWindow.Repaint();
@@ -108,19 +114,22 @@ namespace Unity.SelectionGroups
 
         internal static void MarkAllContainersDirty()
         {
-            foreach (var container in SelectionGroupContainer.instances.Values)
+            foreach (var container in SelectionGroupContainer.instanceMap.Values)
                 EditorUtility.SetDirty(container);
         }
 
         internal static void UndoRecordObject(string msg)
         {
-            Undo.RecordObjects(SelectionGroupContainer.instances.Values.ToArray(), msg);
+            foreach (var i in SelectionGroupContainer.instanceMap.Values)
+                Undo.RecordObject(i, msg);
         }
 
         void OnGUI()
         {
             var names = SelectionGroupUtility.GetGroupNames();
             scroll = EditorGUILayout.BeginScrollView(scroll);
+            if (hotRect.HasValue)
+                EditorGUI.DrawRect(hotRect.Value, Color.white * 0.5f);
             using (var cc = new EditorGUI.ChangeCheckScope())
             {
                 foreach (var n in names)
@@ -150,13 +159,17 @@ namespace Unity.SelectionGroups
                         Event.current.Use();
                 }
                 GUILayout.FlexibleSpace();
+                GUILayout.Space(16);
                 if (GUILayout.Button("Add Group"))
                 {
-                    UndoRecordObject("New Selection Group");
-                    var actualName = SelectionGroupUtility.CreateNewGroup("New Group");
-                    SelectionGroupUtility.AddObjectToGroup(Selection.gameObjects, actualName);
-                    MarkAllContainersDirty();
+                    CreateNewGroup(Selection.objects);
                 }
+                // addNewRect.yMax = GUILayoutUtility.GetLastRect().yMax;
+                //This handle creating a new group by dragging onto the add button.
+                var addNewRect = GUILayoutUtility.GetLastRect();
+                addNewRect.yMin -= 16;
+                HandleDragEvents(addNewRect, null);
+
                 GUILayout.Space(EditorGUIUtility.singleLineHeight * 0.5f);
                 var bottom = GUILayoutUtility.GetLastRect();
                 if (cc.changed)
@@ -165,8 +178,23 @@ namespace Unity.SelectionGroups
             }
             EditorGUILayout.EndScrollView();
 
+            //Unlike other drag events, this DragExited should be handled once per frame.
+            if (Event.current.type == EventType.DragExited)
+            {
+                ExitDrag();
+                Event.current.Use();
+            }
+
             if (focusedWindow == this)
                 Repaint();
+        }
+
+        private static void CreateNewGroup(Object[] objects)
+        {
+            UndoRecordObject("New Selection Group");
+            var actualName = SelectionGroupUtility.CreateNewGroup("New Group");
+            SelectionGroupUtility.AddObjectToGroup(objects, actualName);
+            MarkAllContainersDirty();
         }
 
         void DrawGroupMembers(Rect rect, string groupName, List<GameObject> members, bool allowRemove)
@@ -181,9 +209,7 @@ namespace Unity.SelectionGroups
 
         private void DrawGroupMemberWidget(Rect rect, string groupName, GameObject g, bool allowRemove)
         {
-            // GUIContent content;
             var content = EditorGUIUtility.ObjectContent(g, typeof(GameObject));
-            // content.text = g.name;
             if (Selection.activeGameObject == g)
             {
                 GUI.Box(rect, string.Empty);
@@ -192,7 +218,7 @@ namespace Unity.SelectionGroups
             if (GUI.Button(rect, content, "label"))
             {
                 Selection.activeGameObject = g;
-                if (Event.current.button == 1)
+                if (Event.current.button == RIGHT_MOUSE_BUTTON)
                 {
                     ShowGameObjectContextMenu(rect, groupName, g, allowRemove);
                 }
@@ -203,11 +229,22 @@ namespace Unity.SelectionGroups
         {
             var group = SelectionGroupUtility.GetFirstGroup(groupName);
             var content = EditorGUIUtility.IconContent("LODGroup Icon");
-            content.text = groupName;
-            GUI.Box(rect, string.Empty);
+            content.text = $"{groupName}";
+            var backgroundColor = groupName == hotGroup ? Color.white * 0.5f : Color.white * 0.4f;
+            EditorGUI.DrawRect(rect, backgroundColor);
+            if (HandleMouseEvents(rect, groupName))
+                Event.current.Use();
             using (var cc = new EditorGUI.ChangeCheckScope())
             {
-                group.showMembers = EditorGUI.Foldout(rect, group.showMembers, content);
+                rect.width = 16;
+                group.showMembers = EditorGUI.Toggle(rect, group.showMembers, "foldout");
+                rect.x += 16;
+                rect.width = EditorGUIUtility.currentViewWidth - 16;
+                if (GUI.Button(rect, content, "label"))
+                {
+                    hotGroup = groupName;
+                    Selection.objects = SelectionGroupUtility.GetMembers(groupName).ToArray();
+                }
                 var colorRect = rect;
                 colorRect.x = colorRect.width - colorRect.height - 4;
                 colorRect.width = colorRect.height;
@@ -219,8 +256,7 @@ namespace Unity.SelectionGroups
                     MarkAllContainersDirty();
                 }
             }
-            if (HandleMouseEvents(rect, groupName))
-                Event.current.Use();
+
             return group.showMembers;
         }
 
@@ -244,12 +280,30 @@ namespace Unity.SelectionGroups
         void ShowGroupContextMenu(Rect rect, string groupName)
         {
             var menu = new GenericMenu();
-            menu.AddItem(new GUIContent("Remove Group"), false, () =>
+           
+            menu.AddItem(new GUIContent("Enable Changes"), false, () =>
             {
-                UndoRecordObject("Remove group");
-                SelectionGroupUtility.RemoveGroup(groupName);
+                UndoRecordObject("Unlock group");
+                SelectionGroupUtility.UnlockGroup(groupName);
                 MarkAllContainersDirty();
             });
+            menu.AddItem(new GUIContent("Disable Changes"), false, () =>
+            {
+                UndoRecordObject("Lock group");
+                SelectionGroupUtility.LockGroup(groupName);
+                MarkAllContainersDirty();
+            });
+            menu.AddSeparator(string.Empty);
+            menu.AddItem(new GUIContent("Hide"), false, () =>
+            {
+                SceneVisibilityManager.instance.Hide(SelectionGroupUtility.GetMembers(groupName).ToArray(), false);
+            });
+            menu.AddItem(new GUIContent("Show"), false, () =>
+            {
+                SceneVisibilityManager.instance.Show(SelectionGroupUtility.GetMembers(groupName).ToArray(), false);
+            });
+            menu.AddSeparator(string.Empty);
+
             menu.AddItem(new GUIContent("Duplicate Group"), false, () =>
             {
                 UndoRecordObject("Duplicate group");
@@ -268,13 +322,18 @@ namespace Unity.SelectionGroups
                 switch (e.type)
                 {
                     case EventType.MouseDown:
-                        ShowGroupContextMenu(position, groupName);
-                        return true;
+                        if (e.button == RIGHT_MOUSE_BUTTON)
+                        {
+                            ShowGroupContextMenu(position, groupName);
+                            return true;
+                        }
+                        break;
                 }
             }
             return false;
         }
 
+        //This is called once per group, every frame.
         bool HandleDragEvents(Rect position, string groupName)
         {
             var e = Event.current;
@@ -283,9 +342,7 @@ namespace Unity.SelectionGroups
                 switch (e.type)
                 {
                     case EventType.DragUpdated:
-                        UpdateDrag(position);
-                        return true;
-                    case EventType.DragExited:
+                        UpdateDrag(position, groupName);
                         return true;
                     case EventType.DragPerform:
                         PerformDrag(position, groupName);
@@ -295,24 +352,31 @@ namespace Unity.SelectionGroups
             return false;
         }
 
-        void UpdateDrag(Rect rect)
+        void ExitDrag()
+        {
+            hotRect = null;
+        }
+
+        void UpdateDrag(Rect rect, string groupName)
         {
             DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+            hotRect = rect;
             DragAndDrop.AcceptDrag();
         }
 
         void PerformDrag(Rect position, string groupName)
         {
-            UndoRecordObject("Drop objects into group");
-            foreach (var i in DragAndDrop.objectReferences)
+            if (groupName == null)
             {
-                var g = i as GameObject;
-                if (g != null)
-                {
-                    SelectionGroupUtility.AddObjectToGroup(g, groupName);
-                }
+                CreateNewGroup(DragAndDrop.objectReferences);
             }
-            MarkAllContainersDirty();
+            else
+            {
+                UndoRecordObject("Drop objects into group");
+                SelectionGroupUtility.AddObjectToGroup(DragAndDrop.objectReferences, groupName);
+                MarkAllContainersDirty();
+                hotRect = null;
+            }
         }
     }
 }
