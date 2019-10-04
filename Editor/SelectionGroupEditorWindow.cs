@@ -24,6 +24,7 @@ namespace Unity.SelectionGroups
         static SelectionGroupEditorWindow editorWindow;
         Rect? hotRect = null;
         string hotGroup = null;
+        GUIStyle miniButtonStyle;
 
         static SelectionGroupEditorWindow()
         {
@@ -126,10 +127,19 @@ namespace Unity.SelectionGroups
 
         void OnGUI()
         {
+            if (miniButtonStyle == null)
+            {
+                miniButtonStyle = EditorStyles.miniButton;
+                miniButtonStyle.padding = new RectOffset(0, 0, 0, 0);
+            }
             var names = SelectionGroupUtility.GetGroupNames();
             scroll = EditorGUILayout.BeginScrollView(scroll);
             if (hotRect.HasValue)
                 EditorGUI.DrawRect(hotRect.Value, Color.white * 0.5f);
+            if (GUILayout.Button("Add Group"))
+            {
+                CreateNewGroup(Selection.objects);
+            }
             using (var cc = new EditorGUI.ChangeCheckScope())
             {
                 foreach (var n in names)
@@ -137,7 +147,7 @@ namespace Unity.SelectionGroups
                     GUILayout.Space(EditorGUIUtility.singleLineHeight);
                     var rect = GUILayoutUtility.GetRect(1, EditorGUIUtility.singleLineHeight);
                     var dropRect = rect;
-                    var showChildren = DrawGroupWidget(rect, n);
+                    var showChildren = DrawHeader(rect, n);
                     if (showChildren)
                     {
                         var members = SelectionGroupUtility.GetGameObjects(n);
@@ -160,10 +170,7 @@ namespace Unity.SelectionGroups
                 }
                 GUILayout.FlexibleSpace();
                 GUILayout.Space(16);
-                if (GUILayout.Button("Add Group"))
-                {
-                    CreateNewGroup(Selection.objects);
-                }
+
                 // addNewRect.yMax = GUILayoutUtility.GetLastRect().yMax;
                 //This handle creating a new group by dragging onto the add button.
                 var addNewRect = GUILayoutUtility.GetLastRect();
@@ -225,30 +232,63 @@ namespace Unity.SelectionGroups
             }
         }
 
-        bool DrawGroupWidget(Rect rect, string groupName)
+        bool DrawHeader(Rect rect, string groupName)
         {
             var group = SelectionGroupUtility.GetFirstGroup(groupName);
             var content = EditorGUIUtility.IconContent("LODGroup Icon");
             content.text = $"{groupName}";
             var backgroundColor = groupName == hotGroup ? Color.white * 0.5f : Color.white * 0.4f;
             EditorGUI.DrawRect(rect, backgroundColor);
-            if (HandleMouseEvents(rect, groupName))
+            if (HandleMouseEvents(rect, groupName, group))
                 Event.current.Use();
             using (var cc = new EditorGUI.ChangeCheckScope())
             {
                 rect.width = 16;
                 group.showMembers = EditorGUI.Toggle(rect, group.showMembers, "foldout");
                 rect.x += 16;
-                rect.width = EditorGUIUtility.currentViewWidth - 16;
+                rect.width = EditorGUIUtility.currentViewWidth - 96;
                 if (GUI.Button(rect, content, "label"))
                 {
                     hotGroup = groupName;
                     Selection.objects = SelectionGroupUtility.GetMembers(groupName).ToArray();
                 }
-                var colorRect = rect;
-                colorRect.x = colorRect.width - colorRect.height - 4;
-                colorRect.width = colorRect.height;
-                EditorGUI.DrawRect(colorRect, group.color);
+                rect.x += rect.width;
+                rect.width = 16;
+                if (group.mutability != MutabilityMode.Disabled)
+                {
+                    if (GUI.Button(rect, EditorGUIUtility.IconContent("InspectorLock", "Toggle Mutability"), miniButtonStyle))
+                    {
+                        if (SelectionGroupEditorUtility.AreAnyMembersLocked(groupName))
+                        {
+                            SelectionGroupEditorUtility.UnlockGroup(groupName);
+                        }
+                        else
+                        {
+                            SelectionGroupEditorUtility.LockGroup(groupName);
+                        }
+                    }
+                }
+                rect.x += 20;
+
+                if (group.visibility != VisibilityMode.Disabled)
+                {
+
+                    if (GUI.Button(rect, EditorGUIUtility.IconContent("d_VisibilityOn", "Toggle Visibility"), miniButtonStyle))
+                    {
+                        if (SelectionGroupEditorUtility.AreAnyMembersHidden(groupName))
+                        {
+                            SelectionGroupEditorUtility.ShowGroup(groupName);
+                        }
+                        else
+                        {
+                            SelectionGroupEditorUtility.HideGroup(groupName);
+                        }
+                    }
+                }
+                rect.x += 20;
+
+                EditorGUI.DrawRect(rect, group.color);
+
                 if (cc.changed)
                 {
                     //saves the show members flag.
@@ -277,32 +317,40 @@ namespace Unity.SelectionGroups
             menu.DropDown(rect);
         }
 
-        void ShowGroupContextMenu(Rect rect, string groupName)
+        void ShowGroupContextMenu(Rect rect, string groupName, SelectionGroup group)
         {
             var menu = new GenericMenu();
-           
-            menu.AddItem(new GUIContent("Enable Changes"), false, () =>
+            menu.AddItem(new GUIContent("Enable Mutability Toggle"), group.mutability == MutabilityMode.Enabled, () =>
             {
-                UndoRecordObject("Unlock group");
-                SelectionGroupUtility.UnlockGroup(groupName);
+                if (group.mutability == MutabilityMode.Enabled)
+                {
+                    SelectionGroupEditorUtility.UnlockGroup(groupName);
+                    group.mutability = MutabilityMode.Disabled;
+                }
+                else
+                {
+                    group.mutability = MutabilityMode.Enabled;
+                }
+                SelectionGroupUtility.UpdateGroup(groupName, group);
                 MarkAllContainersDirty();
             });
-            menu.AddItem(new GUIContent("Disable Changes"), false, () =>
+
+            menu.AddItem(new GUIContent("Enable Visibility Toggle"), group.visibility == VisibilityMode.Enabled, () =>
             {
-                UndoRecordObject("Lock group");
-                SelectionGroupUtility.LockGroup(groupName);
+                if (group.visibility == VisibilityMode.Enabled)
+                {
+                    SceneVisibilityManager.instance.Show(SelectionGroupUtility.GetMembers(groupName).ToArray(), false);
+                    group.visibility = VisibilityMode.Disabled;
+                }
+                else
+                {
+                    group.visibility = VisibilityMode.Enabled;
+                }
+                SelectionGroupUtility.UpdateGroup(groupName, group);
                 MarkAllContainersDirty();
             });
             menu.AddSeparator(string.Empty);
-            menu.AddItem(new GUIContent("Hide"), false, () =>
-            {
-                SceneVisibilityManager.instance.Hide(SelectionGroupUtility.GetMembers(groupName).ToArray(), false);
-            });
-            menu.AddItem(new GUIContent("Show"), false, () =>
-            {
-                SceneVisibilityManager.instance.Show(SelectionGroupUtility.GetMembers(groupName).ToArray(), false);
-            });
-            menu.AddSeparator(string.Empty);
+
 
             menu.AddItem(new GUIContent("Duplicate Group"), false, () =>
             {
@@ -314,7 +362,7 @@ namespace Unity.SelectionGroups
             menu.DropDown(rect);
         }
 
-        bool HandleMouseEvents(Rect position, string groupName)
+        bool HandleMouseEvents(Rect position, string groupName, SelectionGroup group)
         {
             var e = Event.current;
             if (position.Contains(e.mousePosition))
@@ -324,7 +372,7 @@ namespace Unity.SelectionGroups
                     case EventType.MouseDown:
                         if (e.button == RIGHT_MOUSE_BUTTON)
                         {
-                            ShowGroupContextMenu(position, groupName);
+                            ShowGroupContextMenu(position, groupName, group);
                             return true;
                         }
                         break;

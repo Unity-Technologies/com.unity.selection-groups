@@ -30,6 +30,8 @@ namespace Unity.SelectionGroups
                     existingGroup.color = group.color;
                     existingGroup.selectionQuery = group.selectionQuery;
                     existingGroup.showMembers = group.showMembers;
+                    existingGroup.mutability = group.mutability;
+                    existingGroup.visibility = group.visibility;
                     if (existingGroup.selectionQuery.enabled)
                         existingGroup.queryResults = RunSelectionQuery(existingGroup.selectionQuery);
                     else
@@ -264,17 +266,6 @@ namespace Unity.SelectionGroups
             }
             return results;
         }
-
-        public static void LockGroup(string groupName)
-        {
-            foreach (var go in GetMembers(groupName))
-                go.hideFlags |= HideFlags.NotEditable;
-        }
-
-        public static void UnlockGroup(string groupName)
-        {
-            foreach (var go in GetMembers(groupName))
-                go.hideFlags &= ~HideFlags.NotEditable;
-        }
+        
     }
 }

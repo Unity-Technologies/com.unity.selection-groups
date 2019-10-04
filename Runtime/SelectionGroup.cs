@@ -5,6 +5,16 @@ using UnityEngine;
 
 namespace Unity.SelectionGroups
 {
+    public enum VisibilityMode {
+        Disabled, 
+        Enabled
+    }
+
+    public enum MutabilityMode {
+        Disabled, 
+        Enabled
+    }
+
     [System.Serializable]
     public struct SelectionGroup : ISerializationCallbackReceiver
     {
@@ -15,6 +25,8 @@ namespace Unity.SelectionGroups
         public DynamicSelectionQuery selectionQuery;
         public HashSet<GameObject> queryResults;
         public List<Object> attachments;
+        public VisibilityMode visibility;
+        public MutabilityMode mutability;
 
         [SerializeField] GameObject[] _objects;
 
