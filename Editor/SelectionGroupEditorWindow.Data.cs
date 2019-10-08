@@ -13,7 +13,10 @@ namespace Unity.SelectionGroups
 
     public partial class SelectionGroupEditorWindow : EditorWindow
     {
+        const int LEFT_MOUSE_BUTTON = 0;
         const int RIGHT_MOUSE_BUTTON = 1;
+
+        static readonly Color SELECTION_COLOR = new Color32(62, 95, 150, 255);
 
         ReorderableList list;
         SerializedObject serializedObject;
@@ -25,5 +28,21 @@ namespace Unity.SelectionGroups
         Rect? hotRect = null;
         string hotGroup = null;
         GUIStyle miniButtonStyle;
+        HashSet<Object> activeSelection = new HashSet<Object>();
+        SelectionOperation nextSelectionOperation;
+
+        enum SelectionCommand
+        {
+            Add,
+            Remove,
+            Set,
+            None
+        }
+
+        class SelectionOperation
+        {
+            public SelectionCommand command;
+            public GameObject gameObject;
+        }
     }
 }

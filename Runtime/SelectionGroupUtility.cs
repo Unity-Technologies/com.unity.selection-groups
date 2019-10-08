@@ -172,6 +172,28 @@ namespace Unity.SelectionGroups
             }
         }
 
+        public static void RemoveObjectsFromGroup(IEnumerable<GameObject> gameObjects, string groupName)
+        {
+            foreach (var i in SelectionGroupContainer.instanceMap.Values)
+            {
+                if (i.groups.TryGetValue(groupName, out SelectionGroup group))
+                {
+                    group.objects.ExceptWith(gameObjects);
+                }
+            }
+        }
+
+        public static void ClearGroup(string groupName)
+        {
+            foreach (var i in SelectionGroupContainer.instanceMap.Values)
+            {
+                if (i.groups.TryGetValue(groupName, out SelectionGroup group))
+                {
+                    group.objects.Clear();
+                }
+            }
+        }
+
         public static List<GameObject> GetMembers(string groupName)
         {
             var objectSet = new HashSet<GameObject>();
@@ -266,6 +288,6 @@ namespace Unity.SelectionGroups
             }
             return results;
         }
-        
+
     }
 }

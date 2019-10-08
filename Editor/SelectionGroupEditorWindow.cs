@@ -87,6 +87,34 @@ namespace Unity.SelectionGroups
             MarkAllContainersDirty();
         }
 
+        void QueueSelectionOperation(SelectionCommand command, GameObject gameObject)
+        {
+            if (nextSelectionOperation == null)
+            {
+                nextSelectionOperation = new SelectionOperation() { command = command, gameObject = gameObject };
+            }
+        }
+
+        void PerformSelectionCommands()
+        {
+            if (nextSelectionOperation != null)
+            {
+                if (nextSelectionOperation.gameObject != null)
+                    switch (nextSelectionOperation.command)
+                    {
+                        case SelectionCommand.Add:
+                            Selection.objects = Selection.objects.Append(nextSelectionOperation.gameObject).ToArray();
+                            break;
+                        case SelectionCommand.Remove:
+                            Selection.objects = (from i in Selection.objects where i != nextSelectionOperation.gameObject select i).ToArray();
+                            break;
+                        case SelectionCommand.Set:
+                            Selection.objects = new Object[] { nextSelectionOperation.gameObject };
+                            break;
+                    }
+                nextSelectionOperation = null;
+            }
+        }
 
     }
 }

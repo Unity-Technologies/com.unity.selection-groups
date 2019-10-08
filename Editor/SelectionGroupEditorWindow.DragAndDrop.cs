@@ -14,7 +14,7 @@ namespace Unity.SelectionGroups
     public partial class SelectionGroupEditorWindow : EditorWindow
     {
         //This is called once per group, every frame.
-        bool HandleDragEvents(Rect position, string groupName)
+        bool HandleGroupDragEvents(Rect position, string groupName)
         {
             var e = Event.current;
             if (position.Contains(e.mousePosition))
