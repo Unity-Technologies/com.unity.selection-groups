@@ -30,7 +30,8 @@ namespace Unity.SelectionGroups
         GUIStyle miniButtonStyle;
         HashSet<Object> activeSelection = new HashSet<Object>();
         SelectionOperation nextSelectionOperation;
-
+        HashSet<string> activeNames = new HashSet<string>();
+        
         enum SelectionCommand
         {
             Add,

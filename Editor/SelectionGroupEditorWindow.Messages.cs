@@ -41,6 +41,24 @@ namespace Unity.SelectionGroups
         {
             activeSelection.Clear();
             activeSelection.UnionWith(Selection.objects);
+            var names = SelectionGroupUtility.GetGroupNames();
+            activeNames.Clear();
+            foreach (var n in names)
+            {
+                var members = SelectionGroupUtility.GetGameObjects(n);
+                if (activeSelection.Intersect(members).Count() > 0)
+                {
+                    activeNames.Add(n);
+                    continue;
+                }
+                var queryMembers = SelectionGroupUtility.GetQueryObjects(n);
+                if (activeSelection.Intersect(queryMembers).Count() > 0)
+                {
+                    activeNames.Add(n);
+                    continue;
+                }
+            }
+            Repaint();
         }
 
         void OnGUI()
@@ -58,10 +76,10 @@ namespace Unity.SelectionGroups
             if (focusedWindow == this)
                 Repaint();
 
-            if(Event.current.type == EventType.Repaint)
+            if (Event.current.type == EventType.Repaint)
                 EditorApplication.delayCall += PerformSelectionCommands;
         }
 
-        
+
     }
 }

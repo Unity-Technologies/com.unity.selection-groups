@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Unity.SelectionGroups
 {
-    public class SelectionGroupDialog : EditorWindow
+    public class SelectionGroupConfigurationDialog : EditorWindow
     {
         string groupName;
         SelectionGroup group;
@@ -16,7 +16,7 @@ namespace Unity.SelectionGroups
 
         public static void Open(string groupName)
         {
-            var dialog = EditorWindow.GetWindow<SelectionGroupDialog>();
+            var dialog = EditorWindow.GetWindow<SelectionGroupConfigurationDialog>();
             dialog.ShowPopup();
             dialog.Configure(groupName);
         }
@@ -35,6 +35,10 @@ namespace Unity.SelectionGroups
                 GUILayout.BeginVertical("box", GUILayout.Width(position.width));
                 group.groupName = EditorGUILayout.DelayedTextField("Group Name", group.groupName);
                 group.color = EditorGUILayout.ColorField("Group Color", group.color);
+                GUILayout.Space(EditorGUIUtility.singleLineHeight);
+                
+                group.mutability = (MutabilityMode) EditorGUILayout.EnumPopup("Lock/Unlock Tool", group.mutability);
+                group.visibility = (VisibilityMode) EditorGUILayout.EnumPopup("Show/Hide Tool", group.visibility);
                 GUILayout.Space(EditorGUIUtility.singleLineHeight);
                 GUILayout.EndVertical();
                 GUILayout.BeginVertical("box", GUILayout.Width(position.width));
