@@ -45,5 +45,22 @@ namespace Unity.SelectionGroups
         }
         public static IEnumerable<SelectionGroupContainer> Instances => instanceMap.Values;
         public SelectionGroup this[string index] => groups[index];
+
+        internal SelectionGroup Create(string groupName, Color color, bool showMembers)
+        {
+            var g = new GameObject(groupName).AddComponent<SelectionGroup>();
+            g.color = color;
+            g.showMembers = showMembers;
+            g.objects = new HashSet<GameObject>();
+            groups[groupName] = g;
+            g.transform.parent = this.transform;
+            return g;
+        }
+
+        internal SelectionGroup Create(string groupName)
+        {
+            var color = Color.HSVToRGB(Random.value, Random.Range(0.7f, 1f), Random.Range(0.7f, 1f));
+            return Create(groupName, color, showMembers: true);
+        }
     }
 }

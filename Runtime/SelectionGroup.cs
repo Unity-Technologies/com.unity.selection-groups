@@ -5,20 +5,21 @@ using UnityEngine;
 
 namespace Unity.SelectionGroups
 {
-    public enum VisibilityMode {
-        Disabled, 
+    public enum VisibilityMode
+    {
+        Disabled,
         Enabled
     }
 
-    public enum MutabilityMode {
-        Disabled, 
+    public enum MutabilityMode
+    {
+        Disabled,
         Enabled
     }
 
     [System.Serializable]
-    public struct SelectionGroup : ISerializationCallbackReceiver
+    public class SelectionGroup : MonoBehaviour, ISerializationCallbackReceiver
     {
-        public string groupName;
         public Color color;
         public HashSet<GameObject> objects;
         public bool showMembers;

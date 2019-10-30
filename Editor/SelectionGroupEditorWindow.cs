@@ -62,6 +62,7 @@ namespace Unity.SelectionGroups
                     g.ClearQueryResults();
                 }
                 container.gameObject.hideFlags = HideFlags.None;
+                // container.gameObject.hideFlags = HideFlags.HideInHierarchy;
                 EditorUtility.SetDirty(i);
             }
             if (editorWindow != null) editorWindow.Repaint();

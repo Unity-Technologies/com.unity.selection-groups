@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Unity.SelectionGroups
 {
-    public class SelectionGroupConfigurationDialog : EditorWindow
+    public class SelectionGroupDialog : EditorWindow
     {
         string groupName;
         SelectionGroup group;
@@ -16,7 +16,7 @@ namespace Unity.SelectionGroups
 
         public static void Open(string groupName)
         {
-            var dialog = EditorWindow.GetWindow<SelectionGroupConfigurationDialog>();
+            var dialog = EditorWindow.GetWindow<SelectionGroupDialog>();
             dialog.ShowPopup();
             dialog.Configure(groupName);
         }
@@ -26,10 +26,6 @@ namespace Unity.SelectionGroups
             this.groupName = groupName;
             group = SelectionGroupUtility.GetFirstGroup(groupName);
             titleContent.text = "Selection Group Settings";
-            typeList = null;
-            materialList = null;
-            shaderList = null;
-            attachmentList = null;
         }
 
         void OnGUI()
@@ -39,10 +35,6 @@ namespace Unity.SelectionGroups
                 GUILayout.BeginVertical("box", GUILayout.Width(position.width));
                 group.name = EditorGUILayout.DelayedTextField("Group Name", group.name);
                 group.color = EditorGUILayout.ColorField("Group Color", group.color);
-                GUILayout.Space(EditorGUIUtility.singleLineHeight);
-
-                group.mutability = (MutabilityMode)EditorGUILayout.EnumPopup("Lock/Unlock Tool", group.mutability);
-                group.visibility = (VisibilityMode)EditorGUILayout.EnumPopup("Show/Hide Tool", group.visibility);
                 GUILayout.Space(EditorGUIUtility.singleLineHeight);
                 GUILayout.EndVertical();
                 GUILayout.BeginVertical("box", GUILayout.Width(position.width));
@@ -137,20 +129,13 @@ namespace Unity.SelectionGroups
             typeList.onAddCallback = (list) => list.list.Add(string.Empty);
             typeList.drawElementCallback = (rect, index, isActive, isFocused) =>
             {
-                try
-                {
-                    rect.x += 8;
-                    rect.width -= 16;
-                    rect.y += (rect.height - EditorGUIUtility.singleLineHeight) * 0.25f;
-                    rect.height = EditorGUIUtility.singleLineHeight;
-                    var typeName = group.selectionQuery.requiredTypes[index];
-                    typeName = EditorGUI.TextField(rect, typeName);
-                    group.selectionQuery.requiredTypes[index] = typeName;
-                }
-                catch (System.ArgumentOutOfRangeException)
-                {
-
-                }
+                rect.x += 8;
+                rect.width -= 16;
+                rect.y += (rect.height - EditorGUIUtility.singleLineHeight) * 0.25f;
+                rect.height = EditorGUIUtility.singleLineHeight;
+                var typeName = group.selectionQuery.requiredTypes[index];
+                typeName = EditorGUI.TextField(rect, typeName);
+                group.selectionQuery.requiredTypes[index] = typeName;
             };
             typeList.draggable = false;
             typeList.drawHeaderCallback = (rect) => EditorGUI.LabelField(rect, "Required Types");

@@ -9,6 +9,11 @@ namespace Unity.SelectionGroups
 
     public static class SelectionGroupUtility
     {
+        /// <summary>
+        /// Return the first group instance that matches name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static SelectionGroup GetFirstGroup(string name)
         {
             foreach (var i in SelectionGroupContainer.instanceMap.Values)
@@ -19,6 +24,11 @@ namespace Unity.SelectionGroups
             throw new KeyNotFoundException($"No group named: {name}");
         }
 
+        /// <summary>
+        /// Copy the fields from group into the Selection Group specified by name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="group"></param>
         public static void UpdateGroup(string name, SelectionGroup group)
         {
             foreach (var i in SelectionGroupContainer.instanceMap.Values)
@@ -26,7 +36,7 @@ namespace Unity.SelectionGroups
                 if (i.groups.TryGetValue(name, out SelectionGroup existingGroup))
                 {
                     i.groups.Remove(name);
-                    existingGroup.groupName = group.groupName;
+                    existingGroup.name = group.name;
                     existingGroup.color = group.color;
                     existingGroup.selectionQuery = group.selectionQuery;
                     existingGroup.showMembers = group.showMembers;
@@ -36,18 +46,23 @@ namespace Unity.SelectionGroups
                         existingGroup.queryResults = RunSelectionQuery(existingGroup.selectionQuery);
                     else
                         existingGroup.queryResults = null;
-                    i.groups[group.groupName] = existingGroup;
+                    i.groups[group.name] = existingGroup;
                 }
             }
         }
 
+        /// <summary>
+        /// Create a new group with specified name. If name is not unique, it will have a numeric suffix appended.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static string CreateNewGroup(string name)
         {
             var actualName = CreateUniqueName(name);
             var color = Color.HSVToRGB(Random.value, Random.Range(0.7f, 1f), Random.Range(0.7f, 1f));
             foreach (var i in SelectionGroupContainer.instanceMap.Values)
             {
-                i.groups[actualName] = new SelectionGroup() { groupName = actualName, objects = new HashSet<GameObject>(), color = color, showMembers = true };
+                i.Create(actualName, color, showMembers: true);
             }
             return actualName;
         }
@@ -83,6 +98,10 @@ namespace Unity.SelectionGroups
             return true;
         }
 
+        /// <summary>
+        /// Duplicate and a new group, giving the new group a new unique name.
+        /// </summary>
+        /// <param name="groupName"></param>
         public static void DuplicateGroup(string groupName)
         {
             var actualName = CreateNewGroup(groupName);
@@ -94,6 +113,11 @@ namespace Unity.SelectionGroups
             UpdateGroup(actualName, n);
         }
 
+        /// <summary>
+        /// Change the name of a group.
+        /// </summary>
+        /// <param name="groupName"></param>
+        /// <param name="newName"></param>
         public static void RenameGroup(string groupName, string newName)
         {
             foreach (var i in SelectionGroupContainer.instanceMap.Values)
@@ -101,12 +125,16 @@ namespace Unity.SelectionGroups
                 if (i.groups.TryGetValue(groupName, out SelectionGroup group))
                 {
                     i.groups.Remove(groupName);
-                    group.groupName = newName;
+                    group.name = newName;
                     i.groups.Add(newName, group);
                 }
             }
         }
 
+        /// <summary>
+        /// Delete a group specified by name.
+        /// </summary>
+        /// <param name="groupName"></param>
         public static void RemoveGroup(string groupName)
         {
             foreach (var i in SelectionGroupContainer.instanceMap.Values)
@@ -115,6 +143,10 @@ namespace Unity.SelectionGroups
             }
         }
 
+        /// <summary>
+        /// Return all group names.
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<string> GetGroupNames()
         {
             var nameSet = new HashSet<string>();
@@ -125,6 +157,11 @@ namespace Unity.SelectionGroups
             return names.ToArray();
         }
 
+        /// <summary>
+        /// Add gameobjects to a group.
+        /// </summary>
+        /// <param name="gameObjects"></param>
+        /// <param name="groupName"></param>
         public static void AddObjectToGroup(IList<Object> gameObjects, string groupName)
         {
             foreach (var g in gameObjects)
@@ -132,6 +169,11 @@ namespace Unity.SelectionGroups
                     AddObjectToGroup((GameObject)g, groupName);
         }
 
+        /// <summary>
+        /// Add a single gameobject to a group.
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <param name="groupName"></param>
         public static void AddObjectToGroup(GameObject gameObject, string groupName)
         {
             //Get the container from the appropriate scene
@@ -153,11 +195,15 @@ namespace Unity.SelectionGroups
 
             //at this point, it appears the group does not exist in this particular container, so we
             //create it and add the gameObject into it.
-            var newGroup = new SelectionGroup() { groupName = groupName, objects = new HashSet<GameObject>() };
+            var newGroup = container.Create(groupName);
             newGroup.objects.Add(gameObject);
-            container.groups.Add(groupName, newGroup);
         }
 
+        /// <summary>
+        /// Remove a single object from a group.
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <param name="groupName"></param>
         public static void RemoveObjectFromGroup(GameObject gameObject, string groupName)
         {
             if (!SelectionGroupContainer.instanceMap.TryGetValue(gameObject.scene, out SelectionGroupContainer container))
@@ -172,6 +218,11 @@ namespace Unity.SelectionGroups
             }
         }
 
+        /// <summary>
+        /// Remove gameobjects from a group.
+        /// </summary>
+        /// <param name="gameObjects"></param>
+        /// <param name="groupName"></param>
         public static void RemoveObjectsFromGroup(IEnumerable<GameObject> gameObjects, string groupName)
         {
             foreach (var i in SelectionGroupContainer.instanceMap.Values)
@@ -183,6 +234,10 @@ namespace Unity.SelectionGroups
             }
         }
 
+        /// <summary>
+        /// Remove all gameobjects from a group.
+        /// </summary>
+        /// <param name="groupName"></param>
         public static void ClearGroup(string groupName)
         {
             foreach (var i in SelectionGroupContainer.instanceMap.Values)
@@ -194,6 +249,28 @@ namespace Unity.SelectionGroups
             }
         }
 
+        /// <summary>
+        /// Return all components of type(T) that exist on members of a group.
+        /// </summary>
+        /// <param name="groupName"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IEnumerable<T> GetComponents<T>(string groupName) where T : Component
+        {
+            foreach (var i in GetMembers(groupName))
+            {
+                if (i.TryGetComponent<T>(out T component))
+                {
+                    yield return component;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get all members, including gameobjects and query objects from a group.
+        /// </summary>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
         public static List<GameObject> GetMembers(string groupName)
         {
             var objectSet = new HashSet<GameObject>();
@@ -204,6 +281,11 @@ namespace Unity.SelectionGroups
             return objects;
         }
 
+        /// <summary>
+        /// Get all gameobjects (excluding query objects) from a group.
+        /// </summary>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
         public static List<GameObject> GetGameObjects(string groupName)
         {
             var objectSet = new HashSet<GameObject>();
@@ -211,7 +293,8 @@ namespace Unity.SelectionGroups
             {
                 if (i.groups.TryGetValue(groupName, out SelectionGroup group))
                 {
-                    objectSet.UnionWith(group.objects);
+                    if (group != null && group.objects != null)
+                        objectSet.UnionWith(group.objects);
                 }
             }
             var objects = (from o in objectSet where o != null select o).ToList();
@@ -219,6 +302,11 @@ namespace Unity.SelectionGroups
             return objects;
         }
 
+        /// <summary>
+        /// Get all query objects (excluding manually added gameobjects) from a group.
+        /// </summary>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
         public static List<GameObject> GetQueryObjects(string groupName)
         {
             var objectSet = new HashSet<GameObject>();

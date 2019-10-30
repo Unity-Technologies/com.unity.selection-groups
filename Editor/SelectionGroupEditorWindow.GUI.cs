@@ -39,7 +39,7 @@ namespace Unity.SelectionGroups
                     GUILayout.Space(EditorGUIUtility.singleLineHeight);
                     var rect = GUILayoutUtility.GetRect(1, EditorGUIUtility.singleLineHeight);
                     var dropRect = rect;
-                    var showChildren = DrawHeader(rect, n, isActive:isActive);
+                    var showChildren = DrawHeader(rect, n, isActive: isActive);
                     if (showChildren)
                     {
                         var members = SelectionGroupUtility.GetGameObjects(n);
@@ -57,7 +57,7 @@ namespace Unity.SelectionGroups
                             GUI.backgroundColor = bg;
                         }
                     }
-                    
+
                     if (HandleGroupDragEvents(dropRect, n))
                         Event.current.Use();
                 }
@@ -127,9 +127,10 @@ namespace Unity.SelectionGroups
                     QueueSelectionOperation(SelectionCommand.Set, g);
                 else
                 {
-                    if (isThisMemberSelected && isControl)
+                    if (isThisMemberSelected)
                     {
-                        QueueSelectionOperation(SelectionCommand.Remove, g);
+                        if (isControl)
+                            QueueSelectionOperation(SelectionCommand.Remove, g);
                     }
                     else
                     {
@@ -157,10 +158,11 @@ namespace Unity.SelectionGroups
         bool DrawHeader(Rect rect, string groupName, bool isActive)
         {
             var group = SelectionGroupUtility.GetFirstGroup(groupName);
+            if (group == null) return false;
             var content = EditorGUIUtility.IconContent("LODGroup Icon");
             content.text = $"{groupName}";
             var backgroundColor = groupName == hotGroup ? Color.white * 0.5f : Color.white * 0.4f;
-            EditorGUI.DrawRect(rect, isActive?SELECTION_COLOR:backgroundColor);
+            EditorGUI.DrawRect(rect, isActive ? SELECTION_COLOR : backgroundColor);
             if (HandleMouseEvents(rect, groupName, group))
                 Event.current.Use();
             using (var cc = new EditorGUI.ChangeCheckScope())
@@ -169,7 +171,7 @@ namespace Unity.SelectionGroups
                 group.showMembers = EditorGUI.Toggle(rect, group.showMembers, "foldout");
                 rect.x += 16;
                 rect.width = EditorGUIUtility.currentViewWidth - 96;
-                
+
                 if (GUI.Button(rect, content, "label"))
                 {
                     hotGroup = groupName;
