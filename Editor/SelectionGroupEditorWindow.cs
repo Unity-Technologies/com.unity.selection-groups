@@ -47,8 +47,11 @@ namespace Unity.SelectionGroups
         {
             foreach (var name in container.groups.Keys.ToArray())
             {
+                if (string.IsNullOrEmpty(name)) continue;
                 var mainGroup = SelectionGroupUtility.GetFirstGroup(name);
+                if (mainGroup == null) continue;
                 var importedGroup = container.groups[name];
+                if (importedGroup == null) continue;
                 importedGroup.color = mainGroup.color;
                 importedGroup.selectionQuery = mainGroup.selectionQuery;
                 importedGroup.showMembers = mainGroup.showMembers;
