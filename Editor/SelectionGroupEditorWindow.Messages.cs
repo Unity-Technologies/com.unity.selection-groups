@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
@@ -18,6 +19,14 @@ namespace Unity.SelectionGroups
         {
             titleContent.text = "Selection Groups";
             editorWindow = this;
+            Undo.undoRedoPerformed -= OnUndoRedoPerformed;
+            Undo.undoRedoPerformed += OnUndoRedoPerformed;
+        }
+
+         void OnUndoRedoPerformed()
+        {
+            foreach(var i in SelectionGroupContainer.Instances)
+                i.RebuildIndex();
         }
 
         void OnHierarchyChange()
@@ -30,6 +39,8 @@ namespace Unity.SelectionGroups
         {
             SelectionGroupContainer.onLoaded -= OnContainerLoaded;
             editorWindow = null;
+            Undo.undoRedoPerformed -= OnUndoRedoPerformed;
+
         }
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)

@@ -52,8 +52,8 @@ namespace Unity.SelectionGroups
             }
             else
             {
-                UndoRecordObject("Drop objects into group");
-                SelectionGroupUtility.AddObjectToGroup(DragAndDrop.objectReferences, groupName);
+                SelectionGroupEditorUtility.RecordUndo("Add member to Group");
+                SelectionGroupEditorUtility.AddObjectToGroup(DragAndDrop.objectReferences, groupName);
                 MarkAllContainersDirty();
                 hotRect = null;
             }

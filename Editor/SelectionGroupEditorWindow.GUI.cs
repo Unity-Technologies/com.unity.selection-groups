@@ -217,7 +217,7 @@ namespace Unity.SelectionGroups
                 if (cc.changed)
                 {
                     //saves the show members flag.
-                    SelectionGroupUtility.UpdateGroup(groupName, group);
+                    SelectionGroupEditorUtility.UpdateGroup(groupName, group);
                     MarkAllContainersDirty();
                 }
             }
@@ -233,8 +233,8 @@ namespace Unity.SelectionGroups
             if (allowRemove)
                 menu.AddItem(content, false, () =>
                 {
-                    UndoRecordObject("Remove objects from group");
-                    SelectionGroupUtility.RemoveObjectsFromGroup(Selection.gameObjects, groupName);
+                    SelectionGroupEditorUtility.RecordUndo("Remove group member");
+                    SelectionGroupEditorUtility.RemoveObjectsFromGroup(Selection.gameObjects, groupName);
                     MarkAllContainersDirty();
                 });
             else
@@ -245,22 +245,24 @@ namespace Unity.SelectionGroups
         void ShowGroupContextMenu(Rect rect, string groupName, SelectionGroup group)
         {
             var menu = new GenericMenu();
-
-
-
             menu.AddItem(new GUIContent("Duplicate Group"), false, () =>
             {
-                UndoRecordObject("Duplicate group");
-                SelectionGroupUtility.DuplicateGroup(groupName);
+                SelectionGroupEditorUtility.RecordUndo("Duplicate Group");
+                SelectionGroupEditorUtility.DuplicateGroup(groupName);
                 MarkAllContainersDirty();
             });
             menu.AddItem(new GUIContent("Clear Group"), false, () =>
             {
-                UndoRecordObject("Clear group");
-                SelectionGroupUtility.ClearGroup(groupName);
+                SelectionGroupEditorUtility.RecordUndo("Clear Group");
+                SelectionGroupEditorUtility.ClearGroup(groupName);
                 MarkAllContainersDirty();
             });
             menu.AddItem(new GUIContent("Configure Group"), false, () => SelectionGroupConfigurationDialog.Open(groupName));
+            menu.AddItem(new GUIContent("Delete Group"), false, () =>
+            {
+                SelectionGroupEditorUtility.RemoveGroup(groupName);
+                MarkAllContainersDirty();
+            });
             menu.DropDown(rect);
         }
 

@@ -35,7 +35,7 @@ namespace Unity.SelectionGroups
                         if (o != null && o.scene != scene)
                         {
                             group.objects.Remove(o);
-                            SelectionGroupUtility.AddObjectToGroup(o, name);
+                            SelectionGroupEditorUtility.AddObjectToGroup(o, name);
                             EditorUtility.SetDirty(container);
                         }
                     }
@@ -71,23 +71,18 @@ namespace Unity.SelectionGroups
             if (editorWindow != null) editorWindow.Repaint();
         }
 
+
         internal static void MarkAllContainersDirty()
         {
             foreach (var container in SelectionGroupContainer.instanceMap.Values)
                 EditorUtility.SetDirty(container);
         }
 
-        internal static void UndoRecordObject(string msg)
-        {
-            foreach (var i in SelectionGroupContainer.instanceMap.Values)
-                Undo.RecordObject(i, msg);
-        }
-
         static void CreateNewGroup(Object[] objects)
         {
-            UndoRecordObject("New Selection Group");
-            var actualName = SelectionGroupUtility.CreateNewGroup("New Group");
-            SelectionGroupUtility.AddObjectToGroup(objects, actualName);
+            SelectionGroupEditorUtility.RecordUndo("New Group");
+            var actualName = SelectionGroupEditorUtility.CreateNewGroup("New Group");
+            SelectionGroupEditorUtility.AddObjectToGroup(objects, actualName);
             MarkAllContainersDirty();
         }
 

@@ -29,17 +29,17 @@ namespace Unity.SelectionGroups
         public VisibilityMode visibility;
         public MutabilityMode mutability;
 
-        [SerializeField] GameObject[] _objects;
+        public GameObject[] sz_objects;
 
         public void OnAfterDeserialize()
         {
-            objects = new HashSet<GameObject>(_objects ?? new GameObject[0]);
+            objects = new HashSet<GameObject>(sz_objects ?? new GameObject[0]);
         }
 
         public void OnBeforeSerialize()
         {
             if (objects != null)
-                _objects = objects.ToArray();
+                sz_objects = objects.ToArray();
         }
 
         public void ClearQueryResults()
