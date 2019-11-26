@@ -101,6 +101,7 @@ namespace Unity.SelectionGroups
         internal static SelectionGroup Create(SelectionGroupContainer sgc, string groupName, Color color, bool showMembers)
         {
             var g = new GameObject(groupName).AddComponent<SelectionGroup>();
+            Undo.RegisterCreatedObjectUndo(g.gameObject, "Create Group");
             g.color = color;
             g.showMembers = showMembers;
             g.objects = new HashSet<GameObject>();

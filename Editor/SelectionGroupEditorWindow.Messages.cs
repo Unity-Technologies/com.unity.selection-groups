@@ -27,6 +27,7 @@ namespace Unity.SelectionGroups
         {
             foreach(var i in SelectionGroupContainer.Instances)
                 i.RebuildIndex();
+            Repaint();
         }
 
         void OnHierarchyChange()
@@ -40,12 +41,11 @@ namespace Unity.SelectionGroups
             SelectionGroupContainer.onLoaded -= OnContainerLoaded;
             editorWindow = null;
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
-
         }
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-
+            Repaint();
         }
 
         void OnSelectionChange()
