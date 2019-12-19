@@ -19,14 +19,11 @@ namespace Unity.SelectionGroups
         static readonly Color SELECTION_COLOR = new Color32(62, 95, 150, 255);
 
         ReorderableList list;
-        SerializedObject serializedObject;
-        SelectionGroupContainer selectionGroups;
         Vector2 scroll;
-        SerializedProperty activeSelectionGroup;
+        SelectionGroup activeSelectionGroup;
         float width;
         static SelectionGroupEditorWindow editorWindow;
         Rect? hotRect = null;
-        string hotGroup = null;
         GUIStyle miniButtonStyle;
         HashSet<Object> activeSelection = new HashSet<Object>();
         SelectionOperation nextSelectionOperation;
@@ -43,7 +40,7 @@ namespace Unity.SelectionGroups
         class SelectionOperation
         {
             public SelectionCommand command;
-            public GameObject gameObject;
+            public Object gameObject;
         }
     }
 }

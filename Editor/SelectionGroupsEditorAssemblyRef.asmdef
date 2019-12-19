@@ -1,7 +1,8 @@
 {
     "name": "SelectionGroupsEditor",
     "references": [
-        "GUID:a1f2a1ae20746f947b43a9e2da5b01fc"
+        "GUID:a1f2a1ae20746f947b43a9e2da5b01fc",
+        "GUID:3da36206d2e0b7147a85b4213efa0e12"
     ],
     "includePlatforms": [
         "Editor"
@@ -12,5 +13,6 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": []
+    "versionDefines": [],
+    "noEngineReferences": false
 }

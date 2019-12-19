@@ -14,7 +14,7 @@ namespace Unity.SelectionGroups
     public partial class SelectionGroupEditorWindow : EditorWindow
     {
         //This is called once per group, every frame.
-        bool HandleGroupDragEvents(Rect position, string groupName)
+        bool HandleGroupDragEvents(Rect position, SelectionGroup group)
         {
             var e = Event.current;
             if (position.Contains(e.mousePosition))
@@ -22,10 +22,10 @@ namespace Unity.SelectionGroups
                 switch (e.type)
                 {
                     case EventType.DragUpdated:
-                        UpdateDrag(position, groupName);
+                        UpdateDrag(position, group);
                         return true;
                     case EventType.DragPerform:
-                        PerformDrag(position, groupName);
+                        PerformDrag(position, group);
                         return true;
                 }
             }
@@ -37,24 +37,23 @@ namespace Unity.SelectionGroups
             hotRect = null;
         }
 
-        void UpdateDrag(Rect rect, string groupName)
+        void UpdateDrag(Rect rect, SelectionGroup group)
         {
             DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
             hotRect = rect;
             DragAndDrop.AcceptDrag();
         }
 
-        void PerformDrag(Rect position, string groupName)
+        void PerformDrag(Rect position, SelectionGroup group)
         {
-            if (groupName == null)
+            if (group == null)
             {
                 CreateNewGroup(DragAndDrop.objectReferences);
             }
             else
             {
-                SelectionGroupEditorUtility.RecordUndo("Add member to Group");
-                SelectionGroupEditorUtility.AddObjectToGroup(DragAndDrop.objectReferences, groupName);
-                MarkAllContainersDirty();
+                Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Add to group");
+                group.AddRange(DragAndDrop.objectReferences);
                 hotRect = null;
             }
         }

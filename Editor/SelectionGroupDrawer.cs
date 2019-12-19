@@ -12,7 +12,7 @@ namespace Unity.SelectionGroups
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (names == null) names = SelectionGroupUtility.GetGroupNames().ToArray();
+            if (names == null) names = SelectionGroupManager.instance.GetGroupNames();
             var name = property.stringValue;
             position = EditorGUI.PrefixLabel(position, label);
             var index = System.Array.IndexOf(names, name);
