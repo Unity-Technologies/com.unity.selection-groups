@@ -25,22 +25,33 @@ namespace Unity.SelectionGroups
         [SerializeField] Scene[] _scenes;
         [SerializeField] StringArray[] _objectIds;
 
+        public void DebugGIDS() {
+            foreach(var i in _objectIds) {
+                Debug.Log($"{i.items.Length} - {string.Join(", ", i.items)}");
+            }
+        }
+
         public void OnAfterDeserialize()
         {
-            if (_assets != null)
-                assets = new HashSet<Object>((from i in _assets where i != null select i));
-            else
+            if (assets == null)
                 assets = new HashSet<Object>();
+            else
+                assets.Clear();
+
+            if (_assets != null)
+                assets.UnionWith(from i in _assets where i != null select i);
+
+            if (objectIdStrings == null)
+                objectIdStrings = new Dictionary<Scene, string[]>();
+            else
+                objectIdStrings.Clear();
 
             if (_scenes != null && _objectIds != null)
             {
-                objectIdStrings = new Dictionary<Scene, string[]>();
-                for (var i = 0; i < _scenes.Length; i++)
+                for (var i = 0; i < _scenes.Length; i++) {
+                    // Debug.Log($"{name} {_scenes[i].handle} {_objectIds[i].items.Length}");
                     objectIdStrings.Add(_scenes[i], _objectIds[i].items);
-            }
-            else
-            {
-                objectIdStrings = new Dictionary<Scene, string[]>();
+                }
             }
         }
 

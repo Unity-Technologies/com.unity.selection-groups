@@ -37,13 +37,13 @@ namespace Unity.SelectionGroups
             {
                 var scene = EditorSceneManager.GetSceneAt(i);
                 foreach (var g in allGroups)
-                    g.LoadSceneObjects(scene);
+                    g.ConvertGlobalObjectIdsToSceneObjects(scene);
             }
         }
 
         void OnHierarchyChanged()
         {
-            using (var bt = new BlockTimer("SelectionGroupManager.OnHierarchyChange"))
+            using (var bt = new AnalyticsTimer("SelectionGroupManager.OnHierarchyChange"))
             {
                 foreach (var i in groups.Values)
                 {
@@ -56,7 +56,7 @@ namespace Unity.SelectionGroups
         {
             foreach (var g in groups.Values)
             {
-                g.SaveSceneObjects(scene);
+                g.ConvertSceneObjectsToGlobalObjectIds(scene);
             }
         }
 
@@ -72,7 +72,7 @@ namespace Unity.SelectionGroups
         {
             foreach (var g in groups.Values)
             {
-                g.LoadSceneObjects(scene);
+                g.ConvertGlobalObjectIdsToSceneObjects(scene);
             }
         }
 

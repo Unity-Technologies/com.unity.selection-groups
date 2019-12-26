@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace Unity.SelectionGroups
 {
-    internal class BlockTimer : IDisposable
+    internal class AnalyticsTimer : IDisposable
     {
         string name;
         System.Diagnostics.Stopwatch clock;
-        static string version = "0.0.0";
 
-        public BlockTimer(string name)
+        public AnalyticsTimer(string name)
         {
             this.name = name;
             clock = new System.Diagnostics.Stopwatch();
+            SendEvent("Started");
             clock.Start();
         }
 

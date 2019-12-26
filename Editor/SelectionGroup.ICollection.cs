@@ -39,7 +39,7 @@ namespace Unity.SelectionGroups
             }
         }
 
-        internal bool LoadSceneObjects(Scene scene)
+        internal bool ConvertGlobalObjectIdsToSceneObjects(Scene scene)
         {
             if (objectIdStrings.TryGetValue(scene, out string[] ids))
             {
@@ -49,10 +49,14 @@ namespace Unity.SelectionGroups
                 var objects = new Object[ids.Length];
                 GlobalObjectId.GlobalObjectIdentifiersToObjectsSlow(objectIds, objects);
                 var hashset = sceneObjects[scene] = new HashSet<Object>();
-                foreach (var i in objects)
+                for (var i = 0; i < objects.Length; i++)
                 {
-                    if (i != null)
-                        hashset.Add(i);
+                    var go = objects[i];
+                    //a dead global object id will result in a null object
+                    if (go != null)
+                    {
+                        hashset.Add(go);
+                    }
                 }
                 return true;
             }
@@ -63,18 +67,18 @@ namespace Unity.SelectionGroups
             }
         }
 
-        internal void SaveSceneObjects()
+        internal void ConvertSceneObjectsToGlobalObjectIds()
         {
             foreach (var kv in sceneObjects)
             {
                 var scene = kv.Key;
                 var hashset = kv.Value;
                 if (scene.isLoaded)
-                    SaveSceneObjects(scene);
+                    ConvertSceneObjectsToGlobalObjectIds(scene);
             }
         }
 
-        internal bool SaveSceneObjects(Scene scene)
+        internal bool ConvertSceneObjectsToGlobalObjectIds(Scene scene)
         {
             if (sceneObjects.TryGetValue(scene, out HashSet<Object> hashset))
             {

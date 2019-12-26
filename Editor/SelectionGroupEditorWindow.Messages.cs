@@ -122,7 +122,7 @@ namespace Unity.SelectionGroups
                     current.Use();
                     return;
             }
-            Debug.Log(current.commandName);
+            // Debug.Log(current.commandName);
         }
 
         void OnSelectionChange()

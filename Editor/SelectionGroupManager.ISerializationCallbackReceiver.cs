@@ -15,7 +15,8 @@ namespace Unity.SelectionGroups
 
         static SelectionGroupManager s_Instance;
 
-        public static void Reload() {
+        public static void Reload()
+        {
             CreateAndLoad();
         }
 
@@ -37,7 +38,12 @@ namespace Unity.SelectionGroups
             if (managers.Length > 0)
             {
                 s_Instance = managers[0] as SelectionGroupManager;
+                if (managers.Length != 1)
+                {
+                    Debug.LogError("Multiple SelectionGroupManager instances detected!");
+                }
             }
+
 
             if (s_Instance == null)
             {
@@ -67,7 +73,7 @@ namespace Unity.SelectionGroups
         public void Save()
         {
             foreach (var g in groups.Values)
-                g.SaveSceneObjects();
+                g.ConvertSceneObjectsToGlobalObjectIds();
             InternalEditorUtility.SaveToSerializedFileAndForget(new[] { s_Instance }, GetFilePath(), true);
         }
 
@@ -81,8 +87,10 @@ namespace Unity.SelectionGroups
         {
             if (groups != null)
             {
-                _keys = groups.Keys.ToArray();
-                _values = (from i in _keys select groups[i]).ToArray();
+                foreach (var g in groups.Values)
+                    g.ConvertSceneObjectsToGlobalObjectIds();
+                _values = groups.Values.ToArray();
+                _keys = (from i in _values select i.name).ToArray();
             }
         }
 
@@ -96,7 +104,9 @@ namespace Unity.SelectionGroups
             {
                 for (var i = 0; i < _keys.Length; i++)
                 {
-                    groups.Add(_keys[i], _values[i]);
+                    //need to ensure name is unique here.
+                    _values[i].name = UniqueName(_values[i].name);
+                    groups.Add(_values[i].name, _values[i]);
                 }
             }
         }

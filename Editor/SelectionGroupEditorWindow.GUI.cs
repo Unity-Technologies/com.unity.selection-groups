@@ -120,6 +120,17 @@ namespace Unity.SelectionGroups
             GUI.contentColor = allowRemove ? Color.white : Color.Lerp(Color.white, Color.yellow, 0.25f);
             GUI.Label(rect, content);
             GUI.contentColor = Color.white;
+
+
+            //left click down = set active
+                //if drag then begin drag op
+                //if left click up 
+                    //if ctrl then add selecttion
+                    //else if shift then add selection between first and current
+                    //else set selection to object
+                
+            
+
             if (isLeftMouseDown)
             {
                 activeSelectionGroup = group;
@@ -131,6 +142,8 @@ namespace Unity.SelectionGroups
                     {
                         if (isControl)
                             QueueSelectionOperation(SelectionCommand.Remove, g);
+                        else if (isManySelected)
+                            QueueSelectionOperation(SelectionCommand.Set, g);
                     }
                     else
                     {
@@ -177,44 +190,16 @@ namespace Unity.SelectionGroups
                 {
                     activeSelectionGroup = group;
                 }
-                // Selection.objects = SelectionGroupManager.instance.GetMembers(groupName);
             }
             rect.x += rect.width;
             rect.width = 16;
-            // if (group.mutability != MutabilityMode.Disabled)
-            // {
-            //     if (GUI.Button(rect, EditorGUIUtility.IconContent("InspectorLock", "Toggle Mutability"), miniButtonStyle))
-            //     {
-            //         // if (SelectionGroupManager.instance.AreAnyMembersLocked(groupName))
-            //         // {
-            //         //     // SelectionGroupEditorUtility.UnlockGroup(groupName);
-            //         // }
-            //         // else
-            //         // {
-            //         //     // SelectionGroupEditorUtility.LockGroup(groupName);
-            //         // }
-            //     }
+            // if(GUI.Button(rect,"")) {
+            //     group.DebugGIDS();
             // }
-            // rect.x += 20;
-
-            // if (group.visibility != VisibilityMode.Disabled)
-            // {
-
-            //     if (GUI.Button(rect, EditorGUIUtility.IconContent("d_VisibilityOn", "Toggle Visibility"), miniButtonStyle))
-            //     {
-            //         // if (SelectionGroupEditorUtility.AreAnyMembersHidden(groupName))
-            //         // {
-            //         //     SelectionGroupEditorUtility.ShowGroup(groupName);
-            //         // }
-            //         // else
-            //         // {
-            //         //     SelectionGroupEditorUtility.HideGroup(groupName);
-            //         // }
-            //     }
-            // }
-            // rect.x += 20;
-
-            // EditorGUI.DrawRect(rect, group.color);
+            
+            rect.xMax = position.xMax;
+            
+            EditorGUI.DrawRect(rect, new Color(group.color.r, group.color.g, group.color.b));
 
 
 
@@ -224,14 +209,14 @@ namespace Unity.SelectionGroups
 
         void ShowGameObjectContextMenu(Rect rect, SelectionGroup group, Object g, bool allowRemove)
         {
-            Selection.activeObject = g;
+            // Selection.activeObject = g;
             var menu = new GenericMenu();
             var content = new GUIContent("Remove From Group");
             if (allowRemove)
                 menu.AddItem(content, false, () =>
                 {
                     Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Remove");
-                    group.Remove(g);
+                    group.Remove(Selection.objects);
                 });
             else
                 menu.AddDisabledItem(content);
