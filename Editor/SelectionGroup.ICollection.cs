@@ -1,10 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.Profiling;
 using UnityEngine.SceneManagement;
 
 namespace Unity.SelectionGroups
@@ -16,80 +12,26 @@ namespace Unity.SelectionGroups
         public Color color;
         public bool showMembers;
         public string query = string.Empty;
+        public bool sort = false;
 
+        public Dictionary<Scene, string[]> objectIdStrings;
+        public Dictionary<Scene, HashSet<Object>> sceneObjects = new Dictionary<Scene, HashSet<Object>>();
+        public HashSet<Object> assets = new HashSet<Object>();
+        public int groupId;
 
-        Dictionary<Scene, string[]> objectIdStrings;
-        Dictionary<Scene, HashSet<Object>> sceneObjects = new Dictionary<Scene, HashSet<Object>>();
-
-        HashSet<Object> assets = new HashSet<Object>();
+        GoQL.GoQLExecutor executor = new GoQL.GoQLExecutor();
 
         public void RefreshQueryResults()
         {
             if (query != string.Empty)
             {
-                var executor = new GoQL.GoQLExecutor();
-                var code = GoQL.Parser.Parse(query, out GoQL.ParseResult parseResult);
-                if (parseResult == GoQL.ParseResult.OK)
-                {
-                    var objects = executor.Execute(code);
-                    Clear();
+                executor.Code = query;
+                var objects = executor.Execute();
+                Clear();
+                if (sort)
                     System.Array.Sort(objects, (a, b) => a.name.CompareTo(b.name));
-                    AddRange(objects);
-                }
+                AddRange(objects);
             }
-        }
-
-        internal bool ConvertGlobalObjectIdsToSceneObjects(Scene scene)
-        {
-            if (objectIdStrings.TryGetValue(scene, out string[] ids))
-            {
-                var objectIds = new GlobalObjectId[ids.Length];
-                for (var i = 0; i < ids.Length; i++)
-                    GlobalObjectId.TryParse(ids[i], out objectIds[i]);
-                var objects = new Object[ids.Length];
-                GlobalObjectId.GlobalObjectIdentifiersToObjectsSlow(objectIds, objects);
-                var hashset = sceneObjects[scene] = new HashSet<Object>();
-                for (var i = 0; i < objects.Length; i++)
-                {
-                    var go = objects[i];
-                    //a dead global object id will result in a null object
-                    if (go != null)
-                    {
-                        hashset.Add(go);
-                    }
-                }
-                return true;
-            }
-            else
-            {
-                sceneObjects[scene] = new HashSet<Object>();
-                return false;
-            }
-        }
-
-        internal void ConvertSceneObjectsToGlobalObjectIds()
-        {
-            foreach (var kv in sceneObjects)
-            {
-                var scene = kv.Key;
-                var hashset = kv.Value;
-                if (scene.isLoaded)
-                    ConvertSceneObjectsToGlobalObjectIds(scene);
-            }
-        }
-
-        internal bool ConvertSceneObjectsToGlobalObjectIds(Scene scene)
-        {
-            if (sceneObjects.TryGetValue(scene, out HashSet<Object> hashset))
-            {
-                var objectIds = new GlobalObjectId[hashset.Count];
-                var objects = hashset.ToArray();
-                GlobalObjectId.GetGlobalObjectIdsSlow(objects, objectIds);
-                if (objectIdStrings == null) objectIdStrings = new Dictionary<Scene, string[]>();
-                objectIdStrings[scene] = (from i in objectIds select i.ToString()).ToArray();
-                return true;
-            }
-            return false;
         }
 
         internal bool AreSceneObjectsLoaded(Scene scene)

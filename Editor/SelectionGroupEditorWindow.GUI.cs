@@ -229,7 +229,7 @@ namespace Unity.SelectionGroups
             menu.AddItem(new GUIContent("Duplicate Group"), false, () =>
             {
                 Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Duplicate");
-                SelectionGroupManager.instance.DuplicateGroup(groupName);
+                SelectionGroupManager.instance.DuplicateGroup(group.groupId);
             });
             menu.AddItem(new GUIContent("Clear Group"), false, () =>
             {
@@ -240,7 +240,7 @@ namespace Unity.SelectionGroups
             menu.AddItem(new GUIContent("Delete Group"), false, () =>
             {
                 Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Delete");
-                SelectionGroupManager.instance.RemoveGroup(groupName);
+                SelectionGroupManager.instance.RemoveGroup(group.groupId);
             });
             menu.DropDown(rect);
         }

@@ -15,7 +15,11 @@ namespace Unity.SelectionGroups
     //NOTE: This class should eventually use ScriptableObjectSingleton when it becomes usable in a production version.
     public partial class SelectionGroupManager : ScriptableObject, IEnumerable<SelectionGroup>
     {
-        Dictionary<string, SelectionGroup> groups = new Dictionary<string, SelectionGroup>();
+        Dictionary<int, SelectionGroup> groups = new Dictionary<int, SelectionGroup>();
+        public int _groupCounter;
+        public bool isDirty = true;
+
+        internal void SetIsDirty() => isDirty = true;
 
         void OnEnable()
         {
@@ -28,6 +32,30 @@ namespace Unity.SelectionGroups
             EditorApplication.hierarchyChanged += OnHierarchyChanged;
             Undo.undoRedoPerformed -= ReloadGroups;
             Undo.undoRedoPerformed += ReloadGroups;
+            EditorApplication.update -= Update;
+            EditorApplication.update += Update;
+            SetIsDirty();
+        }
+
+        void UpdateSelectionGroupContainersInScene()
+        {
+            foreach (var container in Runtime.SelectionGroupContainer.instances)
+            {
+                foreach (var kv in groups)
+                {
+                    var id = kv.Key;
+                    var group = kv.Value;
+                    if (!container.groups.TryGetValue(id, out Runtime.SelectionGroup runtimeGroup))
+                        runtimeGroup = container.AddGroup(id);
+                    runtimeGroup.name = group.name;
+                    runtimeGroup.color = group.color;
+                    if (runtimeGroup.members == null)
+                        runtimeGroup.members = new List<Object>();
+                    else
+                        runtimeGroup.members.Clear();
+                    runtimeGroup.members.AddRange(group);
+                }
+            }
         }
 
         private void ReloadGroups()
@@ -41,15 +69,26 @@ namespace Unity.SelectionGroups
             }
         }
 
-        void OnHierarchyChanged()
+        void OnHierarchyChanged() => SetIsDirty();
+
+        void Update()
         {
-            using (var bt = new AnalyticsTimer("SelectionGroupManager.OnHierarchyChange"))
+            Profiler.BeginSample("SelectionGroupManager.Update()");
+            if (isDirty)
             {
-                foreach (var i in groups.Values)
+                // using (var bt = new AnalyticsTimer("SelectionGroupManager.Update"))
                 {
-                    i.RefreshQueryResults();
+                    foreach (var i in groups.Values)
+                    {
+                        i.RefreshQueryResults();
+                    }
+                    // bt.SendEvent("RFQR");
+                    UpdateSelectionGroupContainersInScene();
+                    // bt.SendEvent("USGCIS");
                 }
+                isDirty = false;
             }
+            Profiler.EndSample();
         }
 
         private void OnSceneClosing(Scene scene, bool removingScene)
@@ -58,6 +97,7 @@ namespace Unity.SelectionGroups
             {
                 g.ConvertSceneObjectsToGlobalObjectIds(scene);
             }
+            SetIsDirty();
         }
 
         void OnDisable()
@@ -66,6 +106,7 @@ namespace Unity.SelectionGroups
             EditorSceneManager.sceneClosing -= OnSceneClosing;
             EditorApplication.hierarchyChanged -= OnHierarchyChanged;
             Undo.undoRedoPerformed -= ReloadGroups;
+            EditorApplication.update -= Update;
         }
 
         void OnSceneOpened(Scene scene, OpenSceneMode mode)
@@ -74,59 +115,40 @@ namespace Unity.SelectionGroups
             {
                 g.ConvertGlobalObjectIdsToSceneObjects(scene);
             }
+            SetIsDirty();
         }
 
-        public bool TryGetGroup(string name, out SelectionGroup group)
+        public bool TryGetGroup(int groupId, out SelectionGroup group)
         {
-            return groups.TryGetValue(name, out group);
+            return groups.TryGetValue(groupId, out group);
         }
 
         public SelectionGroup CreateGroup(string name)
         {
             var g = new SelectionGroup();
-            name = UniqueName(name);
+            g.groupId = _groupCounter++;
             g.name = name;
-            groups.Add(name, g);
+            groups.Add(g.groupId, g);
             return g;
         }
 
-        public void RemoveGroup(string name)
+        public void RemoveGroup(int groupId)
         {
-            groups.Remove(name);
+            groups.Remove(groupId);
         }
 
         public string[] GetGroupNames()
         {
-            return groups.Keys.ToArray();
+            return (from i in groups.Values select i.name).ToArray();
         }
 
-        string UniqueName(string name)
+        public void DuplicateGroup(int groupId)
         {
-            if (!groups.ContainsKey(name)) return name;
-            var i = 1;
-            if (Regex.IsMatch(name, @" \(\d\)$"))
+            if (TryGetGroup(groupId, out SelectionGroup group))
             {
-                name = name.Substring(0, name.Length - 4);
-            }
-            while (true)
-            {
-                var newName = $"{name} ({i})";
-                if (!groups.ContainsKey(newName))
-                {
-                    return newName;
-                }
-                else
-                {
-                    i += 1;
-                }
-            }
-        }
-
-        public void DuplicateGroup(string groupName)
-        {
-            if (TryGetGroup(groupName, out SelectionGroup group))
-            {
-                var newGroup = CreateGroup(groupName);
+                var newGroup = CreateGroup(group.name);
+                newGroup.query = group.query;
+                newGroup.color = group.color;
                 newGroup.AddRange(group);
             }
         }

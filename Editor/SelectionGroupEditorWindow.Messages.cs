@@ -26,8 +26,6 @@ namespace Unity.SelectionGroups
         {
             //This is required to preserve refences when a gameobject is moved between scenes in the editor.
             SanitizeSceneReferences();
-            foreach (var i in SelectionGroupManager.instance)
-                i.RefreshQueryResults();
             Repaint();
         }
 

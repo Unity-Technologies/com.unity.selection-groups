@@ -10,7 +10,7 @@ namespace Unity.SelectionGroups
 
     public partial class SelectionGroupManager : ISerializationCallbackReceiver
     {
-        [SerializeField] string[] _keys;
+        [SerializeField] int[] _keys;
         [SerializeField] SelectionGroup[] _values;
 
         static SelectionGroupManager s_Instance;
@@ -43,7 +43,6 @@ namespace Unity.SelectionGroups
                     Debug.LogError("Multiple SelectionGroupManager instances detected!");
                 }
             }
-
 
             if (s_Instance == null)
             {
@@ -90,23 +89,21 @@ namespace Unity.SelectionGroups
                 foreach (var g in groups.Values)
                     g.ConvertSceneObjectsToGlobalObjectIds();
                 _values = groups.Values.ToArray();
-                _keys = (from i in _values select i.name).ToArray();
+                _keys = (from i in _values select i.groupId).ToArray();
             }
         }
 
         public void OnAfterDeserialize()
         {
             if (groups == null)
-                groups = new Dictionary<string, SelectionGroup>();
+                groups = new Dictionary<int, SelectionGroup>();
             else
                 groups.Clear();
             if (_keys != null && _values != null)
             {
                 for (var i = 0; i < _keys.Length; i++)
                 {
-                    //need to ensure name is unique here.
-                    _values[i].name = UniqueName(_values[i].name);
-                    groups.Add(_values[i].name, _values[i]);
+                    groups.Add(_keys[i], _values[i]);
                 }
             }
         }

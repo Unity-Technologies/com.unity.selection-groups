@@ -1,11 +1,11 @@
-using System.Linq;
+using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEngine;
 
 
 namespace Unity.SelectionGroups
 {
-    [CustomPropertyDrawer(typeof(SelectionGroupAttribute))]
+    [CustomPropertyDrawer(typeof(SelectionGroupDropDownAttribute))]
     public class SelectionGroupDrawer : PropertyDrawer
     {
         string[] names;
