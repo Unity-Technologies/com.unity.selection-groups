@@ -46,6 +46,7 @@ namespace Unity.SelectionGroups
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             Repaint();
+            
         }
 
         void OnGUI()
@@ -84,7 +85,7 @@ namespace Unity.SelectionGroups
             switch (current.commandName)
             {
                 case "SelectAll":
-                    Selection.objects = activeSelectionGroup.ToArray();
+                    Selection.objects = activeSelectionGroup.members.ToArray();
                     current.Use();
                     break;
                 case "DeselectAll":
@@ -92,7 +93,7 @@ namespace Unity.SelectionGroups
                     current.Use();
                     break;
                 case "InvertSelection":
-                    Selection.objects = new HashSet<Object>(activeSelectionGroup).Except(Selection.objects).ToArray();
+                    Selection.objects = new HashSet<Object>(activeSelectionGroup.members).Except(Selection.objects).ToArray();
                     current.Use();
                     break;
                 case "SoftDelete":

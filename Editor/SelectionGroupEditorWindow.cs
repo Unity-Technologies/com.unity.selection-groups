@@ -26,7 +26,7 @@ namespace Unity.SelectionGroups
         {
             Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Create");            
             var g = SelectionGroupManager.instance.CreateGroup("New Group");
-            g.AddRange(objects);
+            g.Add(objects);
         }
 
         void QueueSelectionOperation(SelectionCommand command, Object gameObject)

@@ -1,12 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEditor;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Unity.SelectionGroups
 {
     [System.Serializable]
-    public partial class SelectionGroup : ICollection<Object>
+    public partial class SelectionGroup
     {
         public string name;
         public Color color;
@@ -14,10 +14,11 @@ namespace Unity.SelectionGroups
         public string query = string.Empty;
         public bool sort = false;
 
-        public Dictionary<Scene, string[]> objectIdStrings;
-        public Dictionary<Scene, HashSet<Object>> sceneObjects = new Dictionary<Scene, HashSet<Object>>();
-        public HashSet<Object> assets = new HashSet<Object>();
         public int groupId;
+
+        [System.NonSerialized] public List<UnityEngine.Object> members = new List<UnityEngine.Object>();
+        
+        HashSet<GlobalObjectId> globalObjectIdSet = new HashSet<GlobalObjectId>();
 
         GoQL.GoQLExecutor executor = new GoQL.GoQLExecutor();
 
@@ -27,183 +28,47 @@ namespace Unity.SelectionGroups
             {
                 executor.Code = query;
                 var objects = executor.Execute();
-                Clear();
+                members.Clear();
                 if (sort)
                     System.Array.Sort(objects, (a, b) => a.name.CompareTo(b.name));
-                AddRange(objects);
+                members.AddRange(objects);
             }
         }
 
-        internal bool AreSceneObjectsLoaded(Scene scene)
+        internal void Add(ICollection<UnityEngine.Object> objectReferences)
         {
-            return sceneObjects.ContainsKey(scene);
+            members.AddRange(objectReferences);
         }
 
-        public int Count
+        internal void ConvertSceneObjectsToGlobalObjectIds()
         {
-            get
-            {
-                var count = assets == null ? 0 : assets.Count;
-                foreach (var kv in sceneObjects)
-                {
-                    var scene = kv.Key;
-                    var objects = kv.Value;
-                    if (scene.isLoaded)
-                        count += objects.Count;
-                }
-                return count;
+            var gids = new GlobalObjectId[members.Count];
+            GlobalObjectId.GetGlobalObjectIdsSlow(members.ToArray(), gids);
+            globalObjectIdSet.UnionWith(gids);
+        }
+
+        internal void Clear()
+        {
+            members.Clear();
+            query = string.Empty;
+            globalObjectIdSet.Clear();
+        }
+
+        internal void ConvertGlobalObjectIdsToSceneObjects()
+        {
+            var outputObjects = new Object[globalObjectIdSet.Count];
+            GlobalObjectId.GlobalObjectIdentifiersToObjectsSlow(globalObjectIdSet.ToArray(), outputObjects);
+            var objectSet = new HashSet<Object>(members);
+            foreach(var i in outputObjects) {
+                if(i != null) objectSet.Add(i);
             }
+            members.Clear();
+            members.AddRange(objectSet);
         }
 
-        public void AddRange(ICollection<Object> objects)
+        internal void Remove(UnityEngine.Object[] objects)
         {
-            foreach (var i in objects) Add(i);
-        }
-
-        public bool IsReadOnly => false;
-
-        public void Add(Object obj)
-        {
-            if (obj is GameObject)
-            {
-                var gameObject = (GameObject)obj;
-                var scene = gameObject.scene;
-                AddSceneObject(scene, obj);
-            }
-            else if (obj is Component)
-            {
-                var component = (Component)obj;
-                var scene = component.gameObject.scene;
-                AddSceneObject(scene, obj);
-            }
-            else
-                AddAsset(obj);
-        }
-
-        public IEnumerable<Object> EnumerateObjects()
-        {
-            foreach (var kv in sceneObjects)
-            {
-                var scene = kv.Key;
-                var objects = kv.Value;
-                if (scene.isLoaded)
-                {
-                    if (objects != null)
-                        foreach (var i in objects) yield return i;
-                }
-                if (assets != null)
-                    foreach (var i in assets)
-                        yield return i;
-            }
-        }
-
-        void AddAsset(Object obj)
-        {
-            if (assets == null) assets = new HashSet<Object>();
-            assets.Add(obj);
-        }
-
-        void AddSceneObject(Scene scene, Object obj)
-        {
-            if (scene != null)
-            {
-                if (!sceneObjects.TryGetValue(scene, out HashSet<Object> items))
-                    items = sceneObjects[scene] = new HashSet<Object>();
-                items.Add(obj);
-            }
-        }
-
-        bool RemoveAsset(Object obj)
-        {
-            return assets.Remove(obj);
-        }
-
-        bool RemoveSceneObject(Scene scene, Object obj)
-        {
-            if (sceneObjects.TryGetValue(scene, out HashSet<Object> items))
-            {
-                return items.Remove(obj);
-            }
-            return false;
-        }
-
-        public void Clear()
-        {
-            assets.Clear();
-            foreach (var kv in sceneObjects)
-            {
-                var scene = kv.Key;
-                var objects = kv.Value;
-                if (scene.isLoaded)
-                    objects.Clear();
-            }
-        }
-
-        public bool Contains(Object item)
-        {
-            if (assets.Contains(item)) return true;
-            foreach (var kv in sceneObjects)
-            {
-                var scene = kv.Key;
-                var objects = kv.Value;
-                if (scene.isLoaded && objects.Contains(item))
-                    return true;
-            }
-            return false;
-        }
-
-        public void CopyTo(Object[] array, int arrayIndex)
-        {
-            var index = arrayIndex;
-            foreach (var kv in sceneObjects)
-            {
-                var scene = kv.Key;
-                var objects = kv.Value;
-                if (scene.isLoaded)
-                {
-                    objects.CopyTo(array, index);
-                    index += objects.Count;
-                }
-            }
-            assets.CopyTo(array, index);
-        }
-
-        public bool Remove(Object obj)
-        {
-            if (obj is GameObject)
-            {
-                var gameObject = (GameObject)obj;
-                var scene = gameObject.scene;
-                return RemoveSceneObject(scene, obj);
-            }
-            else if (obj is Component)
-            {
-                var component = (Component)obj;
-                var scene = component.gameObject.scene;
-                return RemoveSceneObject(scene, obj);
-            }
-            else
-                return RemoveAsset(obj);
-        }
-
-        public void Remove(Object[] objects)
-        {
-            foreach (var obj in objects)
-            {
-                Remove(obj);
-            }
-        }
-
-        public IEnumerator<Object> GetEnumerator()
-        {
-            foreach (var i in EnumerateObjects())
-                yield return i;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            foreach (var i in EnumerateObjects())
-                yield return i;
+            foreach(var o in objects) members.Remove(o);
         }
     }
 }

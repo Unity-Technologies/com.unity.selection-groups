@@ -7,15 +7,36 @@ namespace Unity.SelectionGroups.Runtime
     public class SelectionGroupContainer : MonoBehaviour
     {
         public static HashSet<SelectionGroupContainer> instances = new HashSet<SelectionGroupContainer>();
-
         public Dictionary<int, SelectionGroup> groups = new Dictionary<int, SelectionGroup>();
+
+        public static IEnumerable<Object> Groups
+        {
+            get
+            {
+                var returnedGroups = new HashSet<int>();
+                foreach (var instance in instances)
+                {
+                    foreach (var kv in instance.groups)
+                    {
+                        var id = kv.Key;
+                        var group = kv.Value;
+                        if (!returnedGroups.Contains(id))
+                        {
+                            returnedGroups.Add(id);
+                            yield return group;
+                        }
+                    }
+                }
+            }
+        }
 
         void OnEnable()
         {
             instances.Add(this);
             groups.Clear();
-            foreach(var i in GetComponentsInChildren<SelectionGroup>()) {
-                groups.Add(i.groupId, i);
+            foreach (var i in GetComponentsInChildren<SelectionGroup>())
+            {
+                groups[i.groupId] = i;
             }
         }
 

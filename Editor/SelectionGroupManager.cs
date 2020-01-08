@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,17 +20,24 @@ namespace Unity.SelectionGroups
         public int _groupCounter;
         public bool isDirty = true;
 
-        internal void SetIsDirty() => isDirty = true;
+        public Dictionary<string, Scene> loadedScenes = new Dictionary<string, Scene>();
+
+        internal void SetIsDirty()
+        {
+            isDirty = true;
+        }
 
         void OnEnable()
         {
             ReloadGroups();
             EditorSceneManager.sceneOpened -= OnSceneOpened;
             EditorSceneManager.sceneOpened += OnSceneOpened;
+            EditorSceneManager.sceneClosed -= OnSceneClosed;
+            EditorSceneManager.sceneClosed += OnSceneClosed;
             EditorSceneManager.sceneClosing -= OnSceneClosing;
             EditorSceneManager.sceneClosing += OnSceneClosing;
-            EditorApplication.hierarchyChanged -= OnHierarchyChanged;
-            EditorApplication.hierarchyChanged += OnHierarchyChanged;
+            // EditorApplication.hierarchyChanged -= OnHierarchyChanged;
+            // EditorApplication.hierarchyChanged += OnHierarchyChanged;
             Undo.undoRedoPerformed -= ReloadGroups;
             Undo.undoRedoPerformed += ReloadGroups;
             EditorApplication.update -= Update;
@@ -50,10 +58,10 @@ namespace Unity.SelectionGroups
                     runtimeGroup.name = group.name;
                     runtimeGroup.color = group.color;
                     if (runtimeGroup.members == null)
-                        runtimeGroup.members = new List<Object>();
+                        runtimeGroup.members = new List<UnityEngine.Object>();
                     else
                         runtimeGroup.members.Clear();
-                    runtimeGroup.members.AddRange(group);
+                    runtimeGroup.members.AddRange(group.members);
                 }
             }
         }
@@ -65,7 +73,7 @@ namespace Unity.SelectionGroups
             {
                 var scene = EditorSceneManager.GetSceneAt(i);
                 foreach (var g in allGroups)
-                    g.ConvertGlobalObjectIdsToSceneObjects(scene);
+                    g.ConvertGlobalObjectIdsToSceneObjects();
             }
         }
 
@@ -76,6 +84,7 @@ namespace Unity.SelectionGroups
             Profiler.BeginSample("SelectionGroupManager.Update()");
             if (isDirty)
             {
+                isDirty = false;
                 // using (var bt = new AnalyticsTimer("SelectionGroupManager.Update"))
                 {
                     foreach (var i in groups.Values)
@@ -86,19 +95,23 @@ namespace Unity.SelectionGroups
                     UpdateSelectionGroupContainersInScene();
                     // bt.SendEvent("USGCIS");
                 }
-                isDirty = false;
             }
             Profiler.EndSample();
         }
 
-        private void OnSceneClosing(Scene scene, bool removingScene)
+        void OnSceneClosing(Scene scene, bool removingScene)
         {
             foreach (var g in groups.Values)
             {
-                g.ConvertSceneObjectsToGlobalObjectIds(scene);
+                g.ConvertSceneObjectsToGlobalObjectIds();
             }
+        }
+
+        void OnSceneClosed(Scene scene)
+        {
             SetIsDirty();
         }
+
 
         void OnDisable()
         {
@@ -113,7 +126,7 @@ namespace Unity.SelectionGroups
         {
             foreach (var g in groups.Values)
             {
-                g.ConvertGlobalObjectIdsToSceneObjects(scene);
+                g.ConvertGlobalObjectIdsToSceneObjects();
             }
             SetIsDirty();
         }
@@ -149,7 +162,7 @@ namespace Unity.SelectionGroups
                 var newGroup = CreateGroup(group.name);
                 newGroup.query = group.query;
                 newGroup.color = group.color;
-                newGroup.AddRange(group);
+                newGroup.Add(group.members);
             }
         }
 

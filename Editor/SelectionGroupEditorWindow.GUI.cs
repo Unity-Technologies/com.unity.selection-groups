@@ -27,6 +27,7 @@ namespace Unity.SelectionGroups
             scroll = EditorGUILayout.BeginScrollView(scroll);
             if (hotRect.HasValue)
                 EditorGUI.DrawRect(hotRect.Value, Color.white * 0.5f);
+            DrawDebugTools();
             if (GUILayout.Button("Add Group"))
             {
                 CreateNewGroup(Selection.objects);
@@ -45,7 +46,7 @@ namespace Unity.SelectionGroups
                     var showChildren = DrawHeader(rect, group, isActive: isActive);
                     if (showChildren)
                     {
-                        rect = GUILayoutUtility.GetRect(1, (EditorGUIUtility.singleLineHeight) * group.Count);
+                        rect = GUILayoutUtility.GetRect(1, (EditorGUIUtility.singleLineHeight) * group.members.Count);
 
                         dropRect.yMax = rect.yMax;
                         //early out if this group yMax is above window rect (not visible).
@@ -74,6 +75,21 @@ namespace Unity.SelectionGroups
             EditorGUILayout.EndScrollView();
         }
 
+        void DrawDebugTools()
+        {
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("DMP"))
+            {
+                
+            }
+            if (GUILayout.Button("SAV"))
+            {
+                SelectionGroupManager.instance.Save();
+            }
+            
+            GUILayout.EndHorizontal();
+        }
+
         void SetupStyles()
         {
             if (miniButtonStyle == null)
@@ -86,7 +102,7 @@ namespace Unity.SelectionGroups
         void DrawAllGroupMembers(Rect rect, SelectionGroup group, bool allowRemove)
         {
             rect.height = EditorGUIUtility.singleLineHeight;
-            foreach (var i in group)
+            foreach (var i in group.members)
             {
                 //if rect is below window, early out.
                 if (rect.yMin - scroll.y > position.height) return;
@@ -123,13 +139,13 @@ namespace Unity.SelectionGroups
 
 
             //left click down = set active
-                //if drag then begin drag op
-                //if left click up 
-                    //if ctrl then add selecttion
-                    //else if shift then add selection between first and current
-                    //else set selection to object
-                
-            
+            //if drag then begin drag op
+            //if left click up 
+            //if ctrl then add selecttion
+            //else if shift then add selection between first and current
+            //else set selection to object
+
+
 
             if (isLeftMouseDown)
             {
@@ -196,9 +212,9 @@ namespace Unity.SelectionGroups
             // if(GUI.Button(rect,"")) {
             //     group.DebugGIDS();
             // }
-            
+
             rect.xMax = position.xMax;
-            
+
             EditorGUI.DrawRect(rect, new Color(group.color.r, group.color.g, group.color.b));
 
 

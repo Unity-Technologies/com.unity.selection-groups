@@ -47,7 +47,7 @@ namespace Unity.SelectionGroups
                         var objects = executor.Execute();
                         message = $"{objects.Length} results.";
                         group.Clear();
-                        group.AddRange(objects);
+                        group.Add(objects);
                         parentWindow.Repaint();
                     }
                     else

@@ -53,7 +53,7 @@ namespace Unity.SelectionGroups
             else
             {
                 Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Add to group");
-                group.AddRange(DragAndDrop.objectReferences);
+                group.Add(DragAndDrop.objectReferences);
                 hotRect = null;
             }
         }
