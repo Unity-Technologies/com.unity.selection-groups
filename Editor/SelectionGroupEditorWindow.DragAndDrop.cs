@@ -13,49 +13,42 @@ namespace Unity.SelectionGroups
 
     public partial class SelectionGroupEditorWindow : EditorWindow
     {
-        //This is called once per group, every frame.
-        bool HandleGroupDragEvents(Rect position, SelectionGroup group)
+        public bool HandleGroupDragEvents(Rect rect, SelectionGroup group)
         {
-            var e = Event.current;
-            if (position.Contains(e.mousePosition))
+            Event evt = Event.current;
+
+            switch (evt.type)
             {
-                switch (e.type)
-                {
-                    case EventType.DragUpdated:
-                        UpdateDrag(position, group);
-                        return true;
-                    case EventType.DragPerform:
-                        PerformDrag(position, group);
-                        return true;
-                }
+                case EventType.DragUpdated:
+                case EventType.DragPerform:
+                    if (!rect.Contains(evt.mousePosition))
+                        return false;
+
+                    DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+                    hotRect = rect;
+
+                    if (evt.type == EventType.DragPerform)
+                    {
+                        DragAndDrop.AcceptDrag();
+
+                        // Debug.Log($"Adding refs to group {position} {position.Contains(Event.current.mousePosition)}");
+                        Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Add to group");
+                        group.Add(DragAndDrop.objectReferences);
+                        hotRect = null;
+
+                    }
+                    break;
             }
             return false;
         }
+
+
 
         void ExitDrag()
         {
             hotRect = null;
         }
 
-        void UpdateDrag(Rect rect, SelectionGroup group)
-        {
-            DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
-            hotRect = rect;
-            DragAndDrop.AcceptDrag();
-        }
 
-        void PerformDrag(Rect position, SelectionGroup group)
-        {
-            if (group == null)
-            {
-                CreateNewGroup(DragAndDrop.objectReferences);
-            }
-            else
-            {
-                Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Add to group");
-                group.Add(DragAndDrop.objectReferences);
-                hotRect = null;
-            }
-        }
     }
 }

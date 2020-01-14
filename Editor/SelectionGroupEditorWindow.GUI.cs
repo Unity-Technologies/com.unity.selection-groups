@@ -18,76 +18,60 @@ namespace Unity.SelectionGroups
         static void OpenWindow()
         {
             var window = EditorWindow.GetWindow<SelectionGroupEditorWindow>();
-            window.ShowUtility();
+            window.Show();
         }
 
         void DrawGUI()
         {
             var names = SelectionGroupManager.instance.GetGroupNames();
             scroll = EditorGUILayout.BeginScrollView(scroll);
-            if (hotRect.HasValue)
-                EditorGUI.DrawRect(hotRect.Value, Color.white * 0.5f);
             DrawDebugTools();
             if (GUILayout.Button("Add Group"))
             {
                 CreateNewGroup(Selection.objects);
             }
-            using (var cc = new EditorGUI.ChangeCheckScope())
+
+            foreach (var group in SelectionGroupManager.instance)
             {
-                foreach (var group in SelectionGroupManager.instance)
+               // Debug.Log(group);
+                var isActive = activeNames.Contains(group.name);
+                GUILayout.Space(3);
+                var rect = GUILayoutUtility.GetRect(1, EditorGUIUtility.singleLineHeight);
+                //early out if this group yMin is below window rect (not visible).
+                if ((rect.yMin - scroll.y) > position.height) break;
+                var showChildren = DrawHeader(rect, group, isActive: isActive);
+                var dropRect = rect;
+               
+                if (showChildren)
                 {
+                    rect = GUILayoutUtility.GetRect(1, (EditorGUIUtility.singleLineHeight) * group.Count);
 
-                    var isActive = activeNames.Contains(group.name);
-                    GUILayout.Space(3);
-                    var rect = GUILayoutUtility.GetRect(1, EditorGUIUtility.singleLineHeight);
-                    var dropRect = rect;
-                    //early out if this group yMin is below window rect (not visible).
-                    if ((rect.yMin - scroll.y) > position.height) break;
-                    var showChildren = DrawHeader(rect, group, isActive: isActive);
-                    if (showChildren)
-                    {
-                        rect = GUILayoutUtility.GetRect(1, (EditorGUIUtility.singleLineHeight) * group.members.Count);
-
-                        dropRect.yMax = rect.yMax;
-                        //early out if this group yMax is above window rect (not visible).
-                        if (rect.yMax - scroll.y < 0)
-                            continue;
-                        DrawAllGroupMembers(rect, group, allowRemove: true);
-                    }
-
-                    if (HandleGroupDragEvents(dropRect, group))
-                        Event.current.Use();
+                    dropRect.yMax = rect.yMax;
+                    //early out if this group yMax is above window rect (not visible).
+                    if (rect.yMax - scroll.y < 0)
+                        continue;
+                    DrawAllGroupMembers(rect, group, allowRemove: true);
                 }
-                GUILayout.FlexibleSpace();
-                GUILayout.Space(4);
 
-                //This handles creating a new group by dragging onto the add button.
-                var addNewRect = GUILayoutUtility.GetLastRect();
-                addNewRect.yMin -= 16;
-                HandleGroupDragEvents(addNewRect, null);
+                HandleGroupDragEvents(dropRect, group);
 
-                GUILayout.Space(EditorGUIUtility.singleLineHeight * 0.5f);
-                var bottom = GUILayoutUtility.GetLastRect();
-                if (cc.changed)
-                {
-                }
             }
             EditorGUILayout.EndScrollView();
         }
 
         void DrawDebugTools()
         {
-            GUILayout.BeginHorizontal();
-            if (GUILayout.Button("DMP"))
-            {
-                
-            }
-            if (GUILayout.Button("SAV"))
-            {
-                SelectionGroupManager.instance.Save();
-            }
-            
-            GUILayout.EndHorizontal();
+            // GUILayout.BeginHorizontal();
+            // if (GUILayout.Button("DMP"))
+            // {
+
+            // }
+            // if (GUILayout.Button("SAV"))
+            // {
+            //     SelectionGroupManager.instance.Save();
+            // }
+
+            // GUILayout.EndHorizontal();
         }
 
         void SetupStyles()
@@ -102,7 +86,7 @@ namespace Unity.SelectionGroups
         void DrawAllGroupMembers(Rect rect, SelectionGroup group, bool allowRemove)
         {
             rect.height = EditorGUIUtility.singleLineHeight;
-            foreach (var i in group.members)
+            foreach (var i in group)
             {
                 //if rect is below window, early out.
                 if (rect.yMin - scroll.y > position.height) return;
@@ -115,22 +99,46 @@ namespace Unity.SelectionGroups
 
         void DrawGroupMember(Rect rect, SelectionGroup group, Object g, bool allowRemove)
         {
+            var e = Event.current;
             var content = EditorGUIUtility.ObjectContent(g, g.GetType());
             var isThisMemberSelected = activeSelection.Contains(g);
-            var isMouseOver = rect.Contains(Event.current.mousePosition);
+            var isMouseOver = rect.Contains(e.mousePosition);
+            var isMouseDrag = e.type == EventType.MouseDrag;
             var isManySelected = activeSelection.Count > 1;
             var isAnySelected = activeSelection.Count > 0;
-            var isLeftButton = Event.current.button == LEFT_MOUSE_BUTTON;
-            var isRightButton = Event.current.button == RIGHT_MOUSE_BUTTON;
-            var isMouseDown = Event.current.type == EventType.MouseDown;
-            var isMouseUp = Event.current.type == EventType.MouseUp;
+            var isLeftButton = e.button == LEFT_MOUSE_BUTTON;
+            var isRightButton = e.button == RIGHT_MOUSE_BUTTON;
+            var isMouseDown = e.type == EventType.MouseDown;
+            var isMouseUp = e.type == EventType.MouseUp;
             var isNoSelection = activeSelection.Count == 0;
-            var isControl = Event.current.control;
+            var isControl = e.control;
             var isLeftMouseDown = isMouseOver && isLeftButton && isMouseDown;
             var isLeftMouseUp = isMouseOver && isLeftButton && isMouseUp;
+            var isHotMember = g == hotMember;
 
-            if (isThisMemberSelected || isLeftMouseDown)
+            if (isMouseOver)
+            {
+                EditorGUI.DrawRect(rect, HOVER_COLOR);
+            }
+
+            if (isLeftMouseDown)
+                hotMember = g;
+
+            if (isMouseUp && !isMouseOver && isHotMember)
+                hotMember = null;
+
+            if (isLeftMouseUp && isHotMember)
+            {
+                if (!isControl) activeSelection.Clear();
+                activeSelection.Add(g);
+                Selection.objects = activeSelection.ToArray();
+                activeSelectionGroup = group;
+            }
+
+            if (g == hotMember || activeSelection.Contains(g))
+            {
                 EditorGUI.DrawRect(rect, SELECTION_COLOR);
+            }
 
             rect.x += 24;
             GUI.contentColor = allowRemove ? Color.white : Color.Lerp(Color.white, Color.yellow, 0.25f);
@@ -138,45 +146,13 @@ namespace Unity.SelectionGroups
             GUI.contentColor = Color.white;
 
 
-            //left click down = set active
-            //if drag then begin drag op
-            //if left click up 
-            //if ctrl then add selecttion
-            //else if shift then add selection between first and current
-            //else set selection to object
-
-
-
-            if (isLeftMouseDown)
-            {
-                activeSelectionGroup = group;
-                if (isNoSelection)
-                    QueueSelectionOperation(SelectionCommand.Set, g);
-                else
-                {
-                    if (isThisMemberSelected)
-                    {
-                        if (isControl)
-                            QueueSelectionOperation(SelectionCommand.Remove, g);
-                        else if (isManySelected)
-                            QueueSelectionOperation(SelectionCommand.Set, g);
-                    }
-                    else
-                    {
-                        if (isControl)
-                            QueueSelectionOperation(SelectionCommand.Add, g);
-                        else
-                            QueueSelectionOperation(SelectionCommand.Set, g);
-                    }
-                }
-            }
-            else if (isRightButton && isMouseOver && isMouseDown && isThisMemberSelected)
+            if (isRightButton && isMouseOver && isMouseDown && isThisMemberSelected)
             {
                 ShowGameObjectContextMenu(rect, group, g, allowRemove);
             }
 
 
-            if (Event.current.type == EventType.MouseDrag && rect.Contains(Event.current.mousePosition))
+            if (isMouseOver && isMouseDrag)
             {
                 DragAndDrop.PrepareStartDrag();
                 DragAndDrop.objectReferences = Selection.objects;
@@ -186,39 +162,26 @@ namespace Unity.SelectionGroups
 
         bool DrawHeader(Rect rect, SelectionGroup group, bool isActive)
         {
-            if (group == null) return false;
+            // if (group == null) return false;
             var content = EditorGUIUtility.IconContent("LODGroup Icon");
             content.text = $"{group.name}";
             var backgroundColor = group == activeSelectionGroup ? Color.white * 0.6f : Color.white * 0.3f;
             EditorGUI.DrawRect(rect, backgroundColor);
-            if (HandleMouseEvents(rect, group.name, group))
-                Event.current.Use();
 
             rect.width = 16;
             group.showMembers = EditorGUI.Toggle(rect, group.showMembers, "foldout");
             rect.x += 16;
             rect.width = EditorGUIUtility.currentViewWidth - 96;
 
-            if (GUI.Button(rect, content, "label"))
-            {
-                group.showMembers = !group.showMembers;
-                if (group.showMembers)
-                {
-                    activeSelectionGroup = group;
-                }
-            }
+            HandleHeaderMouseEvents(rect, group.name, group);
+            GUI.Label(rect, content, "label");
+
             rect.x += rect.width;
             rect.width = 16;
-            // if(GUI.Button(rect,"")) {
-            //     group.DebugGIDS();
-            // }
 
             rect.xMax = position.xMax;
 
             EditorGUI.DrawRect(rect, new Color(group.color.r, group.color.g, group.color.b));
-
-
-
 
             return group.showMembers;
         }
@@ -244,7 +207,6 @@ namespace Unity.SelectionGroups
             var menu = new GenericMenu();
             menu.AddItem(new GUIContent("Duplicate Group"), false, () =>
             {
-                Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Duplicate");
                 SelectionGroupManager.instance.DuplicateGroup(group.groupId);
             });
             menu.AddItem(new GUIContent("Clear Group"), false, () =>
@@ -255,29 +217,41 @@ namespace Unity.SelectionGroups
             menu.AddItem(new GUIContent("Configure Group"), false, () => SelectionGroupConfigurationDialog.Open(group, this));
             menu.AddItem(new GUIContent("Delete Group"), false, () =>
             {
-                Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Delete");
                 SelectionGroupManager.instance.RemoveGroup(group.groupId);
             });
             menu.DropDown(rect);
         }
 
-        bool HandleMouseEvents(Rect position, string groupName, SelectionGroup group)
+        void HandleHeaderMouseEvents(Rect rect, string groupName, SelectionGroup group)
         {
             var e = Event.current;
-            if (position.Contains(e.mousePosition))
+            if (rect.Contains(e.mousePosition))
             {
                 switch (e.type)
                 {
                     case EventType.MouseDown:
-                        if (e.button == RIGHT_MOUSE_BUTTON)
+                        switch (e.button)
                         {
-                            ShowGroupContextMenu(position, groupName, group);
-                            return true;
+                            case RIGHT_MOUSE_BUTTON:
+                                ShowGroupContextMenu(rect, groupName, group);
+                                break;
+                            case LEFT_MOUSE_BUTTON:
+                                if(e.clickCount == 1)
+                                    activeSelectionGroup = group;
+                                else
+                                    SelectionGroupConfigurationDialog.Open(group, this);
+                                break;
                         }
+
+                        break;
+                    case EventType.MouseDrag:
+                        DragAndDrop.PrepareStartDrag();
+                        DragAndDrop.StartDrag(groupName);
+                        DragAndDrop.objectReferences = group.ToArray();
+                        e.Use();
                         break;
                 }
             }
-            return false;
         }
     }
 }

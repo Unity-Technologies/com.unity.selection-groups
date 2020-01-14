@@ -14,13 +14,6 @@ namespace Unity.SelectionGroups
     public partial class SelectionGroupEditorWindow : EditorWindow
     {
 
-        static SelectionGroupEditorWindow()
-        {
-        }
-
-        static void SanitizeSceneReferences()
-        {
-        }
 
         static void CreateNewGroup(Object[] objects)
         {

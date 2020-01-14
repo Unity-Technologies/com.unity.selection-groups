@@ -19,20 +19,18 @@ namespace Unity.SelectionGroups
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
             EditorApplication.hierarchyChanged -= OnHierarchyChanged;
             EditorApplication.hierarchyChanged += OnHierarchyChanged;
+            this.wantsMouseMove = true;
         }
 
 
         void OnHierarchyChanged()
         {
-            //This is required to preserve refences when a gameobject is moved between scenes in the editor.
-            SanitizeSceneReferences();
-            Repaint();
+
         }
 
         void OnUndoRedoPerformed()
         {
             SelectionGroupManager.Reload();
-            Repaint();
         }
 
         void OnDisable()
@@ -46,37 +44,34 @@ namespace Unity.SelectionGroups
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             Repaint();
-            
+        }
+
+        void OnFocus()
+        {
+        }
+
+        void OnLostFocus()
+        {
         }
 
         void OnGUI()
         {
+            //Debug.Log(Event.current.type);
             // Profiler.BeginSample("SelectionGroupEditorWindow");
             SetupStyles();
             DrawGUI();
 
             switch (Event.current.type)
             {
-                //Unlike other drag events, this DragExited should be handled once per frame.
-                case EventType.DragExited:
-                    ExitDrag();
-                    Event.current.Use();
-                    break;
-                case EventType.Repaint:
-                    EditorApplication.delayCall += PerformSelectionCommands;
-                    break;
                 case EventType.ValidateCommand:
                     OnValidateCommand(Event.current);
                     break;
                 case EventType.ExecuteCommand:
+                    // Debug.Log($"Command: {Event.current.commandName}");
                     OnExecuteCommand(Event.current);
                     break;
             }
-
-            //Make sure window repaints after any user action.
-            if (focusedWindow == this && (Event.current.isMouse || Event.current.isKey))
-                Repaint();
-
+            Repaint();
             // Profiler.EndSample();
         }
 
@@ -85,23 +80,35 @@ namespace Unity.SelectionGroups
             switch (current.commandName)
             {
                 case "SelectAll":
-                    Selection.objects = activeSelectionGroup.members.ToArray();
+                    Selection.objects = activeSelectionGroup.ToArray();
+                    UpdateActiveSelection();
                     current.Use();
                     break;
                 case "DeselectAll":
                     Selection.objects = null;
+                    UpdateActiveSelection();
                     current.Use();
                     break;
                 case "InvertSelection":
-                    Selection.objects = new HashSet<Object>(activeSelectionGroup.members).Except(Selection.objects).ToArray();
+                    Selection.objects = new HashSet<Object>(activeSelectionGroup).Except(Selection.objects).ToArray();
+                    UpdateActiveSelection();
                     current.Use();
                     break;
                 case "SoftDelete":
                     Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Remove");
                     activeSelectionGroup.Remove(Selection.objects);
+                    Selection.objects = null;
+                    UpdateActiveSelection();
                     current.Use();
                     return;
             }
+        }
+
+        void UpdateActiveSelection()
+        {
+            activeSelection.Clear();
+            if (Selection.objects != null)
+                activeSelection.UnionWith(Selection.objects);
         }
 
         private void OnValidateCommand(Event current)
@@ -126,8 +133,8 @@ namespace Unity.SelectionGroups
 
         void OnSelectionChange()
         {
-            activeSelection.Clear();
-            activeSelection.UnionWith(Selection.objects);
+            // activeSelection.Clear();
+            // activeSelection.UnionWith(Selection.objects);
 
             // Below code will enable selection groups to be highlighted when one of their members is selected.
             // Need a more performant way to do this.
@@ -139,7 +146,7 @@ namespace Unity.SelectionGroups
             //         continue;
             //     }
             // }
-            Repaint();
+            // Repaint();
         }
 
 
