@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using UnityEditor;
-using UnityEditor.SceneManagement;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,26 +17,28 @@ namespace Unity.SelectionGroups
             editorWindow = this;
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
+            EditorApplication.hierarchyChanged -= OnHierarchyChanged;
+            EditorApplication.hierarchyChanged += OnHierarchyChanged;
+            this.wantsMouseMove = true;
         }
 
-         void OnUndoRedoPerformed()
+
+        void OnHierarchyChanged()
         {
-            foreach(var i in SelectionGroupContainer.Instances)
-                i.RebuildIndex();
-            Repaint();
+
         }
 
-        void OnHierarchyChange()
+        void OnUndoRedoPerformed()
         {
-            //This is required to preserve refences when a gameobject is moved between scenes in the editor.
-            SanitizeSceneReferences();
+            SelectionGroupManager.Reload();
         }
 
         void OnDisable()
         {
-            SelectionGroupContainer.onLoaded -= OnContainerLoaded;
             editorWindow = null;
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
+            EditorApplication.hierarchyChanged -= OnHierarchyChanged;
+            SelectionGroupManager.instance.Save();
         }
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -48,47 +46,107 @@ namespace Unity.SelectionGroups
             Repaint();
         }
 
-        void OnSelectionChange()
+        void OnFocus()
         {
-            activeSelection.Clear();
-            activeSelection.UnionWith(Selection.objects);
-            var names = SelectionGroupUtility.GetGroupNames();
-            activeNames.Clear();
-            foreach (var n in names)
-            {
-                var members = SelectionGroupUtility.GetGameObjects(n);
-                if (activeSelection.Intersect(members).Count() > 0)
-                {
-                    activeNames.Add(n);
-                    continue;
-                }
-                var queryMembers = SelectionGroupUtility.GetQueryObjects(n);
-                if (activeSelection.Intersect(queryMembers).Count() > 0)
-                {
-                    activeNames.Add(n);
-                    continue;
-                }
-            }
-            Repaint();
+        }
+
+        void OnLostFocus()
+        {
         }
 
         void OnGUI()
         {
+            //Debug.Log(Event.current.type);
+            // Profiler.BeginSample("SelectionGroupEditorWindow");
             SetupStyles();
             DrawGUI();
 
-            //Unlike other drag events, this DragExited should be handled once per frame.
-            if (Event.current.type == EventType.DragExited)
+            switch (Event.current.type)
             {
-                ExitDrag();
-                Event.current.Use();
+                case EventType.ValidateCommand:
+                    OnValidateCommand(Event.current);
+                    break;
+                case EventType.ExecuteCommand:
+                    // Debug.Log($"Command: {Event.current.commandName}");
+                    OnExecuteCommand(Event.current);
+                    break;
             }
+            Repaint();
+            // Profiler.EndSample();
+        }
 
-            if (focusedWindow == this)
-                Repaint();
+        private void OnExecuteCommand(Event current)
+        {
+            switch (current.commandName)
+            {
+                case "SelectAll":
+                    Selection.objects = activeSelectionGroup.ToArray();
+                    UpdateActiveSelection();
+                    current.Use();
+                    break;
+                case "DeselectAll":
+                    Selection.objects = null;
+                    UpdateActiveSelection();
+                    current.Use();
+                    break;
+                case "InvertSelection":
+                    Selection.objects = new HashSet<Object>(activeSelectionGroup).Except(Selection.objects).ToArray();
+                    UpdateActiveSelection();
+                    current.Use();
+                    break;
+                case "SoftDelete":
+                    Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Remove");
+                    activeSelectionGroup.Remove(Selection.objects);
+                    Selection.objects = null;
+                    UpdateActiveSelection();
+                    current.Use();
+                    return;
+            }
+        }
 
-            if (Event.current.type == EventType.Repaint)
-                EditorApplication.delayCall += PerformSelectionCommands;
+        void UpdateActiveSelection()
+        {
+            activeSelection.Clear();
+            if (Selection.objects != null)
+                activeSelection.UnionWith(Selection.objects);
+        }
+
+        private void OnValidateCommand(Event current)
+        {
+            switch (current.commandName)
+            {
+                case "SelectAll":
+                    current.Use();
+                    return;
+                case "DeselectAll":
+                    current.Use();
+                    return;
+                case "InvertSelection":
+                    current.Use();
+                    return;
+                case "SoftDelete":
+                    current.Use();
+                    return;
+            }
+            // Debug.Log(current.commandName);
+        }
+
+        void OnSelectionChange()
+        {
+            // activeSelection.Clear();
+            // activeSelection.UnionWith(Selection.objects);
+
+            // Below code will enable selection groups to be highlighted when one of their members is selected.
+            // Need a more performant way to do this.
+            // foreach(var g in SelectionGroupManager.instance)
+            // {
+            //     if (activeSelection.Intersect(g).Count() > 0)
+            //     {
+            //         activeNames.Add(g.name);
+            //         continue;
+            //     }
+            // }
+            // Repaint();
         }
 
 

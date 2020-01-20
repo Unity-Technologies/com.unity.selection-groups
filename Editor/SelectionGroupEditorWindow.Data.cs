@@ -17,21 +17,21 @@ namespace Unity.SelectionGroups
         const int RIGHT_MOUSE_BUTTON = 1;
 
         static readonly Color SELECTION_COLOR = new Color32(62, 95, 150, 255);
+        static readonly Color HOVER_COLOR = new Color32(112, 112, 112, 128);
 
         ReorderableList list;
-        SerializedObject serializedObject;
-        SelectionGroupContainer selectionGroups;
         Vector2 scroll;
-        SerializedProperty activeSelectionGroup;
+        SelectionGroup activeSelectionGroup;
         float width;
         static SelectionGroupEditorWindow editorWindow;
         Rect? hotRect = null;
-        string hotGroup = null;
         GUIStyle miniButtonStyle;
         HashSet<Object> activeSelection = new HashSet<Object>();
         SelectionOperation nextSelectionOperation;
         HashSet<string> activeNames = new HashSet<string>();
-        
+
+        Object hotMember;
+
         enum SelectionCommand
         {
             Add,
@@ -43,7 +43,7 @@ namespace Unity.SelectionGroups
         class SelectionOperation
         {
             public SelectionCommand command;
-            public GameObject gameObject;
+            public Object gameObject;
         }
     }
 }

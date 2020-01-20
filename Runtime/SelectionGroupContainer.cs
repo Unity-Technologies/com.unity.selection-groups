@@ -1,43 +1,54 @@
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-
-namespace Unity.SelectionGroups
+namespace Unity.SelectionGroups.Runtime
 {
     [ExecuteInEditMode]
     public class SelectionGroupContainer : MonoBehaviour
     {
-        public static readonly Dictionary<Scene, SelectionGroupContainer> instanceMap = new Dictionary<Scene, SelectionGroupContainer>();
-        public static event System.Action<SelectionGroupContainer> onLoaded, onUnloaded;
+        public static HashSet<SelectionGroupContainer> instances = new HashSet<SelectionGroupContainer>();
+        public Dictionary<int, SelectionGroup> groups = new Dictionary<int, SelectionGroup>();
 
-        public Dictionary<string, SelectionGroup> groups = new Dictionary<string, SelectionGroup>();
-
-        void OnEnable()
+        public static IEnumerable<Object> Groups
         {
-            RebuildIndex();
-            instanceMap.Add(gameObject.scene, this);
-            if (onLoaded != null) onLoaded(this);
-        }
-
-        public void RebuildIndex()
-        {
-            groups.Clear();
-            foreach (var i in GetComponentsInChildren<SelectionGroup>())
+            get
             {
-                groups[i.name] = i;
+                var returnedGroups = new HashSet<int>();
+                foreach (var instance in instances)
+                {
+                    foreach (var kv in instance.groups)
+                    {
+                        var id = kv.Key;
+                        var group = kv.Value;
+                        if (!returnedGroups.Contains(id))
+                        {
+                            returnedGroups.Add(id);
+                            yield return group;
+                        }
+                    }
+                }
             }
         }
 
-        void OnDisable()
+        void OnEnable()
         {
-            instanceMap.Remove(gameObject.scene);
-            if (onUnloaded != null) onUnloaded(this);
+            instances.Add(this);
+            groups.Clear();
+            foreach (var i in GetComponentsInChildren<SelectionGroup>())
+            {
+                groups[i.groupId] = i;
+            }
         }
 
-        public static IEnumerable<SelectionGroupContainer> Instances => instanceMap.Values;
-        public SelectionGroup this[string index] => groups[index];
+        void OnDisable() => instances.Remove(this);
 
+        public SelectionGroup AddGroup(int id)
+        {
+            var g = new GameObject("Selection Group").AddComponent<SelectionGroup>();
+            g.transform.parent = transform;
+            g.groupId = id;
+            groups.Add(id, g);
+            return g;
+        }
     }
 }

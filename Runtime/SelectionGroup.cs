@@ -1,50 +1,53 @@
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-
-namespace Unity.SelectionGroups
+namespace Unity.SelectionGroups.Runtime
 {
-    public enum VisibilityMode
+    public class SelectionGroup : MonoBehaviour
     {
-        Disabled,
-        Enabled
-    }
-
-    public enum MutabilityMode
-    {
-        Disabled,
-        Enabled
-    }
-
-    [System.Serializable]
-    public class SelectionGroup : MonoBehaviour, ISerializationCallbackReceiver
-    {
+        public int groupId;
         public Color color;
-        public HashSet<GameObject> objects;
-        public bool showMembers;
-        public DynamicSelectionQuery selectionQuery;
-        public HashSet<GameObject> queryResults;
-        public List<Object> attachments;
-        public VisibilityMode visibility;
-        public MutabilityMode mutability;
+        public string query;
+        public List<UnityEngine.Object> members;
 
-        public GameObject[] sz_objects;
+        GoQL.ParseResult parseResult;
+        List<object> code;
+        GoQL.GoQLExecutor executor;
 
-        public void OnAfterDeserialize()
+        void OnEnable()
         {
-            objects = new HashSet<GameObject>(sz_objects ?? new GameObject[0]);
+            executor = new GoQL.GoQLExecutor();
+            executor.Code = query;
         }
 
-        public void OnBeforeSerialize()
+        /// <summary>
+        /// Run the GoQL query attached to this group, adding any new members that are discovered.
+        /// </summary>
+        public void RefreshQueryResults()
         {
-            if (objects != null)
-                sz_objects = objects.ToArray();
+            executor.Code = query;
+            members.Clear();
+            members.AddRange(executor.Execute());
         }
 
-        public void ClearQueryResults()
+        /// <summary>
+        /// Get components from all members of a group that are GameObjects.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public IEnumerable<T> GetMemberComponents<T>() where T : Component
         {
-            if (queryResults != null) queryResults.Clear();
+            foreach (var member in members)
+            {
+                var go = member as GameObject;
+                if (go != null)
+                {
+                    foreach (var component in go.GetComponents<T>()) {
+                        yield return component;
+                    }
+                }
+            }
         }
     }
 }
