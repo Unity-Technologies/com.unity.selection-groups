@@ -155,7 +155,7 @@ namespace Unity.SelectionGroups
                             lastIndex = i;
                         }
                     }
-                    for(var i=firstIndex; i<lastIndex; i++)
+                    for (var i = firstIndex; i < lastIndex; i++)
                         activeSelection.Add(group[i]);
                     updateSelectionObjects = true;
                 }
@@ -164,15 +164,21 @@ namespace Unity.SelectionGroups
             {
                 if (isLeftMouseUp && isHotMember)
                 {
-                    if (isInSelection)
-                    {
-                        //TODO: rename
-                    }
-                    else
+                    if (isInSelection && isManySelected)
                     {
                         activeSelection.Clear();
                         activeSelection.Add(g);
                         updateSelectionObjects = true;
+                    }
+                    else if (!isInSelection)
+                    {
+                        activeSelection.Clear();
+                        activeSelection.Add(g);
+                        updateSelectionObjects = true;
+                    }
+                    else
+                    {
+                        //TODO: rename
                     }
                 }
             }
