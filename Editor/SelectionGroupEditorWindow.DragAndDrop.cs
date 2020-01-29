@@ -23,19 +23,22 @@ namespace Unity.SelectionGroups
                 case EventType.DragPerform:
                     if (!rect.Contains(evt.mousePosition))
                         return false;
+                    
+                    var canDrop = string.IsNullOrEmpty(group.query);
 
-                    DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+                    if(!canDrop)
+                        DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
+                    else
+                        DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+
                     hotRect = rect;
 
-                    if (evt.type == EventType.DragPerform)
+                    if (evt.type == EventType.DragPerform && canDrop)
                     {
                         DragAndDrop.AcceptDrag();
-
-                        // Debug.Log($"Adding refs to group {position} {position.Contains(Event.current.mousePosition)}");
                         Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Add to group");
                         group.Add(DragAndDrop.objectReferences);
                         hotRect = null;
-
                     }
                     break;
             }

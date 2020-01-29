@@ -1,30 +1,36 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 namespace Unity.SelectionGroups
 {
-    public class UniqueList<T> : IList<T>
+    /// <summary>
+    /// A HashSet which retains order of items as they are added or inserted.
+    /// or
+    /// A List which only contains unique references.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    internal class OrderedSet<T> : IList<T>
     {
         List<T> items = new List<T>();
         HashSet<T> uniqueIndex = new HashSet<T>();
 
-        public T this[int index] { get => ((IList<T>)items)[index]; set => ((IList<T>)items)[index] = value; }
+        public T this[int index] { get => items[index]; set => items[index] = value; }
 
-        public int Count => ((IList<T>)items).Count;
+        public int Count => items.Count;
 
-        public bool IsReadOnly => ((IList<T>)items).IsReadOnly;
+        public bool IsReadOnly => false;
 
         public void Add(T item)
         {
             if(!uniqueIndex.Contains(item)) {
-                ((IList<T>)items).Add(item);
+                items.Add(item);
                 uniqueIndex.Add(item);
             }
         }
 
         public void Clear()
         {
-            ((IList<T>)items).Clear();
+            items.Clear();
             uniqueIndex.Clear();
         }
 
@@ -35,28 +41,29 @@ namespace Unity.SelectionGroups
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            ((IList<T>)items).CopyTo(array, arrayIndex);
+            items.CopyTo(array, arrayIndex);
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            return ((IList<T>)items).GetEnumerator();
+            return items.GetEnumerator();
         }
 
         public int IndexOf(T item)
         {
-            return ((IList<T>)items).IndexOf(item);
+            return items.IndexOf(item);
         }
 
         public void AddRange(IEnumerable<T> objectReferences)
         {
-            foreach(var i in objectReferences) Add(i);
+            foreach(var i in objectReferences) 
+                Add(i);
         }
 
         public void Insert(int index, T item)
         {
             if(!uniqueIndex.Contains(item)) {
-                ((IList<T>)items).Insert(index, item);
+                items.Insert(index, item);
                 uniqueIndex.Add(item);
             }
         }
@@ -64,19 +71,19 @@ namespace Unity.SelectionGroups
         public bool Remove(T item)
         {
             uniqueIndex.Remove(item);
-            return ((IList<T>)items).Remove(item);
+            return items.Remove(item);
         }
 
         public void RemoveAt(int index)
         {
             var item = items[index];
             uniqueIndex.Remove(item);
-            ((IList<T>)items).RemoveAt(index);
+            items.RemoveAt(index);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IList<T>)items).GetEnumerator();
+            return items.GetEnumerator();
         }
     }
 }

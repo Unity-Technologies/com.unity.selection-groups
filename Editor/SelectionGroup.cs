@@ -17,13 +17,15 @@ namespace Unity.SelectionGroups
 
         public int groupId;
 
-        [System.NonSerialized] UniqueList<Object> members = new UniqueList<Object>();
+        [System.NonSerialized] OrderedSet<Object> members = new OrderedSet<Object>();
 
         HashSet<GlobalObjectId> globalObjectIdSet = new HashSet<GlobalObjectId>();
 
         GoQL.GoQLExecutor executor = new GoQL.GoQLExecutor();
 
         public int Count => members.Count;
+
+        public Object this[int index] { get => members[index]; set => members[index] = value; }
 
         public void RefreshQueryResults()
         {

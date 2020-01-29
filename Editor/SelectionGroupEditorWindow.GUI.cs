@@ -33,7 +33,7 @@ namespace Unity.SelectionGroups
 
             foreach (var group in SelectionGroupManager.instance)
             {
-               // Debug.Log(group);
+                // Debug.Log(group);
                 var isActive = activeNames.Contains(group.name);
                 GUILayout.Space(3);
                 var rect = GUILayoutUtility.GetRect(1, EditorGUIUtility.singleLineHeight);
@@ -41,7 +41,7 @@ namespace Unity.SelectionGroups
                 if ((rect.yMin - scroll.y) > position.height) break;
                 var showChildren = DrawHeader(rect, group, isActive: isActive);
                 var dropRect = rect;
-               
+
                 if (showChildren)
                 {
                     rect = GUILayoutUtility.GetRect(1, (EditorGUIUtility.singleLineHeight) * group.Count);
@@ -101,7 +101,7 @@ namespace Unity.SelectionGroups
         {
             var e = Event.current;
             var content = EditorGUIUtility.ObjectContent(g, g.GetType());
-            var isThisMemberSelected = activeSelection.Contains(g);
+            var isInSelection = activeSelection.Contains(g);
             var isMouseOver = rect.Contains(e.mousePosition);
             var isMouseDrag = e.type == EventType.MouseDrag;
             var isManySelected = activeSelection.Count > 1;
@@ -112,41 +112,80 @@ namespace Unity.SelectionGroups
             var isMouseUp = e.type == EventType.MouseUp;
             var isNoSelection = activeSelection.Count == 0;
             var isControl = e.control;
+            var isShift = e.shift;
             var isLeftMouseDown = isMouseOver && isLeftButton && isMouseDown;
             var isLeftMouseUp = isMouseOver && isLeftButton && isMouseUp;
             var isHotMember = g == hotMember;
+            var updateSelectionObjects = false;
 
             if (isMouseOver)
-            {
                 EditorGUI.DrawRect(rect, HOVER_COLOR);
-            }
 
             if (isLeftMouseDown)
                 hotMember = g;
 
-            if (isMouseUp && !isMouseOver && isHotMember)
-                hotMember = null;
 
-            if (isLeftMouseUp && isHotMember)
+            if (isControl)
             {
-                if (!isControl) activeSelection.Clear();
-                activeSelection.Add(g);
-                Selection.objects = activeSelection.ToArray();
-                activeSelectionGroup = group;
+                if (isLeftMouseUp && isHotMember && isInSelection)
+                {
+                    activeSelection.Remove(g);
+                    activeSelectionGroup = group;
+                    updateSelectionObjects = true;
+                }
+                if (isLeftMouseUp && isHotMember && !isInSelection)
+                {
+                    activeSelection.Add(g);
+                    activeSelectionGroup = group;
+                    updateSelectionObjects = true;
+                }
+            }
+            else if (isShift)
+            {
+                if (isLeftMouseUp && isHotMember)
+                {
+                    activeSelection.Add(g);
+                    int firstIndex = -1, lastIndex = -1;
+                    for (var i = 0; i < group.Count; i++)
+                    {
+                        if (activeSelection.Contains(group[i]))
+                        {
+                            if (firstIndex < 0)
+                                firstIndex = i;
+                            lastIndex = i;
+                        }
+                    }
+                    for(var i=firstIndex; i<lastIndex; i++)
+                        activeSelection.Add(group[i]);
+                    updateSelectionObjects = true;
+                }
+            }
+            else
+            {
+                if (isLeftMouseUp && isHotMember)
+                {
+                    if (isInSelection)
+                    {
+                        //TODO: rename
+                    }
+                    else
+                    {
+                        activeSelection.Clear();
+                        activeSelection.Add(g);
+                        updateSelectionObjects = true;
+                    }
+                }
             }
 
-            if (g == hotMember || activeSelection.Contains(g))
-            {
+            if (isInSelection)
                 EditorGUI.DrawRect(rect, SELECTION_COLOR);
-            }
 
             rect.x += 24;
             GUI.contentColor = allowRemove ? Color.white : Color.Lerp(Color.white, Color.yellow, 0.25f);
             GUI.Label(rect, content);
             GUI.contentColor = Color.white;
 
-
-            if (isRightButton && isMouseOver && isMouseDown && isThisMemberSelected)
+            if (isRightButton && isMouseOver && isMouseDown && isInSelection)
             {
                 ShowGameObjectContextMenu(rect, group, g, allowRemove);
             }
@@ -158,6 +197,10 @@ namespace Unity.SelectionGroups
                 DragAndDrop.objectReferences = Selection.objects;
                 DragAndDrop.StartDrag(g.name);
             }
+
+            if (updateSelectionObjects)
+                Selection.objects = activeSelection.ToArray();
+
         }
 
         bool DrawHeader(Rect rect, SelectionGroup group, bool isActive)
@@ -236,7 +279,7 @@ namespace Unity.SelectionGroups
                                 ShowGroupContextMenu(rect, groupName, group);
                                 break;
                             case LEFT_MOUSE_BUTTON:
-                                if(e.clickCount == 1)
+                                if (e.clickCount == 1)
                                     activeSelectionGroup = group;
                                 else
                                     SelectionGroupConfigurationDialog.Open(group, this);
