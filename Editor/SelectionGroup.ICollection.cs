@@ -3,12 +3,11 @@ using UnityEditor;
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections;
-using System;
 
 namespace Unity.SelectionGroups
 {
     [System.Serializable]
-    public partial class SelectionGroup : IEnumerable<UnityEngine.Object>
+    public partial class SelectionGroup : IEnumerable<Object>
     {
         public string name;
         public Color color;
@@ -18,7 +17,7 @@ namespace Unity.SelectionGroups
 
         public int groupId;
 
-        [System.NonSerialized] List<UnityEngine.Object> members = new List<UnityEngine.Object>();
+        [System.NonSerialized] UniqueList<Object> members = new UniqueList<Object>();
 
         HashSet<GlobalObjectId> globalObjectIdSet = new HashSet<GlobalObjectId>();
 
@@ -40,7 +39,7 @@ namespace Unity.SelectionGroups
             }
         }
 
-        internal void Add(IEnumerable<UnityEngine.Object> objectReferences)
+        internal void Add(IEnumerable<Object> objectReferences)
         {
             members.AddRange(objectReferences);
             SortMembers();
@@ -48,7 +47,7 @@ namespace Unity.SelectionGroups
 
         void SortMembers()
         {
-            members.Sort((A, B) => A.name.CompareTo(B.name));
+            // members.Sort((A, B) => A.name.CompareTo(B.name));
         }
 
         internal void ConvertSceneObjectsToGlobalObjectIds()
@@ -64,9 +63,9 @@ namespace Unity.SelectionGroups
 
         internal void ConvertGlobalObjectIdsToSceneObjects()
         {
-            var outputObjects = new UnityEngine.Object[globalObjectIdSet.Count];
+            var outputObjects = new Object[globalObjectIdSet.Count];
             GlobalObjectId.GlobalObjectIdentifiersToObjectsSlow(globalObjectIdSet.ToArray(), outputObjects);
-            var objectSet = new HashSet<UnityEngine.Object>(members);
+            var objectSet = new HashSet<Object>(members);
             foreach (var i in outputObjects)
             {
                 if (i != null) objectSet.Add(i);
@@ -76,20 +75,20 @@ namespace Unity.SelectionGroups
             SortMembers();
         }
 
-        internal void Remove(UnityEngine.Object[] objects)
+        internal void Remove(Object[] objects)
         {
             globalObjectIdSet.ExceptWith(GetGlobalObjectIds(objects));
             foreach (var o in objects) members.Remove(o);
         }
 
-        internal GlobalObjectId[] GetGlobalObjectIds(params UnityEngine.Object[] gameObjects)
+        internal GlobalObjectId[] GetGlobalObjectIds(params Object[] gameObjects)
         {
             var gids = new GlobalObjectId[gameObjects.Length];
             GlobalObjectId.GetGlobalObjectIdsSlow(gameObjects, gids);
             return gids;
         }
 
-        public IEnumerator<UnityEngine.Object> GetEnumerator()
+        public IEnumerator<Object> GetEnumerator()
         {
             return members.GetEnumerator();
         }

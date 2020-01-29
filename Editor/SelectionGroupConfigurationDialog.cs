@@ -21,9 +21,12 @@ namespace Unity.SelectionGroups
         public static void Open(SelectionGroup group, SelectionGroupEditorWindow parentWindow)
         {
             var dialog = EditorWindow.GetWindow<SelectionGroupConfigurationDialog>();
+            // var dialog = ScriptableObject.CreateInstance(typeof(SelectionGroupConfigurationDialog)) as SelectionGroupConfigurationDialog;
             dialog.group = group;
             dialog.parentWindow = parentWindow;
             dialog.refreshQuery = true;
+            // dialog.ShowModalUtility();
+            dialog.titleContent.text = $"Configure {group.name}";
             dialog.ShowPopup();
         }
 
