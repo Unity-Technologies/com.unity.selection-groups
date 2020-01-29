@@ -178,7 +178,7 @@ namespace Unity.SelectionGroups
                     }
                     else
                     {
-                        //TODO: rename
+                        //TODO: add a rename overlay
                     }
                 }
             }
@@ -186,6 +186,13 @@ namespace Unity.SelectionGroups
             if (isInSelection)
                 EditorGUI.DrawRect(rect, SELECTION_COLOR);
 
+            if(g.hideFlags.HasFlag(HideFlags.NotEditable)) {
+                var icon = EditorGUIUtility.IconContent("InspectorLock");
+                var irect = rect;
+                irect.width = 16;
+                irect.height = 14;
+                GUI.DrawTexture(irect, icon.image);
+            }
             rect.x += 24;
             GUI.contentColor = allowRemove ? Color.white : Color.Lerp(Color.white, Color.yellow, 0.25f);
             GUI.Label(rect, content);
@@ -217,22 +224,48 @@ namespace Unity.SelectionGroups
             var backgroundColor = group == activeSelectionGroup ? Color.white * 0.6f : Color.white * 0.3f;
             EditorGUI.DrawRect(rect, backgroundColor);
 
+
             rect.width = 16;
             group.showMembers = EditorGUI.Toggle(rect, group.showMembers, "foldout");
             rect.x += 16;
-            rect.width = EditorGUIUtility.currentViewWidth - 96;
+            rect.width = EditorGUIUtility.currentViewWidth - 128;
 
             HandleHeaderMouseEvents(rect, group.name, group);
             GUI.Label(rect, content, "label");
 
             rect.x += rect.width;
-            rect.width = 16;
-
+            rect = DrawTools(rect, group);
+            rect.x += 8;
             rect.xMax = position.xMax;
 
             EditorGUI.DrawRect(rect, new Color(group.color.r, group.color.g, group.color.b));
 
             return group.showMembers;
+        }
+
+        Rect DrawTools(Rect rect, SelectionGroup group)
+        {
+            rect.width = 18;
+            rect.height = 18;
+            foreach (var i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>())
+            {
+                var attr = i.GetCustomAttribute<SelectionGroupToolAttribute>();
+                var content = EditorGUIUtility.IconContent(attr.icon, attr.text);
+                if (GUI.Button(rect, content, miniButtonStyle))
+                {
+                    try
+                    {
+                        i.Invoke(null, new object[] { group });
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                }
+                rect.x += rect.width;
+            }
+
+            return rect;
         }
 
         void ShowGameObjectContextMenu(Rect rect, SelectionGroup group, Object g, bool allowRemove)
