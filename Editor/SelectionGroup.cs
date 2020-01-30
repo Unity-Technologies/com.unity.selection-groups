@@ -17,6 +17,8 @@ namespace Unity.SelectionGroups
 
         public int groupId;
 
+        [SerializeField] internal HashSet<string> enabledTools = new HashSet<string>();
+
         [System.NonSerialized] OrderedSet<Object> members = new OrderedSet<Object>();
 
         HashSet<GlobalObjectId> globalObjectIdSet = new HashSet<GlobalObjectId>();

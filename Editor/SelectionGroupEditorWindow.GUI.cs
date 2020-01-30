@@ -186,7 +186,8 @@ namespace Unity.SelectionGroups
             if (isInSelection)
                 EditorGUI.DrawRect(rect, SELECTION_COLOR);
 
-            if(g.hideFlags.HasFlag(HideFlags.NotEditable)) {
+            if (g.hideFlags.HasFlag(HideFlags.NotEditable))
+            {
                 var icon = EditorGUIUtility.IconContent("InspectorLock");
                 var irect = rect;
                 irect.width = 16;
@@ -250,7 +251,10 @@ namespace Unity.SelectionGroups
             foreach (var i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>())
             {
                 var attr = i.GetCustomAttribute<SelectionGroupToolAttribute>();
-                var content = EditorGUIUtility.IconContent(attr.icon, attr.text);
+                if (!group.enabledTools.Contains(attr.ToolID))
+                    continue;
+                var content = EditorGUIUtility.IconContent(attr.icon);
+                content.tooltip = attr.description;
                 if (GUI.Button(rect, content, miniButtonStyle))
                 {
                     try

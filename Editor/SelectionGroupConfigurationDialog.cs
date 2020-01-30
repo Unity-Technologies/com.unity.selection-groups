@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -64,6 +65,26 @@ namespace Unity.SelectionGroups
                     GUILayout.Space(5);
                     EditorGUILayout.HelpBox(message, MessageType.Info);
                 }
+                GUILayout.Space(5);
+
+                GUILayout.BeginVertical("box");
+                GUILayout.Label("Enabled Toolbar Buttons", EditorStyles.largeLabel);
+                foreach (var i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>())
+                {
+                    var attr = i.GetCustomAttribute<SelectionGroupToolAttribute>();
+                    var enabled = group.enabledTools.Contains(attr.ToolID);
+                    var content = EditorGUIUtility.IconContent(attr.icon);
+                    var _enabled = EditorGUILayout.ToggleLeft(content, enabled, "button");
+                    if (enabled && !_enabled)
+                    {
+                        group.enabledTools.Remove(attr.ToolID);
+                    }
+                    if (!enabled && _enabled)
+                    {
+                        group.enabledTools.Add(attr.ToolID);
+                    }
+                }
+                GUILayout.EndVertical();
                 if (cc.changed)
                 {
                     SelectionGroupManager.instance.SetIsDirty();
