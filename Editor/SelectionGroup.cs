@@ -20,9 +20,12 @@ namespace Unity.SelectionGroups
         [SerializeField] internal HashSet<string> enabledTools = new HashSet<string>();
 
         [SerializeField] PersistentObjectStore _persistentObjectStore;
-        PersistentObjectStore PersistentObjectStore {
-            get {
-                if(_persistentObjectStore == null) {
+        PersistentObjectStore PersistentObjectStore
+        {
+            get
+            {
+                if (_persistentObjectStore == null)
+                {
                     _persistentObjectStore = new PersistentObjectStore();
                     _persistentObjectStore.LoadObjects();
                 }

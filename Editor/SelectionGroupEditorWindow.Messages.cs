@@ -55,6 +55,10 @@ namespace Unity.SelectionGroups
 
         void OnGUI()
         {
+            if(EditorApplication.isPlayingOrWillChangePlaymode) {
+                GUILayout.Label("Selection Groups are not available in Play Mode.");
+                return;
+            }
             //Debug.Log(Event.current.type);
             // Profiler.BeginSample("SelectionGroupEditorWindow");
             SetupStyles();
