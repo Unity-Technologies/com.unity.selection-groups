@@ -38,7 +38,6 @@ namespace Unity.SelectionGroups
             editorWindow = null;
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
             EditorApplication.hierarchyChanged -= OnHierarchyChanged;
-            SelectionGroupManager.instance.Save();
         }
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)

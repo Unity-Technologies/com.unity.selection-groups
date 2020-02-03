@@ -71,9 +71,8 @@ namespace Unity.SelectionGroups
 
         public void Save()
         {
-            foreach (var g in groups.Values)
-                g.ConvertSceneObjectsToGlobalObjectIds();
-            InternalEditorUtility.SaveToSerializedFileAndForget(new[] { s_Instance }, GetFilePath(), true);
+            if (s_Instance != null)
+                InternalEditorUtility.SaveToSerializedFileAndForget(new[] { s_Instance }, GetFilePath(), true);
         }
 
         static string GetFilePath()
@@ -86,8 +85,6 @@ namespace Unity.SelectionGroups
         {
             if (groups != null)
             {
-                foreach (var g in groups.Values)
-                    g.ConvertSceneObjectsToGlobalObjectIds();
                 _values = groups.Values.ToArray();
                 _keys = (from i in _values select i.groupId).ToArray();
             }

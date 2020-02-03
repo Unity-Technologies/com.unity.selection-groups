@@ -6,6 +6,7 @@ using System.Collections;
 
 namespace Unity.SelectionGroups
 {
+
     [System.Serializable]
     public partial class SelectionGroup : IEnumerable<Object>
     {
@@ -13,93 +14,66 @@ namespace Unity.SelectionGroups
         public Color color;
         public bool showMembers;
         public string query = string.Empty;
-        public bool sort = false;
 
         public int groupId;
 
         [SerializeField] internal HashSet<string> enabledTools = new HashSet<string>();
 
-        [System.NonSerialized] OrderedSet<Object> members = new OrderedSet<Object>();
-
-        HashSet<GlobalObjectId> globalObjectIdSet = new HashSet<GlobalObjectId>();
-
-        GoQL.GoQLExecutor executor = new GoQL.GoQLExecutor();
-
-        public int Count => members.Count;
-
-        public Object this[int index] { get => members[index]; set => members[index] = value; }
-
-        public void RefreshQueryResults()
-        {
-            if (query != string.Empty)
-            {
-                executor.Code = query;
-                var objects = executor.Execute();
-                members.Clear();
-                if (sort)
-                    System.Array.Sort(objects, (a, b) => a.name.CompareTo(b.name));
-                members.AddRange(objects);
-                SortMembers();
+        [SerializeField] PersistentObjectStore _persistentObjectStore;
+        PersistentObjectStore PersistentObjectStore {
+            get {
+                if(_persistentObjectStore == null) {
+                    _persistentObjectStore = new PersistentObjectStore();
+                    _persistentObjectStore.LoadObjects();
+                }
+                return _persistentObjectStore;
             }
         }
 
-        internal void Add(IEnumerable<Object> objectReferences)
-        {
-            members.AddRange(objectReferences);
-            SortMembers();
-        }
+        GoQL.GoQLExecutor executor = new GoQL.GoQLExecutor();
 
-        void SortMembers()
-        {
-            // members.Sort((A, B) => A.name.CompareTo(B.name));
-        }
+        public int Count => PersistentObjectStore.LoadedObjectCount;
 
-        internal void ConvertSceneObjectsToGlobalObjectIds()
+        public int TotalCount => PersistentObjectStore.TotalObjectCount;
+
+        public Object this[int index] { get => PersistentObjectStore[index]; set => PersistentObjectStore[index] = value; }
+
+        public void RefreshQueryResults()
         {
-            globalObjectIdSet.UnionWith(GetGlobalObjectIds(members.ToArray()));
+            if (!string.IsNullOrEmpty(query))
+            {
+                executor.Code = query;
+                var objects = executor.Execute();
+                PersistentObjectStore.Clear();
+                PersistentObjectStore.Add(objects);
+            }
         }
 
         internal void Clear()
         {
-            globalObjectIdSet.ExceptWith(GetGlobalObjectIds(members.ToArray()));
-            members.Clear();
-        }
-
-        internal void ConvertGlobalObjectIdsToSceneObjects()
-        {
-            var outputObjects = new Object[globalObjectIdSet.Count];
-            GlobalObjectId.GlobalObjectIdentifiersToObjectsSlow(globalObjectIdSet.ToArray(), outputObjects);
-            var objectSet = new HashSet<Object>(members);
-            foreach (var i in outputObjects)
-            {
-                if (i != null) objectSet.Add(i);
-            }
-            members.Clear();
-            members.AddRange(objectSet);
-            SortMembers();
+            PersistentObjectStore.Clear();
         }
 
         internal void Remove(Object[] objects)
         {
-            globalObjectIdSet.ExceptWith(GetGlobalObjectIds(objects));
-            foreach (var o in objects) members.Remove(o);
+            PersistentObjectStore.Remove(objects);
         }
 
-        internal GlobalObjectId[] GetGlobalObjectIds(params Object[] gameObjects)
+        internal void Add(Object[] objects)
         {
-            var gids = new GlobalObjectId[gameObjects.Length];
-            GlobalObjectId.GetGlobalObjectIdsSlow(gameObjects, gids);
-            return gids;
+            PersistentObjectStore.Add(objects);
         }
 
         public IEnumerator<Object> GetEnumerator()
         {
-            return members.GetEnumerator();
+            PersistentObjectStore.LoadObjects();
+            return PersistentObjectStore.activeObjects.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return members.GetEnumerator();
+            PersistentObjectStore.LoadObjects();
+            return PersistentObjectStore.activeObjects.GetEnumerator();
         }
     }
 }

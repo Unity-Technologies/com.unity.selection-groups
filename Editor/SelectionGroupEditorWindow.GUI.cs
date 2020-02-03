@@ -221,7 +221,7 @@ namespace Unity.SelectionGroups
         {
             // if (group == null) return false;
             var content = EditorGUIUtility.IconContent("LODGroup Icon");
-            content.text = $"{group.name}";
+            content.text = $"{group.name} ({group.Count}/{group.TotalCount})";
             var backgroundColor = group == activeSelectionGroup ? Color.white * 0.6f : Color.white * 0.3f;
             EditorGUI.DrawRect(rect, backgroundColor);
 
@@ -282,6 +282,7 @@ namespace Unity.SelectionGroups
                 {
                     Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Remove");
                     group.Remove(Selection.objects);
+
                 });
             else
                 menu.AddDisabledItem(content);

@@ -8,7 +8,7 @@ namespace Unity.SelectionGroups
 {
     public class SelectionGroupConfigurationDialog : EditorWindow
     {
-        SelectionGroup group;
+        public int groupId;
         ReorderableList materialList;
         ReorderableList typeList;
         ReorderableList shaderList;
@@ -18,21 +18,25 @@ namespace Unity.SelectionGroups
         SelectionGroupEditorWindow parentWindow;
         string message = string.Empty;
         bool refreshQuery = true;
+        bool showDebug = false;
+        SelectionGroupDebugInformation debugInformation;
 
         public static void Open(SelectionGroup group, SelectionGroupEditorWindow parentWindow)
         {
             var dialog = EditorWindow.GetWindow<SelectionGroupConfigurationDialog>();
             // var dialog = ScriptableObject.CreateInstance(typeof(SelectionGroupConfigurationDialog)) as SelectionGroupConfigurationDialog;
-            dialog.group = group;
+            dialog.groupId = group.groupId;
             dialog.parentWindow = parentWindow;
             dialog.refreshQuery = true;
             // dialog.ShowModalUtility();
             dialog.titleContent.text = $"Configure {group.name}";
             dialog.ShowPopup();
+            dialog.debugInformation = null;
         }
 
         void OnGUI()
         {
+            var group = SelectionGroupManager.instance.GetGroup(groupId);
             using (var cc = new EditorGUI.ChangeCheckScope())
             {
                 GUILayout.Label("Selection Group Properties", EditorStyles.largeLabel);
@@ -89,7 +93,38 @@ namespace Unity.SelectionGroups
                 {
                     SelectionGroupManager.instance.SetIsDirty();
                 }
+                showDebug = GUILayout.Toggle(showDebug, "Show Debug Info", "button");
+                if (showDebug)
+                {
+                    if (debugInformation == null) debugInformation = new SelectionGroupDebugInformation(group);
+                    foreach (var kv in debugInformation.idObjectMap)
+                    {
+                        var gid = kv.Key;
+                        var obj = kv.Value;
+
+                        GUILayout.BeginHorizontal();
+                        EditorGUILayout.LabelField(gid.ToString());
+                        EditorGUILayout.ObjectField(obj, typeof(Object), true);
+                        EditorGUILayout.LabelField(obj == null ? "NULL" : obj.GetInstanceID().ToString());
+                        GUILayout.EndHorizontal();
+                    }
+                }
+                else
+                {
+                    debugInformation = null;
+                }
             }
+        }
+    }
+
+    class SelectionGroupDebugInformation
+    {
+
+        public Dictionary<GlobalObjectId, Object> idObjectMap = new Dictionary<GlobalObjectId, Object>();
+
+        public SelectionGroupDebugInformation(SelectionGroup group)
+        {
+            
         }
     }
 

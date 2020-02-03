@@ -19,6 +19,8 @@ namespace Unity.SelectionGroups
 
         public Dictionary<string, Scene> loadedScenes = new Dictionary<string, Scene>();
 
+        public SelectionGroup GetGroup(int groupId) => groups[groupId];
+
         internal void SetIsDirty()
         {
             isDirty = true;
@@ -27,12 +29,6 @@ namespace Unity.SelectionGroups
         void OnEnable()
         {
             ReloadGroups();
-            EditorSceneManager.sceneOpened -= OnSceneOpened;
-            EditorSceneManager.sceneOpened += OnSceneOpened;
-            EditorSceneManager.sceneClosed -= OnSceneClosed;
-            EditorSceneManager.sceneClosed += OnSceneClosed;
-            EditorSceneManager.sceneClosing -= OnSceneClosing;
-            EditorSceneManager.sceneClosing += OnSceneClosing;
             // EditorApplication.hierarchyChanged -= OnHierarchyChanged;
             // EditorApplication.hierarchyChanged += OnHierarchyChanged;
             Undo.undoRedoPerformed -= ReloadGroups;
@@ -79,19 +75,14 @@ namespace Unity.SelectionGroups
 
         private void ReloadGroups()
         {
-            var allGroups = groups.Values.ToArray();
-            for (var i = 0; i < EditorSceneManager.loadedSceneCount; i++)
-            {
-                var scene = EditorSceneManager.GetSceneAt(i);
-                foreach (var g in allGroups)
-                    g.ConvertGlobalObjectIdsToSceneObjects();
-            }
+            
         }
 
         void OnHierarchyChanged() => SetIsDirty();
 
         void Update()
         {
+            if(EditorApplication.isPlayingOrWillChangePlaymode) return;
             Profiler.BeginSample("SelectionGroupManager.Update()");
             if (isDirty)
             {
@@ -110,35 +101,13 @@ namespace Unity.SelectionGroups
             Profiler.EndSample();
         }
 
-        void OnSceneClosing(Scene scene, bool removingScene)
-        {
-            foreach (var g in groups.Values)
-            {
-                g.ConvertSceneObjectsToGlobalObjectIds();
-            }
-        }
-
-        void OnSceneClosed(Scene scene)
-        {
-            SetIsDirty();
-        }
 
         void OnDisable()
         {
-            EditorSceneManager.sceneOpened -= OnSceneOpened;
-            EditorSceneManager.sceneClosing -= OnSceneClosing;
+            Save();
             EditorApplication.hierarchyChanged -= OnHierarchyChanged;
             Undo.undoRedoPerformed -= ReloadGroups;
             EditorApplication.update -= Update;
-        }
-
-        void OnSceneOpened(Scene scene, OpenSceneMode mode)
-        {
-            foreach (var g in groups.Values)
-            {
-                g.ConvertGlobalObjectIdsToSceneObjects();
-            }
-            SetIsDirty();
         }
 
         public bool TryGetGroup(int groupId, out SelectionGroup group)
@@ -177,7 +146,7 @@ namespace Unity.SelectionGroups
                 var newGroup = CreateGroup(group.name);
                 newGroup.query = group.query;
                 newGroup.color = group.color;
-                newGroup.Add(group);
+                newGroup.Add(group.ToArray());
             }
         }
 
