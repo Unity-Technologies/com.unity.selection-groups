@@ -23,7 +23,6 @@ namespace Unity.SelectionGroups
 
         void DrawGUI()
         {
-            var names = SelectionGroupManager.instance.GetGroupNames();
             scroll = EditorGUILayout.BeginScrollView(scroll);
             DrawDebugTools();
             if (GUILayout.Button("Add Group"))

@@ -15,21 +15,15 @@ namespace Unity.SelectionGroups
 
         static SelectionGroupManager s_Instance;
 
-        public static void Reload()
-        {
-            CreateAndLoad();
-        }
-
         public static SelectionGroupManager instance
         {
             get
             {
-                if (s_Instance == null) CreateAndLoad();
                 return s_Instance;
             }
         }
 
-        static void CreateAndLoad()
+        internal static void CreateAndLoad()
         {
 
             System.Diagnostics.Debug.Assert(s_Instance == null);
@@ -40,7 +34,7 @@ namespace Unity.SelectionGroups
                 s_Instance = managers[0] as SelectionGroupManager;
                 if (managers.Length != 1)
                 {
-                    Debug.LogError("Multiple SelectionGroupManager instances detected!");
+                    Debug.LogError($"Multiple SelectionGroupManager instances detected! {managers.Length}");
                 }
             }
 

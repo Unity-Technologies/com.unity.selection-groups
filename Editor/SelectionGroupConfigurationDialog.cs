@@ -97,17 +97,7 @@ namespace Unity.SelectionGroups
                 if (showDebug)
                 {
                     if (debugInformation == null) debugInformation = new SelectionGroupDebugInformation(group);
-                    foreach (var kv in debugInformation.idObjectMap)
-                    {
-                        var gid = kv.Key;
-                        var obj = kv.Value;
-
-                        GUILayout.BeginHorizontal();
-                        EditorGUILayout.LabelField(gid.ToString());
-                        EditorGUILayout.ObjectField(obj, typeof(Object), true);
-                        EditorGUILayout.LabelField(obj == null ? "NULL" : obj.GetInstanceID().ToString());
-                        GUILayout.EndHorizontal();
-                    }
+                    EditorGUILayout.TextArea(debugInformation.text);
                 }
                 else
                 {
@@ -120,11 +110,11 @@ namespace Unity.SelectionGroups
     class SelectionGroupDebugInformation
     {
 
-        public Dictionary<GlobalObjectId, Object> idObjectMap = new Dictionary<GlobalObjectId, Object>();
+        public string text;
 
         public SelectionGroupDebugInformation(SelectionGroup group)
         {
-            
+            text = EditorJsonUtility.ToJson(group, prettyPrint:true);
         }
     }
 

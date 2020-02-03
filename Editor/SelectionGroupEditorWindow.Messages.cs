@@ -15,29 +15,12 @@ namespace Unity.SelectionGroups
         {
             titleContent.text = "Selection Groups";
             editorWindow = this;
-            Undo.undoRedoPerformed -= OnUndoRedoPerformed;
-            Undo.undoRedoPerformed += OnUndoRedoPerformed;
-            EditorApplication.hierarchyChanged -= OnHierarchyChanged;
-            EditorApplication.hierarchyChanged += OnHierarchyChanged;
             this.wantsMouseMove = true;
-        }
-
-
-        void OnHierarchyChanged()
-        {
-
-        }
-
-        void OnUndoRedoPerformed()
-        {
-            SelectionGroupManager.Reload();
         }
 
         void OnDisable()
         {
             editorWindow = null;
-            Undo.undoRedoPerformed -= OnUndoRedoPerformed;
-            EditorApplication.hierarchyChanged -= OnHierarchyChanged;
         }
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -55,8 +38,14 @@ namespace Unity.SelectionGroups
 
         void OnGUI()
         {
-            if(EditorApplication.isPlayingOrWillChangePlaymode) {
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+            {
                 GUILayout.Label("Selection Groups are not available in Play Mode.");
+                return;
+            }
+            if (SelectionGroupManager.instance == null)
+            {
+                GUILayout.Label("Waiting for SelectionGroupManager to load.");
                 return;
             }
             //Debug.Log(Event.current.type);
@@ -107,6 +96,21 @@ namespace Unity.SelectionGroups
             }
         }
 
+        void Update()
+        {
+            if (SelectionGroupManager.instance == null)
+            {
+                SelectionGroupManager.CreateAndLoad();
+                Repaint();
+            }
+
+        }
+
+        void OnSelectionChange()
+        {
+            UpdateActiveSelection();
+        }
+
         void UpdateActiveSelection()
         {
             activeSelection.Clear();
@@ -133,25 +137,6 @@ namespace Unity.SelectionGroups
             }
             // Debug.Log(current.commandName);
         }
-
-        void OnSelectionChange()
-        {
-            // activeSelection.Clear();
-            // activeSelection.UnionWith(Selection.objects);
-
-            // Below code will enable selection groups to be highlighted when one of their members is selected.
-            // Need a more performant way to do this.
-            // foreach(var g in SelectionGroupManager.instance)
-            // {
-            //     if (activeSelection.Intersect(g).Count() > 0)
-            //     {
-            //         activeNames.Add(g.name);
-            //         continue;
-            //     }
-            // }
-            // Repaint();
-        }
-
 
     }
 }

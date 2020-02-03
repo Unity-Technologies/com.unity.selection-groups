@@ -28,24 +28,9 @@ namespace Unity.SelectionGroups
         Rect? hotRect = null;
         GUIStyle miniButtonStyle;
         HashSet<Object> activeSelection = new HashSet<Object>();
-        SelectionOperation nextSelectionOperation;
         HashSet<string> activeNames = new HashSet<string>();
 
         Object hotMember;
-
-        enum SelectionCommand
-        {
-            Add,
-            Remove,
-            Set,
-            None
-        }
-
-        class SelectionOperation
-        {
-            public SelectionCommand command;
-            public Object gameObject;
-        }
 
         static void CreateNewGroup(Object[] objects)
         {
@@ -53,35 +38,5 @@ namespace Unity.SelectionGroups
             var g = SelectionGroupManager.instance.CreateGroup("New Group");
             g.Add(objects);
         }
-
-        void QueueSelectionOperation(SelectionCommand command, Object gameObject)
-        {
-            if (nextSelectionOperation == null)
-            {
-                nextSelectionOperation = new SelectionOperation() { command = command, gameObject = gameObject };
-            }
-        }
-
-        void PerformSelectionCommands()
-        {
-            if (nextSelectionOperation != null)
-            {
-                if (nextSelectionOperation.gameObject != null)
-                    switch (nextSelectionOperation.command)
-                    {
-                        case SelectionCommand.Add:
-                            Selection.objects = Selection.objects.Append(nextSelectionOperation.gameObject).ToArray();
-                            break;
-                        case SelectionCommand.Remove:
-                            Selection.objects = (from i in Selection.objects where i != nextSelectionOperation.gameObject select i).ToArray();
-                            break;
-                        case SelectionCommand.Set:
-                            Selection.objects = new Object[] { nextSelectionOperation.gameObject };
-                            break;
-                    }
-                nextSelectionOperation = null;
-            }
-        }
-
     }
 }

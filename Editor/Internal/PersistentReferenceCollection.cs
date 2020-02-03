@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -13,28 +14,23 @@ namespace Unity.SelectionGroups
     /// is generated for any new gameobjects added to the set.
     /// </summary>
     [System.Serializable]
-    public class PersistentObjectStore : ISerializationCallbackReceiver, System.IDisposable
+    public class PersistentReferenceCollection : ISerializationCallbackReceiver, System.IDisposable, IEnumerable<Object>
     {
-        internal OrderedSet<UnityEngine.Object> activeObjects = new OrderedSet<UnityEngine.Object>();
+        OrderedSet<UnityEngine.Object> activeObjects = new OrderedSet<UnityEngine.Object>();
         Dictionary<int, GlobalObjectId> instanceIdMap = new Dictionary<int, GlobalObjectId>();
         HashSet<GlobalObjectId> globalObjectIdSet = new HashSet<GlobalObjectId>();
 
-        [SerializeField] internal string[] _objectIds;
-
-        bool isDirty = false;
+        [SerializeField] string[] _objectIds;
 
         public int LoadedObjectCount => activeObjects.Count;
-        public int TotalObjectCount
-        {
-            get
-            {
-                if (isDirty) ConvertSceneObjectsToGlobalObjectIds();
-                return globalObjectIdSet.Count;
-            }
-        }
+        public int TotalObjectCount => globalObjectIdSet.Count;
 
         public Object this[int index] { get => activeObjects[index]; set => activeObjects[index] = value; }
 
+        /// <summary>
+        /// Load references to objects that currently exist in a scene.
+        /// </summary>
+        /// <param name="forceReload"></param>
         public void LoadObjects(bool forceReload = false)
         {
             if (LoadedObjectCount == 0 || forceReload)
@@ -44,19 +40,17 @@ namespace Unity.SelectionGroups
         public void Add(Object obj)
         {
             activeObjects.Add(obj);
-            isDirty = true;
+            ConvertSceneObjectsToGlobalObjectIds();
         }
 
         public void Add(Object[] objects)
         {
             activeObjects.AddRange(objects);
-            isDirty = true;
+            ConvertSceneObjectsToGlobalObjectIds();
         }
 
         public void Remove(Object obj)
         {
-            if (isDirty)
-                ConvertSceneObjectsToGlobalObjectIds();
             activeObjects.Remove(obj);
             var id = obj.GetInstanceID();
             var gid = instanceIdMap[id];
@@ -66,8 +60,6 @@ namespace Unity.SelectionGroups
 
         public void Remove(Object[] objects)
         {
-            if (isDirty)
-                ConvertSceneObjectsToGlobalObjectIds();
             activeObjects.Remove(objects);
             foreach (var obj in objects)
             {
@@ -78,8 +70,7 @@ namespace Unity.SelectionGroups
             }
         }
 
-
-        public PersistentObjectStore()
+        public PersistentReferenceCollection()
         {
             EditorSceneManager.sceneLoaded -= OnSceneLoaded;
             EditorSceneManager.sceneLoaded += OnSceneLoaded;
@@ -89,8 +80,7 @@ namespace Unity.SelectionGroups
 
         void OnSceneClosing(Scene scene, bool removingScene)
         {
-            if (isDirty)
-                ConvertSceneObjectsToGlobalObjectIds();
+            ConvertSceneObjectsToGlobalObjectIds();
         }
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -100,8 +90,6 @@ namespace Unity.SelectionGroups
 
         public void Dispose()
         {
-            if (isDirty)
-                ConvertSceneObjectsToGlobalObjectIds();
             EditorSceneManager.sceneClosing -= OnSceneClosing;
             EditorSceneManager.sceneLoaded -= OnSceneLoaded;
         }
@@ -113,7 +101,6 @@ namespace Unity.SelectionGroups
             globalObjectIdSet.UnionWith(gids);
             for (var i = 0; i < objects.Length; i++)
                 instanceIdMap[objects[i].GetInstanceID()] = gids[i];
-            isDirty = false;
         }
 
         internal void Clear()
@@ -125,10 +112,11 @@ namespace Unity.SelectionGroups
 
         internal void ConvertGlobalObjectIdsToSceneObjects()
         {
+            activeObjects.Clear();
+            instanceIdMap.Clear();
             var outputObjects = new UnityEngine.Object[globalObjectIdSet.Count];
             var gids = globalObjectIdSet.ToArray();
             GlobalObjectId.GlobalObjectIdentifiersToObjectsSlow(gids, outputObjects);
-            activeObjects.Clear();
             for (var i = 0; i < outputObjects.Length; i++)
             {
                 var obj = outputObjects[i];
@@ -160,6 +148,14 @@ namespace Unity.SelectionGroups
             _objectIds = (from i in globalObjectIdSet select i.ToString()).ToArray();
         }
 
+        public IEnumerator<Object> GetEnumerator()
+        {
+            return activeObjects.GetEnumerator();
+        }
 
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return activeObjects.GetEnumerator();
+        }
     }
 }

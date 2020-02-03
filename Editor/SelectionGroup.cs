@@ -13,70 +13,92 @@ namespace Unity.SelectionGroups
         public string name;
         public Color color;
         public bool showMembers;
+
+        /// <summary>
+        /// A GoQL query string which will populate the group with matching members.
+        /// </summary>
         public string query = string.Empty;
 
         public int groupId;
 
+        /// <summary>
+        /// Number of objects in this group that are available to be referenced. (Ie. they exist in a loaded scene)
+        /// </summary>
+        public int Count => PersistentReferenceCollection.LoadedObjectCount;
+
+        /// <summary>
+        /// Number of objects that exist in this group, including objects that cannot be loaded. (Ie. The containing scene has not been loaded)
+        /// </summary>
+        public int TotalCount => PersistentReferenceCollection.TotalObjectCount;
+
+        /// <summary>
+        /// Access by index the loaded objects in this group.
+        /// </summary>
+        /// <value></value>
+        public Object this[int index] { get => PersistentReferenceCollection[index]; set => PersistentReferenceCollection[index] = value; }
+
         [SerializeField] internal HashSet<string> enabledTools = new HashSet<string>();
 
-        [SerializeField] PersistentObjectStore _persistentObjectStore;
-        PersistentObjectStore PersistentObjectStore
+        [SerializeField] PersistentReferenceCollection _persistentReferenceCollection;
+        PersistentReferenceCollection PersistentReferenceCollection
         {
             get
             {
-                if (_persistentObjectStore == null)
+                if (_persistentReferenceCollection == null)
                 {
-                    _persistentObjectStore = new PersistentObjectStore();
-                    _persistentObjectStore.LoadObjects();
+                    _persistentReferenceCollection = new PersistentReferenceCollection();
+                    _persistentReferenceCollection.LoadObjects();
                 }
-                return _persistentObjectStore;
+                return _persistentReferenceCollection;
             }
         }
 
         GoQL.GoQLExecutor executor = new GoQL.GoQLExecutor();
 
-        public int Count => PersistentObjectStore.LoadedObjectCount;
-
-        public int TotalCount => PersistentObjectStore.TotalObjectCount;
-
-        public Object this[int index] { get => PersistentObjectStore[index]; set => PersistentObjectStore[index] = value; }
-
+        
         public void RefreshQueryResults()
         {
             if (!string.IsNullOrEmpty(query))
             {
                 executor.Code = query;
                 var objects = executor.Execute();
-                PersistentObjectStore.Clear();
-                PersistentObjectStore.Add(objects);
+                PersistentReferenceCollection.Clear();
+                PersistentReferenceCollection.Add(objects);
             }
         }
 
-        internal void Clear()
-        {
-            PersistentObjectStore.Clear();
+        /// <summary>
+        /// Creates all references in this group that exist in a loaded scene.
+        /// </summary>
+        public void Reload() {
+            PersistentReferenceCollection.LoadObjects(forceReload:true);
         }
 
-        internal void Remove(Object[] objects)
+        public void Clear()
         {
-            PersistentObjectStore.Remove(objects);
+            PersistentReferenceCollection.Clear();
         }
 
-        internal void Add(Object[] objects)
+        public void Remove(Object[] objects)
         {
-            PersistentObjectStore.Add(objects);
+            PersistentReferenceCollection.Remove(objects);
+        }
+
+        public void Add(Object[] objects)
+        {
+            PersistentReferenceCollection.Add(objects);
         }
 
         public IEnumerator<Object> GetEnumerator()
         {
-            PersistentObjectStore.LoadObjects();
-            return PersistentObjectStore.activeObjects.GetEnumerator();
+            PersistentReferenceCollection.LoadObjects();
+            return PersistentReferenceCollection.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            PersistentObjectStore.LoadObjects();
-            return PersistentObjectStore.activeObjects.GetEnumerator();
+            PersistentReferenceCollection.LoadObjects();
+            return PersistentReferenceCollection.GetEnumerator();
         }
     }
 }

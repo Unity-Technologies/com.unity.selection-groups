@@ -73,16 +73,19 @@ namespace Unity.SelectionGroups
             }
         }
 
-        private void ReloadGroups()
+        void ReloadGroups()
         {
-            
+            foreach (var g in groups)
+            {
+                g.Value.Reload();
+            }
         }
 
         void OnHierarchyChanged() => SetIsDirty();
 
         void Update()
         {
-            if(EditorApplication.isPlayingOrWillChangePlaymode) return;
+            if (EditorApplication.isPlayingOrWillChangePlaymode) return;
             Profiler.BeginSample("SelectionGroupManager.Update()");
             if (isDirty)
             {
@@ -100,7 +103,6 @@ namespace Unity.SelectionGroups
             }
             Profiler.EndSample();
         }
-
 
         void OnDisable()
         {
