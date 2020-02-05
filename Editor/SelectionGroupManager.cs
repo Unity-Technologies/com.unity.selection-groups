@@ -28,6 +28,7 @@ namespace Unity.SelectionGroups
 
         void OnEnable()
         {
+            Application.SetStackTraceLogType(LogType.Assert, StackTraceLogType.Full);
             ReloadGroups();
             // EditorApplication.hierarchyChanged -= OnHierarchyChanged;
             // EditorApplication.hierarchyChanged += OnHierarchyChanged;
@@ -61,7 +62,11 @@ namespace Unity.SelectionGroups
                         runtimeGroup.members = new List<UnityEngine.Object>();
                     else
                         runtimeGroup.members.Clear();
-                    runtimeGroup.members.AddRange(group);
+                    foreach(var i in group) {
+                        var go = i as GameObject;
+                        if(go != null && go.scene != runtimeGroup.gameObject.scene) continue;
+                        runtimeGroup.members.Add(i);
+                    }
                     allContainedGroups.Remove(runtimeGroup);
                 }
                 foreach (var deadGroup in allContainedGroups)

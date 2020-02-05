@@ -9,7 +9,7 @@ namespace Unity.SelectionGroups.Runtime
         public static HashSet<SelectionGroupContainer> instances = new HashSet<SelectionGroupContainer>();
         public Dictionary<int, SelectionGroup> groups = new Dictionary<int, SelectionGroup>();
 
-        public static IEnumerable<Object> Groups
+        public static IEnumerable<SelectionGroup> Groups
         {
             get
             {

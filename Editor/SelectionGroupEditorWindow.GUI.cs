@@ -98,6 +98,7 @@ namespace Unity.SelectionGroups
 
         void DrawGroupMember(Rect rect, SelectionGroup group, Object g, bool allowRemove)
         {
+            if(g == null) return;
             var e = Event.current;
             var content = EditorGUIUtility.ObjectContent(g, g.GetType());
             var isInSelection = activeSelection.Contains(g);
