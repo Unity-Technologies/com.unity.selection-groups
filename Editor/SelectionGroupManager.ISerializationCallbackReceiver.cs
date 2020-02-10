@@ -65,13 +65,16 @@ namespace Unity.SelectionGroups
 
         public void Save()
         {
-            if (s_Instance != null)
-                InternalEditorUtility.SaveToSerializedFileAndForget(new[] { s_Instance }, GetFilePath(), true);
+            if (s_Instance != null) {
+                var path = GetFilePath();
+                System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path));
+                InternalEditorUtility.SaveToSerializedFileAndForget(new[] { s_Instance }, path, true);
+            }
         }
 
         static string GetFilePath()
         {
-            string filePath = "Library" + "/" + "SelectionGroups.asset";
+            string filePath = "SelectionGroups" + "/" + "SelectionGroups.asset";
             return filePath;
         }
 
