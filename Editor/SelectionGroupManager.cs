@@ -23,6 +23,7 @@ namespace Unity.SelectionGroups
 
         internal void SetIsDirty()
         {
+            UpdateSelectionGroupContainersInLoadedScenes();
             isDirty = true;
         }
 
