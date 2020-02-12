@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
@@ -25,10 +26,15 @@ namespace Unity.SelectionGroups
         {
             scroll = EditorGUILayout.BeginScrollView(scroll);
             DrawDebugTools();
+            GUILayout.BeginHorizontal();
             if (GUILayout.Button("Add Group"))
             {
                 CreateNewGroup(Selection.objects);
             }
+            if(GUILayout.Button(EditorGUIUtility.IconContent("d_Settings"),"label",GUILayout.ExpandWidth(false))) {
+                ShowSettings();
+            }
+            GUILayout.EndHorizontal();
 
             foreach (var group in SelectionGroupManager.instance)
             {
@@ -56,6 +62,16 @@ namespace Unity.SelectionGroups
 
             }
             EditorGUILayout.EndScrollView();
+        }
+
+         void ShowSettings()
+        {
+            var menu = new GenericMenu();
+            menu.AddItem(new GUIContent("Enable Runtime Groups"), SelectionGroupManager.instance.enablePlayModeSelectionGroups, ()=> {
+                SelectionGroupManager.instance.enablePlayModeSelectionGroups = !SelectionGroupManager.instance.enablePlayModeSelectionGroups;
+                SelectionGroupManager.instance.UpdateSelectionGroupContainers();
+            });
+            menu.ShowAsContext();
         }
 
         void DrawDebugTools()
@@ -96,7 +112,7 @@ namespace Unity.SelectionGroups
             }
         }
 
-        void DrawGroupMember(Rect rect, SelectionGroup group, Object g, bool allowRemove)
+        void DrawGroupMember(Rect rect, SelectionGroup group, UnityEngine.Object g, bool allowRemove)
         {
             if(g == null) return;
             var e = Event.current;
@@ -272,7 +288,7 @@ namespace Unity.SelectionGroups
             return rect;
         }
 
-        void ShowGameObjectContextMenu(Rect rect, SelectionGroup group, Object g, bool allowRemove)
+        void ShowGameObjectContextMenu(Rect rect, SelectionGroup group, UnityEngine.Object g, bool allowRemove)
         {
             // Selection.activeObject = g;
             var menu = new GenericMenu();

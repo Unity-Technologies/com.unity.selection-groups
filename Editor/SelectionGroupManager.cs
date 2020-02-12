@@ -16,6 +16,7 @@ namespace Unity.SelectionGroups
         Dictionary<int, SelectionGroup> groups = new Dictionary<int, SelectionGroup>();
         public int _groupCounter;
         public bool isDirty = true;
+        public bool enablePlayModeSelectionGroups = false;
 
         public Dictionary<string, Scene> loadedScenes = new Dictionary<string, Scene>();
 
@@ -40,8 +41,65 @@ namespace Unity.SelectionGroups
             SetIsDirty();
         }
 
+        internal void UpdateSelectionGroupContainers()
+        {
+            if (enablePlayModeSelectionGroups)
+            {
+                AddContainersToLoadedScenes();
+            }
+            else
+            {
+                RemoveContainersFromLoadedScenes();
+            }
+        }
+
+        void RemoveContainersFromLoadedScenes()
+        {
+            for (var i = 0; i < EditorSceneManager.sceneCount; i++)
+            {
+                var scene = EditorSceneManager.GetSceneAt(i);
+                var objects = scene.GetRootGameObjects();
+                foreach (var j in objects)
+                {
+                    if (j.TryGetComponent<Runtime.SelectionGroupContainer>(out Runtime.SelectionGroupContainer container))
+                    {
+                        DestroyImmediate(j.gameObject);
+                        break;
+                    }
+                }
+            }
+        }
+
+        void AddContainersToLoadedScenes()
+        {
+            for (var i = 0; i < EditorSceneManager.sceneCount; i++)
+            {
+                var scene = EditorSceneManager.GetSceneAt(i);
+                var objects = scene.GetRootGameObjects();
+                var hasContainer = false;
+                foreach (var j in objects)
+                {
+                    if (j.TryGetComponent<Runtime.SelectionGroupContainer>(out Runtime.SelectionGroupContainer container))
+                    {
+                        hasContainer = true;
+                        break;
+                    }
+                }
+                if (!hasContainer)
+                {
+                    var container = new GameObject("Selection Groups").AddComponent<Runtime.SelectionGroupContainer>();
+                    EditorSceneManager.MoveGameObjectToScene(container.gameObject, scene);
+                }
+            }
+            UpdateSelectionGroupContainersInLoadedScenes();
+        }
+
         void UpdateSelectionGroupContainersInLoadedScenes()
         {
+            if (enablePlayModeSelectionGroups)
+            {
+
+            }
             foreach (var container in Runtime.SelectionGroupContainer.instances)
             {
                 //track all groups so we can delete dead groups.
@@ -63,9 +121,10 @@ namespace Unity.SelectionGroups
                         runtimeGroup.members = new List<UnityEngine.Object>();
                     else
                         runtimeGroup.members.Clear();
-                    foreach(var i in group) {
+                    foreach (var i in group)
+                    {
                         var go = i as GameObject;
-                        if(go != null && go.scene != runtimeGroup.gameObject.scene) continue;
+                        if (go != null && go.scene != runtimeGroup.gameObject.scene) continue;
                         runtimeGroup.members.Add(i);
                     }
                     allContainedGroups.Remove(runtimeGroup);
