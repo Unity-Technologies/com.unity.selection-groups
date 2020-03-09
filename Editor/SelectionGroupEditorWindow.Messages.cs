@@ -67,7 +67,7 @@ namespace Unity.SelectionGroups
             // Profiler.EndSample();
         }
 
-        private void OnExecuteCommand(Event current)
+        void OnExecuteCommand(Event current)
         {
             switch (current.commandName)
             {
@@ -118,7 +118,7 @@ namespace Unity.SelectionGroups
                 activeSelection.UnionWith(Selection.objects);
         }
 
-        private void OnValidateCommand(Event current)
+        void OnValidateCommand(Event current)
         {
             switch (current.commandName)
             {

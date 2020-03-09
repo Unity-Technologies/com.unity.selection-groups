@@ -31,7 +31,8 @@ namespace Unity.SelectionGroups
             {
                 CreateNewGroup(Selection.objects);
             }
-            if(GUILayout.Button(EditorGUIUtility.IconContent("d_Settings"),"label",GUILayout.ExpandWidth(false))) {
+            if (GUILayout.Button(EditorGUIUtility.IconContent("d_Settings"), "label", GUILayout.ExpandWidth(false)))
+            {
                 ShowSettings();
             }
             GUILayout.EndHorizontal();
@@ -64,10 +65,11 @@ namespace Unity.SelectionGroups
             EditorGUILayout.EndScrollView();
         }
 
-         void ShowSettings()
+        void ShowSettings()
         {
             var menu = new GenericMenu();
-            menu.AddItem(new GUIContent("Enable Runtime Groups"), SelectionGroupManager.instance.enablePlayModeSelectionGroups, ()=> {
+            menu.AddItem(new GUIContent("Enable Runtime Groups"), SelectionGroupManager.instance.enablePlayModeSelectionGroups, () =>
+            {
                 SelectionGroupManager.instance.enablePlayModeSelectionGroups = !SelectionGroupManager.instance.enablePlayModeSelectionGroups;
                 SelectionGroupManager.instance.UpdateSelectionGroupContainers();
             });
@@ -114,7 +116,7 @@ namespace Unity.SelectionGroups
 
         void DrawGroupMember(Rect rect, SelectionGroup group, UnityEngine.Object g, bool allowRemove)
         {
-            if(g == null) return;
+            if (g == null) return;
             var e = Event.current;
             var content = EditorGUIUtility.ObjectContent(g, g.GetType());
             var isInSelection = activeSelection.Contains(g);

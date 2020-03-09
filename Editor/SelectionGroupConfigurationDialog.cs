@@ -8,7 +8,7 @@ namespace Unity.SelectionGroups
 {
     public class SelectionGroupConfigurationDialog : EditorWindow
     {
-        public int groupId;
+        [SerializeField] int groupId;
         ReorderableList materialList;
         ReorderableList typeList;
         ReorderableList shaderList;
@@ -21,7 +21,7 @@ namespace Unity.SelectionGroups
         bool showDebug = false;
         SelectionGroupDebugInformation debugInformation;
 
-        public static void Open(SelectionGroup group, SelectionGroupEditorWindow parentWindow)
+        internal static void Open(SelectionGroup group, SelectionGroupEditorWindow parentWindow)
         {
             var dialog = EditorWindow.GetWindow<SelectionGroupConfigurationDialog>();
             // var dialog = ScriptableObject.CreateInstance(typeof(SelectionGroupConfigurationDialog)) as SelectionGroupConfigurationDialog;

@@ -24,18 +24,18 @@ namespace Unity.SelectionGroups
         /// <summary>
         /// Number of objects in this group that are available to be referenced. (Ie. they exist in a loaded scene)
         /// </summary>
-        public int Count => PersistentReferenceCollection.LoadedObjectCount;
+        internal int Count => PersistentReferenceCollection.LoadedObjectCount;
 
         /// <summary>
         /// Number of objects that exist in this group, including objects that cannot be loaded. (Ie. The containing scene has not been loaded)
         /// </summary>
-        public int TotalCount => PersistentReferenceCollection.TotalObjectCount;
+        internal int TotalCount => PersistentReferenceCollection.TotalObjectCount;
 
         /// <summary>
         /// Access by index the loaded objects in this group.
         /// </summary>
         /// <value></value>
-        public Object this[int index] { get => PersistentReferenceCollection[index]; set => PersistentReferenceCollection[index] = value; }
+        internal Object this[int index] { get => PersistentReferenceCollection[index]; set => PersistentReferenceCollection[index] = value; }
 
         [SerializeField] internal HashSet<string> enabledTools = new HashSet<string>();
 
@@ -56,7 +56,7 @@ namespace Unity.SelectionGroups
         GoQL.GoQLExecutor executor = new GoQL.GoQLExecutor();
 
         
-        public void RefreshQueryResults()
+        internal void RefreshQueryResults()
         {
             if (!string.IsNullOrEmpty(query))
             {
@@ -70,21 +70,21 @@ namespace Unity.SelectionGroups
         /// <summary>
         /// Creates all references in this group that exist in a loaded scene.
         /// </summary>
-        public void Reload() {
+        internal void Reload() {
             PersistentReferenceCollection.LoadObjects(forceReload:true);
         }
 
-        public void Clear()
+        internal void Clear()
         {
             PersistentReferenceCollection.Clear();
         }
 
-        public void Remove(Object[] objects)
+        internal void Remove(Object[] objects)
         {
             PersistentReferenceCollection.Remove(objects);
         }
 
-        public void Add(Object[] objects)
+        internal void Add(Object[] objects)
         {
             PersistentReferenceCollection.Add(objects);
         }

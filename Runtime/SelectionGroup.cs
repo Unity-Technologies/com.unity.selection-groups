@@ -24,7 +24,7 @@ namespace Unity.SelectionGroups.Runtime
         /// <summary>
         /// Run the GoQL query attached to this group, adding any new members that are discovered.
         /// </summary>
-        public void RefreshQueryResults()
+        void RefreshQueryResults()
         {
             executor.Code = query;
             members.Clear();
@@ -43,7 +43,8 @@ namespace Unity.SelectionGroups.Runtime
                 var go = member as GameObject;
                 if (go != null)
                 {
-                    foreach (var component in go.GetComponents<T>()) {
+                    foreach (var component in go.GetComponents<T>())
+                    {
                         yield return component;
                     }
                 }

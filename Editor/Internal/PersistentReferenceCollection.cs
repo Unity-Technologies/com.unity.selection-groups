@@ -15,7 +15,7 @@ namespace Unity.SelectionGroups
     /// is generated for any new gameobjects added to the set.
     /// </summary>
     [System.Serializable]
-    public class PersistentReferenceCollection : ISerializationCallbackReceiver, System.IDisposable, IEnumerable<UnityEngine.Object>
+    internal class PersistentReferenceCollection : ISerializationCallbackReceiver, System.IDisposable, IEnumerable<UnityEngine.Object>
     {
         OrderedSet<UnityEngine.Object> activeObjects = new OrderedSet<UnityEngine.Object>();
         Dictionary<int, GlobalObjectId> instanceIdMap = new Dictionary<int, GlobalObjectId>();

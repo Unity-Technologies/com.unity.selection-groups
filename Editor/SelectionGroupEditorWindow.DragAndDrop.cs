@@ -13,7 +13,7 @@ namespace Unity.SelectionGroups
 
     public partial class SelectionGroupEditorWindow : EditorWindow
     {
-        public bool HandleGroupDragEvents(Rect rect, SelectionGroup group)
+        bool HandleGroupDragEvents(Rect rect, SelectionGroup group)
         {
             Event evt = Event.current;
 
@@ -23,10 +23,10 @@ namespace Unity.SelectionGroups
                 case EventType.DragPerform:
                     if (!rect.Contains(evt.mousePosition))
                         return false;
-                    
+
                     var canDrop = string.IsNullOrEmpty(group.query);
 
-                    if(!canDrop)
+                    if (!canDrop)
                         DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
                     else
                         DragAndDrop.visualMode = DragAndDropVisualMode.Copy;

@@ -14,13 +14,13 @@ namespace Unity.SelectionGroups
     public partial class SelectionGroupManager : ScriptableObject, IEnumerable<SelectionGroup>
     {
         Dictionary<int, SelectionGroup> groups = new Dictionary<int, SelectionGroup>();
-        public int _groupCounter;
-        public bool isDirty = true;
-        public bool enablePlayModeSelectionGroups = false;
+        [SerializeField] int _groupCounter;
+        [SerializeField] bool isDirty = true;
+        [SerializeField] internal bool enablePlayModeSelectionGroups = false;
 
-        public Dictionary<string, Scene> loadedScenes = new Dictionary<string, Scene>();
+        Dictionary<string, Scene> loadedScenes = new Dictionary<string, Scene>();
 
-        public SelectionGroup GetGroup(int groupId) => groups[groupId];
+        internal SelectionGroup GetGroup(int groupId) => groups[groupId];
 
         internal void SetIsDirty()
         {
@@ -96,6 +96,7 @@ namespace Unity.SelectionGroups
 
         void UpdateSelectionGroupContainersInLoadedScenes()
         {
+            if (EditorApplication.isPlayingOrWillChangePlaymode) return;
             if (enablePlayModeSelectionGroups)
             {
 
@@ -177,12 +178,12 @@ namespace Unity.SelectionGroups
             EditorApplication.update -= Update;
         }
 
-        public bool TryGetGroup(int groupId, out SelectionGroup group)
+        bool TryGetGroup(int groupId, out SelectionGroup group)
         {
             return groups.TryGetValue(groupId, out group);
         }
 
-        public SelectionGroup CreateGroup(string name)
+        internal SelectionGroup CreateGroup(string name)
         {
             Undo.RecordObject(instance, "Create Group");
             var g = new SelectionGroup();

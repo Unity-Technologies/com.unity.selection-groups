@@ -63,9 +63,10 @@ namespace Unity.SelectionGroups
             System.Diagnostics.Debug.Assert(s_Instance != null);
         }
 
-        public void Save()
+        void Save()
         {
-            if (s_Instance != null) {
+            if (s_Instance != null)
+            {
                 var path = GetFilePath();
                 System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path));
                 InternalEditorUtility.SaveToSerializedFileAndForget(new[] { s_Instance }, path, true);
