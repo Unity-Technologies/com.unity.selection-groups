@@ -299,6 +299,7 @@ namespace Unity.SelectionGroups
                 menu.AddItem(content, false, () =>
                 {
                     Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Remove");
+                    group.query = "";
                     group.Remove(Selection.objects);
 
                 });

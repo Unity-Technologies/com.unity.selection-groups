@@ -36,6 +36,7 @@ namespace Unity.SelectionGroups
 
         void OnGUI()
         {
+            if(SelectionGroupManager.instance == null) return;
             var group = SelectionGroupManager.instance.GetGroup(groupId);
             using (var cc = new EditorGUI.ChangeCheckScope())
             {

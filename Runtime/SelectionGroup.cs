@@ -43,7 +43,7 @@ namespace Unity.SelectionGroups.Runtime
                 var go = member as GameObject;
                 if (go != null)
                 {
-                    foreach (var component in go.GetComponents<T>())
+                    foreach (var component in go.GetComponentsInChildren<T>())
                     {
                         yield return component;
                     }
