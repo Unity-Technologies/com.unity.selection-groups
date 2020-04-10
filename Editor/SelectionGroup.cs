@@ -86,6 +86,13 @@ namespace Unity.SelectionGroups
 
         internal void Add(Object[] objects)
         {
+            foreach(var i in objects) {
+                var go = i as GameObject;
+                if(go != null && string.IsNullOrEmpty(go.scene.path)) {
+                    //GameObject is not saved into a scene, therefore it cannot be stored in a selection group.
+                    throw new SelectionGroupException("Cannot add a gameobject from an unsaved scene.");
+                }
+            }
             PersistentReferenceCollection.Add(objects);
         }
 

@@ -125,6 +125,9 @@ namespace Unity.SelectionGroups
                     foreach (var i in group)
                     {
                         var go = i as GameObject;
+                        if(go == null) continue;
+                        var scene = go.scene;
+                        if(go.scene == null) continue;
                         if (go != null && go.scene != runtimeGroup.gameObject.scene) continue;
                         runtimeGroup.members.Add(i);
                     }
@@ -166,6 +169,7 @@ namespace Unity.SelectionGroups
                     UpdateSelectionGroupContainersInLoadedScenes();
                     // bt.SendEvent("USGCIS");
                 }
+                Save();
             }
             Profiler.EndSample();
         }
@@ -192,12 +196,14 @@ namespace Unity.SelectionGroups
             g.color = Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f));
             g.showMembers = true;
             groups.Add(g.groupId, g);
+            SetIsDirty();
             return g;
         }
 
         public void RemoveGroup(int groupId)
         {
             Undo.RecordObject(instance, "Remove Group");
+            SetIsDirty();
             groups.Remove(groupId);
         }
 
@@ -215,6 +221,7 @@ namespace Unity.SelectionGroups
                 newGroup.query = group.query;
                 newGroup.color = group.color;
                 newGroup.Add(group.ToArray());
+                SetIsDirty();
             }
         }
 

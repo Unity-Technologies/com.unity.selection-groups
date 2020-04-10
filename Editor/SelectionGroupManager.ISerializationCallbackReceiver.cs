@@ -70,6 +70,7 @@ namespace Unity.SelectionGroups
                 var path = GetFilePath();
                 System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path));
                 InternalEditorUtility.SaveToSerializedFileAndForget(new[] { s_Instance }, path, true);
+                Debug.Log("Saved.");
             }
         }
 

@@ -58,11 +58,18 @@ namespace Unity.SelectionGroups
                         continue;
                     DrawAllGroupMembers(rect, group, allowRemove: true);
                 }
+                try
+                {
 
-                HandleGroupDragEvents(dropRect, group);
-
+                    HandleGroupDragEvents(dropRect, group);
+                }
+                catch (SelectionGroupException ex)
+                {
+                    ShowNotification(new GUIContent(ex.Message));
+                }
             }
             EditorGUILayout.EndScrollView();
+
         }
 
         void ShowSettings()
