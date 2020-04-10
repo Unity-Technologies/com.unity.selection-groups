@@ -308,6 +308,7 @@ namespace Unity.SelectionGroups
                     Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Remove");
                     group.query = "";
                     group.Remove(Selection.objects);
+                    SelectionGroupManager.instance.SetIsDirty();
 
                 });
             else
@@ -321,16 +322,21 @@ namespace Unity.SelectionGroups
             menu.AddItem(new GUIContent("Duplicate Group"), false, () =>
             {
                 SelectionGroupManager.instance.DuplicateGroup(group.groupId);
+                SelectionGroupManager.instance.SetIsDirty();
+
             });
             menu.AddItem(new GUIContent("Clear Group"), false, () =>
             {
                 Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Clear");
                 group.Clear();
+                SelectionGroupManager.instance.SetIsDirty();
             });
             menu.AddItem(new GUIContent("Configure Group"), false, () => SelectionGroupConfigurationDialog.Open(group, this));
             menu.AddItem(new GUIContent("Delete Group"), false, () =>
             {
                 SelectionGroupManager.instance.RemoveGroup(group.groupId);
+                SelectionGroupManager.instance.SetIsDirty();
+
             });
             menu.DropDown(rect);
         }
