@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Unity.SelectionGroups.Runtime
 {
+
     public class SelectionGroup : MonoBehaviour
     {
         public int groupId;
@@ -14,6 +16,14 @@ namespace Unity.SelectionGroups.Runtime
         GoQL.ParseResult parseResult;
         List<object> code;
         GoQL.GoQLExecutor executor;
+
+
+        public IEnumerable<GameObject> EnumerateGameObjects()
+        {
+            foreach (var i in members)
+                if (i is GameObject)
+                    yield return i as GameObject;
+        }
 
         void OnEnable()
         {
