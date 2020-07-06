@@ -21,6 +21,8 @@ namespace Unity.SelectionGroups
 
         public int groupId;
 
+        public SelectionGroupList exclude = new SelectionGroupList();
+
         /// <summary>
         /// Number of objects in this group that are available to be referenced. (Ie. they exist in a loaded scene)
         /// </summary>

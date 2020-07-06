@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -12,6 +13,8 @@ namespace Unity.SelectionGroups
     {
         [SerializeField] int[] _keys;
         [SerializeField] SelectionGroup[] _values;
+
+        string[] _names;
 
         static SelectionGroupManager s_Instance;
 
@@ -85,6 +88,7 @@ namespace Unity.SelectionGroups
             {
                 _values = groups.Values.ToArray();
                 _keys = (from i in _values select i.groupId).ToArray();
+                _names = (from i in _values select i.name).ToArray();
             }
         }
 
@@ -101,6 +105,17 @@ namespace Unity.SelectionGroups
                     groups.Add(_keys[i], _values[i]);
                 }
             }
+        }
+
+        internal static SelectionGroup Popup(Rect rect, SelectionGroup group)
+        {
+            var groupId = group.groupId;
+            var index = System.Array.IndexOf(instance._keys, groupId);
+            if(index < 0) index = 0;
+            index = EditorGUI.Popup(rect, index, instance._names);
+            if(index > 0 && index < instance._keys.Length)
+                return instance._values[index];
+            return null;
         }
     }
 }
