@@ -69,31 +69,32 @@ namespace Unity.SelectionGroups
 
         void OnExecuteCommand(Event current)
         {
-            switch (current.commandName)
-            {
-                case "SelectAll":
-                    Selection.objects = activeSelectionGroup.ToArray();
-                    UpdateActiveSelection();
-                    current.Use();
-                    break;
-                case "DeselectAll":
-                    Selection.objects = null;
-                    UpdateActiveSelection();
-                    current.Use();
-                    break;
-                case "InvertSelection":
-                    Selection.objects = new HashSet<Object>(activeSelectionGroup).Except(Selection.objects).ToArray();
-                    UpdateActiveSelection();
-                    current.Use();
-                    break;
-                case "SoftDelete":
-                    Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Remove");
-                    activeSelectionGroup.Remove(Selection.objects);
-                    Selection.objects = null;
-                    UpdateActiveSelection();
-                    current.Use();
-                    return;
-            }
+            if (activeSelectionGroup != null)
+                switch (current.commandName)
+                {
+                    case "SelectAll":
+                        Selection.objects = activeSelectionGroup.ToArray();
+                        UpdateActiveSelection();
+                        current.Use();
+                        break;
+                    case "DeselectAll":
+                        Selection.objects = null;
+                        UpdateActiveSelection();
+                        current.Use();
+                        break;
+                    case "InvertSelection":
+                        Selection.objects = new HashSet<Object>(activeSelectionGroup).Except(Selection.objects).ToArray();
+                        UpdateActiveSelection();
+                        current.Use();
+                        break;
+                    case "SoftDelete":
+                        Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Remove");
+                        activeSelectionGroup.Remove(Selection.objects);
+                        Selection.objects = null;
+                        UpdateActiveSelection();
+                        current.Use();
+                        return;
+                }
         }
 
         void Update()
@@ -132,7 +133,8 @@ namespace Unity.SelectionGroups
                     current.Use();
                     return;
                 case "SoftDelete":
-                    current.Use();
+                    if (activeSelectionGroup != null)
+                        current.Use();
                     return;
             }
             // Debug.Log(current.commandName);
