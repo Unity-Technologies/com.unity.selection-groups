@@ -65,9 +65,11 @@ namespace Unity.SelectionGroups
             foreach (var obj in objects)
             {
                 var id = obj.GetInstanceID();
-                var gid = instanceIdMap[id];
-                instanceIdMap.Remove(id);
-                globalObjectIdSet.Remove(gid);
+                if (instanceIdMap.TryGetValue(id, out var gid))
+                {
+                    instanceIdMap.Remove(id);
+                    globalObjectIdSet.Remove(gid);
+                }
             }
         }
 

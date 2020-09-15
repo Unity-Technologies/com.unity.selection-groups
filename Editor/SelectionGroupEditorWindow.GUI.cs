@@ -273,9 +273,10 @@ namespace Unity.SelectionGroups
         {
             rect.width = 18;
             rect.height = 18;
+            
             foreach (var i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>())
             {
-                var attr = i.GetCustomAttribute<SelectionGroupToolAttribute>();
+                var attr = AttributeCache.GetCustomAttribute<SelectionGroupToolAttribute>(i);
                 if (!group.enabledTools.Contains(attr.ToolID))
                     continue;
                 var content = EditorGUIUtility.IconContent(attr.icon);
