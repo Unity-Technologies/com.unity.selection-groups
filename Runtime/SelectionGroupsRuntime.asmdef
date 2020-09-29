@@ -1,7 +1,7 @@
 {
     "name": "SelectionGroupsRuntime",
     "references": [
-        "GUID:3da36206d2e0b7147a85b4213efa0e12"
+        "GUID:f05b2c431bca79e4fa618c6f7b09e6c4"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -10,6 +10,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "Select...",
+            "expression": "",
+            "define": ""
+        }
+    ],
     "noEngineReferences": false
 }

@@ -2,10 +2,7 @@
   "displayName": "Selection Groups",
   "name": "com.unity.selection-groups",
   "unity": "2019.3",
-  "version": "0.0.4-dev",
-  "dependencies": {
-    "com.unity.goql": "0.0.2-dev"
-  },
+  "version": "0.0.5-dev",
   "description": "Provides editor tools for working with arbitrary groups of gameobjects along with the hierarchy window and inspector.",
   "author": "Simon Wittber <simonwittber@unity3d.com> (https://github.com/smnwttbr)",
   "contributors": [

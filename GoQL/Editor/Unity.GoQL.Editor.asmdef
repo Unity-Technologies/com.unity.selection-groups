@@ -1,7 +1,6 @@
 {
-    "name": "SelectionGroupsEditor",
+    "name": "Unity.GoQL.Editor",
     "references": [
-        "GUID:a1f2a1ae20746f947b43a9e2da5b01fc",
         "GUID:f05b2c431bca79e4fa618c6f7b09e6c4"
     ],
     "includePlatforms": [

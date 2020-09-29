@@ -81,16 +81,16 @@ namespace Unity.SelectionGroups
                 foreach (var i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>())
                 {
                     var attr = i.GetCustomAttribute<SelectionGroupToolAttribute>();
-                    var enabled = group.enabledTools.Contains(attr.ToolID);
+                    var enabled = group.enabledTools.Contains(attr.toolId);
                     var content = EditorGUIUtility.IconContent(attr.icon);
                     var _enabled = EditorGUILayout.ToggleLeft(content, enabled, "button");
                     if (enabled && !_enabled)
                     {
-                        group.enabledTools.Remove(attr.ToolID);
+                        group.enabledTools.Remove(attr.toolId);
                     }
                     if (!enabled && _enabled)
                     {
-                        group.enabledTools.Add(attr.ToolID);
+                        group.enabledTools.Add(attr.toolId);
                     }
                 }
                 GUILayout.EndVertical();

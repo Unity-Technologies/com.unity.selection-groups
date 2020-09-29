@@ -277,7 +277,7 @@ namespace Unity.SelectionGroups
             foreach (var i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>())
             {
                 var attr = AttributeCache.GetCustomAttribute<SelectionGroupToolAttribute>(i);
-                if (!group.enabledTools.Contains(attr.ToolID))
+                if (!group.enabledTools.Contains(attr.toolId))
                     continue;
                 var content = EditorGUIUtility.IconContent(attr.icon);
                 content.tooltip = attr.description;
