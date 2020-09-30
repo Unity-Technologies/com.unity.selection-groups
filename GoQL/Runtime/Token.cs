@@ -1,8 +1,6 @@
-
-
 namespace Unity.GoQL
 {
-    public struct Token
+    struct Token
     {
         public readonly TokenType type;
         public readonly string value;

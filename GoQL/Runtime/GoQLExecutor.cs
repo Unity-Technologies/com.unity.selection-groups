@@ -16,6 +16,10 @@ namespace Unity.GoQL
         bool refresh = true;
         string code;
 
+        /// <summary>
+        /// The GoQL source code to be executed.
+        /// </summary>
+        /// <value></value>
         public string Code
         {
             get => code;
@@ -27,8 +31,15 @@ namespace Unity.GoQL
             }
         }
 
+        /// <summary>
+        /// The result of parsing the Code property.
+        /// </summary>
         public ParseResult parseResult;
 
+        /// <summary>
+        /// An error message for the user if the Code property could not be parsed.
+        /// </summary>
+        /// <value></value>
         public string Error
         {
             get;

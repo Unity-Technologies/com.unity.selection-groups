@@ -2,7 +2,7 @@ using System;
 
 namespace Unity.GoQL
 {
-    public enum TokenType
+    enum TokenType
     {
         OpenSquare,
         CloseSquare,

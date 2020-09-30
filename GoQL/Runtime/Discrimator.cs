@@ -1,6 +1,6 @@
 namespace Unity.GoQL
 {
-    public struct Discrimator
+    struct Discrimator
     {
         public string type;
         public string value;

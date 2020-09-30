@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Unity.GoQL
 {
-    public class Tokenizer
+    class Tokenizer
     {
         System.Action _TokenizeFunction;
         string code = "";

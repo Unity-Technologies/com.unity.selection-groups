@@ -1,6 +1,6 @@
 namespace Unity.GoQL
 {
-    public struct Range
+    struct Range
     {
         public int start;
         public int end;

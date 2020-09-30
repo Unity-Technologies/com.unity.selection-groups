@@ -1,6 +1,6 @@
 namespace Unity.GoQL
 {
-    public enum GoQLCode {
+    enum GoQLCode {
         EnterChildren,
         FilterName,
         FilterIndex,

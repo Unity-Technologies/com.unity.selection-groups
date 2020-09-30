@@ -5,9 +5,17 @@ using UnityEngine;
 
 namespace Unity.GoQL
 {
-
+    /// <summary>
+    /// The parser for GoQL code.
+    /// </summary>
     public class Parser
     {
+        /// <summary>
+        /// Parse GoQL code represented as a string, and append instructions to the instructions list.
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="instructions"></param>
+        /// <param name="parseResult"></param>
         public static void Parse(string code, List<object> instructions, out ParseResult parseResult)
         {
             var tokenizer = new Tokenizer();
@@ -23,6 +31,12 @@ namespace Unity.GoQL
             }
         }
 
+        /// <summary>
+        /// Parse GoQL code represented as a string.
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="parseResult"></param>
+        /// <returns>List of instructions.</returns>
         public static List<object> Parse(string code, out ParseResult parseResult)
         {
             var tokenizer = new Tokenizer();
