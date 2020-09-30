@@ -3,12 +3,32 @@ using UnityEngine;
 
 namespace Unity.SelectionGroups.Runtime
 {
+
+    /// <summary>
+    /// This class is used to maintain the child set of SelectionGroups in play-mode.
+    /// </summary>
     [ExecuteInEditMode]
     public class SelectionGroupContainer : MonoBehaviour
     {
+        /// <summary>
+        /// The set of instances of this class. There may be more than one instance if multiple scenes are loaded.
+        /// </summary>
+        /// <typeparam name="SelectionGroupContainer"></typeparam>
+        /// <returns></returns>
         public static HashSet<SelectionGroupContainer> instances = new HashSet<SelectionGroupContainer>();
+
+        /// <summary>
+        /// A mapping of group Id to SelectionGroup instances.
+        /// </summary>
+        /// <typeparam name="int"></typeparam>
+        /// <typeparam name="SelectionGroup"></typeparam>
+        /// <returns></returns>
         public Dictionary<int, SelectionGroup> groups = new Dictionary<int, SelectionGroup>();
 
+        /// <summary>
+        /// Allows enumeration over all SelectionGroup instances which may be contained in multiple SelectionGroupContainer instances.
+        /// </summary>
+        /// <value></value>
         public static IEnumerable<SelectionGroup> Groups
         {
             get
@@ -42,6 +62,11 @@ namespace Unity.SelectionGroups.Runtime
 
         void OnDisable() => instances.Remove(this);
 
+        /// <summary>
+        /// Add a SelectionGroup to this container using a unique ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public SelectionGroup AddGroup(int id)
         {
             var g = new GameObject("Selection Group").AddComponent<SelectionGroup>();

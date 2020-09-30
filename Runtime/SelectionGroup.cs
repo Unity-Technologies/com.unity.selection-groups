@@ -5,19 +5,36 @@ using UnityEngine;
 
 namespace Unity.SelectionGroups.Runtime
 {
-
+    /// <summary>
+    /// This class is used to provide selection group information during play-mode. It reflects the information in the Editor-only class.
+    /// </summary>
     public class SelectionGroup : MonoBehaviour
     {
+        /// <summary>
+        /// Unique ID of this group.
+        /// </summary>
         public int groupId;
+        /// <summary>
+        /// A color assigned to this group.
+        /// </summary>
         public Color color;
+        /// <summary>
+        /// If not empty, this is a GoQL query string used to create the set of matching objects for this group.
+        /// </summary>
         public string query;
+        /// <summary>
+        /// The members of this group.
+        /// </summary>
         public List<UnityEngine.Object> members;
 
         GoQL.ParseResult parseResult;
         List<object> code;
         GoQL.GoQLExecutor executor;
 
-
+        /// <summary>
+        /// An enumerator that matches only the GameObject members of this group.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<GameObject> EnumerateGameObjects()
         {
             foreach (var i in members)
