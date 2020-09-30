@@ -13,22 +13,16 @@ namespace Unity.SelectionGroups.Runtime
         /// <summary>
         /// The set of instances of this class. There may be more than one instance if multiple scenes are loaded.
         /// </summary>
-        /// <typeparam name="SelectionGroupContainer"></typeparam>
-        /// <returns></returns>
         public static HashSet<SelectionGroupContainer> instances = new HashSet<SelectionGroupContainer>();
 
         /// <summary>
         /// A mapping of group Id to SelectionGroup instances.
         /// </summary>
-        /// <typeparam name="int"></typeparam>
-        /// <typeparam name="SelectionGroup"></typeparam>
-        /// <returns></returns>
         public Dictionary<int, SelectionGroup> groups = new Dictionary<int, SelectionGroup>();
 
         /// <summary>
         /// Allows enumeration over all SelectionGroup instances which may be contained in multiple SelectionGroupContainer instances.
         /// </summary>
-        /// <value></value>
         public static IEnumerable<SelectionGroup> Groups
         {
             get

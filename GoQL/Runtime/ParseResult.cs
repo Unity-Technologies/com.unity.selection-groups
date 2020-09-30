@@ -5,11 +5,17 @@ namespace Unity.GoQL
     /// </summary>
     public enum ParseResult
     {
+        /// <summary></summary>
         UnexpectedEndOfInput,
+        /// <summary></summary>
         Empty,
+        /// <summary></summary>
         OK,
+        /// <summary></summary>
         ClosingTokenMismatch,
+        /// <summary></summary>
         InvalidNumberFormat,
+        /// <summary></summary>
         DiscriminatorSyntaxError
     }
 

@@ -1,12 +1,14 @@
 namespace Unity.SelectionGroups
 {
+    /// <summary>
+    /// This exception is thrown when user intervention is required during a selection group operation. Eg, adding invalid objects.
+    /// </summary>
     public class SelectionGroupException : System.Exception
     {
         /// <summary>
-        /// This exception is thrown when user intervention is required during a selection group operation. Eg, adding invalid objects.
+        /// Construct exception with error message for user.
         /// </summary>
         /// <param name="msg"></param>
-        /// <returns></returns>
         public SelectionGroupException(string msg) : base(msg)
         {
 

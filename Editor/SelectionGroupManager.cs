@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 
 namespace Unity.SelectionGroups
 {
-    
+
     //NOTE: This class should eventually use ScriptableObjectSingleton when it becomes usable in a production version.
     /// <summary>
     /// The Editor only manager for selection groups.
@@ -129,9 +129,9 @@ namespace Unity.SelectionGroups
                     foreach (var i in group)
                     {
                         var go = i as GameObject;
-                        if(go == null) continue;
+                        if (go == null) continue;
                         var scene = go.scene;
-                        if(go.scene == null) continue;
+                        if (go.scene == null) continue;
                         if (go != null && go.scene != runtimeGroup.gameObject.scene) continue;
                         runtimeGroup.members.Add(i);
                     }
@@ -253,7 +253,10 @@ namespace Unity.SelectionGroups
                 yield return group;
             }
         }
-
+        /// <summary>
+        /// The enumerable for all items this manager.
+        /// </summary>
+        /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return (IEnumerator<SelectionGroup>)(this).GetEnumerator();

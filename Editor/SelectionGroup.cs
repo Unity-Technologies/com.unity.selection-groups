@@ -126,7 +126,10 @@ namespace Unity.SelectionGroups
             PersistentReferenceCollection.LoadObjects();
             return PersistentReferenceCollection.GetEnumerator();
         }
-
+        /// <summary>
+        /// Enumerable for all members of this group.
+        /// </summary>
+        /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             PersistentReferenceCollection.LoadObjects();

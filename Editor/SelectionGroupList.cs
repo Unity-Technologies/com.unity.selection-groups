@@ -20,6 +20,9 @@ namespace Unity.SelectionGroups
         /// </summary>
         public int Count => groupIds.Count;
 
+        /// <summary>
+        /// Is this list readonly? Always false.
+        /// </summary>
         public bool IsReadOnly => false;
 
         /// <summary>
@@ -82,6 +85,10 @@ namespace Unity.SelectionGroups
             }
         }
 
+        /// <summary>
+        /// Enumerable for all groups in this list.
+        /// </summary>
+        /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
@@ -145,6 +152,11 @@ namespace Unity.SelectionGroups
                 array[i] = this[i];
         }
 
+        /// <summary>
+        /// Remove an item from this list.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns>True if item was found otherwise false.</returns>
         bool ICollection<SelectionGroup>.Remove(SelectionGroup item)
         {
             return this.Remove(item);
