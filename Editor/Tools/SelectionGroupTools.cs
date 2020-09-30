@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Unity.SelectionGroups
 {
+    /// <summary>
+    /// This class containes methods which implement the default tools available for selection groups.
+    /// </summary>
     public static class SelectionGroupTools
     {
         [SelectionGroupTool("d_VisibilityOn", "Toggle Visibility", "Show and hide objects in the scene.")]

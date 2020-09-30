@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace Unity.SelectionGroups
 {
+    /// <summary>
+    /// Implements the configuration dialog in the editor for a selection group. 
+    /// </summary>
     public class SelectionGroupConfigurationDialog : EditorWindow
     {
         [SerializeField] int groupId;

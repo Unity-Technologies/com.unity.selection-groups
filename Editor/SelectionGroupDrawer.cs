@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Unity.SelectionGroups
 {
+    /// <summary>
+    /// The editor draw used in the inspector for SelectionGroup properties.
+    /// </summary>
     [CustomPropertyDrawer(typeof(SelectionGroupDropDownAttribute))]
     public class SelectionGroupDrawer : PropertyDrawer
     {

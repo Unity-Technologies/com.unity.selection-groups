@@ -13,12 +13,17 @@ namespace Unity.SelectionGroups
     {
 
         [SerializeField] string[] _enabledTools;
-
+        
+        /// <summary>
+        /// The deserialization callback.
+        /// </summary>
         public void OnAfterDeserialize()
         {
             enabledTools.UnionWith(_enabledTools);
         }
-
+        /// <summary>
+        /// The serialization callback.
+        /// </summary>
         public void OnBeforeSerialize()
         {
             _enabledTools = enabledTools.ToArray();

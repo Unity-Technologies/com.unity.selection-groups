@@ -10,7 +10,11 @@ using UnityEngine.SceneManagement;
 
 namespace Unity.SelectionGroups
 {
+    
     //NOTE: This class should eventually use ScriptableObjectSingleton when it becomes usable in a production version.
+    /// <summary>
+    /// The Editor only manager for selection groups.
+    /// </summary>
     public partial class SelectionGroupManager : ScriptableObject, IEnumerable<SelectionGroup>
     {
         Dictionary<int, SelectionGroup> groups = new Dictionary<int, SelectionGroup>();
@@ -200,6 +204,10 @@ namespace Unity.SelectionGroups
             return g;
         }
 
+        /// <summary>
+        /// Remove a selection group.
+        /// </summary>
+        /// <param name="groupId"></param>
         public void RemoveGroup(int groupId)
         {
             Undo.RecordObject(instance, "Remove Group");
@@ -207,11 +215,19 @@ namespace Unity.SelectionGroups
             groups.Remove(groupId);
         }
 
+        /// <summary>
+        /// Fetch an array of selection group names.
+        /// </summary>
+        /// <returns></returns>
         public string[] GetGroupNames()
         {
             return (from i in groups.Values select i.name).ToArray();
         }
 
+        /// <summary>
+        /// Duplicate the group specified by groupId.
+        /// </summary>
+        /// <param name="groupId"></param>
         public void DuplicateGroup(int groupId)
         {
             if (TryGetGroup(groupId, out SelectionGroup group))
@@ -225,6 +241,10 @@ namespace Unity.SelectionGroups
             }
         }
 
+        /// <summary>
+        /// Enumerate over all selection groups in this manager.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator<SelectionGroup> GetEnumerator()
         {
             foreach (var kv in groups)

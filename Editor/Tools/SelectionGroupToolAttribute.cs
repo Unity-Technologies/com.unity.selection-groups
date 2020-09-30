@@ -3,6 +3,9 @@ using UnityEditor;
 
 namespace Unity.SelectionGroups
 {
+    /// <summary>
+    /// Marks a method to be included as a SelectionGroup tool, which is enabled in the configuration dialog for a selection group.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
     public class SelectionGroupToolAttribute : Attribute
     {

@@ -18,6 +18,10 @@ namespace Unity.SelectionGroups
 
         static SelectionGroupManager s_Instance;
 
+        /// <summary>
+        /// The single instance of the SelectionGroupManager.
+        /// </summary>
+        /// <value></value>
         public static SelectionGroupManager instance
         {
             get
@@ -82,6 +86,9 @@ namespace Unity.SelectionGroups
             return filePath;
         }
 
+        /// <summary>
+        /// The serialization method for this class.
+        /// </summary>
         public void OnBeforeSerialize()
         {
             if (groups != null)
@@ -92,6 +99,9 @@ namespace Unity.SelectionGroups
             }
         }
 
+        /// <summary>
+        /// The deserialization method for this class.
+        /// </summary>
         public void OnAfterDeserialize()
         {
             if (groups == null)
@@ -111,9 +121,9 @@ namespace Unity.SelectionGroups
         {
             var groupId = group.groupId;
             var index = System.Array.IndexOf(instance._keys, groupId);
-            if(index < 0) index = 0;
+            if (index < 0) index = 0;
             index = EditorGUI.Popup(rect, index, instance._names);
-            if(index > 0 && index < instance._keys.Length)
+            if (index > 0 && index < instance._keys.Length)
                 return instance._values[index];
             return null;
         }

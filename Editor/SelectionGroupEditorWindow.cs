@@ -10,7 +10,9 @@ using UnityEngine.SceneManagement;
 
 namespace Unity.SelectionGroups
 {
-
+    /// <summary>
+    /// The main editor window for working with selection groups.
+    /// </summary>
     public partial class SelectionGroupEditorWindow : EditorWindow
     {
 

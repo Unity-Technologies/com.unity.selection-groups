@@ -7,11 +7,23 @@ using System.Collections;
 namespace Unity.SelectionGroups
 {
 
+    /// <summary>
+    /// This class is the Editor-only container for selection group information and members.
+    /// </summary>
     [System.Serializable]
     public partial class SelectionGroup : IEnumerable<Object>
     {
+        /// <summary>
+        /// The name of the group.
+        /// </summary>
         public string name;
+        /// <summary>
+        /// A color assigned to the group.
+        /// </summary>
         public Color color;
+        /// <summary>
+        /// Should this group expand the list of members in the UI.
+        /// </summary>
         public bool showMembers;
 
         /// <summary>
@@ -19,8 +31,15 @@ namespace Unity.SelectionGroups
         /// </summary>
         public string query = string.Empty;
 
+        /// <summary>
+        /// Unique ID of the group.
+        /// </summary>
         public int groupId;
 
+        /// <summary>
+        /// Allows this group to exclude the members of other selection group.
+        /// </summary>
+        /// <returns></returns>
         public SelectionGroupList exclude = new SelectionGroupList();
 
         /// <summary>
@@ -98,6 +117,10 @@ namespace Unity.SelectionGroups
             PersistentReferenceCollection.Add(objects);
         }
 
+        /// <summary>
+        /// Enumerator for all members of this group.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator<Object> GetEnumerator()
         {
             PersistentReferenceCollection.LoadObjects();
