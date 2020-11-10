@@ -86,14 +86,21 @@ namespace Unity.SelectionGroups
         void DrawDebugTools()
         {
             // GUILayout.BeginHorizontal();
-            // if (GUILayout.Button("DMP"))
-            // {
-
-            // }
-            // if (GUILayout.Button("SAV"))
-            // {
-            //     SelectionGroupManager.instance.Save();
-            // }
+            if (GUILayout.Button("DMP"))
+            {
+                foreach (var i in SelectionGroupManager.instance)
+                {
+                    Debug.Log($"{i.name} {i.Count}");
+                    foreach (var j in i)
+                    {
+                        Debug.Log(GlobalObjectId.GetGlobalObjectIdSlow(j).ToString());
+                    }
+                }
+            }
+            if (GUILayout.Button("SAV"))
+            {
+                SelectionGroupManager.instance.Save();
+            }
 
             // GUILayout.EndHorizontal();
         }

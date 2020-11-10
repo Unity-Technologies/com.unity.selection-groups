@@ -19,33 +19,42 @@ namespace Unity.SelectionGroups
 
             switch (evt.type)
             {
+                case EventType.DragExited:
+                    ExitDrag();
+                    break;
                 case EventType.DragUpdated:
                 case EventType.DragPerform:
-                    if (!rect.Contains(evt.mousePosition))
-                        return false;
-
-                    var canDrop = string.IsNullOrEmpty(group.query);
-
-                    if (!canDrop)
-                        DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
-                    else
-                        DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
-
-                    hotRect = rect;
-
-                    if (evt.type == EventType.DragPerform && canDrop)
-                    {
-                        DragAndDrop.AcceptDrag();
-                        Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Add to group");
-                        group.Add(DragAndDrop.objectReferences);
-                        hotRect = null;
-                        SelectionGroupManager.instance.SetIsDirty();
-                    }
+                    if (!PerformDrag(rect, group, evt)) return false;
                     break;
             }
             return false;
         }
+        bool PerformDrag(Rect rect, SelectionGroup group, Event evt)
+        {
+            if (!rect.Contains(evt.mousePosition))
+                return false;
 
+            var canDrop = string.IsNullOrEmpty(group.query);
+            hotRect = rect;
+            if (!canDrop)
+            {
+                DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
+            }
+            else
+            {
+                DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+                if (evt.type == EventType.DragPerform)
+                {
+                    DragAndDrop.AcceptDrag();
+                    Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Add to group");
+                    group.Add(DragAndDrop.objectReferences);
+                    hotRect = null;
+                    SelectionGroupManager.instance.SetIsDirty();
+                }
+            }
+
+            return true;
+        }
 
 
         void ExitDrag()

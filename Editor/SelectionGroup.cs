@@ -6,7 +6,6 @@ using System.Collections;
 
 namespace Unity.SelectionGroups
 {
-
     /// <summary>
     /// This class is the Editor-only container for selection group information and members.
     /// </summary>
@@ -85,6 +84,7 @@ namespace Unity.SelectionGroups
                 var objects = executor.Execute();
                 PersistentReferenceCollection.Clear();
                 PersistentReferenceCollection.Add(objects);
+                SelectionGroupManager.instance.SetIsDirty();
             }
         }
 
@@ -98,11 +98,13 @@ namespace Unity.SelectionGroups
         internal void Clear()
         {
             PersistentReferenceCollection.Clear();
+            SelectionGroupManager.instance.SetIsDirty();
         }
 
         internal void Remove(Object[] objects)
         {
             PersistentReferenceCollection.Remove(objects);
+            SelectionGroupManager.instance.SetIsDirty();
         }
 
         internal void Add(Object[] objects)
@@ -114,7 +116,9 @@ namespace Unity.SelectionGroups
                     throw new SelectionGroupException("Cannot add a gameobject from an unsaved scene.");
                 }
             }
+            Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Add");                        
             PersistentReferenceCollection.Add(objects);
+            SelectionGroupManager.instance.SetIsDirty();
         }
 
         /// <summary>

@@ -158,6 +158,7 @@ namespace Unity.SelectionGroups
 
         void Update()
         {
+            // SetIsDirty();
             if (EditorApplication.isPlayingOrWillChangePlaymode) return;
             Profiler.BeginSample("SelectionGroupManager.Update()");
             if (isDirty)

@@ -48,8 +48,6 @@ namespace Unity.SelectionGroups
                 GUILayout.Label("Waiting for SelectionGroupManager to load.");
                 return;
             }
-            //Debug.Log(Event.current.type);
-            // Profiler.BeginSample("SelectionGroupEditorWindow");
             SetupStyles();
             DrawGUI();
 
@@ -59,12 +57,10 @@ namespace Unity.SelectionGroups
                     OnValidateCommand(Event.current);
                     break;
                 case EventType.ExecuteCommand:
-                    // Debug.Log($"Command: {Event.current.commandName}");
                     OnExecuteCommand(Event.current);
                     break;
             }
             Repaint();
-            // Profiler.EndSample();
         }
 
         void OnExecuteCommand(Event current)
@@ -137,7 +133,6 @@ namespace Unity.SelectionGroups
                         current.Use();
                     return;
             }
-            // Debug.Log(current.commandName);
         }
 
     }

@@ -18,7 +18,6 @@ namespace Unity.SelectionGroups
     internal class PersistentReferenceCollection : ISerializationCallbackReceiver, System.IDisposable, IEnumerable<UnityEngine.Object>
     {
         OrderedSet<UnityEngine.Object> activeObjects = new OrderedSet<UnityEngine.Object>();
-        Dictionary<int, GlobalObjectId> instanceIdMap = new Dictionary<int, GlobalObjectId>();
         HashSet<GlobalObjectId> globalObjectIdSet = new HashSet<GlobalObjectId>();
 
         [SerializeField] string[] _objectIds;
@@ -53,24 +52,18 @@ namespace Unity.SelectionGroups
         public void Remove(UnityEngine.Object obj)
         {
             activeObjects.Remove(obj);
-            var id = obj.GetInstanceID();
-            var gid = instanceIdMap[id];
-            instanceIdMap.Remove(id);
+            var gid = GlobalObjectId.GetGlobalObjectIdSlow(obj);
             globalObjectIdSet.Remove(gid);
         }
 
         public void Remove(UnityEngine.Object[] objects)
         {
             activeObjects.Remove(objects);
-            foreach (var obj in objects)
+            foreach (var gid in GetGlobalObjectIds(objects))
             {
-                var id = obj.GetInstanceID();
-                if (instanceIdMap.TryGetValue(id, out var gid))
-                {
-                    instanceIdMap.Remove(id);
-                    globalObjectIdSet.Remove(gid);
-                }
+                globalObjectIdSet.Remove(gid);
             }
+            
         }
 
         public PersistentReferenceCollection()
@@ -110,40 +103,41 @@ namespace Unity.SelectionGroups
             var objects = activeObjects.ToArray();
             var gids = GetGlobalObjectIds(objects);
             globalObjectIdSet.UnionWith(gids);
-            for (var i = 0; i < objects.Length; i++)
-                if (objects[i] != null)
-                    instanceIdMap[objects[i].GetInstanceID()] = gids[i];
         }
 
         internal void Clear()
         {
             globalObjectIdSet.Clear();
             activeObjects.Clear();
-            instanceIdMap.Clear();
         }
 
         internal void ConvertGlobalObjectIdsToSceneObjects()
         {
             activeObjects.Clear();
-            instanceIdMap.Clear();
-            var outputObjects = new UnityEngine.Object[globalObjectIdSet.Count];
             var gids = globalObjectIdSet.ToArray();
+            var outputObjects = new UnityEngine.Object[gids.Length];
             GlobalObjectId.GlobalObjectIdentifiersToObjectsSlow(gids, outputObjects);
             for (var i = 0; i < outputObjects.Length; i++)
             {
                 var obj = outputObjects[i];
+                //Debug.Log($"GID: {gids[i]}, OBJ: {obj} -> GUID: {GlobalObjectId.GetGlobalObjectIdSlow(obj)}");
+                //Sometimes invalid objects are returned. https://fogbugz.unity3d.com/f/cases/1291291/
+                //This is the workaround.
                 if (obj != null)
                 {
-                    activeObjects.Add(obj);
-                    instanceIdMap[obj.GetInstanceID()] = gids[i];
+                    //if(gids[i] == GlobalObjectId.GetGlobalObjectIdSlow(obj))
+                    var x = gids[i];
+                    var y = GlobalObjectId.GetGlobalObjectIdSlow(obj);
+                    if(y.identifierType == x.identifierType && y.targetObjectId == x.targetObjectId && y.targetPrefabId == x.targetPrefabId && y.assetGUID == x.assetGUID)
+                        activeObjects.Add(obj);
                 }
             }
         }
 
-        internal GlobalObjectId[] GetGlobalObjectIds(params UnityEngine.Object[] gameObjects)
+        internal GlobalObjectId[] GetGlobalObjectIds(params UnityEngine.Object[] objects)
         {
-            var gids = new GlobalObjectId[gameObjects.Length];
-            GlobalObjectId.GetGlobalObjectIdsSlow(gameObjects, gids);
+            var gids = new GlobalObjectId[objects.Length];
+            GlobalObjectId.GetGlobalObjectIdsSlow(objects, gids);
             return gids;
         }
 

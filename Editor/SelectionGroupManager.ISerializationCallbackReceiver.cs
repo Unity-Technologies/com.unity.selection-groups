@@ -70,7 +70,7 @@ namespace Unity.SelectionGroups
             System.Diagnostics.Debug.Assert(s_Instance != null);
         }
 
-        void Save()
+        internal void Save()
         {
             if (s_Instance != null)
             {

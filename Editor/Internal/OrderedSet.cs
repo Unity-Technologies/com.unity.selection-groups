@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Unity.SelectionGroups
 {
@@ -56,8 +57,10 @@ namespace Unity.SelectionGroups
 
         public void AddRange(IEnumerable<T> objectReferences)
         {
-            foreach(var i in objectReferences) 
+            foreach (var i in objectReferences)
+            {
                 Add(i);
+            }
         }
 
         public void Insert(int index, T item)
