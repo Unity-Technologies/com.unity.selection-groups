@@ -20,3 +20,4 @@ You can right click on the group to open a context menu. This menu provides cont
 
 # Group Configuration
 When selecting the Configure Group option from the context menu, a configuration window will open. You can change the group name, the group color and the selection query using this window.
+
