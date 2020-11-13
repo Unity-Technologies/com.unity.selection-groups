@@ -1,4 +1,4 @@
-yamato_name: MaterialSwitch
+yamato_name: SelectionGroups
 
 test_editors:
   - version: 2019.4
