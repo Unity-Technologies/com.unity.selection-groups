@@ -49,6 +49,19 @@ namespace Unity.SelectionGroups
             ConvertSceneObjectsToGlobalObjectIds();
         }
 
+        public bool Update(UnityEngine.Object[] objects)
+        {
+            var newObjects = new HashSet<UnityEngine.Object>(objects);
+            newObjects.ExceptWith(activeObjects);
+            if (newObjects.Count > 0)
+            {
+                Clear();
+                activeObjects.AddRange(objects);
+                return true;
+            }
+            return false;
+        }
+
         public void Remove(UnityEngine.Object obj)
         {
             activeObjects.Remove(obj);

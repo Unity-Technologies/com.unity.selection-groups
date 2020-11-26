@@ -26,9 +26,8 @@ namespace Unity.SelectionGroups
 
         internal SelectionGroup GetGroup(int groupId) => groups[groupId];
 
-        internal void SetIsDirty()
+        void SetIsDirty()
         {
-            UpdateSelectionGroupContainersInLoadedScenes();
             isDirty = true;
         }
 
@@ -36,8 +35,8 @@ namespace Unity.SelectionGroups
         {
             Application.SetStackTraceLogType(LogType.Assert, StackTraceLogType.Full);
             ReloadGroups();
-            // EditorApplication.hierarchyChanged -= OnHierarchyChanged;
-            // EditorApplication.hierarchyChanged += OnHierarchyChanged;
+            EditorApplication.hierarchyChanged -= OnHierarchyChanged;
+            EditorApplication.hierarchyChanged += OnHierarchyChanged;
             Undo.undoRedoPerformed -= ReloadGroups;
             Undo.undoRedoPerformed += ReloadGroups;
             EditorApplication.update -= Update;
@@ -65,11 +64,10 @@ namespace Unity.SelectionGroups
                 var objects = scene.GetRootGameObjects();
                 foreach (var j in objects)
                 {
-                    if (j.TryGetComponent<Runtime.SelectionGroupContainer>(out Runtime.SelectionGroupContainer container))
-                    {
-                        DestroyImmediate(j.gameObject);
-                        break;
-                    }
+                    if (!j.TryGetComponent<Runtime.SelectionGroupContainer>(
+                        out Runtime.SelectionGroupContainer container)) continue;
+                    DestroyImmediate(j.gameObject);
+                    break;
                 }
             }
         }
@@ -154,29 +152,28 @@ namespace Unity.SelectionGroups
             }
         }
 
-        void OnHierarchyChanged() => SetIsDirty();
+        void OnHierarchyChanged()
+        {    
+            RefreshQueryResults();
+        } 
 
         void Update()
         {
-            // SetIsDirty();
-            if (EditorApplication.isPlayingOrWillChangePlaymode) return;
-            Profiler.BeginSample("SelectionGroupManager.Update()");
             if (isDirty)
             {
-                isDirty = false;
-                // using (var bt = new AnalyticsTimer("SelectionGroupManager.Update"))
-                {
-                    foreach (var i in groups.Values)
-                    {
-                        i.RefreshQueryResults();
-                    }
-                    // bt.SendEvent("RFQR");
-                    UpdateSelectionGroupContainersInLoadedScenes();
-                    // bt.SendEvent("USGCIS");
-                }
+                if (EditorApplication.isPlayingOrWillChangePlaymode) return;
+                Profiler.BeginSample("SelectionGroupManager.Update()");
+                UpdateSelectionGroupContainersInLoadedScenes();
                 Save();
+                isDirty = false;
+                Profiler.EndSample();
             }
-            Profiler.EndSample();
+        }
+
+        private void RefreshQueryResults()
+        {
+            foreach (var i in groups.Values)
+                i.RefreshQueryResults();
         }
 
         void OnDisable()

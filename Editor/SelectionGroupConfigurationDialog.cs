@@ -99,7 +99,7 @@ namespace Unity.SelectionGroups
                 GUILayout.EndVertical();
                 if (cc.changed)
                 {
-                    SelectionGroupManager.instance.SetIsDirty();
+                    group.isDirty = true;
                 }
                 showDebug = GUILayout.Toggle(showDebug, "Show Debug Info", "button");
                 if (showDebug)

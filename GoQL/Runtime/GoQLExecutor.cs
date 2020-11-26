@@ -96,13 +96,11 @@ namespace Unity.GoQL
         /// <returns></returns>
         public GameObject[] Execute()
         {
-            if (!refresh)
+            if (refresh)
             {
-                return selection.ToArray();
+                instructions.Clear();
+                GoQL.Parser.Parse(code, instructions, out parseResult);
             }
-
-            instructions.Clear();
-            GoQL.Parser.Parse(code, instructions, out parseResult);
             stack.Clear();
             selection.Clear();
             Error = string.Empty;
@@ -130,8 +128,8 @@ namespace Unity.GoQL
                     }
                 }
             }
-
             refresh = false;
+
             return selection.ToArray();
         }
 

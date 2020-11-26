@@ -75,17 +75,14 @@ namespace Unity.SelectionGroups
 
         GoQL.GoQLExecutor executor = new GoQL.GoQLExecutor();
 
+        internal bool isDirty = false;
         
         internal void RefreshQueryResults()
         {
-            if (!string.IsNullOrEmpty(query))
-            {
-                executor.Code = query;
-                var objects = executor.Execute();
-                PersistentReferenceCollection.Clear();
-                PersistentReferenceCollection.Add(objects);
-                SelectionGroupManager.instance.SetIsDirty();
-            }
+            if (string.IsNullOrEmpty(query)) return;
+            executor.Code = query;
+            var objects = executor.Execute();
+            isDirty = PersistentReferenceCollection.Update(objects);
         }
 
         /// <summary>
@@ -98,17 +95,18 @@ namespace Unity.SelectionGroups
         internal void Clear()
         {
             PersistentReferenceCollection.Clear();
-            SelectionGroupManager.instance.SetIsDirty();
+            isDirty = true;
         }
 
         internal void Remove(Object[] objects)
         {
             PersistentReferenceCollection.Remove(objects);
-            SelectionGroupManager.instance.SetIsDirty();
+            isDirty = true;
         }
 
         internal void Add(Object[] objects)
         {
+            isDirty = true;
             foreach(var i in objects) {
                 var go = i as GameObject;
                 if(go != null && string.IsNullOrEmpty(go.scene.path)) {
@@ -118,7 +116,6 @@ namespace Unity.SelectionGroups
             }
             Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Add");                        
             PersistentReferenceCollection.Add(objects);
-            SelectionGroupManager.instance.SetIsDirty();
         }
 
         /// <summary>
