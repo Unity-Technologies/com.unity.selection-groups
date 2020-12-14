@@ -91,6 +91,7 @@ namespace Unity.SelectionGroups
                 {
                     var container = new GameObject("Selection Groups").AddComponent<Runtime.SelectionGroupContainer>();
                     EditorSceneManager.MoveGameObjectToScene(container.gameObject, scene);
+                    container.gameObject.hideFlags |= HideFlags.NotEditable;
                 }
             }
             UpdateSelectionGroupContainersInLoadedScenes();
@@ -117,6 +118,7 @@ namespace Unity.SelectionGroups
                         runtimeGroup = container.AddGroup(id);
                         allContainedGroups.Add(runtimeGroup);
                     }
+                    
                     runtimeGroup.name = group.name;
                     runtimeGroup.color = group.color;
                     runtimeGroup.query = group.query;
@@ -133,6 +135,7 @@ namespace Unity.SelectionGroups
                         if (go != null && go.scene != runtimeGroup.gameObject.scene) continue;
                         runtimeGroup.members.Add(i);
                     }
+                    
                     allContainedGroups.Remove(runtimeGroup);
                 }
                 foreach (var deadGroup in allContainedGroups)

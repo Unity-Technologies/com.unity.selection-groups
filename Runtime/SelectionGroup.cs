@@ -13,19 +13,19 @@ namespace Unity.SelectionGroups.Runtime
         /// <summary>
         /// Unique ID of this group.
         /// </summary>
-        public int groupId;
+        [SerializeField] [HideInInspector] public int groupId;
         /// <summary>
         /// A color assigned to this group.
         /// </summary>
-        public Color color;
+        [SerializeField] [HideInInspector] public Color color;
         /// <summary>
         /// If not empty, this is a GoQL query string used to create the set of matching objects for this group.
         /// </summary>
-        public string query;
+        [SerializeField] [HideInInspector] public string query;
         /// <summary>
         /// The members of this group.
         /// </summary>
-        public List<UnityEngine.Object> members;
+        [SerializeField] [HideInInspector] public List<UnityEngine.Object> members;
 
         GoQL.ParseResult parseResult;
         List<object> code;
