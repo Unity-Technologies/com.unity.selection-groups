@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Linq;
 using UnityEditor;
-using UnityEditor.SceneManagement;
-using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 
 namespace Unity.SelectionGroups
@@ -25,7 +19,6 @@ namespace Unity.SelectionGroups
         void DrawGUI()
         {
             scroll = EditorGUILayout.BeginScrollView(scroll);
-            // DrawDebugTools();
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Add Group"))
             {
@@ -39,7 +32,6 @@ namespace Unity.SelectionGroups
 
             foreach (var group in SelectionGroupManager.instance)
             {
-                // Debug.Log(group);
                 var isActive = activeNames.Contains(group.name);
                 GUILayout.Space(3);
                 var rect = GUILayoutUtility.GetRect(1, EditorGUIUtility.singleLineHeight);
@@ -82,29 +74,7 @@ namespace Unity.SelectionGroups
             });
             menu.ShowAsContext();
         }
-
-        void DrawDebugTools()
-        {
-            // GUILayout.BeginHorizontal();
-            if (GUILayout.Button("DMP"))
-            {
-                foreach (var i in SelectionGroupManager.instance)
-                {
-                    Debug.Log($"{i.name} {i.Count}");
-                    foreach (var j in i)
-                    {
-                        Debug.Log(GlobalObjectId.GetGlobalObjectIdSlow(j).ToString());
-                    }
-                }
-            }
-            if (GUILayout.Button("SAV"))
-            {
-                SelectionGroupManager.instance.Save();
-            }
-
-            // GUILayout.EndHorizontal();
-        }
-
+        
         void SetupStyles()
         {
             if (miniButtonStyle == null)
@@ -235,8 +205,7 @@ namespace Unity.SelectionGroups
             {
                 ShowGameObjectContextMenu(rect, group, g, allowRemove);
             }
-
-
+            
             if (isMouseOver && isMouseDrag)
             {
                 DragAndDrop.PrepareStartDrag();
@@ -251,13 +220,11 @@ namespace Unity.SelectionGroups
 
         bool DrawHeader(Rect rect, SelectionGroup group, bool isActive)
         {
-            // if (group == null) return false;
             var content = EditorGUIUtility.IconContent("LODGroup Icon");
             content.text = $"{group.name} ({group.Count}/{group.TotalCount})";
             var backgroundColor = group == activeSelectionGroup ? Color.white * 0.6f : Color.white * 0.3f;
             EditorGUI.DrawRect(rect, backgroundColor);
-
-
+            
             rect.width = 16;
             group.showMembers = EditorGUI.Toggle(rect, group.showMembers, "foldout");
             rect.x += 16;
@@ -307,7 +274,6 @@ namespace Unity.SelectionGroups
 
         void ShowGameObjectContextMenu(Rect rect, SelectionGroup group, UnityEngine.Object g, bool allowRemove)
         {
-            // Selection.activeObject = g;
             var menu = new GenericMenu();
             var content = new GUIContent("Remove From Group");
             if (allowRemove)

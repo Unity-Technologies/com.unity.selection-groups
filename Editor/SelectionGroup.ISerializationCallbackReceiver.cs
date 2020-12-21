@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEditor;
-using System;
 
 namespace Unity.SelectionGroups
 {

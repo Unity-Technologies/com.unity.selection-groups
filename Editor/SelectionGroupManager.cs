@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.SceneManagement;
@@ -13,7 +12,7 @@ namespace Unity.SelectionGroups
 
     //NOTE: This class should eventually use ScriptableObjectSingleton when it becomes usable in a production version.
     /// <summary>
-    /// The Editor only manager for selection groups.
+    /// The Editor-only manager for selection groups.
     /// </summary>
     public partial class SelectionGroupManager : ScriptableObject, IEnumerable<SelectionGroup>
     {
@@ -100,10 +99,6 @@ namespace Unity.SelectionGroups
         void UpdateSelectionGroupContainersInLoadedScenes()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode) return;
-            if (enablePlayModeSelectionGroups)
-            {
-
-            }
             foreach (var container in Runtime.SelectionGroupContainer.instances)
             {
                 //track all groups so we can delete dead groups.

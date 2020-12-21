@@ -15,27 +15,14 @@ namespace Unity.SelectionGroups
         {
             titleContent.text = "Selection Groups";
             editorWindow = this;
-            this.wantsMouseMove = true;
+            wantsMouseMove = true;
         }
 
         void OnDisable()
         {
             editorWindow = null;
         }
-
-        void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            Repaint();
-        }
-
-        void OnFocus()
-        {
-        }
-
-        void OnLostFocus()
-        {
-        }
-
+        
         void OnGUI()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
@@ -100,7 +87,6 @@ namespace Unity.SelectionGroups
                 SelectionGroupManager.CreateAndLoad();
                 Repaint();
             }
-
         }
 
         void OnSelectionChange()
@@ -134,6 +120,5 @@ namespace Unity.SelectionGroups
                     return;
             }
         }
-
     }
 }

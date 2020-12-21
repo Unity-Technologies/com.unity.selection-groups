@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEditorInternal;
@@ -26,11 +24,9 @@ namespace Unity.SelectionGroups
         internal static void Open(SelectionGroup group, SelectionGroupEditorWindow parentWindow)
         {
             var dialog = EditorWindow.GetWindow<SelectionGroupConfigurationDialog>();
-            // var dialog = ScriptableObject.CreateInstance(typeof(SelectionGroupConfigurationDialog)) as SelectionGroupConfigurationDialog;
             dialog.groupId = group.groupId;
             dialog.parentWindow = parentWindow;
             dialog.refreshQuery = true;
-            // dialog.ShowModalUtility();
             dialog.titleContent.text = $"Configure {group.name}";
             dialog.ShowPopup();
             dialog.debugInformation = null;
@@ -73,12 +69,6 @@ namespace Unity.SelectionGroups
                     EditorGUILayout.HelpBox(message, MessageType.Info);
                 }
                 GUILayout.Space(5);
-                // if (exclusionList == null)
-                // {
-                //     exclusionList = new ReorderableList(group.exclude, typeof(SelectionGroup), false, false, true, true);
-                //     exclusionList.drawElementCallback = DrawSelectionGroupElement;
-                // }
-                // exclusionList.DoLayoutList();
                 GUILayout.BeginVertical("box");
                 GUILayout.Label("Enabled Toolbar Buttons", EditorStyles.largeLabel);
                 foreach (var i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>())
@@ -97,10 +87,7 @@ namespace Unity.SelectionGroups
                     }
                 }
                 GUILayout.EndVertical();
-                if (cc.changed)
-                {
-                    group.isDirty = true;
-                }
+                
                 showDebug = GUILayout.Toggle(showDebug, "Show Debug Info", "button");
                 if (showDebug)
                 {
@@ -113,26 +100,6 @@ namespace Unity.SelectionGroups
                 }
             }
         }
-
-        private void DrawSelectionGroupElement(Rect rect, int index, bool isActive, bool isFocused)
-        {
-            if (index >= 0 && index < group.exclude.Count)
-            {
-                group.exclude[index] = SelectionGroupManager.Popup(rect, group.exclude[index]);
-            }
-        }
     }
-
-    class SelectionGroupDebugInformation
-    {
-
-        public string text;
-
-        public SelectionGroupDebugInformation(SelectionGroup group)
-        {
-            text = EditorJsonUtility.ToJson(group, prettyPrint: true);
-        }
-    }
-
 }
 

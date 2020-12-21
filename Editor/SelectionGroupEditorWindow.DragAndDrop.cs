@@ -1,22 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using UnityEditor;
-using UnityEditor.SceneManagement;
-using UnityEditorInternal;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 
 namespace Unity.SelectionGroups
 {
-
     public partial class SelectionGroupEditorWindow : EditorWindow
     {
         bool HandleGroupDragEvents(Rect rect, SelectionGroup group)
         {
             Event evt = Event.current;
-
             switch (evt.type)
             {
                 case EventType.DragExited:
@@ -53,13 +45,11 @@ namespace Unity.SelectionGroups
             }
             return true;
         }
-
-
+        
         void ExitDrag()
         {
             hotRect = null;
         }
-
 
     }
 }

@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEditor;
-using System.Linq;
 using System.Collections.Generic;
 using System.Collections;
 
@@ -36,12 +35,6 @@ namespace Unity.SelectionGroups
         public int groupId;
 
         /// <summary>
-        /// Allows this group to exclude the members of other selection group.
-        /// </summary>
-        /// <returns></returns>
-        public SelectionGroupList exclude = new SelectionGroupList();
-
-        /// <summary>
         /// Number of objects in this group that are available to be referenced. (Ie. they exist in a loaded scene)
         /// </summary>
         internal int Count => PersistentReferenceCollection.LoadedObjectCount;
@@ -57,7 +50,7 @@ namespace Unity.SelectionGroups
         /// <value></value>
         internal Object this[int index] { get => PersistentReferenceCollection[index]; set => PersistentReferenceCollection[index] = value; }
 
-        [SerializeField] internal HashSet<string> enabledTools = new HashSet<string>();
+        internal HashSet<string> enabledTools = new HashSet<string>();
 
         [SerializeField] PersistentReferenceCollection _persistentReferenceCollection;
         PersistentReferenceCollection PersistentReferenceCollection
@@ -75,14 +68,12 @@ namespace Unity.SelectionGroups
 
         GoQL.GoQLExecutor executor = new GoQL.GoQLExecutor();
 
-        internal bool isDirty = false;
-        
         internal void RefreshQueryResults()
         {
             if (string.IsNullOrEmpty(query)) return;
             executor.Code = query;
             var objects = executor.Execute();
-            isDirty = PersistentReferenceCollection.Update(objects);
+            PersistentReferenceCollection.Update(objects);
         }
 
         /// <summary>
@@ -95,18 +86,15 @@ namespace Unity.SelectionGroups
         internal void Clear()
         {
             PersistentReferenceCollection.Clear();
-            isDirty = true;
         }
 
         internal void Remove(Object[] objects)
         {
             PersistentReferenceCollection.Remove(objects);
-            isDirty = true;
         }
 
         internal void Add(Object[] objects)
         {
-            isDirty = true;
             foreach(var i in objects) {
                 var go = i as GameObject;
                 if(go != null && string.IsNullOrEmpty(go.scene.path)) {
