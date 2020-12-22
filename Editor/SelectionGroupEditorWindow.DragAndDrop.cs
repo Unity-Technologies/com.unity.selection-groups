@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using Unity.SelectionGroups.Runtime;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -6,7 +7,7 @@ namespace Unity.SelectionGroups
 {
     public partial class SelectionGroupEditorWindow : EditorWindow
     {
-        bool HandleGroupDragEvents(Rect rect, SelectionGroup group)
+        bool HandleGroupDragEvents(Rect rect, ISelectionGroup group)
         {
             Event evt = Event.current;
             switch (evt.type)
@@ -21,12 +22,12 @@ namespace Unity.SelectionGroups
             }
             return false;
         }
-        bool PerformDrag(Rect rect, SelectionGroup group, Event evt)
+        bool PerformDrag(Rect rect, ISelectionGroup group, Event evt)
         {
             if (!rect.Contains(evt.mousePosition))
                 return false;
 
-            var canDrop = string.IsNullOrEmpty(group.query);
+            var canDrop = string.IsNullOrEmpty(group.Query);
             hotRect = rect;
             if (!canDrop)
             {

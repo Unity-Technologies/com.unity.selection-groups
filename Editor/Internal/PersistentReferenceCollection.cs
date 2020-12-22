@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace Unity.SelectionGroups
 {
@@ -43,7 +44,7 @@ namespace Unity.SelectionGroups
             ConvertSceneObjectsToGlobalObjectIds();
         }
 
-        public void Add(UnityEngine.Object[] objects)
+        public void Add(IList<Object> objects)
         {
             activeObjects.AddRange(objects);
             ConvertSceneObjectsToGlobalObjectIds();
@@ -69,7 +70,7 @@ namespace Unity.SelectionGroups
             globalObjectIdSet.Remove(gid);
         }
 
-        public void Remove(UnityEngine.Object[] objects)
+        public void Remove(IList<Object> objects)
         {
             activeObjects.Remove(objects);
             foreach (var gid in GetGlobalObjectIds(objects))
@@ -147,10 +148,10 @@ namespace Unity.SelectionGroups
             }
         }
 
-        internal GlobalObjectId[] GetGlobalObjectIds(params UnityEngine.Object[] objects)
+        internal GlobalObjectId[] GetGlobalObjectIds(IList<Object> objects)
         {
-            var gids = new GlobalObjectId[objects.Length];
-            GlobalObjectId.GetGlobalObjectIdsSlow(objects, gids);
+            var gids = new GlobalObjectId[objects.Count];
+            GlobalObjectId.GetGlobalObjectIdsSlow(objects.ToArray(), gids);
             return gids;
         }
 

@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Unity.SelectionGroups.Runtime
 {
-
     /// <summary>
     /// This class is used to maintain the child set of SelectionGroups in play-mode.
     /// </summary>

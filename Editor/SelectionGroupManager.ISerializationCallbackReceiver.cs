@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -93,7 +94,7 @@ namespace Unity.SelectionGroups
         {
             if (groups != null)
             {
-                _values = groups.Values.ToArray();
+                _values = (from i in groups.Values where i is SelectionGroup select (SelectionGroup) i).ToArray();
                 _keys = (from i in _values select i.groupId).ToArray();
                 _names = (from i in _values select i.name).ToArray();
             }
@@ -105,7 +106,7 @@ namespace Unity.SelectionGroups
         public void OnAfterDeserialize()
         {
             if (groups == null)
-                groups = new Dictionary<int, SelectionGroup>();
+                groups = new Dictionary<int, ISelectionGroup>();
             else
                 groups.Clear();
             if (_keys != null && _values != null)

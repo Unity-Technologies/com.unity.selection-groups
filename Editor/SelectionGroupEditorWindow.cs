@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace Unity.SelectionGroups
 
         ReorderableList list;
         Vector2 scroll;
-        SelectionGroup activeSelectionGroup;
+        ISelectionGroup activeSelectionGroup;
         float width;
         static SelectionGroupEditorWindow editorWindow;
         Rect? hotRect = null;

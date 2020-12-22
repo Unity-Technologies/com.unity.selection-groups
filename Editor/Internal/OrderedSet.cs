@@ -77,7 +77,7 @@ namespace Unity.SelectionGroups
             return items.Remove(item);
         }
 
-        public void Remove(T[] items)
+        public void Remove(IList<T> items)
         {
             uniqueIndex.ExceptWith(items);
             foreach(var i in items) {

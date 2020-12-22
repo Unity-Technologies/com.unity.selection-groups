@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
+using Unity.SelectionGroups.Runtime;
+using UnityEngine.SceneManagement;
 
 namespace Unity.SelectionGroups
 {
@@ -9,7 +12,7 @@ namespace Unity.SelectionGroups
     /// This class is the Editor-only container for selection group information and members.
     /// </summary>
     [System.Serializable]
-    public partial class SelectionGroup : IEnumerable<Object>
+    public partial class SelectionGroup : ISelectionGroup
     {
         /// <summary>
         /// The name of the group.
@@ -34,10 +37,15 @@ namespace Unity.SelectionGroups
         /// </summary>
         public int groupId;
 
+        public SelectionGroupScope scope = SelectionGroupScope.Editor;
+        public Scene scene;
+
         /// <summary>
         /// Number of objects in this group that are available to be referenced. (Ie. they exist in a loaded scene)
         /// </summary>
-        internal int Count => PersistentReferenceCollection.LoadedObjectCount;
+        public int Count => PersistentReferenceCollection.LoadedObjectCount;
+
+        public bool ShowMembers { get; set; }
 
         /// <summary>
         /// Number of objects that exist in this group, including objects that cannot be loaded. (Ie. The containing scene has not been loaded)
@@ -68,7 +76,40 @@ namespace Unity.SelectionGroups
 
         GoQL.GoQLExecutor executor = new GoQL.GoQLExecutor();
 
-        internal void RefreshQueryResults()
+
+        public string Name
+        {
+            get => name;
+            set => name = value;
+        }
+
+        string ISelectionGroup.Query
+        {
+            get => query;
+            set => query = value;
+        }
+
+        Color ISelectionGroup.Color
+        {
+            get => color;
+            set => color = value;
+        }
+        public HashSet<string> EnabledTools { 
+            get => enabledTools; 
+            set =>enabledTools = value; 
+        }
+
+        public SelectionGroupScope Scope
+        {
+            get => scope; 
+            set => scope = value;
+        }
+        public int GroupId { 
+            get => groupId; 
+            set => groupId = value; 
+        }
+
+        public void RefreshQueryResults()
         {
             if (string.IsNullOrEmpty(query)) return;
             executor.Code = query;
@@ -79,21 +120,21 @@ namespace Unity.SelectionGroups
         /// <summary>
         /// Creates all references in this group that exist in a loaded scene.
         /// </summary>
-        internal void Reload() {
+        public void Reload() {
             PersistentReferenceCollection.LoadObjects(forceReload:true);
         }
 
-        internal void Clear()
+        public void Clear()
         {
             PersistentReferenceCollection.Clear();
         }
 
-        internal void Remove(Object[] objects)
+        public void Remove(IList<Object> objects)
         {
             PersistentReferenceCollection.Remove(objects);
         }
 
-        internal void Add(Object[] objects)
+        public void Add(IList<Object> objects)
         {
             foreach(var i in objects) {
                 var go = i as GameObject;
@@ -104,6 +145,7 @@ namespace Unity.SelectionGroups
             }
             Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Add");                        
             PersistentReferenceCollection.Add(objects);
+            SelectionGroupEvents.Update(SelectionGroupScope.Editor, groupId, name, query, color, this.ToArray());
         }
 
         /// <summary>
@@ -123,6 +165,16 @@ namespace Unity.SelectionGroups
         {
             PersistentReferenceCollection.LoadObjects();
             return PersistentReferenceCollection.GetEnumerator();
+        }
+
+        public void CopyToRuntimeGroup(Runtime.SelectionGroup sg)
+        {
+            sg.name = name;
+            sg.members.Clear();
+            sg.members.AddRange(this);
+            sg.color = color;
+            sg.query = query;
+            sg.groupId = groupId;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEngine;
 
@@ -32,7 +33,7 @@ namespace Unity.SelectionGroups
 
             foreach (var group in SelectionGroupManager.instance)
             {
-                var isActive = activeNames.Contains(group.name);
+                var isActive = activeNames.Contains(group.Name);
                 GUILayout.Space(3);
                 var rect = GUILayoutUtility.GetRect(1, EditorGUIUtility.singleLineHeight);
                 //early out if this group yMin is below window rect (not visible).
@@ -67,11 +68,6 @@ namespace Unity.SelectionGroups
         void ShowSettings()
         {
             var menu = new GenericMenu();
-            menu.AddItem(new GUIContent("Enable Runtime Groups"), SelectionGroupManager.instance.enablePlayModeSelectionGroups, () =>
-            {
-                SelectionGroupManager.instance.enablePlayModeSelectionGroups = !SelectionGroupManager.instance.enablePlayModeSelectionGroups;
-                SelectionGroupManager.instance.UpdateSelectionGroupContainers();
-            });
             menu.ShowAsContext();
         }
         
@@ -84,10 +80,10 @@ namespace Unity.SelectionGroups
             }
         }
 
-        void DrawAllGroupMembers(Rect rect, SelectionGroup group, bool allowRemove)
+        void DrawAllGroupMembers(Rect rect, ISelectionGroup group, bool allowRemove)
         {
             rect.height = EditorGUIUtility.singleLineHeight;
-            foreach (var i in group)
+            foreach (var i in group.ToArray())
             {
                 //if rect is below window, early out.
                 if (rect.yMin - scroll.y > position.height) return;
@@ -98,7 +94,7 @@ namespace Unity.SelectionGroups
             }
         }
 
-        void DrawGroupMember(Rect rect, SelectionGroup group, UnityEngine.Object g, bool allowRemove)
+        void DrawGroupMember(Rect rect, ISelectionGroup group, UnityEngine.Object g, bool allowRemove)
         {
             if (g == null) return;
             var e = Event.current;
@@ -148,9 +144,10 @@ namespace Unity.SelectionGroups
                 {
                     activeSelection.Add(g);
                     int firstIndex = -1, lastIndex = -1;
-                    for (var i = 0; i < group.Count; i++)
+                    var objects = group.ToArray();
+                    for (var i = 0; i < objects.Length; i++)
                     {
-                        if (activeSelection.Contains(group[i]))
+                        if (activeSelection.Contains(objects[i]))
                         {
                             if (firstIndex < 0)
                                 firstIndex = i;
@@ -158,7 +155,7 @@ namespace Unity.SelectionGroups
                         }
                     }
                     for (var i = firstIndex; i < lastIndex; i++)
-                        activeSelection.Add(group[i]);
+                        activeSelection.Add(objects[i]);
                     updateSelectionObjects = true;
                 }
             }
@@ -218,19 +215,21 @@ namespace Unity.SelectionGroups
 
         }
 
-        bool DrawHeader(Rect rect, SelectionGroup group, bool isActive)
+        bool DrawHeader(Rect rect, ISelectionGroup group, bool isActive)
         {
             var content = EditorGUIUtility.IconContent("LODGroup Icon");
-            content.text = $"{group.name} ({group.Count}/{group.TotalCount})";
+            content.text = $"{group.Name}";
             var backgroundColor = group == activeSelectionGroup ? Color.white * 0.6f : Color.white * 0.3f;
             EditorGUI.DrawRect(rect, backgroundColor);
-            
-            rect.width = 16;
-            group.showMembers = EditorGUI.Toggle(rect, group.showMembers, "foldout");
-            rect.x += 16;
-            rect.width = EditorGUIUtility.currentViewWidth - 128;
 
-            HandleHeaderMouseEvents(rect, group.name, group);
+            {
+                rect.width = 16;
+                group.ShowMembers = EditorGUI.Toggle(rect, group.ShowMembers, "foldout");
+                rect.x += 16;
+                rect.width = EditorGUIUtility.currentViewWidth - 128;
+            }
+
+            HandleHeaderMouseEvents(rect, group.Name, group);
             GUI.Label(rect, content, "label");
 
             rect.x += rect.width;
@@ -238,12 +237,12 @@ namespace Unity.SelectionGroups
             rect.x += 8;
             rect.xMax = position.xMax;
 
-            EditorGUI.DrawRect(rect, new Color(group.color.r, group.color.g, group.color.b));
+            EditorGUI.DrawRect(rect, new Color(group.Color.r, group.Color.g, group.Color.b));
 
-            return group.showMembers;
+            return group.ShowMembers;
         }
 
-        Rect DrawTools(Rect rect, SelectionGroup group)
+        Rect DrawTools(Rect rect, ISelectionGroup group)
         {
             rect.width = 18;
             rect.height = 18;
@@ -251,7 +250,7 @@ namespace Unity.SelectionGroups
             foreach (var i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>())
             {
                 var attr = AttributeCache.GetCustomAttribute<SelectionGroupToolAttribute>(i);
-                if (!group.enabledTools.Contains(attr.toolId))
+                if (!group.EnabledTools.Contains(attr.toolId))
                     continue;
                 var content = EditorGUIUtility.IconContent(attr.icon);
                 content.tooltip = attr.description;
@@ -272,7 +271,7 @@ namespace Unity.SelectionGroups
             return rect;
         }
 
-        void ShowGameObjectContextMenu(Rect rect, SelectionGroup group, UnityEngine.Object g, bool allowRemove)
+        void ShowGameObjectContextMenu(Rect rect, ISelectionGroup group, UnityEngine.Object g, bool allowRemove)
         {
             var menu = new GenericMenu();
             var content = new GUIContent("Remove From Group");
@@ -280,7 +279,7 @@ namespace Unity.SelectionGroups
                 menu.AddItem(content, false, () =>
                 {
                     Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Remove");
-                    group.query = "";
+                    group.Query = "";
                     group.Remove(Selection.objects);
                 });
             else
@@ -288,12 +287,12 @@ namespace Unity.SelectionGroups
             menu.DropDown(rect);
         }
 
-        void ShowGroupContextMenu(Rect rect, string groupName, SelectionGroup group)
+        void ShowGroupContextMenu(Rect rect, string groupName, ISelectionGroup group)
         {
             var menu = new GenericMenu();
             menu.AddItem(new GUIContent("Duplicate Group"), false, () =>
             {
-                SelectionGroupManager.instance.DuplicateGroup(group.groupId);
+                SelectionGroupManager.instance.DuplicateGroup(group.GroupId);
 
             });
             menu.AddItem(new GUIContent("Clear Group"), false, () =>
@@ -304,12 +303,12 @@ namespace Unity.SelectionGroups
             menu.AddItem(new GUIContent("Configure Group"), false, () => SelectionGroupConfigurationDialog.Open(group, this));
             menu.AddItem(new GUIContent("Delete Group"), false, () =>
             {
-                SelectionGroupManager.instance.RemoveGroup(group.groupId);
+                SelectionGroupManager.instance.RemoveGroup(group.GroupId);
             });
             menu.DropDown(rect);
         }
 
-        void HandleHeaderMouseEvents(Rect rect, string groupName, SelectionGroup group)
+        void HandleHeaderMouseEvents(Rect rect, string groupName, ISelectionGroup group)
         {
             var e = Event.current;
             if (rect.Contains(e.mousePosition))

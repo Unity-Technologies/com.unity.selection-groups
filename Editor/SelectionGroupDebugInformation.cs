@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using Unity.SelectionGroups.Runtime;
+using UnityEditor;
 
 namespace Unity.SelectionGroups
 {
@@ -7,7 +8,7 @@ namespace Unity.SelectionGroups
 
         public string text;
 
-        public SelectionGroupDebugInformation(SelectionGroup group)
+        public SelectionGroupDebugInformation(ISelectionGroup group)
         {
             text = EditorJsonUtility.ToJson(group, prettyPrint: true);
         }

@@ -1,11 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 namespace Unity.SelectionGroups
 {
@@ -14,16 +17,17 @@ namespace Unity.SelectionGroups
     /// <summary>
     /// The Editor-only manager for selection groups.
     /// </summary>
-    public partial class SelectionGroupManager : ScriptableObject, IEnumerable<SelectionGroup>
+    public partial class SelectionGroupManager : ScriptableObject, IEnumerable<ISelectionGroup>
     {
-        Dictionary<int, SelectionGroup> groups = new Dictionary<int, SelectionGroup>();
+        Dictionary<int, ISelectionGroup> groups = new Dictionary<int, ISelectionGroup>();
         [SerializeField] int _groupCounter;
         [SerializeField] bool isDirty = true;
         [SerializeField] internal bool enablePlayModeSelectionGroups = false;
 
         Dictionary<string, Scene> loadedScenes = new Dictionary<string, Scene>();
+        
 
-        internal SelectionGroup GetGroup(int groupId) => groups[groupId];
+        internal ISelectionGroup GetGroup(int groupId) => groups[groupId];
 
         void SetIsDirty()
         {
@@ -42,111 +46,17 @@ namespace Unity.SelectionGroups
             EditorApplication.update += Update;
             SetIsDirty();
         }
-
-        internal void UpdateSelectionGroupContainers()
-        {
-            if (enablePlayModeSelectionGroups)
-            {
-                AddContainersToLoadedScenes();
-            }
-            else
-            {
-                RemoveContainersFromLoadedScenes();
-            }
-        }
-
-        void RemoveContainersFromLoadedScenes()
-        {
-            for (var i = 0; i < EditorSceneManager.sceneCount; i++)
-            {
-                var scene = EditorSceneManager.GetSceneAt(i);
-                var objects = scene.GetRootGameObjects();
-                foreach (var j in objects)
-                {
-                    if (!j.TryGetComponent<Runtime.SelectionGroupContainer>(
-                        out Runtime.SelectionGroupContainer container)) continue;
-                    DestroyImmediate(j.gameObject);
-                    break;
-                }
-            }
-        }
-
-        void AddContainersToLoadedScenes()
-        {
-            for (var i = 0; i < EditorSceneManager.sceneCount; i++)
-            {
-                var scene = EditorSceneManager.GetSceneAt(i);
-                var objects = scene.GetRootGameObjects();
-                var hasContainer = false;
-                foreach (var j in objects)
-                {
-                    if (j.TryGetComponent<Runtime.SelectionGroupContainer>(out Runtime.SelectionGroupContainer container))
-                    {
-                        hasContainer = true;
-                        break;
-                    }
-                }
-                if (!hasContainer)
-                {
-                    var container = new GameObject("Selection Groups").AddComponent<Runtime.SelectionGroupContainer>();
-                    EditorSceneManager.MoveGameObjectToScene(container.gameObject, scene);
-                    container.gameObject.hideFlags |= HideFlags.NotEditable;
-                }
-            }
-            UpdateSelectionGroupContainersInLoadedScenes();
-        }
-
-        void UpdateSelectionGroupContainersInLoadedScenes()
-        {
-            if (EditorApplication.isPlayingOrWillChangePlaymode) return;
-            foreach (var container in Runtime.SelectionGroupContainer.instances)
-            {
-                //track all groups so we can delete dead groups.
-                var allContainedGroups = new HashSet<Runtime.SelectionGroup>(container.GetComponentsInChildren<Runtime.SelectionGroup>());
-
-                foreach (var kv in groups)
-                {
-                    var id = kv.Key;
-                    var group = kv.Value;
-                    if (!container.groups.TryGetValue(id, out Runtime.SelectionGroup runtimeGroup))
-                    {
-                        runtimeGroup = container.AddGroup(id);
-                        allContainedGroups.Add(runtimeGroup);
-                    }
-                    
-                    runtimeGroup.name = group.name;
-                    runtimeGroup.color = group.color;
-                    runtimeGroup.query = group.query;
-                    if (runtimeGroup.members == null)
-                        runtimeGroup.members = new List<UnityEngine.Object>();
-                    else
-                        runtimeGroup.members.Clear();
-                    foreach (var i in group)
-                    {
-                        var go = i as GameObject;
-                        if (go == null) continue;
-                        var scene = go.scene;
-                        if (go.scene == null) continue;
-                        if (go != null && go.scene != runtimeGroup.gameObject.scene) continue;
-                        runtimeGroup.members.Add(i);
-                    }
-                    
-                    allContainedGroups.Remove(runtimeGroup);
-                }
-                foreach (var deadGroup in allContainedGroups)
-                {
-                    if (container.groups.ContainsKey(deadGroup.groupId))
-                        container.groups.Remove(deadGroup.groupId);
-                    DestroyImmediate(deadGroup.gameObject);
-                }
-            }
-        }
-
+        
         void ReloadGroups()
         {
             foreach (var g in groups)
             {
                 g.Value.Reload();
+            }
+
+            foreach (var g in Resources.FindObjectsOfTypeAll<Runtime.SelectionGroup>())
+            {
+                groups.Add(g.groupId, g);
             }
         }
 
@@ -161,7 +71,6 @@ namespace Unity.SelectionGroups
             {
                 if (EditorApplication.isPlayingOrWillChangePlaymode) return;
                 Profiler.BeginSample("SelectionGroupManager.Update()");
-                UpdateSelectionGroupContainersInLoadedScenes();
                 Save();
                 isDirty = false;
                 Profiler.EndSample();
@@ -182,7 +91,7 @@ namespace Unity.SelectionGroups
             EditorApplication.update -= Update;
         }
 
-        bool TryGetGroup(int groupId, out SelectionGroup group)
+        bool TryGetGroup(int groupId, out ISelectionGroup group)
         {
             return groups.TryGetValue(groupId, out group);
         }
@@ -217,7 +126,7 @@ namespace Unity.SelectionGroups
         /// <returns></returns>
         public string[] GetGroupNames()
         {
-            return (from i in groups.Values select i.name).ToArray();
+            return (from i in groups.Values select i.Name).ToArray();
         }
 
         /// <summary>
@@ -226,12 +135,12 @@ namespace Unity.SelectionGroups
         /// <param name="groupId"></param>
         public void DuplicateGroup(int groupId)
         {
-            if (TryGetGroup(groupId, out SelectionGroup group))
+            if (TryGetGroup(groupId, out ISelectionGroup group))
             {
                 Undo.RecordObject(instance, "Duplicate Group");
-                var newGroup = CreateGroup(group.name);
-                newGroup.query = group.query;
-                newGroup.color = group.color;
+                var newGroup = CreateGroup(group.Name);
+                newGroup.query = group.Query;
+                newGroup.color = group.Color;
                 newGroup.Add(group.ToArray());
                 SetIsDirty();
             }
@@ -241,7 +150,7 @@ namespace Unity.SelectionGroups
         /// Enumerate over all selection groups in this manager.
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<SelectionGroup> GetEnumerator()
+        public IEnumerator<ISelectionGroup> GetEnumerator()
         {
             foreach (var kv in groups)
             {
@@ -256,6 +165,42 @@ namespace Unity.SelectionGroups
         IEnumerator IEnumerable.GetEnumerator()
         {
             return (IEnumerator<SelectionGroup>)(this).GetEnumerator();
+        }
+        
+        internal static void ChangeScope(ISelectionGroup group, SelectionGroupScope prevScope, SelectionGroupScope newScope)
+        {
+            var groups = s_Instance.groups;
+            
+            //Remove from old scope
+            switch(prevScope)
+            {
+                case SelectionGroupScope.Editor:
+                    groups.Remove(group.GroupId);
+                    break;
+                case SelectionGroupScope.Scene:
+                    break;
+                case SelectionGroupScope.Asset:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(prevScope), prevScope, null);
+            }
+            
+            //Add to new scope
+            switch (newScope)
+            {
+                case SelectionGroupScope.Editor:
+                    break;
+                case SelectionGroupScope.Scene:
+                    var g = new GameObject(group.Name);
+                    var sg = g.AddComponent<Runtime.SelectionGroup>();
+                    // group.CopyToRuntimeGroup(sg);
+                    groups[group.GroupId] = sg;
+                    break;                    
+                case SelectionGroupScope.Asset:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(newScope), newScope, null);
+            }
         }
     }
 }
