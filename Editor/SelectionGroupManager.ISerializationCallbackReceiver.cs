@@ -16,7 +16,6 @@ namespace Unity.SelectionGroups
         [SerializeField] SelectionGroup[] _values;
 
         string[] _names;
-
         static SelectionGroupManager s_Instance;
 
         /// <summary>
@@ -95,8 +94,8 @@ namespace Unity.SelectionGroups
             if (groups != null)
             {
                 _values = (from i in groups.Values where i is SelectionGroup select (SelectionGroup) i).ToArray();
-                _keys = (from i in _values select i.groupId).ToArray();
-                _names = (from i in _values select i.name).ToArray();
+                _keys = (from i in _values select i.GroupId).ToArray();
+                _names = (from i in _values select i.Name).ToArray();
             }
         }
 
@@ -120,7 +119,7 @@ namespace Unity.SelectionGroups
 
         internal static SelectionGroup Popup(Rect rect, SelectionGroup group)
         {
-            var groupId = group.groupId;
+            var groupId = group.GroupId;
             var index = System.Array.IndexOf(instance._keys, groupId);
             if (index < 0) index = 0;
             index = EditorGUI.Popup(rect, index, instance._names);

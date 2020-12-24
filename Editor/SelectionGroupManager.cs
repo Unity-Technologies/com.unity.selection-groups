@@ -49,9 +49,10 @@ namespace Unity.SelectionGroups
         
         void ReloadGroups()
         {
-            foreach (var g in groups)
+            foreach (var g in groups.Values)
             {
-                g.Value.Reload();
+                // if(g is SelectionGroup sg)
+                //     sg.ReloadReferences();
             }
 
             foreach (var g in Resources.FindObjectsOfTypeAll<Runtime.SelectionGroup>())
@@ -79,8 +80,8 @@ namespace Unity.SelectionGroups
 
         private void RefreshQueryResults()
         {
-            foreach (var i in groups.Values)
-                i.RefreshQueryResults();
+            // foreach (var i in groups.Values)
+            //     i.RefreshQueryResults();
         }
 
         void OnDisable()
@@ -99,12 +100,14 @@ namespace Unity.SelectionGroups
         internal SelectionGroup CreateGroup(string name)
         {
             Undo.RecordObject(instance, "Create Group");
-            var g = new SelectionGroup();
-            g.groupId = _groupCounter++;
-            g.name = name;
-            g.color = Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f));
-            g.showMembers = true;
-            groups.Add(g.groupId, g);
+            var g = new SelectionGroup
+            {
+                GroupId = _groupCounter++,
+                Name = name,
+                Color = Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f)),
+                ShowMembers = true
+            };
+            groups.Add(g.GroupId, g);
             SetIsDirty();
             return g;
         }
@@ -139,9 +142,9 @@ namespace Unity.SelectionGroups
             {
                 Undo.RecordObject(instance, "Duplicate Group");
                 var newGroup = CreateGroup(group.Name);
-                newGroup.query = group.Query;
-                newGroup.color = group.Color;
-                newGroup.Add(group.ToArray());
+                newGroup.Query = group.Query;
+                newGroup.Color = group.Color;
+                // newGroup.Add(group.ToArray());
                 SetIsDirty();
             }
         }

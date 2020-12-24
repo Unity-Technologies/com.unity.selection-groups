@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -72,7 +73,7 @@ namespace Unity.SelectionGroups
                         break;
                     case "SoftDelete":
                         Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Remove");
-                        activeSelectionGroup.Remove(Selection.objects);
+                        SelectionGroupEvents.Remove(SelectionGroupScope.Editor, activeSelectionGroup.GroupId, Selection.objects);
                         Selection.objects = null;
                         UpdateActiveSelection();
                         current.Use();

@@ -30,7 +30,7 @@ namespace Unity.SelectionGroups.Runtime
         /// <summary>
         /// The members of this group.
         /// </summary>
-        public List<UnityEngine.Object> members = new List<Object>();
+        public OrderedSet<Object> members = new OrderedSet<Object>();
 
         GoQL.ParseResult parseResult;
         List<object> code;
@@ -53,27 +53,12 @@ namespace Unity.SelectionGroups.Runtime
         {
             executor = new GoQL.GoQLExecutor();
             executor.Code = query;
-            SelectionGroupEvents.Update -= SelectionGroupEventsOnUpdate;
-            SelectionGroupEvents.Update += SelectionGroupEventsOnUpdate;
+            SelectionGroupEvents.RegisterListener(this);
         }
 
-        private void SelectionGroupEventsOnUpdate(SelectionGroupScope sender, int groupId, string name, string query, Color color, IList<Object> objects)
+        void OnDisable()
         {
-            //Ignore events coming from scene, we only listen to the editor.
-            if (sender == SelectionGroupScope.Scene) return;
-            
-            if (groupId == this.groupId)
-            {
-                this.name = name;
-                this.query = query;
-                this.color = color;
-                this.members.Clear();
-                this.members.AddRange(objects);
-            }
-        }
-
-        public void Reload()
-        {
+            SelectionGroupEvents.UnregisterListener(this);
         }
 
         public string Name
@@ -112,30 +97,37 @@ namespace Unity.SelectionGroups.Runtime
             get => groupId; 
             set => groupId = value; 
         }
-        
-        public void Clear()
+
+        public void OnCreate(SelectionGroupScope sender, int groupId, string name, string query, Color color, IList<Object> members)
         {
-            members.Clear();
-        }
-        public void Add(IList<Object> objects)
-        {
-            members.AddRange(objects);
+            if (groupId != this.groupId) return;
         }
 
-        public void Remove(IList<Object> objects)
+        public void OnUpdate(SelectionGroupScope sender, int groupId, string name, string query, Color color, IList<Object> members)
         {
-            var map = new HashSet<Object>(objects);
-            members.RemoveAll(o => map.Contains(o));
+            if (groupId != this.groupId) return;
+            this.name = name;
+            this.query = query;
+            this.color = color;
+            this.members.Clear();
+            this.members.AddRange(members);
         }
 
-        /// <summary>
-        /// Run the GoQL query attached to this group, adding any new members that are discovered.
-        /// </summary>
-        public void RefreshQueryResults()
+        public void OnDelete(SelectionGroupScope sender, int groupId)
         {
-            executor.Code = query;
-            members.Clear();
-            members.AddRange(executor.Execute());
+            if (groupId != this.groupId) return;   
+        }
+
+        public void OnAdd(SelectionGroupScope sender, int groupId, IList<Object> members)
+        {
+            if (groupId != this.groupId) return;
+            this.members.AddRange(members);   
+        }
+
+        public void OnRemove(SelectionGroupScope sender, int groupId, IList<Object> members)
+        {
+            if (groupId != this.groupId) return;
+            this.members.Remove(members);
         }
 
         /// <summary>

@@ -31,11 +31,10 @@ namespace Unity.SelectionGroups
 
         Object hotMember;
 
-        static void CreateNewGroup(Object[] objects)
+        static void CreateNewGroup()
         {
             Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Create");
-            var g = SelectionGroupManager.instance.CreateGroup("New Group");
-            g.Add(objects);
+            SelectionGroupManager.instance.CreateGroup("New Group");
         }
     }
 }

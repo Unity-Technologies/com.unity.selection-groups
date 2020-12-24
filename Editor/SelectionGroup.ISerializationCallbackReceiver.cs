@@ -1,4 +1,5 @@
 using System.Linq;
+using Unity.SelectionGroups.Runtime;
 using UnityEngine;
 
 namespace Unity.SelectionGroups
@@ -8,13 +9,14 @@ namespace Unity.SelectionGroups
     {
 
         [SerializeField] string[] _enabledTools;
-        
+
         /// <summary>
         /// The deserialization callback.
         /// </summary>
         public void OnAfterDeserialize()
         {
             enabledTools.UnionWith(_enabledTools);
+            SelectionGroupEvents.RegisterListener(this);
         }
         /// <summary>
         /// The serialization callback.
@@ -23,6 +25,6 @@ namespace Unity.SelectionGroups
         {
             _enabledTools = enabledTools.ToArray();
         }
-
+        
     }
 }

@@ -17,13 +17,14 @@ namespace Unity.SelectionGroups
             window.Show();
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         void DrawGUI()
         {
             scroll = EditorGUILayout.BeginScrollView(scroll);
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Add Group"))
             {
-                CreateNewGroup(Selection.objects);
+                CreateNewGroup();
             }
             if (GUILayout.Button(EditorGUIUtility.IconContent("d_Settings"), "label", GUILayout.ExpandWidth(false)))
             {
@@ -35,6 +36,7 @@ namespace Unity.SelectionGroups
             {
                 var isActive = activeNames.Contains(group.Name);
                 GUILayout.Space(3);
+                
                 var rect = GUILayoutUtility.GetRect(1, EditorGUIUtility.singleLineHeight);
                 //early out if this group yMin is below window rect (not visible).
                 if ((rect.yMin - scroll.y) > position.height) break;
@@ -53,8 +55,7 @@ namespace Unity.SelectionGroups
                 }
                 try
                 {
-
-                    HandleGroupDragEvents(dropRect, group);
+                    HandleDragEvents(dropRect, group);
                 }
                 catch (SelectionGroupException ex)
                 {
@@ -120,7 +121,9 @@ namespace Unity.SelectionGroups
                 EditorGUI.DrawRect(rect, HOVER_COLOR);
 
             if (isLeftMouseDown)
+            {
                 hotMember = g;
+            }
 
 
             if (isControl)
@@ -130,12 +133,14 @@ namespace Unity.SelectionGroups
                     activeSelection.Remove(g);
                     activeSelectionGroup = group;
                     updateSelectionObjects = true;
+                    hotMember = null;
                 }
                 if (isLeftMouseUp && isHotMember && !isInSelection)
                 {
                     activeSelection.Add(g);
                     activeSelectionGroup = group;
                     updateSelectionObjects = true;
+                    hotMember = null;
                 }
             }
             else if (isShift)
@@ -157,6 +162,7 @@ namespace Unity.SelectionGroups
                     for (var i = firstIndex; i < lastIndex; i++)
                         activeSelection.Add(objects[i]);
                     updateSelectionObjects = true;
+                    hotMember = null;
                 }
             }
             else
@@ -179,6 +185,7 @@ namespace Unity.SelectionGroups
                     {
                         //TODO: add a rename overlay
                     }
+                    hotMember = null;
                 }
             }
 
@@ -203,13 +210,6 @@ namespace Unity.SelectionGroups
                 ShowGameObjectContextMenu(rect, group, g, allowRemove);
             }
             
-            if (isMouseOver && isMouseDrag)
-            {
-                DragAndDrop.PrepareStartDrag();
-                DragAndDrop.objectReferences = Selection.objects;
-                DragAndDrop.StartDrag(g.name);
-            }
-
             if (updateSelectionObjects)
                 Selection.objects = activeSelection.ToArray();
 
@@ -280,7 +280,7 @@ namespace Unity.SelectionGroups
                 {
                     Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Remove");
                     group.Query = "";
-                    group.Remove(Selection.objects);
+                    SelectionGroupEvents.Remove(SelectionGroupScope.Editor, group.GroupId, Selection.objects);
                 });
             else
                 menu.AddDisabledItem(content);
@@ -298,7 +298,8 @@ namespace Unity.SelectionGroups
             menu.AddItem(new GUIContent("Clear Group"), false, () =>
             {
                 Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Clear");
-                group.Clear();
+                SelectionGroupEvents.Update(SelectionGroupScope.Editor, group.GroupId, group.Name, group.Query,
+                    group.Color, new Object[] { });
             });
             menu.AddItem(new GUIContent("Configure Group"), false, () => SelectionGroupConfigurationDialog.Open(group, this));
             menu.AddItem(new GUIContent("Delete Group"), false, () =>

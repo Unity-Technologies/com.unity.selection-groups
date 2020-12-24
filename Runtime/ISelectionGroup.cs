@@ -5,8 +5,6 @@ namespace Unity.SelectionGroups.Runtime
 {
     public interface ISelectionGroup: IEnumerable<Object>
     {
-        void Reload();
-        void RefreshQueryResults();
         string Name { get; set;  }
         string Query { get; set;  }
         Color Color { get; set; }
@@ -15,8 +13,10 @@ namespace Unity.SelectionGroups.Runtime
         int Count { get; }
         bool ShowMembers { get; set; }
         int GroupId { get; set; }
-        void Clear();
-        void Add(IList<Object> objects);
-        void Remove(IList<Object> objects);
+        void OnCreate(SelectionGroupScope sender, int groupId, string name, string query, Color color, IList<Object> members);
+        void OnUpdate(SelectionGroupScope sender, int groupId, string name, string query, Color color, IList<Object> members);
+        void OnDelete(SelectionGroupScope sender, int groupId);
+        void OnAdd(SelectionGroupScope sender, int groupId, IList<Object> members);
+        void OnRemove(SelectionGroupScope sender, int groupId, IList<Object> members);
     }
 }
