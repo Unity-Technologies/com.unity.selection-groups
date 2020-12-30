@@ -1,4 +1,4 @@
-﻿namespace Unity.SelectionGroups
+﻿namespace Unity.SelectionGroupsEditor
 {
     public partial class SelectionGroup
     {

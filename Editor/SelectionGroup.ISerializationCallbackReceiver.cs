@@ -2,7 +2,7 @@ using System.Linq;
 using Unity.SelectionGroups.Runtime;
 using UnityEngine;
 
-namespace Unity.SelectionGroups
+namespace Unity.SelectionGroupsEditor
 {
 
     public partial class SelectionGroup : ISerializationCallbackReceiver
@@ -16,7 +16,7 @@ namespace Unity.SelectionGroups
         public void OnAfterDeserialize()
         {
             enabledTools.UnionWith(_enabledTools);
-            SelectionGroupEvents.RegisterListener(this);
+            // SelectionGroupManager.Register(this);
         }
         /// <summary>
         /// The serialization callback.

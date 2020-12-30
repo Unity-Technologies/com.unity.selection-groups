@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Unity.SelectionGroups;
 using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
 
-namespace Unity.SelectionGroups
+namespace Unity.SelectionGroupsEditor
 {
     /// <summary>
     /// The main editor window for working with selection groups.
@@ -33,8 +34,7 @@ namespace Unity.SelectionGroups
 
         static void CreateNewGroup()
         {
-            Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Create");
-            SelectionGroupManager.instance.CreateGroup("New Group");
+            SelectionGroupManager.Create(SelectionGroupScope.Editor, "New Group", string.Empty, Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f)), new List<Object>());
         }
     }
 }

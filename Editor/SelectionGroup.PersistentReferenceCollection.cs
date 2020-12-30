@@ -1,23 +1,9 @@
 ﻿using UnityEngine;
 
-namespace Unity.SelectionGroups
+namespace Unity.SelectionGroupsEditor
 {
     public partial class SelectionGroup
     {
-        [SerializeField] private PersistentReferenceCollection _persistentReferenceCollection;
-
-        private PersistentReferenceCollection PersistentReferenceCollection
-        {
-            get
-            {
-                if (_persistentReferenceCollection == null)
-                {
-                    _persistentReferenceCollection = new PersistentReferenceCollection();
-                    _persistentReferenceCollection.LoadObjects();
-                }
-
-                return _persistentReferenceCollection;
-            }
-        }
+        [SerializeField] PersistentReferenceCollection PersistentReferenceCollection = new PersistentReferenceCollection();
     }
 }

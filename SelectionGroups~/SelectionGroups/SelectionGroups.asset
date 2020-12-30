@@ -12,30 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d77bebe0cb33ec45aad7d6b9259f66e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _keys: 0000000001000000
+  _keys: 00000000
   _values:
   - _enabledTools: []
-    name: GameObjects
-    color: {r: 0.33127168, g: 0.06531829, b: 0.98850894, a: 1}
-    showMembers: 1
+    PersistentReferenceCollection:
+      _objectIds:
+      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1286887220-0
+    name: New Group A
+    color: {r: 0.9735843, g: 0.32315826, b: 0.08524907, a: 1}
+    showMembers: 0
     query: 
     groupId: 0
-    _persistentReferenceCollection:
-      _objectIds:
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1841824448-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1359428364-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-556657659-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1018674155-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-94783513-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-334774221-0
+    scope: 0
   - _enabledTools: []
-    name: New Group
-    color: {r: 0.9015317, g: 0.4050318, b: 0.077841155, a: 1}
-    showMembers: 1
+    PersistentReferenceCollection:
+      _objectIds:
+      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1496593963-0
+      - GlobalObjectId_V1-1-1d77bebe0cb33ec45aad7d6b9259f66e-11500000-0
+    name: New Group B
+    color: {r: 0.043137252, g: 0.08831907, b: 0.90588236, a: 1}
+    showMembers: 0
     query: 
-    groupId: 1
-    _persistentReferenceCollection:
-      _objectIds: []
-  _groupCounter: 2
-  isDirty: 1
-  enablePlayModeSelectionGroups: 0
+    groupId: 0
+    scope: 0

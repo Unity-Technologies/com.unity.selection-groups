@@ -1,10 +1,12 @@
+using System.Linq;
 using System.Reflection;
+using Unity.SelectionGroups;
 using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace Unity.SelectionGroups
+namespace Unity.SelectionGroupsEditor
 {
     /// <summary>
     /// Implements the configuration dialog in the editor for a selection group. 
@@ -25,7 +27,7 @@ namespace Unity.SelectionGroups
         internal static void Open(ISelectionGroup group, SelectionGroupEditorWindow parentWindow)
         {
             var dialog = EditorWindow.GetWindow<SelectionGroupConfigurationDialog>();
-            dialog.groupId = group.GroupId;
+            dialog.group = group;
             dialog.parentWindow = parentWindow;
             dialog.refreshQuery = true;
             dialog.titleContent.text = $"Configure {group.Name}";
@@ -35,8 +37,6 @@ namespace Unity.SelectionGroups
 
         void OnGUI()
         {
-            if (SelectionGroupManager.instance == null) return;
-            group = SelectionGroupManager.instance.GetGroup(groupId);
             using (var cc = new EditorGUI.ChangeCheckScope())
             {
                 GUILayout.Label("Selection Group Properties", EditorStyles.largeLabel);
@@ -54,8 +54,8 @@ namespace Unity.SelectionGroups
                         executor.Code = group.Query;
                         var objects = executor.Execute();
                         message = $"{objects.Length} results.";
-                        SelectionGroupEvents.Update(SelectionGroupScope.Editor, @group.GroupId, @group.Name,
-                            @group.Query, @group.Color, objects);
+                        @group.Clear();
+                        @group.Add(objects);
                         parentWindow.Repaint();
                     }
                     else
@@ -71,10 +71,11 @@ namespace Unity.SelectionGroups
                 }
                 GUILayout.Space(5);
                 var scope = @group.Scope;
-                @group.Scope = (SelectionGroupScope) EditorGUILayout.EnumPopup(@group.Scope);
+                scope = (SelectionGroupScope) EditorGUILayout.EnumPopup(@group.Scope);
                 if (scope != @group.Scope)
                 {
-                    SelectionGroupManager.ChangeScope(@group, scope, @group.Scope);
+                    SelectionGroupManager.Create(scope, @group.Name, @group.Query, @group.Color, @group.ToArray());
+                    SelectionGroupManager.Delete(@group);
                 }
                 GUILayout.BeginVertical("box");
                 GUILayout.Label("Enabled Toolbar Buttons", EditorStyles.largeLabel);

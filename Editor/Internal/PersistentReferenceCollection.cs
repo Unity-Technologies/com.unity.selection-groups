@@ -2,13 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.SelectionGroups;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
-namespace Unity.SelectionGroups
+namespace Unity.SelectionGroupsEditor
 {
     /// <summary>
     /// This class contains a set of global object id values. When a scene is loaded, they are
@@ -16,17 +17,15 @@ namespace Unity.SelectionGroups
     /// is generated for any new gameobjects added to the set.
     /// </summary>
     [System.Serializable]
-    internal class PersistentReferenceCollection : ISerializationCallbackReceiver, System.IDisposable, IEnumerable<UnityEngine.Object>
+    internal class PersistentReferenceCollection : ISerializationCallbackReceiver, IDisposable, IEnumerable<Object>
     {
-        OrderedSet<UnityEngine.Object> activeObjects = new OrderedSet<UnityEngine.Object>();
+        OrderedSet<UnityEngine.Object> activeObjects = new OrderedSet<Object>();
         HashSet<GlobalObjectId> globalObjectIdSet = new HashSet<GlobalObjectId>();
 
         [SerializeField] string[] _objectIds;
 
         public int LoadedObjectCount => activeObjects.Count;
         public int TotalObjectCount => globalObjectIdSet.Count;
-
-        public UnityEngine.Object this[int index] { get => activeObjects[index]; set => activeObjects[index] = value; }
 
         /// <summary>
         /// Load references to objects that currently exist in a scene.

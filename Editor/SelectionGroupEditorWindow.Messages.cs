@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Unity.SelectionGroups;
 using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-namespace Unity.SelectionGroups
+namespace Unity.SelectionGroupsEditor
 {
 
     public partial class SelectionGroupEditorWindow : EditorWindow
@@ -17,10 +18,22 @@ namespace Unity.SelectionGroups
             titleContent.text = "Selection Groups";
             editorWindow = this;
             wantsMouseMove = true;
+            SelectionGroupManager.Create -= RepaintOnCreate;
+            SelectionGroupManager.Create += RepaintOnCreate;
+            SelectionGroupManager.Delete -= RepaintOnDelete;
+            SelectionGroupManager.Delete += RepaintOnDelete;
         }
+
+        void RepaintOnDelete(ISelectionGroup @group) => 
+            Repaint();
+
+        void RepaintOnCreate(SelectionGroupScope scope, string s, string query, Color color, IList<Object> members) =>
+            Repaint();
 
         void OnDisable()
         {
+            SelectionGroupManager.Create -= RepaintOnCreate;
+            SelectionGroupManager.Delete -= RepaintOnDelete;
             editorWindow = null;
         }
         
@@ -31,11 +44,7 @@ namespace Unity.SelectionGroups
                 GUILayout.Label("Selection Groups are not available in Play Mode.");
                 return;
             }
-            if (SelectionGroupManager.instance == null)
-            {
-                GUILayout.Label("Waiting for SelectionGroupManager to load.");
-                return;
-            }
+            
             SetupStyles();
             DrawGUI();
 
@@ -72,24 +81,14 @@ namespace Unity.SelectionGroups
                         current.Use();
                         break;
                     case "SoftDelete":
-                        Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Remove");
-                        SelectionGroupEvents.Remove(SelectionGroupScope.Editor, activeSelectionGroup.GroupId, Selection.objects);
+                        activeSelectionGroup.Remove(Selection.objects);
                         Selection.objects = null;
                         UpdateActiveSelection();
                         current.Use();
                         return;
                 }
         }
-
-        void Update()
-        {
-            if (SelectionGroupManager.instance == null)
-            {
-                SelectionGroupManager.CreateAndLoad();
-                Repaint();
-            }
-        }
-
+        
         void OnSelectionChange()
         {
             UpdateActiveSelection();

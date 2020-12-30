@@ -1,9 +1,10 @@
-﻿using Unity.SelectionGroups.Runtime;
+﻿using Unity.SelectionGroups;
+using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEngine;
 
 
-namespace Unity.SelectionGroups
+namespace Unity.SelectionGroupsEditor
 {
     public partial class SelectionGroupEditorWindow : EditorWindow
     {
@@ -22,7 +23,7 @@ namespace Unity.SelectionGroups
                 case EventType.DragPerform:
                 case EventType.DragUpdated:
                 case EventType.MouseDrag:
-                    Debug.Log($"{evt.type} {group.Name}");
+                    // Debug.Log($"{evt.type} {group.Name}");
                     break;
             }
 
@@ -31,7 +32,7 @@ namespace Unity.SelectionGroups
                 case EventType.MouseDrag:
                     //This event occurs when dragging inside the EditorWindow which contains this OnGUI method.
                     //It would be better named DragStarted.
-                    Debug.Log($"Start Drag: {group.Name}");
+                    // Debug.Log($"Start Drag: {group.Name}");
                     DragAndDrop.PrepareStartDrag();
                     if(hotMember != null)
                         DragAndDrop.objectReferences = new []{ hotMember };
@@ -58,8 +59,7 @@ namespace Unity.SelectionGroups
                 case EventType.DragPerform:
                     //This will only get called when a valid Drop occurs (determined by the above DragUpdated code)
                     DragAndDrop.AcceptDrag();
-                    Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Add to group");
-                    SelectionGroupEvents.Add(SelectionGroupScope.Editor, group.GroupId, DragAndDrop.objectReferences);
+                    group.Add(DragAndDrop.objectReferences);
                     hotRect = null;
                     evt.Use();
                     break;

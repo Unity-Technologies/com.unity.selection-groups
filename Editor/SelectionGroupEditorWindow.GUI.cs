@@ -1,10 +1,11 @@
 ﻿using System.Linq;
+using Unity.SelectionGroups;
 using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEngine;
 
 
-namespace Unity.SelectionGroups
+namespace Unity.SelectionGroupsEditor
 {
 
     public partial class SelectionGroupEditorWindow : EditorWindow
@@ -17,23 +18,22 @@ namespace Unity.SelectionGroups
             window.Show();
         }
 
-        // ReSharper disable Unity.PerformanceAnalysis
         void DrawGUI()
         {
             scroll = EditorGUILayout.BeginScrollView(scroll);
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Add Group"))
-            {
-                CreateNewGroup();
-            }
+            
+            if (GUILayout.Button("Add Group")) CreateNewGroup();
+            
             if (GUILayout.Button(EditorGUIUtility.IconContent("d_Settings"), "label", GUILayout.ExpandWidth(false)))
             {
                 ShowSettings();
             }
             GUILayout.EndHorizontal();
 
-            foreach (var group in SelectionGroupManager.instance)
+            foreach (var group in SelectionGroupManager.Groups)
             {
+                if (group == null) continue;
                 var isActive = activeNames.Contains(group.Name);
                 GUILayout.Space(3);
                 
@@ -217,7 +217,7 @@ namespace Unity.SelectionGroups
 
         bool DrawHeader(Rect rect, ISelectionGroup group, bool isActive)
         {
-            var content = EditorGUIUtility.IconContent("LODGroup Icon");
+            var content = EditorGUIUtility.IconContent(group.Scope==SelectionGroupScope.Editor?"d_Project":"SceneAsset Icon");
             content.text = $"{group.Name}";
             var backgroundColor = group == activeSelectionGroup ? Color.white * 0.6f : Color.white * 0.3f;
             EditorGUI.DrawRect(rect, backgroundColor);
@@ -278,9 +278,8 @@ namespace Unity.SelectionGroups
             if (allowRemove)
                 menu.AddItem(content, false, () =>
                 {
-                    Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Remove");
                     group.Query = "";
-                    SelectionGroupEvents.Remove(SelectionGroupScope.Editor, group.GroupId, Selection.objects);
+                    group.Remove(Selection.objects);
                 });
             else
                 menu.AddDisabledItem(content);
@@ -292,19 +291,16 @@ namespace Unity.SelectionGroups
             var menu = new GenericMenu();
             menu.AddItem(new GUIContent("Duplicate Group"), false, () =>
             {
-                SelectionGroupManager.instance.DuplicateGroup(group.GroupId);
-
+                // SelectionGroupManager.Duplicate(SelectionGroupScope.Editor, group.GroupId);
             });
             menu.AddItem(new GUIContent("Clear Group"), false, () =>
             {
-                Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Clear");
-                SelectionGroupEvents.Update(SelectionGroupScope.Editor, group.GroupId, group.Name, group.Query,
-                    group.Color, new Object[] { });
+                group.Clear();
             });
             menu.AddItem(new GUIContent("Configure Group"), false, () => SelectionGroupConfigurationDialog.Open(group, this));
             menu.AddItem(new GUIContent("Delete Group"), false, () =>
             {
-                SelectionGroupManager.instance.RemoveGroup(group.GroupId);
+                SelectionGroupManager.Delete(group);
             });
             menu.DropDown(rect);
         }

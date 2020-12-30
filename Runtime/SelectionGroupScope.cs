@@ -3,7 +3,6 @@
     public enum SelectionGroupScope
     {
         Editor,
-        Scene,
-        Asset
+        Scene
     }
 }

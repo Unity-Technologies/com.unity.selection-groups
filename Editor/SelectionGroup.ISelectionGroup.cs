@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.SelectionGroups;
 using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEngine;
 
-namespace Unity.SelectionGroups
+namespace Unity.SelectionGroupsEditor
 {
-    public partial class SelectionGroup : ISelectionGroup
+    public partial class SelectionGroup
     {
         /// <summary>
         /// Number of objects in this group that are available to be referenced. (Ie. they exist in a loaded scene)
@@ -50,49 +51,33 @@ namespace Unity.SelectionGroups
             get => groupId;
             set => groupId = value;
         }
-
-        public void OnCreate(SelectionGroupScope sender, int groupId, string name, string query, Color color, IList<Object> members)
+        
+        public void OnDelete(ISelectionGroup group)
         {
-            if (groupId != this.groupId) return;
+            
         }
 
-        public void OnUpdate(SelectionGroupScope sender, int groupId, string name, string query, Color color, IList<Object> members)
+        public void Add(IList<Object> objectReferences)
         {
-            if (groupId != this.groupId) return;
-            this.name = name;
-            this.query = query;
-            this.color = color;
-            Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Update");
-            PersistentReferenceCollection.Clear();
-            OnAdd(sender, groupId, members);
-        }
-
-        public void OnDelete(SelectionGroupScope sender, int groupId)
-        {
-            if (groupId != this.groupId) return;
-        }
-
-        public void OnAdd(SelectionGroupScope sender, int groupId, IList<Object> members)
-        {
-            if (groupId != this.groupId) return;
-            foreach(var i in members) {
+            foreach(var i in objectReferences) {
                 var go = i as GameObject;
                 if(go != null && string.IsNullOrEmpty(go.scene.path)) {
                     //GameObject is not saved into a scene, therefore it cannot be stored in a selection group.
                     // throw new SelectionGroupException("Cannot add a gameobject from an unsaved scene.");
-                    
-                    return;
-                }
+                    continue;
+                } 
+                PersistentReferenceCollection.Add(i);    
             }
-            Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Add");                        
-            PersistentReferenceCollection.Add(members);
         }
 
-        public void OnRemove(SelectionGroupScope sender, int groupId, IList<Object> members)
+        public void Remove(IList<Object> objectReferences)
         {
-            if (groupId != this.groupId) return;
-            Undo.RegisterCompleteObjectUndo(SelectionGroupManager.instance, "Remove");
-            PersistentReferenceCollection.Remove(members);
+            PersistentReferenceCollection.Remove(objectReferences);
+        }
+
+        public void Clear()
+        {
+            PersistentReferenceCollection.Clear();
         }
 
         /// <summary>

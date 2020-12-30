@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Unity.SelectionGroups
+namespace Unity.SelectionGroupsEditor
 {
     internal class AttributeCache
     {

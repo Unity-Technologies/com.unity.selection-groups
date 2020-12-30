@@ -3,10 +3,11 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using Unity.SelectionGroups;
 using Unity.SelectionGroups.Runtime;
 using UnityEngine.SceneManagement;
 
-namespace Unity.SelectionGroups
+namespace Unity.SelectionGroupsEditor
 {
     /// <summary>
     /// This class is the Editor-only container for selection group information and members.
@@ -21,12 +22,7 @@ namespace Unity.SelectionGroups
         [SerializeField] int groupId;
         [SerializeField] SelectionGroupScope scope = SelectionGroupScope.Editor;
         HashSet<string> enabledTools = new HashSet<string>();
-
-        public SelectionGroup()
-        {
-            SelectionGroupEvents.RegisterListener(this);
-        }
-
+        
         /// <summary>
         /// Creates all references in this group that exist in a loaded scene.
         /// </summary>

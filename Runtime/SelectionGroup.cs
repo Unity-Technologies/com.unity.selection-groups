@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -10,7 +11,7 @@ namespace Unity.SelectionGroups.Runtime
     /// This class is used to provide selection group information during play-mode. It reflects the information in the Editor-only class.
     /// </summary>
     [ExecuteAlways]
-    public class SelectionGroup : MonoBehaviour, ISelectionGroup
+    public class SelectionGroup : MonoBehaviour, ISelectionGroup, ISerializationCallbackReceiver
     {
         /// <summary>
         /// Unique ID of this group.
@@ -19,25 +20,27 @@ namespace Unity.SelectionGroups.Runtime
         /// <summary>
         /// A color assigned to this group.
         /// </summary>
-        public Color color;
+        [SerializeField] Color color;
         /// <summary>
         /// If not empty, this is a GoQL query string used to create the set of matching objects for this group.
         /// </summary>
-        public string query = string.Empty;
+        [SerializeField] string query = string.Empty;
 
-        public SelectionGroupScope scope = SelectionGroupScope.Scene;
+        [SerializeField] SelectionGroupScope scope = SelectionGroupScope.Scene;
 
         /// <summary>
         /// The members of this group.
         /// </summary>
-        public OrderedSet<Object> members = new OrderedSet<Object>();
+        OrderedSet<Object> members = new OrderedSet<Object>();
+        
+        [SerializeField] [HideInInspector] private Object[] _members;
 
         GoQL.ParseResult parseResult;
         List<object> code;
         GoQL.GoQLExecutor executor;
-        [SerializeField] private HashSet<string> enabledTools = new HashSet<string>();
+        HashSet<string> enabledTools = new HashSet<string>();
         
-
+        
         /// <summary>
         /// An enumerator that matches only the GameObject members of this group.
         /// </summary>
@@ -53,12 +56,17 @@ namespace Unity.SelectionGroups.Runtime
         {
             executor = new GoQL.GoQLExecutor();
             executor.Code = query;
-            SelectionGroupEvents.RegisterListener(this);
+            SelectionGroupManager.Register(this);
         }
 
         void OnDisable()
         {
-            SelectionGroupEvents.UnregisterListener(this);
+            SelectionGroupManager.Unregister(this);
+        }
+
+        void OnDestroy()
+        {
+            SelectionGroupManager.Delete(this);
         }
 
         public string Name
@@ -67,13 +75,13 @@ namespace Unity.SelectionGroups.Runtime
             set => this.name = value;
         }
 
-        string ISelectionGroup.Query
+        public string Query
         {
             get => this.query; 
             set => this.query = value;
         }
 
-        Color ISelectionGroup.Color
+        public Color Color
         {
             get => this.color; 
             set => this.color = value;
@@ -93,41 +101,20 @@ namespace Unity.SelectionGroups.Runtime
 
         public int Count => members.Count;
         public bool ShowMembers { get; set; }
-        public int GroupId { 
-            get => groupId; 
-            set => groupId = value; 
+        
+        public void Add(IList<Object> objectReferences)
+        {   
+            members.AddRange(objectReferences);
         }
 
-        public void OnCreate(SelectionGroupScope sender, int groupId, string name, string query, Color color, IList<Object> members)
+        public void Remove(IList<Object> objectReferences)
         {
-            if (groupId != this.groupId) return;
+            members.Remove(objectReferences);
         }
 
-        public void OnUpdate(SelectionGroupScope sender, int groupId, string name, string query, Color color, IList<Object> members)
+        public void Clear()
         {
-            if (groupId != this.groupId) return;
-            this.name = name;
-            this.query = query;
-            this.color = color;
-            this.members.Clear();
-            this.members.AddRange(members);
-        }
-
-        public void OnDelete(SelectionGroupScope sender, int groupId)
-        {
-            if (groupId != this.groupId) return;   
-        }
-
-        public void OnAdd(SelectionGroupScope sender, int groupId, IList<Object> members)
-        {
-            if (groupId != this.groupId) return;
-            this.members.AddRange(members);   
-        }
-
-        public void OnRemove(SelectionGroupScope sender, int groupId, IList<Object> members)
-        {
-            if (groupId != this.groupId) return;
-            this.members.Remove(members);
+            members.Clear();
         }
 
         /// <summary>
@@ -154,5 +141,14 @@ namespace Unity.SelectionGroups.Runtime
         
         IEnumerator IEnumerable.GetEnumerator() => members.GetEnumerator();
 
+        public void OnBeforeSerialize()
+        {
+            _members = members.ToArray();
+        }
+
+        public void OnAfterDeserialize()
+        {
+            if(_members != null) members.AddRange(_members);
+        }
     }
 }
