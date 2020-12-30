@@ -36,5 +36,19 @@ namespace Unity.SelectionGroupsEditor
         {
             SelectionGroupManager.Create(SelectionGroupScope.Editor, "New Group", string.Empty, Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f)), new List<Object>());
         }
+
+        void RegisterUndo(ISelectionGroup @group, string msg)
+        {
+            if (group is SelectionGroups.Runtime.SelectionGroup runtimeGroup)
+            {
+                Undo.RegisterCompleteObjectUndo(runtimeGroup, msg);
+                EditorUtility.SetDirty(runtimeGroup);
+            }
+
+            if (group is SelectionGroup editorGroup)
+            {
+                SelectionGroupPersistenceManager.RegisterUndo(msg);
+            }
+        }
     }
 }

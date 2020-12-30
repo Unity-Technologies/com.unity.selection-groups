@@ -151,58 +151,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &521234485
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 521234487}
-  - component: {fileID: 521234486}
-  m_Layer: 0
-  m_Name: Scene Group (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &521234486
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 521234485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be40bfb66f1080540ad807eb78ccd866, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  groupId: 0
-  color: {r: 0.02463185, g: 0.9734913, b: 0.27555147, a: 1}
-  query: 
-  scope: 1
-  _members:
-  - {fileID: 733226987}
-  - {fileID: 1345298088}
-  - {fileID: 1169896359}
-  - {fileID: 1956096102}
---- !u!4 &521234487
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 521234485}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 11
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &733226987
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,58 +273,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &958686879
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 958686881}
-  - component: {fileID: 958686880}
-  m_Layer: 0
-  m_Name: Scene Group (3)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &958686880
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 958686879}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be40bfb66f1080540ad807eb78ccd866, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  groupId: 0
-  color: {r: 0.02463185, g: 0.9734913, b: 0.27555147, a: 1}
-  query: 
-  scope: 1
-  _members:
-  - {fileID: 733226987}
-  - {fileID: 1345298088}
-  - {fileID: 1169896359}
-  - {fileID: 1956096102}
---- !u!4 &958686881
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 958686879}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 12
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1169896359
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,15 +362,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be40bfb66f1080540ad807eb78ccd866, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groupId: 0
   color: {r: 0.02463185, g: 0.9734913, b: 0.27555147, a: 1}
   query: 
   scope: 1
   _members:
+  - {fileID: 1496593963}
+  - {fileID: 1171911073}
+  - {fileID: 150264410}
   - {fileID: 733226987}
   - {fileID: 1345298088}
-  - {fileID: 1169896359}
-  - {fileID: 1956096102}
 --- !u!4 &1257289865
 Transform:
   m_ObjectHideFlags: 0

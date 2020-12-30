@@ -59,6 +59,7 @@ namespace Unity.SelectionGroupsEditor
                 case EventType.DragPerform:
                     //This will only get called when a valid Drop occurs (determined by the above DragUpdated code)
                     DragAndDrop.AcceptDrag();
+                    RegisterUndo(group, "Add Members");
                     group.Add(DragAndDrop.objectReferences);
                     hotRect = null;
                     evt.Use();

@@ -10,12 +10,10 @@ namespace Unity.SelectionGroups
     /// A List which only contains unique references.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    [System.Serializable]
-    public class OrderedSet<T> : IList<T>, ISerializationCallbackReceiver
+    public class OrderedSet<T> : IList<T>
     {
         List<T> items = new List<T>();
         HashSet<T> uniqueIndex = new HashSet<T>();
-        [SerializeField] T[] _items;
 
         public T this[int index] { get => items[index]; set => items[index] = value; }
 
@@ -99,15 +97,5 @@ namespace Unity.SelectionGroups
             return items.GetEnumerator();
         }
 
-        public void OnBeforeSerialize()
-        {
-            _items = items.ToArray();
-        }
-
-        public void OnAfterDeserialize()
-        {
-            AddRange(_items);
-            _items = null;
-        }
     }
 }

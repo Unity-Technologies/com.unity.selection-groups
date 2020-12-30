@@ -16,7 +16,6 @@ namespace Unity.SelectionGroupsEditor
         public void OnAfterDeserialize()
         {
             enabledTools.UnionWith(_enabledTools);
-            // SelectionGroupManager.Register(this);
         }
         /// <summary>
         /// The serialization callback.

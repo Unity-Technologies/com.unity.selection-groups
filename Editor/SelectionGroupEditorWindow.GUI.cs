@@ -278,6 +278,7 @@ namespace Unity.SelectionGroupsEditor
             if (allowRemove)
                 menu.AddItem(content, false, () =>
                 {
+                    RegisterUndo(group, "Remove Member");
                     group.Query = "";
                     group.Remove(Selection.objects);
                 });

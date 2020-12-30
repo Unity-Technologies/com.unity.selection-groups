@@ -114,5 +114,11 @@ namespace Unity.SelectionGroupsEditor
             EditorApplication.update -= OnUpdate;
         }
 
+        public static void RegisterUndo(string msg)
+        {
+            Undo.RegisterCompleteObjectUndo(Instance, msg);
+            EditorUtility.SetDirty(Instance);
+        }
+
     }
 }

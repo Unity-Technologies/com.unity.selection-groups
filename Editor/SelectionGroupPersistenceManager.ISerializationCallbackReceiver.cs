@@ -83,14 +83,13 @@ namespace Unity.SelectionGroupsEditor
         public void OnBeforeSerialize()
         {
             _values = editorGroups.ToArray();
-            foreach (var i in _values)
-                SelectionGroupManager.Unregister(i);
         }
 
         public void OnAfterDeserialize()
         {
             editorGroups.Clear();
             editorGroups.UnionWith(_values);
+            SelectionGroupManager.ClearEditorGroups();
             foreach (var i in _values)
                 SelectionGroupManager.Register(i);
         }

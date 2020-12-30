@@ -14,10 +14,6 @@ namespace Unity.SelectionGroups.Runtime
     public class SelectionGroup : MonoBehaviour, ISelectionGroup, ISerializationCallbackReceiver
     {
         /// <summary>
-        /// Unique ID of this group.
-        /// </summary>
-        [SerializeField] [HideInInspector] public int groupId;
-        /// <summary>
         /// A color assigned to this group.
         /// </summary>
         [SerializeField] Color color;
@@ -33,13 +29,12 @@ namespace Unity.SelectionGroups.Runtime
         /// </summary>
         OrderedSet<Object> members = new OrderedSet<Object>();
         
-        [SerializeField] [HideInInspector] private Object[] _members;
+        [SerializeField] Object[] _members;
 
         GoQL.ParseResult parseResult;
         List<object> code;
         GoQL.GoQLExecutor executor;
         HashSet<string> enabledTools = new HashSet<string>();
-        
         
         /// <summary>
         /// An enumerator that matches only the GameObject members of this group.
@@ -148,7 +143,9 @@ namespace Unity.SelectionGroups.Runtime
 
         public void OnAfterDeserialize()
         {
-            if(_members != null) members.AddRange(_members);
+            members.Clear();
+            if (_members != null)
+                members.AddRange(_members);
         }
     }
 }

@@ -48,5 +48,10 @@ namespace Unity.SelectionGroups.Runtime
             Debug.Log($"Create: {scope} {name}");
         }
         
+        public static void ClearEditorGroups()
+        {
+            foreach(var i in groups.ToArray())
+                if(i.Scope == SelectionGroupScope.Editor) Unregister(i);
+        }
     }
 }
