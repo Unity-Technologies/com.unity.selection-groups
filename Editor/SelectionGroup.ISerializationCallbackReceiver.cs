@@ -15,6 +15,7 @@ namespace Unity.SelectionGroupsEditor
         /// </summary>
         public void OnAfterDeserialize()
         {
+            enabledTools.Clear();
             enabledTools.UnionWith(_enabledTools);
         }
         /// <summary>

@@ -60,7 +60,15 @@ namespace Unity.SelectionGroupsEditor
                     //This will only get called when a valid Drop occurs (determined by the above DragUpdated code)
                     DragAndDrop.AcceptDrag();
                     RegisterUndo(group, "Add Members");
-                    group.Add(DragAndDrop.objectReferences);
+                    try
+                    {
+                        group.Add(DragAndDrop.objectReferences);
+                    }
+                    catch (SelectionGroupException e)
+                    {
+                        ShowNotification(new GUIContent(e.Message));
+                    }
+
                     hotRect = null;
                     evt.Use();
                     break;

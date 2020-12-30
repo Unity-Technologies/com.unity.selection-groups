@@ -39,13 +39,11 @@ namespace Unity.SelectionGroups.Runtime
 
         static void OnDelete(ISelectionGroup group)
         {
-            Debug.Log($"Delete: {group}");
             Unregister(group);
         }
         
         static void OnCreate(SelectionGroupScope scope, string name, string query, Color color, IList<Object> members)
         {
-            Debug.Log($"Create: {scope} {name}");
         }
         
         public static void ClearEditorGroups()

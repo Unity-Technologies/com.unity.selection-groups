@@ -14,11 +14,21 @@ namespace Unity.SelectionGroupsEditor
     [InitializeOnLoad]
     public partial class SelectionGroupPersistenceManager: ISerializationCallbackReceiver
     {
-        [SerializeField] int[] _keys;
         [SerializeField] SelectionGroup[] _values;
 
         string[] _names;
-        static SelectionGroupPersistenceManager Instance;
+
+        static SelectionGroupPersistenceManager _instance;
+
+        static SelectionGroupPersistenceManager Instance
+        {
+            get
+            {
+                if (_instance == null) CreateAndLoad();
+                return _instance;
+            }
+            set { _instance = value; }
+        }
 
         static SelectionGroupPersistenceManager()
         {
@@ -27,19 +37,19 @@ namespace Unity.SelectionGroupsEditor
         internal static void CreateAndLoad()
         {
 
-            System.Diagnostics.Debug.Assert(Instance == null);
+            System.Diagnostics.Debug.Assert(_instance == null);
             //Find existing
             var managers = Resources.FindObjectsOfTypeAll(typeof(SelectionGroupPersistenceManager));
             if (managers.Length > 0)
             {
-                Instance = managers[0] as SelectionGroupPersistenceManager;
+                _instance = managers[0] as SelectionGroupPersistenceManager;
                 if (managers.Length != 1)
                 {
                     Debug.LogError($"Multiple SelectionGroupManager instances detected! {managers.Length}");
                 }
             }
 
-            if (Instance == null)
+            if (_instance == null)
             {
                 // Load
                 string filePath = GetFilePath();
@@ -49,19 +59,22 @@ namespace Unity.SelectionGroupsEditor
                     var objects = InternalEditorUtility.LoadSerializedFileAndForget(filePath);
                     if (objects.Length > 0 && objects[0] is SelectionGroupPersistenceManager)
                     {
-                        Instance = (SelectionGroupPersistenceManager)objects[0];
+                        _instance = (SelectionGroupPersistenceManager)objects[0];
                     }
                 }
             }
 
-            if (Instance == null)
+            if (_instance == null)
             {
                 // Create
                 var t = CreateInstance<SelectionGroupPersistenceManager>();
                 // t.hideFlags = HideFlags.HideAndDontSave;
-                Instance = t;
+                _instance = t;
             }
-            System.Diagnostics.Debug.Assert(Instance != null);
+            
+            System.Diagnostics.Debug.Assert(_instance != null);
+            _instance.hideFlags = HideFlags.HideAndDontSave;
+            Instance = _instance;
         }
 
         internal static void Save()

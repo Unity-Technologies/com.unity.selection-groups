@@ -76,6 +76,7 @@ namespace Unity.SelectionGroupsEditor
                 {
                     SelectionGroupManager.Create(scope, @group.Name, @group.Query, @group.Color, @group.ToArray());
                     SelectionGroupManager.Delete(@group);
+                    Close();
                 }
                 GUILayout.BeginVertical("box");
                 GUILayout.Label("Enabled Toolbar Buttons", EditorStyles.largeLabel);

@@ -157,9 +157,12 @@ namespace Unity.SelectionGroupsEditor
         public void OnAfterDeserialize()
         {
             var ids = new GlobalObjectId[_objectIds.Length];
+            globalObjectIdSet.Clear();
+            activeObjects.Clear();
             for (var i = 0; i < _objectIds.Length; i++)
                 if (GlobalObjectId.TryParse(_objectIds[i], out ids[i]))
                     globalObjectIdSet.Add(ids[i]);
+            EditorApplication.delayCall += ConvertGlobalObjectIdsToSceneObjects;
         }
 
         public void OnBeforeSerialize()
