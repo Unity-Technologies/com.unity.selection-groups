@@ -11,6 +11,7 @@ namespace Unity.SelectionGroupsEditor
     /// <summary>
     /// The main editor window for working with selection groups.
     /// </summary>
+    
     public partial class SelectionGroupEditorWindow : EditorWindow
     {
 
@@ -24,13 +25,17 @@ namespace Unity.SelectionGroupsEditor
         Vector2 scroll;
         ISelectionGroup activeSelectionGroup;
         float width;
-        static SelectionGroupEditorWindow editorWindow;
-        Rect? hotRect = null;
         GUIStyle miniButtonStyle;
         HashSet<Object> activeSelection = new HashSet<Object>();
         HashSet<string> activeNames = new HashSet<string>();
 
         Object hotMember;
+
+        [InitializeOnLoadMethod]
+        static void SetupQueryCallbacks()
+        {
+            EditorApplication.hierarchyChanged += SelectionGroupManager.ExecuteSelectionGroupQueries;
+        }
 
         static void CreateNewGroup()
         {

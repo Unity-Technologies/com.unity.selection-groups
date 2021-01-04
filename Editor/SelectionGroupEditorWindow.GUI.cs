@@ -25,10 +25,6 @@ namespace Unity.SelectionGroupsEditor
             
             if (GUILayout.Button("Add Group")) CreateNewGroup();
             
-            if (GUILayout.Button(EditorGUIUtility.IconContent("d_Settings"), "label", GUILayout.ExpandWidth(false)))
-            {
-                ShowSettings();
-            }
             GUILayout.EndHorizontal();
 
             foreach (var group in SelectionGroupManager.Groups)

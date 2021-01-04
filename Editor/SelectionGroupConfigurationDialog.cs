@@ -37,6 +37,11 @@ namespace Unity.SelectionGroupsEditor
 
         void OnGUI()
         {
+            if (group == null)
+            {
+                Close();
+                return;
+            }
             using (var cc = new EditorGUI.ChangeCheckScope())
             {
                 GUILayout.Label("Selection Group Properties", EditorStyles.largeLabel);
@@ -74,8 +79,7 @@ namespace Unity.SelectionGroupsEditor
                 scope = (SelectionGroupScope) EditorGUILayout.EnumPopup(@group.Scope);
                 if (scope != @group.Scope)
                 {
-                    SelectionGroupManager.Create(scope, @group.Name, @group.Query, @group.Color, @group.ToArray());
-                    SelectionGroupManager.Delete(@group);
+                    SelectionGroupManager.ChangeGroupScope(group, scope);
                     Close();
                 }
                 GUILayout.BeginVertical("box");

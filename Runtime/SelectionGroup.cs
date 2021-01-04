@@ -61,7 +61,7 @@ namespace Unity.SelectionGroups.Runtime
 
         void OnDestroy()
         {
-            SelectionGroupManager.Delete(this);
+            // SelectionGroupManager.Delete(this);
         }
 
         public string Name
@@ -98,8 +98,14 @@ namespace Unity.SelectionGroups.Runtime
         public bool ShowMembers { get; set; }
         
         public void Add(IList<Object> objectReferences)
-        {   
-            members.AddRange(objectReferences);
+        {
+            var myScene = gameObject.scene;
+            foreach (var i in objectReferences)
+            {
+                if (i is GameObject go && go.scene != myScene)
+                    continue;
+                members.Add(i);
+            }
         }
 
         public void Remove(IList<Object> objectReferences)

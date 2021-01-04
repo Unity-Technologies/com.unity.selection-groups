@@ -69,7 +69,6 @@ namespace Unity.SelectionGroupsEditor
                         ShowNotification(new GUIContent(e.Message));
                     }
 
-                    hotRect = null;
                     evt.Use();
                     break;
             }

@@ -16,7 +16,6 @@ namespace Unity.SelectionGroupsEditor
         void OnEnable()
         {
             titleContent.text = "Selection Groups";
-            editorWindow = this;
             wantsMouseMove = true;
             SelectionGroupManager.Create -= RepaintOnCreate;
             SelectionGroupManager.Create += RepaintOnCreate;
@@ -34,7 +33,6 @@ namespace Unity.SelectionGroupsEditor
         {
             SelectionGroupManager.Create -= RepaintOnCreate;
             SelectionGroupManager.Delete -= RepaintOnDelete;
-            editorWindow = null;
         }
         
         void OnGUI()

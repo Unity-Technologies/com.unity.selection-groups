@@ -372,7 +372,9 @@ namespace Unity.GoQL
         {
             for (var i = 0; i < SceneManager.sceneCount; i++)
             {
-                selection.AddRange(SceneManager.GetSceneAt(i).GetRootGameObjects());
+                var scene = SceneManager.GetSceneAt(i);
+                if(scene.isLoaded)
+                    selection.AddRange(scene.GetRootGameObjects());
             }
         }
 

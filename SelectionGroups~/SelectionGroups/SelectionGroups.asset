@@ -16,24 +16,11 @@ MonoBehaviour:
   - _enabledTools: []
     PersistentReferenceCollection:
       _objectIds:
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1286887220-0
-      - GlobalObjectId_V1-1-3c9275f818f907f41a444615a0a3809d-11500000-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1557907511-0
-    name: New Group A
-    color: {r: 0.9735843, g: 0.32315826, b: 0.08524907, a: 1}
+      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1226140869-0
+      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-473658976-0
+    name: New Group
+    color: {r: 0.938202, g: 0.09184591, b: 0.014949414, a: 1}
     showMembers: 0
-    query: 
-    groupId: 0
-    scope: 0
-  - _enabledTools: []
-    PersistentReferenceCollection:
-      _objectIds:
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1496593963-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-858381675-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1257289863-0
-    name: New Group B
-    color: {r: 0.043137252, g: 0.08831907, b: 0.90588236, a: 1}
-    showMembers: 0
-    query: 
+    query: /Game*/[1:3]
     groupId: 0
     scope: 0
