@@ -78,10 +78,61 @@ namespace Unity.GoQL
                 case TokenType.Slash:
                     instructions.Add(GoQLCode.EnterChildren);
                     return ParseResult.OK;
+                case TokenType.Wildcard:
+                    return ParseWildCard(tokens, instructions);
             }
             return ParseResult.OK;
         }
 
+        private static ParseResult ParseWildCard(List<Token> tokens, List<object> instructions)
+        {
+            
+            if (tokens.Count == 0) //this is the last token, its a wildcard, so match any name
+            {
+                instructions.Add(string.Empty);
+                instructions.Add(GoQLCode.FilterName);
+                return ParseResult.OK;
+            }
+            
+            
+            var nextToken = tokens[0].type;
+            
+            if (nextToken == TokenType.String) //this is potentially a contains match, or a endswith match
+            {
+                //this is a contains match
+                if (tokens.Count > 2 && tokens[1].type == TokenType.Wildcard)
+                {
+                    instructions.Add(tokens[0].value);
+                    tokens.RemoveAt(0);
+                    instructions.Add(GoQLCode.FilterNameContains);
+                    tokens.RemoveAt(0);
+                    return ParseResult.OK;
+                }
+                //this is a startswith match
+                instructions.Add(tokens[0].value);
+                tokens.RemoveAt(0);
+                instructions.Add(GoQLCode.FilterNameEndsWith);
+                return ParseResult.OK;
+            }
+            if (nextToken == TokenType.Wildcard) //this is a collect all children instruction 
+            {
+                tokens.RemoveAt(0);
+                instructions.Add(GoQLCode.CollectAllAncestors);
+                return ParseResult.OK;
+            }
+            //if the last instruction was FilterName, this is a endswith match.
+            if (instructions.Count > 1 && instructions.Last() is GoQLCode code && code == GoQLCode.FilterName)
+            {
+                instructions[instructions.Count - 1] = GoQLCode.FilterNameStartsWith;
+                return ParseResult.OK;
+            }
+            //This is a single wildcard, so match all.
+            instructions.Add(string.Empty);
+            instructions.Add(GoQLCode.FilterName);
+            return ParseResult.OK;
+        }
+
+        
         static ParseResult _ParseDiscriminators(List<Token> tokens, List<object> instructions)
         {
             var elements = new List<object>();

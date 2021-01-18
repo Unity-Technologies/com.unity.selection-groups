@@ -4,7 +4,11 @@ namespace Unity.GoQL
         EnterChildren,
         FilterName,
         FilterIndex,
-        FilterByDiscriminators
+        FilterByDiscriminators,
+        FilterNameEndsWith,
+        FilterNameStartsWith,
+        FilterNameContains,
+        CollectAllAncestors
     }
 
 }

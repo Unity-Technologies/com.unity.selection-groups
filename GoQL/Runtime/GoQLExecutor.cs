@@ -149,7 +149,31 @@ namespace Unity.GoQL
                 case GoQLCode.FilterName:
                     FilterName();
                     break;
+                case GoQLCode.FilterNameEndsWith:
+                    FilterNameEndsWith();
+                    break;
+                case GoQLCode.FilterNameStartsWith:
+                    FilterNameStartsWith();
+                    break;
+                case GoQLCode.FilterNameContains:
+                    FilterNameContains();
+                    break;
+                case GoQLCode.CollectAllAncestors:
+                    CollectAllAncestors();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(i), i, null);
             }
+        }
+
+        private void CollectAllAncestors()
+        {
+            foreach (var i in selection)
+            {
+                foreach(var j in i.GetComponentsInChildren<Transform>()) 
+                    selection.Add(j.gameObject);
+            }
+            selection.Swap();
         }
 
         void CollectAllObjects()
@@ -179,44 +203,48 @@ namespace Unity.GoQL
         void FilterName()
         {
             var q = stack.Pop().ToString();
-            if (q.StartsWith("*") && q.EndsWith("*"))
+            foreach (var i in selection)
             {
-                q = q.Substring(1, q.Length - 2);
-                foreach (var i in selection)
-                {
-                    if (GetName(i).Contains(q))
-                        selection.Add(i);
-                }
+                if (GetName(i) == q)
+                    selection.Add(i);
             }
-            else if (q.StartsWith("*"))
-            {
-                q = q.Substring(1);
-                foreach (var i in selection)
-                {
-                    if (GetName(i).EndsWith(q))
-                        selection.Add(i);
-                }
-            }
-            else if (q.EndsWith("*"))
-            {
-                q = q.Substring(0, q.Length - 1);
-                foreach (var i in selection)
-                {
-                    if (GetName(i).StartsWith(q))
-                        selection.Add(i);
-                }
-            }
-            else
-            {
-                foreach (var i in selection)
-                {
-                    if (GetName(i) == q)
-                        selection.Add(i);
-                }
-            }
-
             selection.Swap();
         }
+
+        void FilterNameContains()
+        {
+            var q = stack.Pop().ToString();
+            foreach (var i in selection)
+            {
+                if (GetName(i).Contains(q))
+                    selection.Add(i);
+            }
+            selection.Swap();
+        }
+
+        void FilterNameEndsWith()
+        {
+            var q = stack.Pop().ToString();
+            foreach (var i in selection)
+            {
+                if (GetName(i).EndsWith(q))
+                    selection.Add(i);
+            }
+            selection.Swap();
+        }
+        
+        void FilterNameStartsWith()
+        {
+            var q = stack.Pop().ToString();
+            
+            foreach (var i in selection)
+            {
+                if (GetName(i).StartsWith(q))
+                    selection.Add(i);
+            }
+            selection.Swap();
+        }
+
 
         void FilterIndex()
         {
