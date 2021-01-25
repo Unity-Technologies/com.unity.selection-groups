@@ -28,6 +28,17 @@ namespace Unity.SelectionGroupsEditor
         void ReloadReferences() {
             PersistentReferenceCollection.LoadObjects(forceReload:true);
         }
-        
+
+        public IEnumerable<T> GetMemberComponents<T>() where T : Component
+        {
+            foreach (var i in this)
+            {
+                if (i is GameObject go)
+                {
+                    foreach (var j in go.GetComponents<T>())
+                        yield return j;
+                }
+            }
+        }
     }
 }
