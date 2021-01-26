@@ -101,6 +101,7 @@ namespace Unity.GoQL
                 instructions.Clear();
                 GoQL.Parser.Parse(code, instructions, out parseResult);
             }
+            Debug.Log(string.Join(" | ", instructions));
             stack.Clear();
             selection.Clear();
             Error = string.Empty;
