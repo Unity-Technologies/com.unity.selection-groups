@@ -8,7 +8,7 @@ namespace Unity.GoQL
         CloseSquare,
         OpenAngle,
         CloseAngle,
-        Wildcard,
+        Operator,
         String,
         Colon,
         Slash,

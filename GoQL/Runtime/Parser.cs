@@ -69,6 +69,7 @@ namespace Unity.GoQL
                 //a string in this context is a name discrimator.
                 case TokenType.String:
                     instructions.Add((string)(token.value));
+                    instructions.Add(GoQLCode.FilterName);
                     return ParseResult.OK;
                 case TokenType.OpenSquare:
                     return _ParseIndexes(tokens, instructions);
@@ -77,76 +78,21 @@ namespace Unity.GoQL
                 case TokenType.Slash:
                     instructions.Add(GoQLCode.EnterChildren);
                     return ParseResult.OK;
-                case TokenType.Wildcard:
-                    return ParseWildCard(tokens, instructions);
+                case TokenType.Operator:
+                    return ParseOperator(token, instructions);
             }
             return ParseResult.OK;
         }
 
-        private static ParseResult ParseWildCard(List<Token> tokens, List<object> instructions)
+        private static ParseResult ParseOperator(Token token, List<object> instructions)
         {
-            //if this is the last token
-            //else check next tokens for possible context
-            if (tokens.Count == 0) 
+            switch (token.value)
             {
-                //if there are any previous instructions, check the context,
-                //else this is a match anything wildcard.
-                if (instructions.Count > 0)
-                {
-                    //if the last instruction was a string, then this is a startswith wildcard,
-                    //else, it is a match anything wildcard.
-                    var prevInstruction = instructions.Last();
-                    if(prevInstruction is string)
-                        instructions.Add(GoQLCode.FilterNameStartsWith);
-                    else
-                    {
-                        instructions.Add(string.Empty);
-                        instructions.Add(GoQLCode.FilterNameContains);
-                    }
-                }
-                else
-                {
-                    instructions.Add(string.Empty);
-                    instructions.Add(GoQLCode.FilterNameContains);    
-                }
-                return ParseResult.OK;
+                case "**":
+                    instructions.Add(GoQLCode.CollectAllAncestors);
+                    break;
             }
-            
-            
-            var nextToken = tokens[0].type;
-            
-            //this wildcard is potentially a contains match, or a endswith match
-            if (nextToken == TokenType.String) 
-            {
-                //this is a contains match
-                if (tokens.Count > 2 && tokens[1].type == TokenType.Wildcard)
-                {
-                    instructions.Add(tokens[0].value);
-                    tokens.RemoveAt(0);
-                    instructions.Add(GoQLCode.FilterNameContains);
-                    tokens.RemoveAt(0);
-                }
-                else
-                {
-                    //this is a endswith match
-                    instructions.Add(tokens[0].value);
-                    tokens.RemoveAt(0);
-                    instructions.Add(GoQLCode.FilterNameEndsWith);
-                }
-                return ParseResult.OK;
-            } else if (nextToken == TokenType.Wildcard) //this is a collect all children instruction 
-            {
-                tokens.RemoveAt(0);
-                instructions.Add(GoQLCode.CollectAllAncestors);
-                return ParseResult.OK;
-            }
-            else
-            {
-                //This is a single wildcard, so match all.
-                instructions.Add(string.Empty);
-                instructions.Add(GoQLCode.FilterName);
-                return ParseResult.OK;
-            }
+            return ParseResult.OK;
         }
 
         

@@ -101,7 +101,7 @@ namespace Unity.GoQL
                 instructions.Clear();
                 GoQL.Parser.Parse(code, instructions, out parseResult);
             }
-            Debug.Log(string.Join(" | ", instructions));
+            
             stack.Clear();
             selection.Clear();
             Error = string.Empty;
@@ -150,15 +150,6 @@ namespace Unity.GoQL
                 case GoQLCode.FilterName:
                     FilterName();
                     break;
-                case GoQLCode.FilterNameEndsWith:
-                    FilterNameEndsWith();
-                    break;
-                case GoQLCode.FilterNameStartsWith:
-                    FilterNameStartsWith();
-                    break;
-                case GoQLCode.FilterNameContains:
-                    FilterNameContains();
-                    break;
                 case GoQLCode.CollectAllAncestors:
                     CollectAllAncestors();
                     break;
@@ -204,48 +195,43 @@ namespace Unity.GoQL
         void FilterName()
         {
             var q = stack.Pop().ToString();
-            foreach (var i in selection)
+            var isWildCardOnly = q == "*";
+            if (isWildCardOnly)
             {
-                if (GetName(i) == q)
+                //TODO: can this be reduced to a nop?
+                foreach (var i in selection)
                     selection.Add(i);
+                selection.Swap();
             }
-            selection.Swap();
+            else
+            {
+                var isWildCardFirst = q.First() == '*';
+                var isWildCardLast = q.Last() == '*';
+                if (isWildCardFirst)
+                    q = q.Substring(1);
+                if (isWildCardLast)
+                    q = q.Substring(0, q.Length - 1);
+
+                foreach (var i in selection)
+                {
+                    if (IsNameMatch(GetName(i), q, isWildCardFirst, isWildCardLast))
+                        selection.Add(i);
+                }
+
+                selection.Swap();
+            }
         }
 
-        void FilterNameContains()
+        bool IsNameMatch(string name, string q, bool isWildCardFirst, bool isWildCardLast)
         {
-            var q = stack.Pop().ToString();
-            foreach (var i in selection)
-            {
-                if (GetName(i).Contains(q))
-                    selection.Add(i);
-            }
-            selection.Swap();
+            if (isWildCardFirst && isWildCardLast)
+                return name.Contains(q);
+            if (isWildCardFirst)
+                return name.EndsWith(q);
+            if (isWildCardLast)
+                return name.StartsWith(q);
+            return name == q;
         }
-
-        void FilterNameEndsWith()
-        {
-            var q = stack.Pop().ToString();
-            foreach (var i in selection)
-            {
-                if (GetName(i).EndsWith(q))
-                    selection.Add(i);
-            }
-            selection.Swap();
-        }
-        
-        void FilterNameStartsWith()
-        {
-            var q = stack.Pop().ToString();
-            
-            foreach (var i in selection)
-            {
-                if (GetName(i).StartsWith(q))
-                    selection.Add(i);
-            }
-            selection.Swap();
-        }
-
 
         void FilterIndex()
         {

@@ -12,7 +12,12 @@ namespace Unity.GoQL
         int index = 0;
         string valueAccumulator = "";
         List<Token> _tokens = new List<Token>();
-        HashSet<char> specialChars = new HashSet<char>("*<>,:/[]".ToCharArray());
+        HashSet<char> specialChars = new HashSet<char>("<>,:/[]".ToCharArray());
+
+        HashSet<string> operators = new HashSet<string>(new[]
+        {
+            "**"
+        });
 
         public List<Token> Tokenize(string code)
         {
@@ -37,9 +42,7 @@ namespace Unity.GoQL
             if (DataAvailable)
             {
                 var c = PeekChar();
-                //if (c == '*' && DataAvailable && PeekChar(1) == '*')
-                //     ChangeState(CollectWildCard);
-                if (char.IsLetter(c) || _TokenizeFunction == CollectString && char.IsDigit(c))
+                if (char.IsLetter(c) || c == '*' || _TokenizeFunction == CollectString && char.IsDigit(c))
                     ChangeState(CollectString);
                 else if (char.IsNumber(c) || c == '-')
                     ChangeState(CollectNumber);
@@ -138,12 +141,6 @@ namespace Unity.GoQL
                     AddToken(TokenType.Comma);
                     WhatIsMyNextState();
                     break;
-                case '*':
-                    valueAccumulator += c;
-                    ConsumeChar();
-                    AddToken(TokenType.Wildcard);
-                    WhatIsMyNextState();
-                    break;
                 case '/':
                     valueAccumulator += c;
                     ConsumeChar();
@@ -161,6 +158,8 @@ namespace Unity.GoQL
 
         void AddToken(TokenType type)
         {
+            if (type == TokenType.String && operators.Contains(valueAccumulator))
+                type = TokenType.Operator;
             Log("Adding token: " + type + " " + valueAccumulator);
             _tokens.Add(new Token(type, valueAccumulator));
             valueAccumulator = "";
