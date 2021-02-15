@@ -37,11 +37,7 @@ namespace Unity.SelectionGroupsEditor
         
         void OnGUI()
         {
-            if (EditorApplication.isPlayingOrWillChangePlaymode)
-            {
-                GUILayout.Label("Selection Groups are not available in Play Mode.");
-                return;
-            }
+            isReadOnly = EditorApplication.isPlayingOrWillChangePlaymode;
             
             SetupStyles();
             DrawGUI();
@@ -79,10 +75,13 @@ namespace Unity.SelectionGroupsEditor
                         current.Use();
                         break;
                     case "SoftDelete":
-                        activeSelectionGroup.Remove(Selection.objects);
-                        Selection.objects = null;
-                        UpdateActiveSelection();
-                        current.Use();
+                        if (!isReadOnly)
+                        {
+                            activeSelectionGroup.Remove(Selection.objects);
+                            Selection.objects = null;
+                            UpdateActiveSelection();
+                            current.Use();
+                        }
                         return;
                 }
         }

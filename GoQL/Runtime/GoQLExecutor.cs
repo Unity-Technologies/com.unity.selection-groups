@@ -18,6 +18,8 @@ namespace Unity.GoQL
         bool refresh = true;
         string code;
 
+        [ThreadStatic] private static List<Transform> gameObjects = new List<Transform>();
+
         /// <summary>
         /// The GoQL source code to be executed.
         /// </summary>
@@ -162,8 +164,10 @@ namespace Unity.GoQL
         {
             foreach (var i in selection)
             {
-                foreach(var j in i.GetComponentsInChildren<Transform>()) 
+                i.GetComponentsInChildren(true, gameObjects);
+                foreach(var j in gameObjects) 
                     selection.Add(j.gameObject);
+                gameObjects.Clear();
             }
             selection.Swap();
         }
@@ -176,22 +180,13 @@ namespace Unity.GoQL
                 var scene = SceneManager.GetSceneAt(i);
                 foreach (var j in scene.GetRootGameObjects())
                 {
-                    _CollectAllGameObjects(j);
+                    foreach(var k in j.GetComponentsInChildren<Transform>(true))
+                        selection.Add(k.gameObject);
                 }
             }
-
             selection.Swap();
         }
-
-        void _CollectAllGameObjects(GameObject gameObject)
-        {
-            selection.Add(gameObject);
-            foreach (Transform transform in gameObject.transform)
-            {
-                _CollectAllGameObjects(transform.gameObject);
-            }
-        }
-
+        
         void FilterName()
         {
             var q = stack.Pop().ToString();

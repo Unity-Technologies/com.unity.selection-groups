@@ -34,23 +34,23 @@ namespace Unity.SelectionGroupsEditor
                     //It would be better named DragStarted.
                     // Debug.Log($"Start Drag: {group.Name}");
                     DragAndDrop.PrepareStartDrag();
-                    if(hotMember != null)
-                        DragAndDrop.objectReferences = new []{ hotMember };
+                    if (hotMember != null)
+                        DragAndDrop.objectReferences = new[] {hotMember};
                     else
                         DragAndDrop.objectReferences = Selection.objects;
 
                     DragAndDrop.StartDrag("Selection Group");
                     evt.Use();
                     break;
-                 case EventType.DragExited: 
-                     //This event occurs when MouseUp occurs, or the cursor leaves the EditorWindow.
-                     ////The cursor may come back into the EditorWindow, however MouseDrag will not be triggered.
-                     break;
+                case EventType.DragExited:
+                    //This event occurs when MouseUp occurs, or the cursor leaves the EditorWindow.
+                    ////The cursor may come back into the EditorWindow, however MouseDrag will not be triggered.
+                    break;
                 case EventType.DragUpdated:
                     //This event can occur ay any time. VisualMode must be assigned a value other than Rejected, else
                     //the DragPerform event will not be triggered.
                     var canDrop = string.IsNullOrEmpty(group.Query);
-                    if (!canDrop)
+                    if (!canDrop || isReadOnly)
                         DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
                     else
                         DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
@@ -58,18 +58,21 @@ namespace Unity.SelectionGroupsEditor
                     break;
                 case EventType.DragPerform:
                     //This will only get called when a valid Drop occurs (determined by the above DragUpdated code)
-                    DragAndDrop.AcceptDrag();
-                    RegisterUndo(group, "Add Members");
-                    try
+                    if (!isReadOnly)
                     {
-                        group.Add(DragAndDrop.objectReferences);
-                    }
-                    catch (SelectionGroupException e)
-                    {
-                        ShowNotification(new GUIContent(e.Message));
+                        DragAndDrop.AcceptDrag();
+                        RegisterUndo(group, "Add Members");
+                        try
+                        {
+                            group.Add(DragAndDrop.objectReferences);
+                        }
+                        catch (SelectionGroupException e)
+                        {
+                            ShowNotification(new GUIContent(e.Message));
+                        }
+                        evt.Use();
                     }
 
-                    evt.Use();
                     break;
             }
             return false;

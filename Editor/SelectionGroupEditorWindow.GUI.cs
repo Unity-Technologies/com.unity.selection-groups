@@ -58,6 +58,13 @@ namespace Unity.SelectionGroupsEditor
                     ShowNotification(new GUIContent(ex.Message));
                 }
             }
+            //Handle clicks on blank areas of window.
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
+            {
+                Selection.objects = new Object[] { };
+                UpdateActiveSelection();
+                Event.current.Use();
+            }
             EditorGUILayout.EndScrollView();
 
         }
@@ -119,8 +126,9 @@ namespace Unity.SelectionGroupsEditor
             if (isLeftMouseDown)
             {
                 hotMember = g;
+                activeSelectionGroup = group;
+                e.Use();
             }
-
 
             if (isControl)
             {
@@ -130,6 +138,7 @@ namespace Unity.SelectionGroupsEditor
                     activeSelectionGroup = group;
                     updateSelectionObjects = true;
                     hotMember = null;
+                    e.Use();
                 }
                 if (isLeftMouseUp && isHotMember && !isInSelection)
                 {
@@ -137,6 +146,7 @@ namespace Unity.SelectionGroupsEditor
                     activeSelectionGroup = group;
                     updateSelectionObjects = true;
                     hotMember = null;
+                    e.Use();
                 }
             }
             else if (isShift)
@@ -159,6 +169,7 @@ namespace Unity.SelectionGroupsEditor
                         activeSelection.Add(objects[i]);
                     updateSelectionObjects = true;
                     hotMember = null;
+                    e.Use();
                 }
             }
             else
@@ -170,12 +181,14 @@ namespace Unity.SelectionGroupsEditor
                         activeSelection.Clear();
                         activeSelection.Add(g);
                         updateSelectionObjects = true;
+                        e.Use();
                     }
                     else if (!isInSelection)
                     {
                         activeSelection.Clear();
                         activeSelection.Add(g);
                         updateSelectionObjects = true;
+                        e.Use();
                     }
                     else
                     {
@@ -204,6 +217,7 @@ namespace Unity.SelectionGroupsEditor
             if (isRightButton && isMouseOver && isMouseDown && isInSelection)
             {
                 ShowGameObjectContextMenu(rect, group, g, allowRemove);
+                e.Use();
             }
             
             if (updateSelectionObjects)
@@ -213,19 +227,29 @@ namespace Unity.SelectionGroupsEditor
 
         bool DrawHeader(Rect rect, ISelectionGroup group, bool isActive)
         {
+            var isAvailableInEditMode = true;
             var content = EditorGUIUtility.IconContent(group.Scope==SelectionGroupScope.Editor?"d_Project":"SceneAsset Icon");
-            content.text = $"{group.Name}";
+            //Editor groups don't work in play mode, as GetGloBALoBJECTiD does not work in play mode.
+            if (group.Scope == SelectionGroupScope.Editor && EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                content.text = $"{group.Name} (Not available in play mode)";
+                isAvailableInEditMode = false;
+            }
+            else
+            {
+                content.text = $"{group.Name}";    
+            }
+            
             var backgroundColor = group == activeSelectionGroup ? Color.white * 0.6f : Color.white * 0.3f;
             EditorGUI.DrawRect(rect, backgroundColor);
-
             {
                 rect.width = 16;
                 group.ShowMembers = EditorGUI.Toggle(rect, group.ShowMembers, "foldout");
                 rect.x += 16;
                 rect.width = EditorGUIUtility.currentViewWidth - 128;
             }
-
-            HandleHeaderMouseEvents(rect, group.Name, group);
+            if(isAvailableInEditMode)
+                HandleHeaderMouseEvents(rect, group.Name, group);
             GUI.Label(rect, content, "label");
 
             rect.x += rect.width;
@@ -235,7 +259,7 @@ namespace Unity.SelectionGroupsEditor
 
             EditorGUI.DrawRect(rect, new Color(group.Color.r, group.Color.g, group.Color.b));
 
-            return group.ShowMembers;
+            return isAvailableInEditMode ? group.ShowMembers : false;
         }
 
         Rect DrawTools(Rect rect, ISelectionGroup group)
@@ -286,15 +310,32 @@ namespace Unity.SelectionGroupsEditor
         void ShowGroupContextMenu(Rect rect, string groupName, ISelectionGroup group)
         {
             var menu = new GenericMenu();
-            menu.AddItem(new GUIContent("Duplicate Group"), false, () =>
+            menu.AddItem(new GUIContent("Select All"), false, () =>
             {
-                // SelectionGroupManager.Duplicate(SelectionGroupScope.Editor, group.GroupId);
+                Selection.objects = activeSelectionGroup.ToArray();
+                UpdateActiveSelection();
             });
+            menu.AddSeparator(string.Empty);
             menu.AddItem(new GUIContent("Clear Group"), false, () =>
             {
                 group.Clear();
             });
             menu.AddItem(new GUIContent("Configure Group"), false, () => SelectionGroupConfigurationDialog.Open(group, this));
+            if (group.Scope == SelectionGroupScope.Editor)
+            {
+                menu.AddItem(new GUIContent("Move to Scene"), false, () =>
+                {
+                    SelectionGroupManager.ChangeGroupScope(group, SelectionGroupScope.Scene);
+                });
+            }
+            else
+            {
+                menu.AddItem(new GUIContent("Move to Editor"), false, () =>
+                {
+                    SelectionGroupManager.ChangeGroupScope(group, SelectionGroupScope.Editor);
+                });
+            }
+
             menu.AddItem(new GUIContent("Delete Group"), false, () =>
             {
                 SelectionGroupManager.Delete(group);
