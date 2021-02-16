@@ -21,6 +21,9 @@ namespace Unity.SelectionGroupsEditor
             SelectionGroupManager.Create += RepaintOnCreate;
             SelectionGroupManager.Delete -= RepaintOnDelete;
             SelectionGroupManager.Delete += RepaintOnDelete;
+            
+            editorHeaderContent = EditorGUIUtility.IconContent("d_Project");
+            sceneHeaderContent = EditorGUIUtility.IconContent("SceneAsset Icon");
         }
 
         void RepaintOnDelete(ISelectionGroup @group) => 
@@ -60,7 +63,7 @@ namespace Unity.SelectionGroupsEditor
                 switch (current.commandName)
                 {
                     case "SelectAll":
-                        Selection.objects = activeSelectionGroup.ToArray();
+                        Selection.objects = activeSelectionGroup.Members.ToArray();
                         UpdateActiveSelection();
                         current.Use();
                         break;
@@ -70,7 +73,7 @@ namespace Unity.SelectionGroupsEditor
                         current.Use();
                         break;
                     case "InvertSelection":
-                        Selection.objects = new HashSet<Object>(activeSelectionGroup).Except(Selection.objects).ToArray();
+                        Selection.objects = new HashSet<Object>(activeSelectionGroup.Members).Except(Selection.objects).ToArray();
                         UpdateActiveSelection();
                         current.Use();
                         break;

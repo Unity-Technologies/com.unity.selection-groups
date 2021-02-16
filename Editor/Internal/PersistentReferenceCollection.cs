@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 using Unity.SelectionGroups;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -26,6 +27,7 @@ namespace Unity.SelectionGroupsEditor
 
         public int LoadedObjectCount => activeObjects.Count;
         public int TotalObjectCount => globalObjectIdSet.Count;
+        public IList<Object> Items => activeObjects.List;
 
         /// <summary>
         /// Load references to objects that currently exist in a scene.

@@ -14,7 +14,7 @@ namespace Unity.SelectionGroups
         [SelectionGroupTool("d_VisibilityOn", "Toggle Visibility", "Show and hide objects in the scene.")]
         static void ToggleVisibility(ISelectionGroup group)
         {
-            foreach (var g in group)
+            foreach (var g in group.Members)
             {
                 var go = g as GameObject;
                 if (go == null) continue;
@@ -26,19 +26,19 @@ namespace Unity.SelectionGroups
         static void DisableEditing(ISelectionGroup group)
         {
             var isLocked = false;
-            foreach (var g in group)
+            foreach (var g in group.Members)
             {
                 if (g.hideFlags.HasFlag(HideFlags.NotEditable))
                     isLocked = true;
             }
             if (isLocked)
             {
-                foreach (var g in group)
+                foreach (var g in group.Members)
                     g.hideFlags &= ~HideFlags.NotEditable;
             }
             else
             {
-                foreach (var g in group)
+                foreach (var g in group.Members)
                     g.hideFlags |= HideFlags.NotEditable;
             }
         }

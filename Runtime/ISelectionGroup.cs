@@ -9,7 +9,7 @@ namespace Unity.SelectionGroups.Runtime
         
     }
 
-    public interface ISelectionGroup: IEnumerable<Object>
+    public interface ISelectionGroup
     {
         string Name { get; set;  }
         string Query { get; set;  }
@@ -18,6 +18,7 @@ namespace Unity.SelectionGroups.Runtime
         SelectionGroupScope Scope { get; set; }
         int Count { get; }
         bool ShowMembers { get; set; }
+        IList<Object> Members { get; }
         void Add(IList<Object> objectReferences);
         void Remove(IList<Object> objectReferences);
         void Clear();

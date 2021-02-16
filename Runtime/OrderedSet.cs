@@ -15,6 +15,8 @@ namespace Unity.SelectionGroups
         List<T> items = new List<T>();
         HashSet<T> uniqueIndex = new HashSet<T>();
 
+        public IList<T> List => items;
+
         public T this[int index] { get => items[index]; set => items[index] = value; }
 
         public int Count => items.Count;

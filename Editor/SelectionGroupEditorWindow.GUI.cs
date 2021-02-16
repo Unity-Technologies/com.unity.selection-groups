@@ -2,6 +2,7 @@
 using Unity.SelectionGroups;
 using Unity.SelectionGroups.Runtime;
 using UnityEditor;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 
 
@@ -10,6 +11,8 @@ namespace Unity.SelectionGroupsEditor
 
     public partial class SelectionGroupEditorWindow : EditorWindow
     {
+        private const string AddGroup = "Add Group";
+        private GUIContent editorHeaderContent, sceneHeaderContent;
 
         [MenuItem("Window/General/Selection Groups")]
         static void OpenWindow()
@@ -18,36 +21,51 @@ namespace Unity.SelectionGroupsEditor
             window.Show();
         }
 
+        float CalculateHeight()
+        {
+            var height = EditorGUIUtility.singleLineHeight;
+            foreach (var i in SelectionGroupManager.Groups)
+            {
+                height += EditorGUIUtility.singleLineHeight + 3;
+                if (i.ShowMembers)
+                {
+                    height += i.Count * EditorGUIUtility.singleLineHeight;
+                }
+            }
+
+            return height;
+        }
+
         void DrawGUI()
         {
-            scroll = EditorGUILayout.BeginScrollView(scroll);
-            GUILayout.BeginHorizontal();
+            var viewRect = Rect.zero;
+            viewRect.width = position.width-16;
+            viewRect.height = CalculateHeight();
+            var windowRect = new Rect(0, 0, position.width, position.height);
+            scroll = GUI.BeginScrollView(windowRect, scroll, viewRect);
             
-            if (GUILayout.Button("Add Group")) CreateNewGroup();
+            var cursor = new Rect(0, 0, position.width-16, EditorGUIUtility.singleLineHeight);
+            if (GUI.Button(cursor, AddGroup)) CreateNewGroup();
+            cursor.y += cursor.height;
             
-            GUILayout.EndHorizontal();
-
             foreach (var group in SelectionGroupManager.Groups)
             {
                 if (group == null) continue;
                 var isActive = activeNames.Contains(group.Name);
-                GUILayout.Space(3);
+                cursor.y += 3;
                 
-                var rect = GUILayoutUtility.GetRect(1, EditorGUIUtility.singleLineHeight);
                 //early out if this group yMin is below window rect (not visible).
-                if ((rect.yMin - scroll.y) > position.height) break;
-                var showChildren = DrawHeader(rect, group, isActive: isActive);
-                var dropRect = rect;
+                if ((cursor.yMin - scroll.y) > position.height) break;
+                cursor = DrawHeader(cursor, group, out bool showChildren, isActive: isActive);
+                var dropRect = cursor;
 
                 if (showChildren)
                 {
-                    rect = GUILayoutUtility.GetRect(1, (EditorGUIUtility.singleLineHeight) * group.Count);
-
-                    dropRect.yMax = rect.yMax;
+                    // dropRect.yMax = rect.yMax;
                     //early out if this group yMax is above window rect (not visible).
-                    if (rect.yMax - scroll.y < 0)
-                        continue;
-                    DrawAllGroupMembers(rect, group, allowRemove: true);
+                    // if (rect.yMax - scroll.y < 0)
+                        // continue;
+                    cursor = DrawAllGroupMembers(cursor, group, allowRemove: true);
                 }
                 try
                 {
@@ -65,7 +83,7 @@ namespace Unity.SelectionGroupsEditor
                 UpdateActiveSelection();
                 Event.current.Use();
             }
-            EditorGUILayout.EndScrollView();
+            GUI.EndScrollView();
 
         }
 
@@ -84,18 +102,20 @@ namespace Unity.SelectionGroupsEditor
             }
         }
 
-        void DrawAllGroupMembers(Rect rect, ISelectionGroup group, bool allowRemove)
+        Rect DrawAllGroupMembers(Rect rect, ISelectionGroup group, bool allowRemove)
         {
             rect.height = EditorGUIUtility.singleLineHeight;
-            foreach (var i in group.ToArray())
+            foreach (var i in group.Members)
             {
                 //if rect is below window, early out.
-                if (rect.yMin - scroll.y > position.height) return;
+                if (rect.yMin - scroll.y > position.height) return rect;
                 //if rect is in window, draw.
                 if (rect.yMax - scroll.y > 0)
                     DrawGroupMember(rect, group, i, allowRemove);
                 rect.y += rect.height;
             }
+
+            return rect;
         }
 
         void DrawGroupMember(Rect rect, ISelectionGroup group, UnityEngine.Object g, bool allowRemove)
@@ -155,8 +175,8 @@ namespace Unity.SelectionGroupsEditor
                 {
                     activeSelection.Add(g);
                     int firstIndex = -1, lastIndex = -1;
-                    var objects = group.ToArray();
-                    for (var i = 0; i < objects.Length; i++)
+                    var objects = group.Members;
+                    for (var i = 0; i < objects.Count; i++)
                     {
                         if (activeSelection.Contains(objects[i]))
                         {
@@ -225,10 +245,16 @@ namespace Unity.SelectionGroupsEditor
 
         }
 
-        bool DrawHeader(Rect rect, ISelectionGroup group, bool isActive)
+        Rect DrawHeader(Rect cursor, ISelectionGroup group, out bool showChildren, bool isActive)
         {
+            var rect = cursor;
             var isAvailableInEditMode = true;
-            var content = EditorGUIUtility.IconContent(group.Scope==SelectionGroupScope.Editor?"d_Project":"SceneAsset Icon");
+            GUIContent content;
+            if (group.Scope == SelectionGroupScope.Editor)
+                content = editorHeaderContent;
+            else
+                content = sceneHeaderContent;
+                    
             //Editor groups don't work in play mode, as GetGloBALoBJECTiD does not work in play mode.
             if (group.Scope == SelectionGroupScope.Editor && EditorApplication.isPlayingOrWillChangePlaymode)
             {
@@ -259,13 +285,17 @@ namespace Unity.SelectionGroupsEditor
 
             EditorGUI.DrawRect(rect, new Color(group.Color.r, group.Color.g, group.Color.b));
 
-            return isAvailableInEditMode ? group.ShowMembers : false;
+            showChildren =  isAvailableInEditMode ? group.ShowMembers : false;
+            rect.x = cursor.x;
+            rect.y += rect.height;
+            return rect;
         }
 
         Rect DrawTools(Rect rect, ISelectionGroup group)
         {
             rect.width = 18;
             rect.height = 18;
+            if (group.EnabledTools.Count == 0) return rect;
             
             foreach (var i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>())
             {
@@ -312,7 +342,7 @@ namespace Unity.SelectionGroupsEditor
             var menu = new GenericMenu();
             menu.AddItem(new GUIContent("Select All"), false, () =>
             {
-                Selection.objects = activeSelectionGroup.ToArray();
+                Selection.objects = activeSelectionGroup.Members.ToArray();
                 UpdateActiveSelection();
             });
             menu.AddSeparator(string.Empty);
@@ -368,7 +398,7 @@ namespace Unity.SelectionGroupsEditor
                     case EventType.MouseDrag:
                         DragAndDrop.PrepareStartDrag();
                         DragAndDrop.StartDrag(groupName);
-                        DragAndDrop.objectReferences = group.ToArray();
+                        DragAndDrop.objectReferences = group.Members.ToArray();
                         e.Use();
                         break;
                 }

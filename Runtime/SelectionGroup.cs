@@ -11,7 +11,7 @@ namespace Unity.SelectionGroups.Runtime
     /// This class is used to provide selection group information during play-mode. It reflects the information in the Editor-only class.
     /// </summary>
     [ExecuteAlways]
-    public class SelectionGroup : MonoBehaviour, ISelectionGroup, ISerializationCallbackReceiver
+    public class SelectionGroup : MonoBehaviour, ISelectionGroup
     {
         /// <summary>
         /// A color assigned to this group.
@@ -24,29 +24,16 @@ namespace Unity.SelectionGroups.Runtime
 
         [SerializeField] SelectionGroupScope scope = SelectionGroupScope.Scene;
 
-        /// <summary>
-        /// The members of this group.
-        /// </summary>
-        OrderedSet<Object> members = new OrderedSet<Object>();
         
-        [SerializeField] Object[] _members;
+        [SerializeField] List<Object> members = new List<Object>();
 
         GoQL.ParseResult parseResult;
         List<object> code;
         GoQL.GoQLExecutor executor;
         HashSet<string> enabledTools = new HashSet<string>();
         
-        /// <summary>
-        /// An enumerator that matches only the GameObject members of this group.
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<GameObject> EnumerateGameObjects()
-        {
-            foreach (var i in members)
-                if (i is GameObject)
-                    yield return i as GameObject;
-        }
-
+        string _name;
+        
         void OnEnable()
         {
             executor = new GoQL.GoQLExecutor();
@@ -59,15 +46,19 @@ namespace Unity.SelectionGroups.Runtime
             SelectionGroupManager.Unregister(this);
         }
 
-        void OnDestroy()
-        {
-            // SelectionGroupManager.Delete(this);
-        }
-
         public string Name
         {
-            get => this.name;
-            set => this.name = value;
+            get
+            {
+                if (string.IsNullOrEmpty(_name))
+                    _name = this.name;
+                return _name;
+            }
+            set
+            {
+                this.name = value;
+                _name = value;
+            }
         }
 
         public string Query
@@ -96,7 +87,9 @@ namespace Unity.SelectionGroups.Runtime
 
         public int Count => members.Count;
         public bool ShowMembers { get; set; }
-        
+
+        public IList<Object> Members => members;
+
         public void Add(IList<Object> objectReferences)
         {
             var myScene = gameObject.scene;
@@ -104,13 +97,14 @@ namespace Unity.SelectionGroups.Runtime
             {
                 if (i is GameObject go && go.scene != myScene)
                     continue;
-                members.Add(i);
+                if(!members.Contains(i))
+                    members.Add(i);
             }
         }
 
         public void Remove(IList<Object> objectReferences)
         {
-            members.Remove(objectReferences);
+            members.RemoveAll(a=> objectReferences.Contains(a));
         }
 
         public void Clear()
@@ -138,20 +132,6 @@ namespace Unity.SelectionGroups.Runtime
             }
         }
 
-        public IEnumerator<Object> GetEnumerator() => members.GetEnumerator();
         
-        IEnumerator IEnumerable.GetEnumerator() => members.GetEnumerator();
-
-        public void OnBeforeSerialize()
-        {
-            _members = members.ToArray();
-        }
-
-        public void OnAfterDeserialize()
-        {
-            members.Clear();
-            if (_members != null)
-                members.AddRange(_members);
-        }
     }
 }

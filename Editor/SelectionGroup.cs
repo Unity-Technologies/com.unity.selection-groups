@@ -29,9 +29,14 @@ namespace Unity.SelectionGroupsEditor
             PersistentReferenceCollection.LoadObjects(forceReload:true);
         }
 
+        public IList<Object> Members
+        {
+            get => PersistentReferenceCollection.Items;
+        }
+
         public IEnumerable<T> GetMemberComponents<T>() where T : Component
         {
-            foreach (var i in this)
+            foreach (var i in this.Members)
             {
                 if (i is GameObject go)
                 {

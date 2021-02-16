@@ -13,15 +13,14 @@ namespace Unity.SelectionGroups.Runtime
         public static CreateEvent Create;
         public static DeleteEvent Delete;
 
-        private static HashSet<ISelectionGroup> groups;
+        private static OrderedSet<ISelectionGroup> groups;
         
         static SelectionGroupManager()
         {
-            groups = new HashSet<ISelectionGroup>();
+            groups = new OrderedSet<ISelectionGroup>();
             Create += OnCreate;
             Delete += OnDelete;
         }
-
         public static void ExecuteSelectionGroupQueries()
         {
             foreach (var i in groups)
@@ -30,7 +29,7 @@ namespace Unity.SelectionGroups.Runtime
             }
         }
 
-        public static IEnumerable<ISelectionGroup> Groups => groups.OrderBy(i => i.Name);
+        public static IList<ISelectionGroup> Groups => groups.List;
         public static IEnumerable<string> GroupNames => groups.OrderBy(i => i.Name).Select(g => g.Name);
 
         public static void Register(ISelectionGroup @group)
@@ -61,7 +60,7 @@ namespace Unity.SelectionGroups.Runtime
 
         public static void ChangeGroupScope(ISelectionGroup @group, SelectionGroupScope scope)
         {
-            Create(scope, @group.Name, @group.Query, @group.Color, @group.ToArray());
+            Create(scope, @group.Name, @group.Query, @group.Color, @group.Members);
             Delete(@group);
         }
 

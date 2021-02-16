@@ -35,7 +35,7 @@ namespace Unity.SelectionGroupsEditor
                     // Debug.Log($"Start Drag: {group.Name}");
                     DragAndDrop.PrepareStartDrag();
                     if (hotMember != null)
-                        DragAndDrop.objectReferences = new[] {hotMember};
+                        DragAndDrop.objectReferences = new[] { hotMember };
                     else
                         DragAndDrop.objectReferences = Selection.objects;
 
