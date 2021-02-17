@@ -27,7 +27,6 @@ namespace Unity.SelectionGroupsEditor
         float width;
         GUIStyle miniButtonStyle;
         HashSet<Object> activeSelection = new HashSet<Object>();
-        HashSet<string> activeNames = new HashSet<string>();
         Object hotMember;
 
         private bool isReadOnly = false;
