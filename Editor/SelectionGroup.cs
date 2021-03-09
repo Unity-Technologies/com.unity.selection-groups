@@ -12,7 +12,7 @@ namespace Unity.SelectionGroupsEditor
     /// This class is the Editor-only container for selection group information and members.
     /// </summary>
     [System.Serializable]
-    public partial class SelectionGroup : ISelectionGroup
+    internal partial class SelectionGroup : ISelectionGroup
     {
         [SerializeField] string name;
         [SerializeField] Color color;
