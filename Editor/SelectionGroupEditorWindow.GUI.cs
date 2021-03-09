@@ -12,7 +12,7 @@ using Object = UnityEngine.Object;
 namespace Unity.SelectionGroupsEditor
 {
 
-    public partial class SelectionGroupEditorWindow : EditorWindow
+    internal partial class SelectionGroupEditorWindow : EditorWindow
     {
         private const string AddGroup = "Add Group";
         private GUIStyle Foldout;
