@@ -11,7 +11,7 @@ namespace Unity.SelectionGroups.Runtime
     /// This class is used to provide selection group information during play-mode. It reflects the information in the Editor-only class.
     /// </summary>
     [ExecuteAlways]
-    public class SelectionGroup : MonoBehaviour, ISelectionGroup
+    internal class SelectionGroup : MonoBehaviour, ISelectionGroup
     {
         /// <summary>
         /// A color assigned to this group.
