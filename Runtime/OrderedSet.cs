@@ -10,7 +10,7 @@ namespace Unity.SelectionGroups
     /// A List which only contains unique references.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class OrderedSet<T> : IList<T>
+    internal class OrderedSet<T> : IList<T>
     {
         List<T> items = new List<T>();
         HashSet<T> uniqueIndex = new HashSet<T>();

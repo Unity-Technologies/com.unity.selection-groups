@@ -4,12 +4,12 @@ using UnityEngine;
 namespace Unity.SelectionGroups.Runtime
 {
     
-    public interface ISelectionGroupContainer : IEnumerable<ISelectionGroup>
+    internal interface ISelectionGroupContainer : IEnumerable<ISelectionGroup>
     {
         
     }
 
-    public interface ISelectionGroup
+    internal interface ISelectionGroup
     {
         string Name { get; set;  }
         string Query { get; set;  }

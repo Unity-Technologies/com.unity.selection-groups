@@ -4,7 +4,7 @@ using UnityEditor;
 namespace Unity.SelectionGroupsEditor
 {
     [CustomEditor(typeof(Unity.SelectionGroups.Runtime.SelectionGroup))]
-    public class SelectionGroupInspector : Editor
+    internal class SelectionGroupInspector : Editor
     {
         public override void OnInspectorGUI()
         {
