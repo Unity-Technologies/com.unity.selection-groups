@@ -6,7 +6,8 @@ Selection Groups User Documentation
 Selection groups allow a number of Unity Objects to be categorized under a common name.
 The selection group data is initially stored in a scene which allows the data 
 to be used by scripts.
-As an alternative, the group data can optionally be stored outside of the scene.
+
+As an alternative, the group data can instead be stored outside of the scene.
 This allows a decoupling between the groups and the scenes, with a tradeoff 
 that the group data cannot be used by scripts.
 
