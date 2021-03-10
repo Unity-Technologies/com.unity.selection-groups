@@ -90,8 +90,9 @@ namespace Unity.SelectionGroups.Runtime
 
         public IList<Object> Members => members;
 
-        public void Add(IList<Object> objectReferences)
+        public void Add(IList<Object> objectReferences) 
         {
+            RemoveNullMembers();
             var myScene = gameObject.scene;
             foreach (var i in objectReferences)
             {
@@ -104,6 +105,7 @@ namespace Unity.SelectionGroups.Runtime
 
         public void Remove(IList<Object> objectReferences)
         {
+            RemoveNullMembers();
             members.RemoveAll(a=> objectReferences.Contains(a));
         }
 
@@ -129,6 +131,15 @@ namespace Unity.SelectionGroups.Runtime
                         yield return component;
                     }
                 }
+            }
+        }
+
+        private void RemoveNullMembers() {
+            for (int i = members.Count-1; i >= 0 ; --i) {
+                if (null != members[i])
+                    continue;
+                
+                members.RemoveAt(i);
             }
         }
 
