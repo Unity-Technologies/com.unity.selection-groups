@@ -291,12 +291,12 @@ namespace Unity.SelectionGroupsEditor
             Color backgroundColor = group == activeSelectionGroup ? Color.white * 0.6f : Color.white * 0.3f;
             if (isPaint) 
             {
-                rect.width = EditorGUIUtility.currentViewWidth - RightMargin - COLOR_WIDTH;                
+                rect.width = currentViewWidth - RightMargin - COLOR_WIDTH;                
                 EditorGUI.DrawRect(rect, backgroundColor);
             } 
             
             //foldout and label
-            float labelWidth = EditorGUIUtility.currentViewWidth
+            float labelWidth = currentViewWidth
                              - (COLOR_WIDTH + FOLDOUT_WIDTH + RightMargin + SEPARATOR_WIDTH);
             {
                 rect.width        =  FOLDOUT_WIDTH;
