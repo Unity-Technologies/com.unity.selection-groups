@@ -28,16 +28,6 @@ namespace Unity.SelectionGroupsEditor
             var window = EditorWindow.GetWindow<SelectionGroupEditorWindow>();
             window.Show();
         }
-        
-        [InitializeOnLoadMethod]
-        static void OnProjectLoadedInEditor()
-        {
-            Debug.Log("Project loaded in Unity Editor");
-        }
-        void Awake() 
-        {
-            
-        }
 
         float CalculateHeight()
         {
