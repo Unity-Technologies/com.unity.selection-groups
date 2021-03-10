@@ -32,6 +32,11 @@ that the group data cannot be used by scripts.
    ![](images/SelectionGroupTools.png)
 
 
-# How does it work?
+# How does storing the data outside a scene work ?
 
-Unity has an API (GlobalObjectId) for creating a global identifier for objects in scenes. The Selection Group stores references to objects using this API, which is saved in an asset external to the project. This allows the same group to exist across the project, containing game assets and Game Objects from multiple scenes. When a scene is loaded, the Selection Group window will only list Game Objects that currently exist in that scene.
+Unity has an API (GlobalObjectId) for creating a global identifier for objects in scenes. 
+The Selection Group stores references to objects using this API, 
+which is saved in an asset external to the project. 
+This allows the same group to exist across the project, 
+containing game assets and **GameObjects** from multiple scenes. 
+When a scene is loaded, the Selection Group window will only list **GameObjects** that currently exist in that scene.
