@@ -18,7 +18,7 @@ MonoBehaviour:
     PersistentReferenceCollection:
       _objectIds:
       - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-858381675-0
-    name: Light
+    name: LightGroup
     color: {r: 0.089983225, g: 0.12710112, b: 0.93305725, a: 1}
     showMembers: 0
     query: 
@@ -26,27 +26,10 @@ MonoBehaviour:
     scope: 0
   - _enabledTools:
     - d_VisibilityOn.Toggle Visibility.Show and hide objects in the scene.
-    - LockIcon-On.Toggle Lock.Enable and disable editing of objects.
     PersistentReferenceCollection:
       _objectIds:
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1557907511-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1496593963-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1171911073-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-150264410-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-733226987-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1345298088-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1169896359-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1956096102-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1641025082-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1348106941-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1991762381-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-779450832-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1190170688-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-391789902-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-28299680-0
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1887853358-0
       - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1437799906-0
-    name: GameObjectsByQuery
+    name: GameObjectsByQueryGroup
     color: {r: 0.99444205, g: 0.7277927, b: 0.03784859, a: 1}
     showMembers: 0
     query: /Game*
