@@ -92,21 +92,25 @@ namespace Unity.SelectionGroups.Runtime
 
         public void Add(IList<Object> objectReferences) 
         {
-            RemoveNullMembers();
             var myScene = gameObject.scene;
-            foreach (var i in objectReferences)
+            foreach (var i in objectReferences) 
             {
+                if (null == i)
+                    continue;
+                
                 if (i is GameObject go && go.scene != myScene)
                     continue;
                 if(!members.Contains(i))
                     members.Add(i);
             }
+            RemoveNullMembers();
+            
         }
 
         public void Remove(IList<Object> objectReferences)
         {
-            RemoveNullMembers();
             members.RemoveAll(a=> objectReferences.Contains(a));
+            RemoveNullMembers();
         }
 
         public void Clear()
