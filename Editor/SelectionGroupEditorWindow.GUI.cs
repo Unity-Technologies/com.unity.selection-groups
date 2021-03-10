@@ -280,15 +280,22 @@ namespace Unity.SelectionGroupsEditor
             {
                 content.text = $"{group.Name}";    
             }
+
+            //
+            const float FOLDOUT_WIDTH    = 16;
+            const float COLOR_WIDTH      = 128;
+            const float SEPARATOR_WIDTH  = 8;
+            float       currentViewWidth = EditorGUIUtility.currentViewWidth;
             
+            //background
             Color backgroundColor = group == activeSelectionGroup ? Color.white * 0.6f : Color.white * 0.3f;
-            if(isPaint) 
+            if (isPaint) 
+            {
+                rect.width = EditorGUIUtility.currentViewWidth - RightMargin - COLOR_WIDTH;                
                 EditorGUI.DrawRect(rect, backgroundColor);
+            } 
             
             //foldout and label
-            const int FOLDOUT_WIDTH   = 16;
-            const int COLOR_WIDTH     = 128;
-            const int SEPARATOR_WIDTH = 8;
             float labelWidth = EditorGUIUtility.currentViewWidth
                              - (COLOR_WIDTH + FOLDOUT_WIDTH + RightMargin + SEPARATOR_WIDTH);
             {
