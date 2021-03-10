@@ -22,6 +22,7 @@ that the group data cannot be used by scripts.
    ![](images/SelectionGroupMembers.png)
 1. Double click the group name, and a configuration dialog box will appear. ![](images/SelectionGroupConfiguration.png)
    1. You may change the group name and color, GoQL query or enable and disable Group Tools.
+   1. The place for storing the data may be configured as well.
    2. The GoQL: Game Object Query Language field allows you to specify a query 
       which will automatically select **GameObjects** from the hierarchy that match the query. 
       For example, `/Enemy*` will select all GameObjects that are in the root of the hierarchy 
