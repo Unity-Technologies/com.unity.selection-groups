@@ -51,7 +51,7 @@ namespace Unity.SelectionGroupsEditor
             var windowRect = new Rect(0, 0, position.width, position.height);
             scroll = GUI.BeginScrollView(windowRect, scroll, viewRect);
             
-            var cursor = new Rect(0, 0, position.width-16, EditorGUIUtility.singleLineHeight);
+            Rect cursor = new Rect(0, 0, position.width-16, EditorGUIUtility.singleLineHeight);
             if (GUI.Button(cursor, AddGroup)) CreateNewGroup();
             cursor.y += cursor.height;
 
@@ -254,11 +254,11 @@ namespace Unity.SelectionGroupsEditor
 
         }
         
-        Rect DrawHeader(Rect cursor, ISelectionGroup group, out bool showChildren)
-        {
-            var isPaint = Event.current.type == EventType.Repaint;
-            var rect = cursor;
-            var isAvailableInEditMode = true;
+        Rect DrawHeader(Rect cursor, ISelectionGroup group, out bool showChildren) 
+        {           
+            bool isPaint = Event.current.type == EventType.Repaint;            
+            Rect rect = new Rect(cursor) {x = 0, };            
+            bool isAvailableInEditMode = true;
             GUIContent content;
             if (group.Scope == SelectionGroupScope.Editor)
                 content = editorHeaderContent;
