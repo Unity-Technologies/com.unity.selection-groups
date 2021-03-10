@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using NUnit.Framework;
 using Unity.SelectionGroups;
 using Unity.SelectionGroups.Runtime;
 using UnityEditor;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -113,8 +111,11 @@ namespace Unity.SelectionGroupsEditor
         Rect DrawAllGroupMembers(Rect rect, ISelectionGroup group, bool allowRemove)
         {
             rect.height = EditorGUIUtility.singleLineHeight;
-            foreach (var i in group.Members)
+            foreach (Object i in group.Members) 
             {
+                if (null == i)
+                    continue;
+                
                 //if rect is below window, early out.
                 if (rect.yMin - scroll.y > position.height) return rect;
                 //if rect is in window, draw.
@@ -125,9 +126,9 @@ namespace Unity.SelectionGroupsEditor
             return rect;
         }
 
-        void DrawGroupMember(Rect rect, ISelectionGroup group, UnityEngine.Object g, bool allowRemove)
+        void DrawGroupMember(Rect rect, ISelectionGroup group, UnityEngine.Object g, bool allowRemove) 
         {
-            if (g == null) return;
+            Assert.IsNotNull(g);
             var e = Event.current;
             var content = EditorGUIUtility.ObjectContent(g, g.GetType());
             var isInSelection = activeSelection.Contains(g);
