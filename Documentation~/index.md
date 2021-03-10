@@ -20,7 +20,8 @@ that the group data cannot be used by scripts.
 1. Click “Add Group” in the Selection Groups window, and a new item will appear inside the window.   
 1. Drag some **GameObjects** from the hierarchy, or assets from the Project window. 
    ![](images/SelectionGroupMembers.png)
-1. Double click the group name, and a configuration dialog box will appear. ![](images/SelectionGroupConfiguration.png)
+1. Double click the group name, and a configuration dialog box will appear.   
+   ![](images/SelectionGroupConfiguration.png)
    1. You may change the group name and color, GoQL query or enable and disable Group Tools.
    1. The place for storing the data may be configured as well.
    2. The GoQL: Game Object Query Language field allows you to specify a query 
