@@ -14,11 +14,14 @@ namespace Unity.SelectionGroupsEditor
 
     internal partial class SelectionGroupEditorWindow : EditorWindow
     {
-        private const string AddGroup = "Add Group";
+        private const string AddGroup    = "Add Group";
+        private const int    RightMargin = 16;
+        
         private GUIStyle Foldout;
         private GUIStyle Label;
         private GUIContent editorHeaderContent, sceneHeaderContent;
         private GUIContent InspectorLock;
+        
 
         [MenuItem("Window/General/Selection Groups")]
         static void OpenWindow()
@@ -51,7 +54,7 @@ namespace Unity.SelectionGroupsEditor
             var windowRect = new Rect(0, 0, position.width, position.height);
             scroll = GUI.BeginScrollView(windowRect, scroll, viewRect);
             
-            var cursor = new Rect(0, 0, position.width-16, EditorGUIUtility.singleLineHeight);
+            Rect cursor = new Rect(0, 0, position.width-RightMargin, EditorGUIUtility.singleLineHeight);
             if (GUI.Button(cursor, AddGroup)) CreateNewGroup();
             cursor.y += cursor.height;
 
@@ -254,11 +257,11 @@ namespace Unity.SelectionGroupsEditor
 
         }
         
-        Rect DrawHeader(Rect cursor, ISelectionGroup group, out bool showChildren)
-        {
-            var isPaint = Event.current.type == EventType.Repaint;
-            var rect = cursor;
-            var isAvailableInEditMode = true;
+        Rect DrawHeader(Rect cursor, ISelectionGroup group, out bool showChildren) 
+        {           
+            bool isPaint = Event.current.type == EventType.Repaint;            
+            Rect rect = new Rect(cursor) {x = 0, };            
+            bool isAvailableInEditMode = true;
             GUIContent content;
             if (group.Scope == SelectionGroupScope.Editor)
                 content = editorHeaderContent;
@@ -276,22 +279,31 @@ namespace Unity.SelectionGroupsEditor
                 content.text = $"{group.Name}";    
             }
             
-            var backgroundColor = group == activeSelectionGroup ? Color.white * 0.6f : Color.white * 0.3f;
-            if(isPaint) EditorGUI.DrawRect(rect, backgroundColor);
+            Color backgroundColor = group == activeSelectionGroup ? Color.white * 0.6f : Color.white * 0.3f;
+            if(isPaint) 
+                EditorGUI.DrawRect(rect, backgroundColor);
+            
+            //foldout and label
+            const int FOLDOUT_WIDTH   = 16;
+            const int COLOR_WIDTH     = 128;
+            const int SEPARATOR_WIDTH = 8;
+            float labelWidth = EditorGUIUtility.currentViewWidth
+                             - (COLOR_WIDTH + FOLDOUT_WIDTH + RightMargin + SEPARATOR_WIDTH);
             {
-                rect.width = 16;
-                group.ShowMembers = EditorGUI.Toggle(rect, group.ShowMembers, Foldout);
-                rect.x += 16;
-                rect.width = EditorGUIUtility.currentViewWidth - 128;
+                rect.width        =  FOLDOUT_WIDTH;
+                group.ShowMembers =  EditorGUI.Toggle(rect, group.ShowMembers, Foldout);
+                rect.x            += FOLDOUT_WIDTH;
+                rect.width        =  labelWidth;
             }
             if(isAvailableInEditMode)
                 HandleHeaderMouseEvents(rect, group.Name, group);
-            if(isPaint) GUI.Label(rect, content, Label);
+            if(isPaint) 
+                GUI.Label(rect, content, Label);
 
-            rect.x += rect.width;
-            rect = DrawTools(rect, group);
-            rect.x += 8;
-            rect.xMax = position.xMax;
+            rect.x     += rect.width;
+            rect       =  DrawTools(rect, group);
+            rect.x     += SEPARATOR_WIDTH;
+            rect.width =  COLOR_WIDTH;
 
             if(isPaint) EditorGUI.DrawRect(rect, new Color(group.Color.r, group.Color.g, group.Color.b));
 
