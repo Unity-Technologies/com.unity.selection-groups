@@ -276,8 +276,10 @@ namespace Unity.SelectionGroupsEditor
                 content.text = $"{group.Name}";    
             }
             
-            var backgroundColor = group == activeSelectionGroup ? Color.white * 0.6f : Color.white * 0.3f;
-            if(isPaint) EditorGUI.DrawRect(rect, backgroundColor);
+            Color backgroundColor = group == activeSelectionGroup ? Color.white * 0.6f : Color.white * 0.3f;
+            if(isPaint) 
+                EditorGUI.DrawRect(rect, backgroundColor);
+            
             {
                 rect.width = 16;
                 group.ShowMembers = EditorGUI.Toggle(rect, group.ShowMembers, Foldout);
@@ -286,7 +288,8 @@ namespace Unity.SelectionGroupsEditor
             }
             if(isAvailableInEditMode)
                 HandleHeaderMouseEvents(rect, group.Name, group);
-            if(isPaint) GUI.Label(rect, content, Label);
+            if(isPaint) 
+                GUI.Label(rect, content, Label);
 
             rect.x += rect.width;
             rect = DrawTools(rect, group);
