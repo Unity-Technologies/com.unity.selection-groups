@@ -1,6 +1,6 @@
 ﻿namespace Unity.SelectionGroupsEditor
 {
-    public partial class SelectionGroup
+    internal partial class SelectionGroup
     {
         private GoQL.GoQLExecutor executor = new GoQL.GoQLExecutor();
 

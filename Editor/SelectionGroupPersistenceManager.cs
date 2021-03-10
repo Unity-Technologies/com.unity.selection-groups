@@ -10,7 +10,7 @@ namespace Unity.SelectionGroupsEditor
     /// <summary>
     /// The Editor-only manager for selection groups.
     /// </summary>
-    public partial class SelectionGroupPersistenceManager : ScriptableObject
+    internal partial class SelectionGroupPersistenceManager : ScriptableObject
     {
         HashSet<GameObject> toDestroy = new HashSet<GameObject>();
 

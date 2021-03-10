@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Unity.SelectionGroupsEditor
 {
-    public partial class SelectionGroup
+    internal partial class SelectionGroup
     {
         /// <summary>
         /// Number of objects in this group that are available to be referenced. (Ie. they exist in a loaded scene)

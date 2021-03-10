@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Unity.SelectionGroups.Runtime
 {
-    public static class SelectionGroupManager
+    internal static class SelectionGroupManager
     {
         public delegate void CreateEvent(SelectionGroupScope scope, string name, string query, Color color, IList<Object> members);
         public delegate void DeleteEvent(ISelectionGroup group);

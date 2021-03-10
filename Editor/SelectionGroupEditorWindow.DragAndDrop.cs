@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Unity.SelectionGroupsEditor
 {
-    public partial class SelectionGroupEditorWindow : EditorWindow
+    internal partial class SelectionGroupEditorWindow : EditorWindow
     {
         
         bool HandleDragEvents(Rect rect, ISelectionGroup group)

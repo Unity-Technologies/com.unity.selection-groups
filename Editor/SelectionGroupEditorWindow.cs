@@ -12,7 +12,7 @@ namespace Unity.SelectionGroupsEditor
     /// The main editor window for working with selection groups.
     /// </summary>
     
-    public partial class SelectionGroupEditorWindow : EditorWindow
+    internal partial class SelectionGroupEditorWindow : EditorWindow
     {
 
         const int LEFT_MOUSE_BUTTON = 0;
