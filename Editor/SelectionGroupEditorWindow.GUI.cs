@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
 using Unity.SelectionGroups;
 using Unity.SelectionGroups.Runtime;
@@ -18,7 +19,7 @@ namespace Unity.SelectionGroupsEditor
         private GUIStyle Foldout;
         private GUIStyle Label;
         private GUIContent editorHeaderContent, sceneHeaderContent;
-        private GUIContent InspectorLock;
+        private GUIContent InspectorLock;       
         
 
         [MenuItem("Window/General/Selection Groups")]
@@ -302,7 +303,10 @@ namespace Unity.SelectionGroupsEditor
                 GUI.Label(rect, content, Label);
 
             rect.x     += rect.width;
-            rect       =  DrawTools(rect, group);
+            
+            if (group.EnabledTools.Count > 0)
+                DrawTools(rect.x, rect.y, group);
+            
             rect.x     += SEPARATOR_WIDTH;
             rect.width =  COLOR_WIDTH;
 
@@ -314,34 +318,44 @@ namespace Unity.SelectionGroupsEditor
             return rect;
         }
 
-        Rect DrawTools(Rect rect, ISelectionGroup group)
+        
+        void DrawTools(float rightAlignedX, float y, ISelectionGroup group)
         {
-            rect.width = 18;
-            rect.height = 18;
-            if (group.EnabledTools.Count == 0) return rect;
+            Assert.Greater(group.EnabledTools.Count,0);
+            const int TOOL_X_DIFF     = 18;
+            const int TOOL_HEIGHT     = 18;
+            int       numEnabledTools = group.EnabledTools.Count;
+
+            Rect rect = new Rect(0, y, TOOL_X_DIFF, TOOL_HEIGHT); 
+            int  i    = 0;
             
-            foreach (var i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>())
-            {
-                var attr = AttributeCache.GetCustomAttribute<SelectionGroupToolAttribute>(i);
-                if (!group.EnabledTools.Contains(attr.toolId))
-                    continue;
-                var content = EditorGUIUtility.IconContent(attr.icon);
+            foreach (string toolId in group.EnabledTools) {
+                SelectionGroupToolAttribute attr        = null;
+                MethodInfo                  methodInfo  = null;
+                
+                bool found = SelectionGroupToolAttributeCache.TryGetAttribute(toolId, out attr);
+                Assert.IsTrue(found);
+                found = SelectionGroupToolAttributeCache.TryGetMethodInfo(toolId, out methodInfo);
+                Assert.IsTrue(found);
+
+                GUIContent content = EditorGUIUtility.IconContent(attr.icon);
                 content.tooltip = attr.description;
+
+                rect.x = rightAlignedX - ((numEnabledTools - i) * TOOL_X_DIFF);
                 if (GUI.Button(rect, content, miniButtonStyle))
                 {
                     try
                     {
-                        i.Invoke(null, new object[] { group });
+                        methodInfo.Invoke(null, new object[] { group });
                     }
                     catch (System.Exception e)
                     {
                         Debug.LogException(e);
                     }
-                }
-                rect.x += rect.width;
+                }                
+                
+                ++i;
             }
-
-            return rect;
         }
 
         void ShowGameObjectContextMenu(Rect rect, ISelectionGroup group, UnityEngine.Object g, bool allowRemove)
