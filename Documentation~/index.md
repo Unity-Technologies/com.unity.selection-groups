@@ -9,7 +9,9 @@ However, it can optionally be stored in a scene which allows the data to be used
 
 # Getting Started
 
-1. Open the selection group window via Window -> General -> Selection Groups. A new window will open, it makes sense to dock this window next to the Hierarchy window. ![](images/image6.png)
+1. Open the selection group window via Window -> General -> Selection Groups. 
+   A new window will open, it makes sense to dock this window next to the Hierarchy window.   
+   ![](images/image6.png)
 1. Click “Add Group” in the Selection Groups window, and a new item will appear inside the window. ![](images/image1.png)
 1. Drag some GameObjects from the hierarchy, or assets from the Project window. 
 1. Double click the group name, and a configuration dialog box will appear. ![](images/image3.png)
