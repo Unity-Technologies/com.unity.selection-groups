@@ -4,9 +4,17 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [0.2.4-preview] - 2021-02-16
+## [0.3.0-preview] - 2021-03-10
 
-* TBD
+* optimisation 
+* changed event handling and repaint to avoid GC
+* internal: change public APIs to internals 
+* fix: the labels in SelectionGroupWindow were not displayed correct in the second screen 
+* fix: remove null members in SelectionGroup
+* fix: set the default SelectionGroup type to Scene 
+* fix: show the tool buttons in an aligned manner 
+* doc: add goql documentation
+* chore: rename GoQL assembly for consistency
 
 ## [0.2.3-preview] - 2021-02-16
 
