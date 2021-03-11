@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
 namespace Unity.SelectionGroups.Runtime
@@ -11,7 +12,7 @@ namespace Unity.SelectionGroups.Runtime
     /// This class is used to provide selection group information during play-mode. It reflects the information in the Editor-only class.
     /// </summary>
     [ExecuteAlways]
-    internal class SelectionGroup : MonoBehaviour, ISelectionGroup
+    internal class SelectionGroup : MonoBehaviour, ISelectionGroup, ISerializationCallbackReceiver    
     {
         /// <summary>
         /// A color assigned to this group.
@@ -24,15 +25,23 @@ namespace Unity.SelectionGroups.Runtime
 
         [SerializeField] SelectionGroupScope scope = SelectionGroupScope.Scene;
 
+        //Obsolete
+        [FormerlySerializedAs("_members")] [SerializeField] Object[] _legacyMembers;
         
         [SerializeField] List<Object> members = new List<Object>();
+        
+        [HideInInspector][SerializeField] private int sgVersion      = CUR_SG_VERSION; 
+        private const                             int CUR_SG_VERSION = (int) SGVersion.INITIAL;        
+        
 
         GoQL.ParseResult parseResult;
         List<object> code;
         GoQL.GoQLExecutor executor;
         HashSet<string> enabledTools = new HashSet<string>();
         
+        
         string _name;
+        
         
         void OnEnable()
         {
@@ -147,6 +156,28 @@ namespace Unity.SelectionGroups.Runtime
             }
         }
 
+        public void OnBeforeSerialize() 
+        {
+            sgVersion = CUR_SG_VERSION;
+        }
+
+        public void OnAfterDeserialize()
+        {
+            //if we have legacyMembers but no current members
+            if (null != _legacyMembers && _legacyMembers.Length > 0 && (null == members || members.Count <= 0)) 
+            {
+                members = new List<Object>();
+                members.AddRange(_legacyMembers);                 
+                _legacyMembers = null; //clear
+            }
+            
+            sgVersion = CUR_SG_VERSION;            
+        }        
         
+        
+        enum SGVersion {
+            INITIAL = 1,    //initial
+
+        }        
     }
-}
+} //end namespace
