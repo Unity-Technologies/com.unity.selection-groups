@@ -30,7 +30,10 @@ namespace Unity.SelectionGroups.Runtime
         
         [SerializeField] List<Object> members = new List<Object>();
         
+#pragma warning disable 414    
         [HideInInspector][SerializeField] private int sgVersion      = CUR_SG_VERSION; 
+#pragma warning restore 414
+        
         private const                             int CUR_SG_VERSION = (int) SGVersion.INITIAL;        
         
 
