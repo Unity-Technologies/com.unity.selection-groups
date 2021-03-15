@@ -26,7 +26,7 @@ namespace Unity.SelectionGroups.Runtime
         [SerializeField] SelectionGroupScope scope = SelectionGroupScope.Scene;
 
         //Obsolete
-        [FormerlySerializedAs("_members")] [SerializeField] Object[] _legacyMembers;
+        [HideInInspector][FormerlySerializedAs("_members")] [SerializeField] Object[] _legacyMembers;
         
         [SerializeField] List<Object> members = new List<Object>();
         
