@@ -75,11 +75,11 @@ namespace Unity.GoQL
                                 {
                                     typeCache.Add($"{j.Namespace}.{j.Name}", j);
                                     var existingType = typeCache[j.Name];
-                                    typeCache.Add($"{existingType.Namespace}.{existingType.Name}", j);
+                                    typeCache[$"{existingType.Namespace}.{existingType.Name}"] = j;
                                 }
                                 else
                                 {
-                                    typeCache.Add(j.Name, j);
+                                    typeCache[j.Name] = j;
                                 }
                             }
                         }
