@@ -39,6 +39,14 @@ A descender is a slash character.
 
 When GoQL reads this symbol, it will narrow the search down into the children of the current set. If it is the first character of the GoQL string, it will match all root objects in the scene. 
 
+A double asterisk is a special descender, which collects all _ancestors_ of the current set.
+
+    **
+
+This will collect every child of the current set, and the childs children, recursively until the end of hierarchy is reached.
+
+When this symbol is read    
+
     /Head
 
 will match any GameObjects named "Head" that are in the root of the hierarchy. While:
@@ -108,8 +116,12 @@ Select the first 3 children of all objects that are a child of a renderer compon
 
 From each object named "Cube", select children that have a name starting with "Quad", then select the last grandchild that has an AudioComponent.
 
-    Cube/Quad"/<t:AudioSource>[-1]
+    Cube/Quad/<t:AudioSource>[-1]
 
 Select all gamobjects that use the material "Skin":
 
     <m:Skin>
+
+Select all ancestors of the root Environment gameobject that have a MeshRenderer.
+
+    /Environment/**<t:MeshRenderer>
