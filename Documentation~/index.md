@@ -43,5 +43,5 @@ The data of each group can be stored in one of these two locations:
 
 > When the group data is stored in the Editor, the group saves references to **GameObjects** using 
 > [GlobalObjectId API](https://docs.unity3d.com/ScriptReference/GlobalObjectId.html),
-> which provides global identifiers for **GameObjects** in scenes, into an asset file.
+> which provides project-global object identifiers, into an asset file.
 
