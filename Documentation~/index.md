@@ -35,7 +35,7 @@ instead of individual **GameObjects**.
       that have names starting with `Enemy`.  
       See the [GoQL](goql.md) documentation for more information.     
    1. Enabled Toolbar Buttons  
-      Enables/disables the following toolbar items in the main Selection Groups window for each group.   
+      Enables/disables the following toolbar items in the main Selection Groups window for the group.   
       1. Eye: show or hide all the **GameObjects** in the group. 
       1. Lock: enable or disable the editing of all the **GameObjects** in the group.  
 
