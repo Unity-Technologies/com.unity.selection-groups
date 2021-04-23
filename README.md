@@ -11,7 +11,7 @@
 ## Overview
 
 Selection Groups provides a more convenient workflow in Unity by 
-allowing to group a number of **GameObjects** under a common name.
+allowing to group a number of **GameObjects** under a common name.  
 This way, we can do operations on these groups, 
 instead of individual **GameObjects**.
 
