@@ -10,8 +10,9 @@ and returns a set of **GameObjects** that match that query.
 
 ## Structure
 
-A GoQL query is built using name filters, indexers, discriminators and descenders. 
-This sounds complicated, but uses a syntax which is similar to directory paths and filenames.
+A GoQL query is built using [name filters](#name-filters), [indexers](#indexers), 
+[discriminators](#discriminators) and [descenders](#descenders). 
+This sounds complicated, but it uses a syntax which is similar to directory paths and filenames.
 
 ### Name Filters
 
@@ -20,7 +21,7 @@ The name of a **GameObject** can be specified directly. E.g.:
     Head
 
 will match all **GameObjects** that are named "Head".   
-A name filter can also use wildcards at the beginning and end of the namem, E.g.:
+A name filter can also use wildcards at the beginning and end of the name, E.g.:
 
     *Head
 
