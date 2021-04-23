@@ -67,9 +67,9 @@ E.g.:
 A discriminator is used to filter the current set by checking for the existence of a particular component, 
 material or shader.   
 Discriminators are specified using angle brackets and one of these codes:
-1. 't': components
-2. 'm': materials
-3. 's': shaders
+1. 't': component
+2. 'm': material
+3. 's': shader
 
 Examples:
 * `Head<t:Collider>`: all **GameObjects** named "Head" which also have a Collider component.
