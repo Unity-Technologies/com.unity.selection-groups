@@ -4,30 +4,41 @@
 ## Overview
 
 Selection Groups provides a more convenient workflow in Unity by 
-allowing to group a number of **GameObjects** under a common name.
+allowing to group a number of **GameObjects** under a common name.  
 This way, we can do operations on these groups, 
 instead of individual **GameObjects**.
 
 ## Getting Started
 
-1. Open the selection group window via Window > General > Selection Groups.  
+1. Open the Selection Groups window via Window > General > Selection Groups.  
    We recommend to dock this window next to the Hierarchy window.   
+
    ![](images/SelectionGroupsWindow.png)
+
 1. Click “Add Group” in the Selection Groups window, and a new item will appear inside the window.   
 1. Drag some **GameObjects** from the hierarchy, or assets from the Project window. 
+   
    ![](images/SelectionGroupMembers.png)
-1. Double click the group name, and a configuration dialog box will appear.   
+
+1. Double click the group name, and a configuration dialog box will appear.
+
    ![](images/SelectionGroupConfiguration.png)
-   * We may change the group name and color.
-   * The place for storing the data may be configured as well.
-   * The [GameObject Query](goql.md) field allows us to specify a query 
-     which will automatically select **GameObjects** from the hierarchy that match the query. 
+
+   The dialog box contain the following properties:
+   * Group name 
+   * Group color
+   * [Data Location](#data-location)
+   * GameObject Query  
+     Specifies a query which will automatically include **GameObjects** from the hierarchy  
+     that match the query into the group.
      For example, `/Enemy*` will select all GameObjects that are in the root of the hierarchy 
-     that have a name starting with `Enemy`. 
-     See the [GoQL](goql.md) documentation for more information.
-   * The Group Tools checkboxes enable toolbar items in the main Selection Groups window for each group. 
-     These tools allow you to show and hide an entire group with a single click, 
-     or enable and disable editing of an entire group with a single click.   
+     that have names starting with `Enemy`.  
+     See the [GoQL](goql.md) documentation for more information.     
+   * Enabled Toolbar Buttons
+     Enables/disables the following toolbar items in the main Selection Groups window for each group.   
+     * Eye: show or hide all the **GameObjects** in the group. 
+     * Lock: enable or disable the editing of all the **GameObjects** in the group.  
+
      ![](images/SelectionGroupTools.png)
 
 ## Data Location
