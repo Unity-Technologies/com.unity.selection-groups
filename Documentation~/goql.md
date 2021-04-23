@@ -64,7 +64,7 @@ will match any **GameObjects** named "Head" that are in the root of the hierarch
 
 would match all immediate children of any **GameObjects** named "Head".
 
-### Indexer
+### Indexers
 
 An indexer will filter the current set using a numerical index which can specifiy individual indexes or a range of indexes. E.g.:
 
