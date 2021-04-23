@@ -1,18 +1,14 @@
-Selection Groups User Documentation
-===================================
-
-# Overview
-
-Selection groups allow a number of Unity Objects to be categorized under a common name.
-The selection group data is initially stored in a scene which allows the data 
-to be used by scripts.
-
-As an alternative, the group data can instead be stored outside of the scene.
-This allows a decoupling between the groups and the scenes, with a tradeoff 
-that the group data cannot be used by scripts.
+# Selection Groups User Documentation
 
 
-# Getting Started
+## Overview
+
+Selection Groups provides a more convenient workflow in Unity by 
+allowing to group a number of **GameObjects** under a common name.
+This way, we can do operations on these groups, 
+instead of individual **GameObjects**.
+
+## Getting Started
 
 1. Open the selection group window via Window > General > Selection Groups.  
    We recommend to dock this window next to the Hierarchy window.   
@@ -34,13 +30,18 @@ that the group data cannot be used by scripts.
      or enable and disable editing of an entire group with a single click.   
      ![](images/SelectionGroupTools.png)
 
+## Data Location
 
-# How does storing the data outside a scene work ?
+The data of each group can be stored in one of these two locations:
+1. Scene: in a scene (default).  
+   This allows scripts to access the data.
+2. Editor: in an asset file outside scenes.  
+   This allows a decoupling between the groups and the scenes, with a tradeoff 
+   that the group data cannot be used by scripts.  
+   The same group can be shared by multiple scenes, 
+   but the Selection Group window will only show grouped **GameObjects** that exist in the opened scene.
 
-Unity has an [GlobalObjectId API](https://docs.unity3d.com/ScriptReference/GlobalObjectId.html) 
-for creating a global identifier for objects in scenes. 
-The Selection Group stores references to objects using this API, 
-which is saved in an asset external to the project. 
-This allows us to avoid modifying scenes when working with Selection Groups, and 
-when a scene is loaded, the Selection Group window will only list **GameObjects** 
-that currently exist in that scene.
+> When the group data is stored in the Editor, the group saves references to **GameObjects** using 
+> [GlobalObjectId API](https://docs.unity3d.com/ScriptReference/GlobalObjectId.html),
+> which provides global identifiers for **GameObjects** in scenes, into an asset file.
+
