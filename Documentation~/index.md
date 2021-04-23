@@ -24,22 +24,22 @@ instead of individual **GameObjects**.
 
    ![](images/SelectionGroupConfiguration.png)
 
-   The dialog box contain the following properties:
-   * Group name 
-   * Group color
-   * [Data Location](#data-location)
-   * GameObject Query  
-     Specifies a query which will automatically include **GameObjects** from the hierarchy  
-     that match the query into the group.
-     For example, `/Enemy*` will select all GameObjects that are in the root of the hierarchy 
-     that have names starting with `Enemy`.  
-     See the [GoQL](goql.md) documentation for more information.     
-   * Enabled Toolbar Buttons
-     Enables/disables the following toolbar items in the main Selection Groups window for each group.   
-     * Eye: show or hide all the **GameObjects** in the group. 
-     * Lock: enable or disable the editing of all the **GameObjects** in the group.  
+   The dialog box contains the following properties:
+   1. Group name 
+   1. Group color
+   1. [Data Location](#data-location)
+   1. GameObject Query  
+      Specifies a query which will automatically include **GameObjects** from the hierarchy
+      that match the query into the group.  
+      For example, `/Enemy*` will select all GameObjects that are in the root of the hierarchy 
+      that have names starting with `Enemy`.  
+      See the [GoQL](goql.md) documentation for more information.     
+   1. Enabled Toolbar Buttons  
+      Enables/disables the following toolbar items in the main Selection Groups window for each group.   
+      1. Eye: show or hide all the **GameObjects** in the group. 
+      1. Lock: enable or disable the editing of all the **GameObjects** in the group.  
 
-     ![](images/SelectionGroupTools.png)
+      ![](images/SelectionGroupTools.png)
 
 ## Data Location
 
