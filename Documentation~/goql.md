@@ -53,7 +53,7 @@ Examples:
 
 ### Indexers
 
-An indexer will filter the current set using a numerical index which can specify individual indexes or a range of indexes.   
+An indexer will filter the current set using a numerical index which can be an individual index or a range of indexes.   
 E.g.:
 
 * `Head/[0]`: the first child of all **GameObjects** named "Head".
