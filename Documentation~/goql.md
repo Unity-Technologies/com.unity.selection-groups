@@ -41,7 +41,7 @@ A slash character (`/`) marks a descender.
 When GoQL reads this symbol, it will narrow the search down into the children of the current set.   
 If it is the first character of the GoQL string, it will match all root objects in the scene. 
 
-A double asterisk (`**`) is a special descender, which collects all ancestors of the current set.
+A double asterisk (`**`) is a special descender, which collects all descendants of the current set.
 
     **    
 
@@ -89,7 +89,7 @@ Examples:
 * `Cube/Quad/<t:AudioSource>[-1]`: from each **GameObject** named "Cube", select children that have a name starting with "Quad", 
   then select the last grandchild that has an AudioComponent.
 * `<m:Skin>`: all **GameObjects** that use a material named "Skin".
-* `/Environment/**<t:MeshRenderer>`: all ancestors of the root Environment **GameObject** that have a MeshRenderer.
+* `/Environment/**<t:MeshRenderer>`: all descendants of the root Environment **GameObject** that have a MeshRenderer.
 
     
 
