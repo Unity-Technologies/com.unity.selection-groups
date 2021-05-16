@@ -21,6 +21,7 @@ namespace Unity.SelectionGroups.Runtime
             Create += OnCreate;
             Delete += OnDelete;
         }
+        
         public static void ExecuteSelectionGroupQueries()
         {
             foreach (var i in groups)
@@ -30,6 +31,7 @@ namespace Unity.SelectionGroups.Runtime
         }
 
         public static IList<ISelectionGroup> Groups => groups.List;
+        
         public static IEnumerable<string> GroupNames => groups.OrderBy(i => i.Name).Select(g => g.Name);
 
         public static void Register(ISelectionGroup @group)
@@ -72,8 +74,7 @@ namespace Unity.SelectionGroups.Runtime
             {
                 executor.Code = group.Query;
                 var objects = executor.Execute();
-                group.Clear();
-                group.Add(objects);
+                group.SetMembers(objects);
             }
         }
     }

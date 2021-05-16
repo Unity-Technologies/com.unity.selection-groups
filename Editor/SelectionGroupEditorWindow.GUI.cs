@@ -114,7 +114,7 @@ namespace Unity.SelectionGroupsEditor
             rect.height = EditorGUIUtility.singleLineHeight;
             foreach (Object i in group.Members) 
             {
-                if (null == i)
+                if (i == null)
                     continue;
                 
                 //if rect is below window, early out.
@@ -395,6 +395,10 @@ namespace Unity.SelectionGroupsEditor
                 group.Clear();
             });
             menu.AddItem(new GUIContent("Configure Group"), false, () => SelectionGroupConfigurationDialog.Open(group, this));
+            if(!string.IsNullOrEmpty(group.Query))
+                menu.AddItem(new GUIContent("Update Query Results"), false, () => SelectionGroupManager.ExecuteQuery(group));
+            else
+                menu.AddDisabledItem(new GUIContent("Update Query Results"), false);
             if (group.Scope == SelectionGroupScope.Editor)
             {
                 menu.AddItem(new GUIContent("Move to Scene"), false, () =>

@@ -59,8 +59,7 @@ namespace Unity.SelectionGroupsEditor
                         executor.Code = group.Query;
                         var objects = executor.Execute();
                         message = $"{objects.Length} results.";
-                        @group.Clear();
-                        @group.Add(objects);
+                        @group.SetMembers(objects);
                         parentWindow.Repaint();
                     }
                     else

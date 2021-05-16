@@ -34,7 +34,9 @@ namespace Unity.SelectionGroupsEditor
         [InitializeOnLoadMethod]
         static void SetupQueryCallbacks()
         {
-            EditorApplication.hierarchyChanged += SelectionGroupManager.ExecuteSelectionGroupQueries;
+            //This is a performance issue, disabled for now.
+            //It is called many times, when it is not needed.
+            //EditorApplication.hierarchyChanged += SelectionGroupManager.ExecuteSelectionGroupQueries;
         }
 
         static void CreateNewGroup()

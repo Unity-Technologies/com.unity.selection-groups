@@ -23,5 +23,6 @@ namespace Unity.SelectionGroups.Runtime
         void Remove(IList<Object> objectReferences);
         void Clear();
         IEnumerable<T> GetMemberComponents<T>() where T:Component;
+        void SetMembers(IList<Object> objects);
     }
 }
