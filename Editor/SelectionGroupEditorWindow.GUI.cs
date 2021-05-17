@@ -114,7 +114,7 @@ namespace Unity.SelectionGroupsEditor
             rect.height = EditorGUIUtility.singleLineHeight;
             foreach (Object i in group.Members) 
             {
-                if (null == i)
+                if (i == null)
                     continue;
                 
                 //if rect is below window, early out.
@@ -306,10 +306,14 @@ namespace Unity.SelectionGroupsEditor
             }
             if(isAvailableInEditMode)
                 HandleHeaderMouseEvents(rect, group.Name, group);
-            if(isPaint) 
+            if (isPaint)
+            {
+                if(!EditorGUIUtility.isProSkin)
+                    Label.normal.textColor = Color.black;
                 GUI.Label(rect, content, Label);
+            }
 
-            rect.x     += rect.width;
+            rect.x += rect.width;
             
             if (group.EnabledTools.Count > 0)
                 DrawTools(rect.x, rect.y, group);
@@ -331,14 +335,14 @@ namespace Unity.SelectionGroupsEditor
             Assert.Greater(group.EnabledTools.Count,0);
             const int TOOL_X_DIFF     = 18;
             const int TOOL_HEIGHT     = 18;
-            int       numEnabledTools = group.EnabledTools.Count;
+            int numEnabledTools = group.EnabledTools.Count;
 
             Rect rect = new Rect(0, y, TOOL_X_DIFF, TOOL_HEIGHT); 
-            int  i    = 0;
+            int i    = 0;
             
             foreach (string toolId in group.EnabledTools) {
-                SelectionGroupToolAttribute attr        = null;
-                MethodInfo                  methodInfo  = null;
+                SelectionGroupToolAttribute attr = null;
+                MethodInfo methodInfo  = null;
                 
                 bool found = SelectionGroupToolAttributeCache.TryGetAttribute(toolId, out attr);
                 Assert.IsTrue(found);
@@ -347,7 +351,7 @@ namespace Unity.SelectionGroupsEditor
 
                 GUIContent content = EditorGUIUtility.IconContent(attr.icon);
                 content.tooltip = attr.description;
-
+                
                 rect.x = rightAlignedX - ((numEnabledTools - i) * TOOL_X_DIFF);
                 if (GUI.Button(rect, content, miniButtonStyle))
                 {
@@ -395,6 +399,10 @@ namespace Unity.SelectionGroupsEditor
                 group.Clear();
             });
             menu.AddItem(new GUIContent("Configure Group"), false, () => SelectionGroupConfigurationDialog.Open(group, this));
+            if(!string.IsNullOrEmpty(group.Query))
+                menu.AddItem(new GUIContent("Update Query Results"), false, () => SelectionGroupManager.ExecuteQuery(group));
+            else
+                menu.AddDisabledItem(new GUIContent("Update Query Results"), false);
             if (group.Scope == SelectionGroupScope.Editor)
             {
                 menu.AddItem(new GUIContent("Move to Scene"), false, () =>

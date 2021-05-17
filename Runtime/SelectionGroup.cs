@@ -107,7 +107,7 @@ namespace Unity.SelectionGroups.Runtime
             var myScene = gameObject.scene;
             foreach (var i in objectReferences) 
             {
-                if (null == i)
+                if (i == null)
                     continue;
                 
                 if (i is GameObject go && go.scene != myScene)
@@ -116,7 +116,20 @@ namespace Unity.SelectionGroups.Runtime
                     members.Add(i);
             }
             RemoveNullMembers();
-            
+        }
+        
+        public void SetMembers(IList<Object> objectReferences) 
+        {
+            var myScene = gameObject.scene;
+            members.Clear();
+            foreach (var i in objectReferences) 
+            {
+                if (i == null)
+                    continue;
+                if (i is GameObject go && go.scene != myScene)
+                    continue;
+                members.Add(i);
+            }
         }
 
         public void Remove(IList<Object> objectReferences)

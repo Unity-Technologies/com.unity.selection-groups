@@ -62,6 +62,12 @@ namespace Unity.SelectionGroupsEditor
                 PersistentReferenceCollection.Add(i);    
             }
         }
+        
+        public void SetMembers(IList<Object> objects)
+        {
+            PersistentReferenceCollection.Clear();
+            Add(objects);
+        }
 
         public void Remove(IList<Object> objectReferences)
         {
