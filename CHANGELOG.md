@@ -4,6 +4,12 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.4.0-preview] - 2021-06-01
+
+* api: open SelectionGroup and SelectionGroupDataLocation to public 
+* opt: optimize goql query events by coalescing consecutive hierarchy change events into one.
+* ui: change the text color on non-pro skin for headings
+
 ## [0.3.3-preview] - 2021-04-26
 * fix: GoQL caching types twice.
 * doc: misc updates
