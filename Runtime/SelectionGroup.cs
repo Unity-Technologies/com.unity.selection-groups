@@ -110,10 +110,10 @@ namespace Unity.SelectionGroups.Runtime
         public IList<Object> Members => members;
 
         /// <inheritdoc/>
-        public void Add(IList<Object> objectReferences) 
+        public void Add(IList<Object> objects) 
         {
             var myScene = gameObject.scene;
-            foreach (var i in objectReferences) 
+            foreach (var i in objects) 
             {
                 if (i == null)
                     continue;
@@ -126,11 +126,11 @@ namespace Unity.SelectionGroups.Runtime
             RemoveNullMembers();
         }
         
-        public void SetMembers(IList<Object> objectReferences) 
+        public void SetMembers(IList<Object> objects) 
         {
             var myScene = gameObject.scene;
             members.Clear();
-            foreach (var i in objectReferences) 
+            foreach (var i in objects) 
             {
                 if (i == null)
                     continue;
