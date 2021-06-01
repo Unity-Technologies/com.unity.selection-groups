@@ -73,35 +73,43 @@ namespace Unity.SelectionGroups.Runtime
             }
         }
 
+        /// <inheritdoc/>
         public string Query
         {
             get => this.query; 
             set => this.query = value;
         }
 
+        /// <inheritdoc/>
         public Color Color
         {
             get => this.color; 
             set => this.color = value;
         }
 
+        /// <inheritdoc/>
         public HashSet<string> EnabledTools
         {
             get => enabledTools;
             set => enabledTools = value;
         }
 
+        /// <inheritdoc/>
         public SelectionGroupDataLocation Scope
         {
             get => scope; 
             set => scope = value;
         }
 
+        /// <inheritdoc/>
         public int Count => members.Count;
+        /// <inheritdoc/>
         public bool ShowMembers { get; set; }
 
+        /// <inheritdoc/>
         public IList<Object> Members => members;
 
+        /// <inheritdoc/>
         public void Add(IList<Object> objectReferences) 
         {
             var myScene = gameObject.scene;
@@ -132,22 +140,24 @@ namespace Unity.SelectionGroups.Runtime
             }
         }
 
+        /// <inheritdoc/>
         public void Remove(IList<Object> objectReferences)
         {
             members.RemoveAll(a=> objectReferences.Contains(a));
             RemoveNullMembers();
         }
 
+        /// <inheritdoc/>
         public void Clear()
         {
             members.Clear();
         }
 
         /// <summary>
-        /// Get components from all members of a group that are GameObjects.
+        /// Enumerate components from all members of a group that have a certain type T.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">The type of the component</typeparam>
+        /// <returns>The enumerated component</returns>
         internal IEnumerable<T> GetMemberComponents<T>() where T : Component
         {
             foreach (var member in members)
