@@ -1,6 +1,6 @@
 ﻿namespace Unity.SelectionGroups
 {
-    internal enum SelectionGroupScope
+    public enum SelectionGroupScope
     {
         Editor,
         Scene
