@@ -5,7 +5,7 @@
     "com.unity.ide.rider": "1.2.1",
     "com.unity.ide.vscode": "1.2.3",
     "com.unity.package-validation-suite": "0.19.3-preview",
-    "com.unity.selection-groups": "0.0.1-preview",
+    "com.unity.selection-groups": "file:../..",    
     "com.unity.test-framework": "1.1.24",
     "com.unity.textmeshpro": "2.1.4",
     "com.unity.timeline": "1.2.18",
