@@ -12,7 +12,7 @@ namespace Unity.SelectionGroups.Runtime
     /// This class is used to provide selection group information during play-mode. It reflects the information in the Editor-only class.
     /// </summary>
     [ExecuteAlways]
-    internal class SelectionGroup : MonoBehaviour, ISelectionGroup, ISerializationCallbackReceiver    
+    public class SelectionGroup : MonoBehaviour, ISelectionGroup, ISerializationCallbackReceiver    
     {
         /// <summary>
         /// A color assigned to this group.
@@ -34,7 +34,7 @@ namespace Unity.SelectionGroups.Runtime
         [HideInInspector][SerializeField] private int sgVersion      = CUR_SG_VERSION; 
 #pragma warning restore 414
         
-        private const                             int CUR_SG_VERSION = (int) SGVersion.INITIAL;        
+        private const int CUR_SG_VERSION = (int) SGVersion.INITIAL;        
         
 
         GoQL.ParseResult parseResult;
