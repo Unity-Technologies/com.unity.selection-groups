@@ -182,11 +182,13 @@ namespace Unity.SelectionGroups.Runtime
             }
         }
 
+        /// <inheritdoc/>
         public void OnBeforeSerialize() 
         {
             sgVersion = CUR_SG_VERSION;
         }
 
+        /// <inheritdoc/>
         public void OnAfterDeserialize()
         {
             //if we have legacyMembers but no current members

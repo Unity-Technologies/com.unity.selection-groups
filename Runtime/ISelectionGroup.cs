@@ -50,19 +50,24 @@ namespace Unity.SelectionGroups.Runtime
         /// <summary>
         /// Adds a list of objects to the SelectionGroup 
         /// </summary>
-        /// <param name="objectReferences">A list of objects to be added</param>
-        void Add(IList<Object> objectReferences);
+        /// <param name="objects">A list of objects to be added</param>
+        void Add(IList<Object> objects);
 
         /// <summary>
         /// Removes a list of objects from the SelectionGroup 
         /// </summary>
-        /// <param name="objectReferences">A list of objects to be removed</param>
-        void Remove(IList<Object> objectReferences);
+        /// <param name="objects">A list of objects to be removed</param>
+        void Remove(IList<Object> objects);
         
         /// <summary>
         /// Clears the members of the SelectionGroup
         /// </summary>
         void Clear();
+
+        /// <summary>
+        /// Clears and set the members of the SelectionGroup 
+        /// </summary>
+        /// <param name="objects">A list of objects to be added</param>
         void SetMembers(IList<Object> objects);
     }
 }
