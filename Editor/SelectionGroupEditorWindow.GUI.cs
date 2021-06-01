@@ -265,13 +265,13 @@ namespace Unity.SelectionGroupsEditor
             Rect rect = new Rect(cursor) {x = 0, };            
             bool isAvailableInEditMode = true;
             GUIContent content;
-            if (group.Scope == SelectionGroupScope.Editor)
+            if (group.Scope == SelectionGroupDataLocation.Editor)
                 content = editorHeaderContent;
             else
                 content = sceneHeaderContent;
                     
             //Editor groups don't work in play mode, as GetGloBALoBJECTiD does not work in play mode.
-            if (group.Scope == SelectionGroupScope.Editor && EditorApplication.isPlayingOrWillChangePlaymode)
+            if (group.Scope == SelectionGroupDataLocation.Editor && EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 content.text = $"{group.Name} (Not available in play mode)";
                 isAvailableInEditMode = false;
@@ -403,18 +403,18 @@ namespace Unity.SelectionGroupsEditor
                 menu.AddItem(new GUIContent("Update Query Results"), false, () => SelectionGroupManager.ExecuteQuery(group));
             else
                 menu.AddDisabledItem(new GUIContent("Update Query Results"), false);
-            if (group.Scope == SelectionGroupScope.Editor)
+            if (group.Scope == SelectionGroupDataLocation.Editor)
             {
                 menu.AddItem(new GUIContent("Move to Scene"), false, () =>
                 {
-                    SelectionGroupManager.ChangeGroupScope(group, SelectionGroupScope.Scene);
+                    SelectionGroupManager.ChangeGroupScope(group, SelectionGroupDataLocation.Scene);
                 });
             }
             else
             {
                 menu.AddItem(new GUIContent("Move to Editor"), false, () =>
                 {
-                    SelectionGroupManager.ChangeGroupScope(group, SelectionGroupScope.Editor);
+                    SelectionGroupManager.ChangeGroupScope(group, SelectionGroupDataLocation.Editor);
                 });
             }
 

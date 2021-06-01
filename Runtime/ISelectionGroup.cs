@@ -15,7 +15,7 @@ namespace Unity.SelectionGroups.Runtime
         string Query { get; set;  }
         Color Color { get; set; }
         HashSet<string> EnabledTools { get; set; }
-        SelectionGroupScope Scope { get; set; }
+        SelectionGroupDataLocation Scope { get; set; }
         int Count { get; }
         bool ShowMembers { get; set; }
         IList<Object> Members { get; }

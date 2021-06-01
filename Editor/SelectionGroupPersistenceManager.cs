@@ -29,14 +29,14 @@ namespace Unity.SelectionGroupsEditor
             SelectionGroupManager.Create += OnCreateSelectionGroup;
         }
 
-        private void OnCreateSelectionGroup(SelectionGroupScope scope, string name, string query, Color color, IList<Object> members)
+        private void OnCreateSelectionGroup(SelectionGroupDataLocation scope, string name, string query, Color color, IList<Object> members)
         {
             switch (scope)
             {
-                case SelectionGroupScope.Editor:
+                case SelectionGroupDataLocation.Editor:
                     CreateEditorSelectionGroup(name, query, color, members);
                     break;
-                case SelectionGroupScope.Scene:
+                case SelectionGroupDataLocation.Scene:
                     CreateSceneSelectionGroup(name, query, color, members);
                     break;
                 default:
@@ -52,7 +52,7 @@ namespace Unity.SelectionGroupsEditor
             group.Name = name;
             group.Query = query;
             group.Color = color;
-            group.Scope = SelectionGroupScope.Scene;
+            group.Scope = SelectionGroupDataLocation.Scene;
             group.ShowMembers = true;
             group.Add(members);
             SelectionGroupManager.Register(group);
@@ -65,7 +65,7 @@ namespace Unity.SelectionGroupsEditor
                 Name = name,
                 Color = color,
                 ShowMembers = true,
-                Scope = SelectionGroupScope.Editor,
+                Scope = SelectionGroupDataLocation.Editor,
                 Query = query
             };
             g.Add(members);
