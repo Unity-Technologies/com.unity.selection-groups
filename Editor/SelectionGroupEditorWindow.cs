@@ -52,6 +52,7 @@ namespace Unity.SelectionGroupsEditor
                 Repaint();
             }
         }
+        
         private static void OnHierarchyChanged()
         {
             performQueryRefresh = (float) (EditorApplication.timeSinceStartup + 0.2f);

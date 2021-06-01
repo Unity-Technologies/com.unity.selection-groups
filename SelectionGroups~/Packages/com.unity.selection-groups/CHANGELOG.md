@@ -4,6 +4,10 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.3.3-preview] - 2021-04-26
+* fix: GoQL caching types twice.
+* doc: misc updates
+
 ## [0.3.2-preview] - 2021-03-17
 * fix: warning "the field 'SelectionGroup.sgVersion' is assigned but its value is never used" 
 * fix: hide legacy members of SelectionGroup in the inspector 
