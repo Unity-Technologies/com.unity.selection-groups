@@ -11,24 +11,27 @@ namespace Unity.SelectionGroups.Runtime
 
     internal interface ISelectionGroup
     {
+        /// <summary>
+        /// Sets/gets the name of the SelectionGroup
+        /// </summary>
         string Name { get; set;  }
         /// <summary>
-        /// A query which will automatically include GameObjects from the hierarchy that match the query into the group.
+        /// Sets/gets the query which will automatically include GameObjects from the hierarchy that match the query into the group.
         /// </summary>
         string Query { get; set;  }
 
         /// <summary>
-        /// The color of the SelectionGroup 
+        /// Sets/gets the color of the SelectionGroup 
         /// </summary>
         Color Color { get; set; }
         
         /// <summary>
-        /// Tools enabled in the SelectionGroups window
+        /// Sets/gets the tools enabled in the SelectionGroups window
         /// </summary>
         HashSet<string> EnabledTools { get; set; }
         
         /// <summary>
-        /// The data location of the SelectionGroup
+        /// Sets/gets the data location of the SelectionGroup
         /// </summary>
         SelectionGroupDataLocation Scope { get; set; }
 
@@ -37,8 +40,9 @@ namespace Unity.SelectionGroups.Runtime
         /// </summary>
         int Count { get; }
 
+        
         /// <summary>
-        /// Show/Hide the members of the group in the SelectionGroups window
+        /// Sets/gets the members visibility in the SelectionGroups window
         /// </summary>
         bool ShowMembers { get; set; }
         

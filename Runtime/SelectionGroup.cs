@@ -58,6 +58,7 @@ namespace Unity.SelectionGroups.Runtime
             SelectionGroupManager.Unregister(this);
         }
 
+        /// <inheritdoc/>
         public string Name
         {
             get
@@ -126,6 +127,7 @@ namespace Unity.SelectionGroups.Runtime
             RemoveNullMembers();
         }
         
+        /// <inheritdoc/>
         public void SetMembers(IList<Object> objects) 
         {
             var myScene = gameObject.scene;
