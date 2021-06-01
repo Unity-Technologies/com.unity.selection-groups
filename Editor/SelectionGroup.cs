@@ -34,16 +34,5 @@ namespace Unity.SelectionGroupsEditor
             get => PersistentReferenceCollection.Items;
         }
 
-        public IEnumerable<T> GetMemberComponents<T>() where T : Component
-        {
-            foreach (var i in this.Members)
-            {
-                if (i is GameObject go)
-                {
-                    foreach (var j in go.GetComponents<T>())
-                        yield return j;
-                }
-            }
-        }
     }
 }

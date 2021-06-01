@@ -148,7 +148,7 @@ namespace Unity.SelectionGroups.Runtime
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public IEnumerable<T> GetMemberComponents<T>() where T : Component
+        internal IEnumerable<T> GetMemberComponents<T>() where T : Component
         {
             foreach (var member in members)
             {
