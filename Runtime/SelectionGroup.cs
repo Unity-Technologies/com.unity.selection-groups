@@ -9,7 +9,7 @@ using Object = UnityEngine.Object;
 namespace Unity.SelectionGroups.Runtime
 {
     /// <summary>
-    /// This class is used to provide selection group information during play-mode. It reflects the information in the Editor-only class.
+    /// A component to group a number of GameObjects under a common name.
     /// </summary>
     [ExecuteAlways]
     public class SelectionGroup : MonoBehaviour, ISelectionGroup, ISerializationCallbackReceiver    
