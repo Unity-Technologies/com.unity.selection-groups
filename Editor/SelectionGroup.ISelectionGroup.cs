@@ -40,7 +40,7 @@ namespace Unity.SelectionGroupsEditor
             set => enabledTools = value;
         }
 
-        public SelectionGroupScope Scope
+        public SelectionGroupDataLocation Scope
         {
             get => scope;
             set => scope = value;

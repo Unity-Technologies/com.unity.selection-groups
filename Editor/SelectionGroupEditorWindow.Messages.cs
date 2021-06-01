@@ -31,7 +31,7 @@ namespace Unity.SelectionGroupsEditor
         void RepaintOnDelete(ISelectionGroup @group) => 
             Repaint();
 
-        void RepaintOnCreate(SelectionGroupScope scope, string s, string query, Color color, IList<Object> members) =>
+        void RepaintOnCreate(SelectionGroupDataLocation scope, string s, string query, Color color, IList<Object> members) =>
             Repaint();
 
         void OnDisable()

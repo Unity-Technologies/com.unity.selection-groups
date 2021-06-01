@@ -75,7 +75,7 @@ namespace Unity.SelectionGroupsEditor
                 }
                 GUILayout.Space(5);
                 var scope = @group.Scope;
-                scope = (SelectionGroupScope) EditorGUILayout.EnumPopup(@group.Scope);
+                scope = (SelectionGroupDataLocation) EditorGUILayout.EnumPopup(@group.Scope);
                 if (scope != @group.Scope)
                 {
                     SelectionGroupManager.ChangeGroupScope(group, scope);

@@ -9,7 +9,7 @@ using Object = UnityEngine.Object;
 namespace Unity.SelectionGroups.Runtime
 {
     /// <summary>
-    /// This class is used to provide selection group information during play-mode. It reflects the information in the Editor-only class.
+    /// A component to group a number of GameObjects under a common name.
     /// </summary>
     [ExecuteAlways]
     public class SelectionGroup : MonoBehaviour, ISelectionGroup, ISerializationCallbackReceiver    
@@ -23,7 +23,7 @@ namespace Unity.SelectionGroups.Runtime
         /// </summary>
         [SerializeField] string query = string.Empty;
 
-        [SerializeField] SelectionGroupScope scope = SelectionGroupScope.Scene;
+        [SerializeField] SelectionGroupDataLocation scope = SelectionGroupDataLocation.Scene;
 
         //Obsolete
         [HideInInspector][FormerlySerializedAs("_members")] [SerializeField] Object[] _legacyMembers;
@@ -91,7 +91,7 @@ namespace Unity.SelectionGroups.Runtime
             set => enabledTools = value;
         }
 
-        public SelectionGroupScope Scope
+        public SelectionGroupDataLocation Scope
         {
             get => scope; 
             set => scope = value;
