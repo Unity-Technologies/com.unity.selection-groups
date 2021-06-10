@@ -53,7 +53,7 @@ An indexer will filter the current set using a numerical index which can be an i
 E.g.:
 
 * `Head/[0]`: the first child of all **GameObjects** named "Head".
-* `Head/[0,1,5]`: the corresponding children with specified indexes of all **GameObjects** named "Head", if they exist.   
+* `Head/[0,1,5]`: the children with specified indexes of all **GameObjects** named "Head", if they exist.   
 * `Head/[-1]`: the last child of all **GameObjects** named "Head".
 * `Head/[3:5]`: all children of objects named "Head" that have an index betweeen 3 and 5 (exclusive).
    
