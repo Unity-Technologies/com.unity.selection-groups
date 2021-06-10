@@ -29,8 +29,8 @@ instead of individual **GameObjects**.
    1. Group color
    1. [Data Location](#data-location)
    1. GameObject Query  
-      Specifies a query which will automatically include **GameObjects** from the hierarchy
-      that match the query into the group.  
+      Specifies a query which will automatically assign **GameObjects** from the hierarchy
+      that match the query to the group.  
       For example, `/Enemy*` will select all GameObjects that are in the root of the hierarchy 
       that have names starting with `Enemy`.  
       See the [GoQL](goql.md) documentation for more information.     
