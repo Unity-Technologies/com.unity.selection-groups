@@ -77,17 +77,19 @@ Examples:
 ## Other Examples
 
 * `/`: all root **GameObjects**.
-* `Quad*`: all **GameObjects** who have a name beginning with "Quad".
+* `Quad*`: all **GameObjects** who have names beginning with "Quad".
 * `Quad*/<t:AudioSource>[1]`: The second audio source component in children of all **GameObjects** 
-  which have a name beginning with "Quad".
+  which have names beginning with "Quad".
 * `<t:Transform, t:AudioSource>`: all **GameObjects** that have a Transform and a AudioSource component.    
 * `<t:Renderer>/*Audio*/[0:3]`: the first 3 children of all **GameObjects** which:
   * have parent **GameObjects** with Renderer components.
   * have "Audio" in their names
-* `Cube/Quad/<t:AudioSource>[-1]`: from each **GameObject** named "Cube", select children that have a name starting with "Quad", 
-  then select the last grandchild that has an AudioComponent.
-* `<m:Skin>`: all **GameObjects** that use a material named "Skin".
-* `/Environment/**<t:MeshRenderer>`: all descendants of root **GameObjects** named "Environment" that have a MeshRenderer.
+* `Cube/Quad/<t:AudioSource>[-1]`: from each **GameObject** named "Cube", 
+  select children that have names starting with "Quad", 
+  then select the last grandchild that has an AudioSource component.
+* `<m:Skin>`: all **GameObjects** that use materials named "Skin".
+* `/Environment/**<t:MeshRenderer>`: all descendants of root **GameObjects** named "Environment" 
+  that have MeshRenderer components.
 
     
 
