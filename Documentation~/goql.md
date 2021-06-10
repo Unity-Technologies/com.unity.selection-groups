@@ -24,11 +24,11 @@ will match all **GameObjects** that are named "Head".
 
 A name filter can also use wildcards at the beginning and end of the name, e.g.:
 
-* `*Head`: all **GameObjects** that have a name ending with "Head".
-* `Head*`: all **GameObjects** that have a name beginning with "Head".
+* `*Head`: all **GameObjects** that have names ending with "Head".
+* `Head*`: all **GameObjects** that have names beginning with "Head".
 * `*Head*`: all **GameObjects** that contain the string "Head" anywhere in their names.
 
-Note that a name filter will look for matching **GameObjects** in the current applicable set.
+Note that a name filter will look for matching **GameObjects** in the current applicable set.  
 Initially, the current applicable set is global, 
 and will contain all objects in the hierarchy.   
 The applicable set can be changed by using [a descender](#descenders).
