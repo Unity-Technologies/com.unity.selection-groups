@@ -39,7 +39,8 @@ A descender is defined by a slash character (`/`).
 
     /
 
-When GoQL reads this symbol, it will narrow the search down into the children of the current set.   
+When GoQL reads this symbol, it will narrow the search down into 
+the children of the current applicable set.   
 If it is the first character of the GoQL string, it will match all root objects in the scene. 
 
 A double asterisk (`**`) is a special descender, which matches all descendants of the applicable set.
