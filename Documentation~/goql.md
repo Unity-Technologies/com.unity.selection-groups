@@ -22,7 +22,7 @@ The name of a **GameObject** can be specified directly. E.g.:
 
 will match all **GameObjects** that are named "Head".   
 
-A name filter can also use wildcards at the beginning and end of the name, E.g.:
+A name filter can also use wildcards at the beginning and end of the name, e.g.:
 
 * `*Head`: all **GameObjects** that have a name ending with "Head".
 * `Head*`: all **GameObjects** that have a name beginning with "Head".
