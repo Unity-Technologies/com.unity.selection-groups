@@ -49,9 +49,9 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.selection-groups": {
-      "version": "file:../..",
+      "version": "file:com.unity.selection-groups",
       "depth": 0,
-      "source": "local",
+      "source": "embedded",
       "dependencies": {}
     },
     "com.unity.test-framework": {
