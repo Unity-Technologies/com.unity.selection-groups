@@ -28,9 +28,10 @@ A name filter can also use wildcards at the beginning and end of the name, e.g.:
 * `Head*`: all **GameObjects** that have a name beginning with "Head".
 * `*Head*`: all **GameObjects** that contain the string "Head" anywhere in their names.
 
-Note that a name filter will match all GameObjects in the current set.  
-Initially, the current set is global, and will contain all objects in the hierarchy.   
-The current set can be changed using a descender.
+Note that a name filter will look for matching **GameObjects** in the current applicable set.
+Initially, the current applicable set is global, 
+and will contain all objects in the hierarchy.   
+The applicable set can be changed by using [a descender](#descenders).
 
 ### Descenders
 
@@ -55,7 +56,7 @@ E.g.:
 * `Head/[0]`: the first child of all **GameObjects** named "Head".
 * `Head/[0,1,5]`: the children with specified indexes of all **GameObjects** named "Head", if they exist.   
 * `Head/[-1]`: the last child of all **GameObjects** named "Head".
-* `Head/[3:5]`: all children of **GameObjects** named "Head" that have indexes betweeen 3 and 5 (exclusive).
+* `Head/[3:5]`: the children of **GameObjects** named "Head" that have indexes betweeen 3 and 5 (exclusive).
    
 
 ### Discriminators
@@ -70,7 +71,7 @@ Discriminators are specified using angle brackets and one of these codes:
 Examples:
 * `Head<t:Collider>`: all **GameObjects** named "Head" which also have a Collider component.
 * `Head<m:Glow>`: all **GameObjects** that are named "Head" and have a material named "Glow"
-* `Head<s:Standard>`: all **GameObjects** that are named "Head" and are using a shader named "Standard".
+* `Head<s:Standard>`: all **GameObjects** that are named "Head" and are using "Standard" shader.
     
 ## Other Examples
 
@@ -78,14 +79,14 @@ Examples:
 * `Quad*`: all **GameObjects** who have a name beginning with "Quad".
 * `Quad*/<t:AudioSource>[1]`: The second audio source component in children of all **GameObjects** 
   which have a name beginning with "Quad".
-* `<t:Transform, t:AudioSource>`: all **GameObjects** that have a Transform and a AudioSource component:    
-* `<t:Renderer>/*Audio*[0:3]`: the first 3 children of all **GameObjects** which
+* `<t:Transform, t:AudioSource>`: all **GameObjects** that have a Transform and a AudioSource component.    
+* `<t:Renderer>/*Audio*/[0:3]`: the first 3 children of all **GameObjects** which:
   * have parent **GameObjects** with Renderer components.
   * have "Audio" in their names
 * `Cube/Quad/<t:AudioSource>[-1]`: from each **GameObject** named "Cube", select children that have a name starting with "Quad", 
   then select the last grandchild that has an AudioComponent.
 * `<m:Skin>`: all **GameObjects** that use a material named "Skin".
-* `/Environment/**<t:MeshRenderer>`: all descendants of the root Environment **GameObject** that have a MeshRenderer.
+* `/Environment/**<t:MeshRenderer>`: all descendants of root **GameObjects** named "Environment" that have a MeshRenderer.
 
     
 
