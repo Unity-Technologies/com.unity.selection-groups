@@ -77,10 +77,10 @@ Examples:
 ## Other Examples
 
 * `/`: all root **GameObjects**.
-* `Quad*`: all **GameObjects** who have names beginning with "Quad".
+* `Quad*`: all **GameObjects** which have names beginning with "Quad".
 * `Quad*/<t:AudioSource>[1]`: The second audio source component in children of all **GameObjects** 
   which have names beginning with "Quad".
-* `<t:Transform, t:AudioSource>`: all **GameObjects** that have a Transform and a AudioSource component.    
+* `<t:Transform, t:AudioSource>`: all **GameObjects** that have Transform and AudioSource components.    
 * `<t:Renderer>/*Audio*/[0:3]`: the first 3 children of all **GameObjects** which:
   * have parent **GameObjects** with Renderer components.
   * have "Audio" in their names
