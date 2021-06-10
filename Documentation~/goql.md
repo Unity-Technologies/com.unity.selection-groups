@@ -34,7 +34,7 @@ The current set can be changed using a descender.
 
 ### Descenders
 
-A slash character (`/`) marks a descender.
+A descender is defined by a slash character (`/`).
 
     /
 
