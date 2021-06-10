@@ -29,15 +29,15 @@ instead of individual **GameObjects**.
    1. Group color
    1. [Data Location](#data-location)
    1. GameObject Query  
-      Specifies a query which will automatically include **GameObjects** from the hierarchy
-      that match the query into the group.  
+      Specifies a query which will automatically assign **GameObjects** from the hierarchy
+      that match the query to the group.  
       For example, `/Enemy*` will select all GameObjects that are in the root of the hierarchy 
       that have names starting with `Enemy`.  
       See the [GoQL](goql.md) documentation for more information.     
-   1. Enabled Toolbar Buttons  
+   1. Toolbar Buttons  
       Enables/disables the following toolbar items in the main Selection Groups window for the group.   
-      1. Eye: show or hide all the **GameObjects** in the group. 
-      1. Lock: enable or disable the editing of all the **GameObjects** in the group.  
+      1. Eye: to show or hide all the **GameObjects** in the group. 
+      1. Lock: to enable or disable the editing of all the **GameObjects** in the group.  
 
       ![](images/SelectionGroupTools.png)
 
@@ -47,10 +47,14 @@ The data of each group can be stored in one of these two locations:
 1. Scene: in a scene (default).  
    This allows scripts to access the data.
 2. Editor: in an asset file outside scenes.  
-   This allows a decoupling between the groups and the scenes, with a tradeoff 
-   that the group data cannot be used by scripts.  
-   The same group can be shared by multiple scenes, 
-   but the Selection Group window will only show grouped **GameObjects** that exist in the opened scene.
+   * Merits: 
+     - allows a decoupling between the groups and the scenes.
+     - enables group sharing among multiple scenes.  
+   * Demerits:
+     - the group data cannot be used by scripts.     
+
+Note that the Selection Group window will only show grouped **GameObjects** 
+that exist in the opened scene.
 
 > When the group data is stored in the Editor, the group saves references to **GameObjects** using 
 > [GlobalObjectId API](https://docs.unity3d.com/ScriptReference/GlobalObjectId.html),
