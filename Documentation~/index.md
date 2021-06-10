@@ -50,10 +50,11 @@ The data of each group can be stored in one of these two locations:
    * Merits: 
      - allows a decoupling between the groups and the scenes.
      - enables group sharing among multiple scenes.  
-       Note that the Selection Group window will only show grouped **GameObjects** 
-       that exist in the opened scene.
    * Demerits:
-     - the group data cannot be used by scripts.
+     - the group data cannot be used by scripts.     
+
+Note that the Selection Group window will only show grouped **GameObjects** 
+that exist in the opened scene.
 
 > When the group data is stored in the Editor, the group saves references to **GameObjects** using 
 > [GlobalObjectId API](https://docs.unity3d.com/ScriptReference/GlobalObjectId.html),
