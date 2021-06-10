@@ -11,7 +11,7 @@ and returns a set of **GameObjects** that match that query.
 ## Structure
 
 A GoQL query is composed using [name filters](#name-filters), [indexers](#indexers), 
-[discriminators](#discriminators) and [descenders](#descenders). 
+[discriminators](#discriminators) and [descenders](#descenders).   
 This sounds complicated, but the syntax is similar to directory paths and filenames.
 
 ### Name Filters
