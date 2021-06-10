@@ -71,7 +71,7 @@ Discriminators are specified using angle brackets and one of these codes:
 
 Examples:
 * `Head<t:Collider>`: all **GameObjects** named "Head" which also have a Collider component.
-* `Head<m:Glow>`: all **GameObjects** that are named "Head" and have a material named "Glow"
+* `Head<m:Glow>`: all **GameObjects** that are named "Head" and use materials named "Glow"
 * `Head<s:Standard>`: all **GameObjects** that are named "Head" and are using "Standard" shader.
     
 ## Other Examples
