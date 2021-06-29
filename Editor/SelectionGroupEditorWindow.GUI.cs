@@ -6,7 +6,7 @@ using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
-
+    
 
 namespace Unity.SelectionGroupsEditor
 {
@@ -67,6 +67,7 @@ namespace Unity.SelectionGroupsEditor
                 //early out if this group yMin is below window rect (not visible).
                 if ((cursor.yMin - scroll.y) > position.height) break;
                 var dropRect = cursor;
+                
                 cursor = DrawHeader(cursor, group, out bool showChildren);
 
                 if (showChildren)
@@ -326,6 +327,7 @@ namespace Unity.SelectionGroupsEditor
             showChildren =  isAvailableInEditMode ? group.ShowMembers : false;
             rect.x = cursor.x;
             rect.y += rect.height;
+            rect.width = cursor.width;
             return rect;
         }
 
