@@ -68,6 +68,8 @@ namespace Unity.SelectionGroups.Runtime
         /// </summary>
         void Clear();
 
+        IEnumerable<T> GetMemberComponents<T>() where T:Component;
+
         /// <summary>
         /// Clears and set the members of the SelectionGroup 
         /// </summary>

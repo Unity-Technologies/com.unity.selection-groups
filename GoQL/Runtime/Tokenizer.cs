@@ -42,7 +42,7 @@ namespace Unity.GoQL
             if (DataAvailable)
             {
                 var c = PeekChar();
-                if (char.IsLetter(c) || c == '*' || _TokenizeFunction == CollectString && char.IsDigit(c))
+                if (IsStringChar(c) || _TokenizeFunction == CollectString && char.IsDigit(c))
                     ChangeState(CollectString);
                 else if (char.IsNumber(c) || c == '-')
                     ChangeState(CollectNumber);
@@ -51,6 +51,11 @@ namespace Unity.GoQL
                 else
                     ChangeState(CollectToken);
             }
+        }
+
+        private static bool IsStringChar(char c)
+        {
+            return char.IsLetter(c) || c == '*' || c == '_' || c == '-';
         }
 
         void CollectWhitespace()
