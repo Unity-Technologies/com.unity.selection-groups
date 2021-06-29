@@ -19,7 +19,7 @@ namespace Unity.SelectionGroupsEditor
         [SerializeField] bool showMembers;
         [SerializeField] string query = string.Empty;
         [SerializeField] int groupId;
-        [SerializeField] SelectionGroupScope scope = SelectionGroupScope.Editor;
+        [SerializeField] SelectionGroupDataLocation scope = SelectionGroupDataLocation.Editor;
         HashSet<string> enabledTools = new HashSet<string>();
         
         /// <summary>
@@ -34,16 +34,5 @@ namespace Unity.SelectionGroupsEditor
             get => PersistentReferenceCollection.Items;
         }
 
-        public IEnumerable<T> GetMemberComponents<T>() where T : Component
-        {
-            foreach (var i in this.Members)
-            {
-                if (i is GameObject go)
-                {
-                    foreach (var j in go.GetComponents<T>())
-                        yield return j;
-                }
-            }
-        }
     }
 }

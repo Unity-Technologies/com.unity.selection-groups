@@ -24,14 +24,3 @@ MonoBehaviour:
     query: 
     groupId: 0
     scope: 0
-  - _enabledTools:
-    - d_VisibilityOn.Toggle Visibility.Show and hide objects in the scene.
-    PersistentReferenceCollection:
-      _objectIds:
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-1437799906-0
-    name: GameObjectsByQueryGroup
-    color: {r: 0.99444205, g: 0.7277927, b: 0.03784859, a: 1}
-    showMembers: 0
-    query: /Game*
-    groupId: 0
-    scope: 0

@@ -7,7 +7,7 @@ namespace Unity.SelectionGroups.Runtime
 {
     internal static class SelectionGroupManager
     {
-        public delegate void CreateEvent(SelectionGroupScope scope, string name, string query, Color color, IList<Object> members);
+        public delegate void CreateEvent(SelectionGroupDataLocation scope, string name, string query, Color color, IList<Object> members);
         public delegate void DeleteEvent(ISelectionGroup group);
 
         public static CreateEvent Create;
@@ -50,17 +50,17 @@ namespace Unity.SelectionGroups.Runtime
             Unregister(group);
         }
         
-        static void OnCreate(SelectionGroupScope scope, string name, string query, Color color, IList<Object> members)
+        static void OnCreate(SelectionGroupDataLocation scope, string name, string query, Color color, IList<Object> members)
         {
         }
         
         public static void ClearEditorGroups()
         {
             foreach(var i in groups.ToArray())
-                if(i.Scope == SelectionGroupScope.Editor) Unregister(i);
+                if(i.Scope == SelectionGroupDataLocation.Editor) Unregister(i);
         }
 
-        public static void ChangeGroupScope(ISelectionGroup @group, SelectionGroupScope scope)
+        public static void ChangeGroupScope(ISelectionGroup @group, SelectionGroupDataLocation scope)
         {
             Create(scope, @group.Name, @group.Query, @group.Color, @group.Members);
             Delete(@group);

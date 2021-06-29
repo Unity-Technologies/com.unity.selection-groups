@@ -9,10 +9,10 @@ using Object = UnityEngine.Object;
 namespace Unity.SelectionGroups.Runtime
 {
     /// <summary>
-    /// This class is used to provide selection group information during play-mode. It reflects the information in the Editor-only class.
+    /// A component to group a number of GameObjects under a common name.
     /// </summary>
     [ExecuteAlways]
-    internal class SelectionGroup : MonoBehaviour, ISelectionGroup, ISerializationCallbackReceiver    
+    public class SelectionGroup : MonoBehaviour, ISelectionGroup, ISerializationCallbackReceiver    
     {
         /// <summary>
         /// A color assigned to this group.
@@ -23,7 +23,7 @@ namespace Unity.SelectionGroups.Runtime
         /// </summary>
         [SerializeField] string query = string.Empty;
 
-        [SerializeField] SelectionGroupScope scope = SelectionGroupScope.Scene;
+        [SerializeField] SelectionGroupDataLocation scope = SelectionGroupDataLocation.Scene;
 
         //Obsolete
         [HideInInspector][FormerlySerializedAs("_members")] [SerializeField] Object[] _legacyMembers;
@@ -34,7 +34,7 @@ namespace Unity.SelectionGroups.Runtime
         [HideInInspector][SerializeField] private int sgVersion      = CUR_SG_VERSION; 
 #pragma warning restore 414
         
-        private const                             int CUR_SG_VERSION = (int) SGVersion.INITIAL;        
+        private const int CUR_SG_VERSION = (int) SGVersion.INITIAL;        
         
 
         GoQL.ParseResult parseResult;
@@ -58,6 +58,7 @@ namespace Unity.SelectionGroups.Runtime
             SelectionGroupManager.Unregister(this);
         }
 
+        /// <inheritdoc/>
         public string Name
         {
             get
@@ -73,39 +74,47 @@ namespace Unity.SelectionGroups.Runtime
             }
         }
 
+        /// <inheritdoc/>
         public string Query
         {
             get => this.query; 
             set => this.query = value;
         }
 
+        /// <inheritdoc/>
         public Color Color
         {
             get => this.color; 
             set => this.color = value;
         }
 
+        /// <inheritdoc/>
         public HashSet<string> EnabledTools
         {
             get => enabledTools;
             set => enabledTools = value;
         }
 
-        public SelectionGroupScope Scope
+        /// <inheritdoc/>
+        public SelectionGroupDataLocation Scope
         {
             get => scope; 
             set => scope = value;
         }
 
+        /// <inheritdoc/>
         public int Count => members.Count;
+        /// <inheritdoc/>
         public bool ShowMembers { get; set; }
 
+        /// <inheritdoc/>
         public IList<Object> Members => members;
 
-        public void Add(IList<Object> objectReferences) 
+        /// <inheritdoc/>
+        public void Add(IList<Object> objects) 
         {
             var myScene = gameObject.scene;
-            foreach (var i in objectReferences) 
+            foreach (var i in objects) 
             {
                 if (i == null)
                     continue;
@@ -118,11 +127,12 @@ namespace Unity.SelectionGroups.Runtime
             RemoveNullMembers();
         }
         
-        public void SetMembers(IList<Object> objectReferences) 
+        /// <inheritdoc/>
+        public void SetMembers(IList<Object> objects) 
         {
             var myScene = gameObject.scene;
             members.Clear();
-            foreach (var i in objectReferences) 
+            foreach (var i in objects) 
             {
                 if (i == null)
                     continue;
@@ -132,23 +142,25 @@ namespace Unity.SelectionGroups.Runtime
             }
         }
 
+        /// <inheritdoc/>
         public void Remove(IList<Object> objectReferences)
         {
             members.RemoveAll(a=> objectReferences.Contains(a));
             RemoveNullMembers();
         }
 
+        /// <inheritdoc/>
         public void Clear()
         {
             members.Clear();
         }
 
         /// <summary>
-        /// Get components from all members of a group that are GameObjects.
+        /// Enumerate components from all members of a group that have a certain type T.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public IEnumerable<T> GetMemberComponents<T>() where T : Component
+        /// <typeparam name="T">The type of the component</typeparam>
+        /// <returns>The enumerated component</returns>
+        internal IEnumerable<T> GetMemberComponents<T>() where T : Component
         {
             foreach (var member in members)
             {
@@ -172,11 +184,13 @@ namespace Unity.SelectionGroups.Runtime
             }
         }
 
+        /// <inheritdoc/>
         public void OnBeforeSerialize() 
         {
             sgVersion = CUR_SG_VERSION;
         }
 
+        /// <inheritdoc/>
         public void OnAfterDeserialize()
         {
             //if we have legacyMembers but no current members
