@@ -1,3 +1,7 @@
+# Latest official docs
+- [English](https://docs.unity3d.com/Packages/com.unity.selection-groups@latest)
+- [日本語](https://docs.unity3d.com/ja/Packages/com.unity.selection-groups@latest)
+
 # Selection Groups
 
 [![](https://badge-proxy.cds.internal.unity3d.com/fb136fc0-1940-40a8-9057-83638eb23bcd)](https://badges.cds.internal.unity3d.com/packages/com.unity.selection-groups/build-info?branch=dev&testWorkflow=package-isolation)
