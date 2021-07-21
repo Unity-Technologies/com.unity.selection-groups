@@ -20,6 +20,8 @@ namespace Unity.SelectionGroupsEditor
         private GUIStyle Label;
         private GUIContent editorHeaderContent, sceneHeaderContent;
         private GUIContent InspectorLock;       
+
+        private static readonly Color ProTextColor = new Color(0.824f, 0.824f, 0.824f, 1f);
         
 
         [MenuItem("Window/General/Selection Groups")]
@@ -311,6 +313,10 @@ namespace Unity.SelectionGroupsEditor
             {
                 if(!EditorGUIUtility.isProSkin)
                     Label.normal.textColor = Color.black;
+                else 
+                    Label.normal.textColor = ProTextColor;
+                
+                
                 GUI.Label(rect, content, Label);
             }
 
