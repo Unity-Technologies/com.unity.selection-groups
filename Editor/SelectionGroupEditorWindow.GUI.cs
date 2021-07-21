@@ -16,10 +16,11 @@ namespace Unity.SelectionGroupsEditor
         private const string AddGroup    = "Add Group";
         private const int    RightMargin = 16;
         
-        private GUIStyle Foldout;
         private GUIStyle Label;
         private GUIContent editorHeaderContent, sceneHeaderContent;
         private GUIContent InspectorLock;       
+
+        private static readonly Color ProTextColor = new Color(0.824f, 0.824f, 0.824f, 1f);
         
 
         [MenuItem("Window/General/Selection Groups")]
@@ -104,7 +105,6 @@ namespace Unity.SelectionGroupsEditor
             {
                 miniButtonStyle = EditorStyles.miniButton;
                 miniButtonStyle.padding = new RectOffset(0, 0, 0, 0); 
-                Foldout = "foldout";
                 Label = "label";
                 InspectorLock = EditorGUIUtility.IconContent("InspectorLock");
             }
@@ -301,16 +301,15 @@ namespace Unity.SelectionGroupsEditor
                              - (COLOR_WIDTH + FOLDOUT_WIDTH + RightMargin + SEPARATOR_WIDTH);
             {
                 rect.width        =  FOLDOUT_WIDTH;
-                group.ShowMembers =  EditorGUI.Toggle(rect, group.ShowMembers, Foldout);
+                group.ShowMembers =  EditorGUI.Toggle(rect, group.ShowMembers, EditorStyles.foldout);
                 rect.x            += FOLDOUT_WIDTH;
                 rect.width        =  labelWidth;
             }
             if(isAvailableInEditMode)
                 HandleHeaderMouseEvents(rect, group.Name, group);
-            if (isPaint)
+            if (isPaint) 
             {
-                if(!EditorGUIUtility.isProSkin)
-                    Label.normal.textColor = Color.black;
+                Label.normal.textColor = EditorGUIUtility.isProSkin ? ProTextColor: Color.black;
                 GUI.Label(rect, content, Label);
             }
 
