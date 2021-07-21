@@ -309,7 +309,8 @@ namespace Unity.SelectionGroupsEditor
             }
             if(isAvailableInEditMode)
                 HandleHeaderMouseEvents(rect, group.Name, group);
-            if (isPaint) {
+            if (isPaint) 
+            {
                 Label.normal.textColor = EditorGUIUtility.isProSkin ? ProTextColor: Color.black;
                 GUI.Label(rect, content, Label);
             }
