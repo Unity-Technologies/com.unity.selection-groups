@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [0.4.2-preview] - 2021-08-03
 
+### Changed
+* doc: change changelog format to adhere to Semantic Versioning 
+
 ### Fixed
 * fix group text colors which were sometimes shown in black while using Unity Pro
 * fix foldout/toggle icon which sometimes did not appear in the SelectionGroups window
