@@ -48,14 +48,6 @@ namespace Unity.GoQL
 
         static Dictionary<string, Type> typeCache;
         static object typeCacheLock = new object();
-        static Dictionary<GameObject, string> nameCache = new Dictionary<GameObject, string>();
-
-        static string GetName(GameObject gameObject)
-        {
-            if (!nameCache.TryGetValue(gameObject, out string name))
-                name = nameCache[gameObject] = gameObject.name;
-            return name;
-        }
 
         static Type FindType(string name)
         {
@@ -209,7 +201,7 @@ namespace Unity.GoQL
 
                 foreach (var i in selection)
                 {
-                    if (IsNameMatch(GetName(i), q, isWildCardFirst, isWildCardLast))
+                    if (IsNameMatch(i.name, q, isWildCardFirst, isWildCardLast))
                         selection.Add(i);
                 }
 
