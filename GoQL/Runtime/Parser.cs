@@ -20,7 +20,6 @@ namespace Unity.GoQL
         {
             var tokenizer = new Tokenizer();
             var tokens = tokenizer.Tokenize(code);
-            Debug.Log(string.Join(" | ", tokens));
             parseResult = ParseResult.Empty;
             while (tokens.Count > 0)
             {
