@@ -13,7 +13,7 @@ namespace Unity.GoQL
     {
         readonly Stack<object> stack = new Stack<object>();
         readonly DoubleBuffer<GameObject> selection = new DoubleBuffer<GameObject>();
-        readonly List<object> instructions = new List<object>();
+        internal readonly List<object> instructions = new List<object>();
 
         bool refresh = true;
         string code;
@@ -48,6 +48,11 @@ namespace Unity.GoQL
 
         static Dictionary<string, Type> typeCache;
         static object typeCacheLock = new object();
+
+        public GoQLExecutor(string q=null)
+        {
+            if (q != null) Code = q;
+        }
 
         static Type FindType(string name)
         {
@@ -250,7 +255,7 @@ namespace Unity.GoQL
                     else if (arg is Range)
                     {
                         var range = (Range) arg;
-                        for (var index = range.start; index < range.end; index++)
+                        for (var index = range.start; index < range.end && index < selection.Count; index++)
                         {
                             for (var j = 0; j < selection.Count; j++)
                             {
@@ -264,7 +269,7 @@ namespace Unity.GoQL
                 }
 
                 selection.Swap();
-                selection.Reverse();
+                //selection.Reverse();
             }
         }
 
@@ -340,7 +345,7 @@ namespace Unity.GoQL
                 {
                     foreach (var m in component.sharedMaterials)
                     {
-                        if (m != null && matcher(m.name, discriminator))
+                        if (m.shader != null && matcher(m.shader.name, discriminator))
                             selection.Add(g);
                     }
                 }

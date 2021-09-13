@@ -39,7 +39,6 @@ namespace Tests
             Assert.AreEqual(TokenType.Colon, tokens[11].type);
             Assert.AreEqual(TokenType.CloseAngle, tokens[12].type);
             Assert.AreEqual(TokenType.Operator, tokens[13].type);
-            
         }
     }
 }
