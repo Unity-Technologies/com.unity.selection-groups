@@ -213,6 +213,7 @@ namespace Unity.GoQL
                         break;
                     default:
                         // ignore everything else, it is a syntax error.
+                        tokens.RemoveAt(0);
                         break;
                 }
             }
