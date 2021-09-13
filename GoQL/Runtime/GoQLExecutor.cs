@@ -48,6 +48,7 @@ namespace Unity.GoQL
 
         static Dictionary<string, Type> typeCache;
         static object typeCacheLock = new object();
+        private bool isExcluding;
 
         public GoQLExecutor(string q=null)
         {
@@ -100,7 +101,7 @@ namespace Unity.GoQL
                 instructions.Clear();
                 GoQL.Parser.Parse(code, instructions, out parseResult);
             }
-            
+            Debug.Log(string.Join(" | ", instructions));
             stack.Clear();
             selection.Clear();
             Error = string.Empty;
@@ -133,24 +134,37 @@ namespace Unity.GoQL
             return selection.ToArray();
         }
 
+        void EnableExclusion()
+        {
+            isExcluding = true;
+        }
+
         void ExecuteCode(GoQLCode i)
         {
             switch (i)
             {
+                case GoQLCode.Exclude:
+                    EnableExclusion();
+                    break;
                 case GoQLCode.EnterChildren:
                     EnterChildren();
+                    isExcluding = false;
                     break;
                 case GoQLCode.FilterByDiscriminators:
                     FilterByDiscriminators();
+                    isExcluding = false;
                     break;
                 case GoQLCode.FilterIndex:
                     FilterIndex();
+                    isExcluding = false;
                     break;
                 case GoQLCode.FilterName:
                     FilterName();
+                    isExcluding = false;
                     break;
                 case GoQLCode.CollectAllAncestors:
                     CollectAllAncestors();
+                    isExcluding = false;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(i), i, null);
@@ -203,7 +217,10 @@ namespace Unity.GoQL
 
                 foreach (var i in selection)
                 {
-                    if (IsNameMatch(i.name, q, isWildCardFirst, isWildCardLast, isWildCardMiddle))
+                    var isMatch = (IsNameMatch(i.name, q, isWildCardFirst, isWildCardLast, isWildCardMiddle));
+                    if (isExcluding && !isMatch)
+                        selection.Add(i);
+                    if(!isExcluding && isMatch)
                         selection.Add(i);
                 }
 
@@ -281,6 +298,7 @@ namespace Unity.GoQL
 
         void FilterByDiscriminators()
         {
+            var isExclusion = (bool) stack.Pop();
             var argCount = (int) stack.Pop();
             for (var i = 0; i < argCount; i++)
             {
@@ -288,25 +306,26 @@ namespace Unity.GoQL
                 if (arg is Discrimator)
                 {
                     var discriminator = (Discrimator) arg;
-                    PerformDiscrimination(discriminator);
+                    PerformDiscrimination(discriminator, isExclusion);
                 }
             }
         }
 
-        void PerformDiscrimination(Discrimator discriminator)
+        void PerformDiscrimination(Discrimator discriminator, bool isExclusion)
         {
             var discriminatorType = discriminator.type;
             var value = discriminator.value;
+            
             switch (discriminatorType)
             {
                 case "t":
-                    PerformTypeDiscrimination(value);
+                    PerformTypeDiscrimination(value, isExclusion);
                     break;
                 case "m":
-                    PerformMaterialDiscrimination(value);
+                    PerformMaterialDiscrimination(value, isExclusion);
                     break;
                 case "s":
-                    PerformShaderDiscrimination(value);
+                    PerformShaderDiscrimination(value, isExclusion);
                     break;
                 default:
                     Error = $"Unknown discrimator type: {discriminatorType}";
@@ -325,7 +344,7 @@ namespace Unity.GoQL
             return (A, B) => A.ToLower() == B.ToLower();
         }
 
-        void PerformMaterialDiscrimination(string discriminator)
+        void PerformMaterialDiscrimination(string discriminator, bool isExclusion)
         {
             var matcher = MatchName(discriminator);
             foreach (var g in selection)
@@ -334,7 +353,10 @@ namespace Unity.GoQL
                 {
                     foreach (var m in component.sharedMaterials)
                     {
-                        if (m != null && matcher(m.name, discriminator))
+                        var materialExists = (m != null && matcher(m.name, discriminator));
+                        if (isExclusion && !materialExists)
+                            selection.Add(g);
+                        if(!isExclusion && materialExists)
                             selection.Add(g);
                     }
                 }
@@ -342,7 +364,7 @@ namespace Unity.GoQL
             selection.Swap();
         }
 
-        void PerformShaderDiscrimination(string discriminator)
+        void PerformShaderDiscrimination(string discriminator, bool isExclusion)
         {
             var matcher = MatchName(discriminator);
             foreach (var g in selection)
@@ -351,7 +373,10 @@ namespace Unity.GoQL
                 {
                     foreach (var m in component.sharedMaterials)
                     {
-                        if (m.shader != null && matcher(m.shader.name, discriminator))
+                        var shaderExists = (m.shader != null && matcher(m.shader.name, discriminator));
+                        if (isExclusion && !shaderExists)
+                            selection.Add(g);
+                        if(!isExclusion && shaderExists)
                             selection.Add(g);
                     }
                 }
@@ -360,17 +385,18 @@ namespace Unity.GoQL
             selection.Swap();
         }
 
-        void PerformTypeDiscrimination(string value)
+        void PerformTypeDiscrimination(string value, bool isExclusion)
         {
             var type = FindType(value);
             if (type != null)
             {
                 foreach (var g in selection)
                 {
-                    if (g.TryGetComponent(type, out Component component))
-                    {
+                    var componentExists = g.TryGetComponent(type, out Component component);
+                    if (isExclusion && !componentExists)
                         selection.Add(g);
-                    }
+                    if(!isExclusion && componentExists)
+                        selection.Add(g);
                 }
 
                 selection.Swap();

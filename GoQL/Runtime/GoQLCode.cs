@@ -8,7 +8,8 @@ namespace Unity.GoQL
         FilterNameEndsWith,
         FilterNameStartsWith,
         FilterNameContains,
-        CollectAllAncestors
+        CollectAllAncestors,
+        Exclude
     }
 
 }

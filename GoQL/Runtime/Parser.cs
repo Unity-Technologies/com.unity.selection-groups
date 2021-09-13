@@ -20,6 +20,7 @@ namespace Unity.GoQL
         {
             var tokenizer = new Tokenizer();
             var tokens = tokenizer.Tokenize(code);
+            Debug.Log(string.Join(" | ", tokens));
             parseResult = ParseResult.Empty;
             while (tokens.Count > 0)
             {
@@ -66,7 +67,10 @@ namespace Unity.GoQL
             tokens.RemoveAt(0);
             switch (token.type)
             {
-                //a string in this context is a name discrimator.
+                case TokenType.Bang:
+                    instructions.Add(GoQLCode.Exclude);
+                    return ParseResult.OK;
+                //a string in this context is a name discriminator.
                 case TokenType.String:
                     instructions.Add((string)(token.value));
                     instructions.Add(GoQLCode.FilterName);
@@ -99,6 +103,7 @@ namespace Unity.GoQL
         static ParseResult _ParseDiscriminators(List<Token> tokens, List<object> instructions)
         {
             var elements = new List<object>();
+            var isExclusion = false;
             while (true)
             {
                 if (tokens.Count == 0)
@@ -115,11 +120,16 @@ namespace Unity.GoQL
                         {
                             instructions.AddRange(elements);
                             instructions.Add(elements.Count);
+                            instructions.Add(isExclusion);
                             instructions.Add(GoQLCode.FilterByDiscriminators);
                         }
                         return ParseResult.OK;
                     case TokenType.Comma:
                         tokens.RemoveAt(0);
+                        break;
+                    case TokenType.Bang:
+                        tokens.RemoveAt(0);
+                        isExclusion = true;
                         break;
                     case TokenType.Colon:
                         //Make a discriminator object

@@ -13,7 +13,8 @@ namespace Unity.GoQL
         Colon,
         Slash,
         Number,
-        Comma
+        Comma,
+        Bang
     }
 }
 

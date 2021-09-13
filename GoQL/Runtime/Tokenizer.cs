@@ -12,7 +12,7 @@ namespace Unity.GoQL
         int index = 0;
         string valueAccumulator = "";
         List<Token> _tokens = new List<Token>();
-        HashSet<char> specialChars = new HashSet<char>("<>,:/[]".ToCharArray());
+        HashSet<char> specialChars = new HashSet<char>("<>,:/[]!".ToCharArray());
 
         HashSet<string> operators = new HashSet<string>(new[]
         {
@@ -159,6 +159,12 @@ namespace Unity.GoQL
                     valueAccumulator += c;
                     ConsumeChar();
                     AddToken(TokenType.Slash);
+                    WhatIsMyNextState();
+                    break;
+                case '!':
+                    valueAccumulator += c;
+                    ConsumeChar();
+                    AddToken(TokenType.Bang);
                     WhatIsMyNextState();
                     break;
                 default:
