@@ -257,7 +257,17 @@ namespace Tests
             var results = e.Execute();
             Assert.AreEqual(ParseResult.OK, e.parseResult);
             Assert.AreEqual(8, results.Length);
-            
+        }
+        
+        [Test]
+        public void TestGoQLExamples21()
+        {
+            var e = new GoQLExecutor("Env*ent");
+            var results = e.Execute();
+            Assert.AreEqual(ParseResult.OK, e.parseResult);
+            Assert.AreEqual(2, results.Length);
+            Assert.AreEqual("Environment", results[0].name);
+            Assert.AreEqual("Environment", results[1].name);
         }
 
     }

@@ -199,14 +199,11 @@ namespace Unity.GoQL
             {
                 var isWildCardFirst = q.First() == '*';
                 var isWildCardLast = q.Last() == '*';
-                if (isWildCardFirst)
-                    q = q.Substring(1);
-                if (isWildCardLast)
-                    q = q.Substring(0, q.Length - 1);
+                var isWildCardMiddle = !isWildCardFirst && !isWildCardLast && q.Contains('*');
 
                 foreach (var i in selection)
                 {
-                    if (IsNameMatch(i.name, q, isWildCardFirst, isWildCardLast))
+                    if (IsNameMatch(i.name, q, isWildCardFirst, isWildCardLast, isWildCardMiddle))
                         selection.Add(i);
                 }
 
@@ -214,8 +211,17 @@ namespace Unity.GoQL
             }
         }
 
-        bool IsNameMatch(string name, string q, bool isWildCardFirst, bool isWildCardLast)
+        bool IsNameMatch(string name, string q, bool isWildCardFirst, bool isWildCardLast, bool isWildCardMiddle)
         {
+            if (isWildCardFirst)
+                q = q.Substring(1);
+            if (isWildCardLast)
+                q = q.Substring(0, q.Length - 1);
+            if (isWildCardMiddle)
+            {
+                var parts = q.Split('*');
+                return name.StartsWith(parts[0]) && name.EndsWith(parts[1]);
+            }
             if (isWildCardFirst && isWildCardLast)
                 return name.Contains(q);
             if (isWildCardFirst)
