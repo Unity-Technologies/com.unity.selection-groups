@@ -57,7 +57,8 @@ namespace Unity.SelectionGroupsEditor
                 var go = i as GameObject;
                 if(go != null && string.IsNullOrEmpty(go.scene.path)) {
                     //GameObject is not saved into a scene, therefore it cannot be stored in a editor selection group.
-                    throw new SelectionGroupException("Cannot add an Object from an unsaved scene.");
+                    //TODO: work out better way to notify user of this exception.
+                    // throw new SelectionGroupException("Cannot add an Object from an unsaved scene.");
                 } 
                 PersistentReferenceCollection.Add(i);    
             }

@@ -1,11 +1,30 @@
+using System.Collections;
 using NUnit.Framework;
 using Unity.GoQL;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.TestTools;
 
 namespace Tests
 {
     public class GoQLTests
     {
+        private static string ScenePath = "GoQLTestScene";
+        
+        [UnitySetUp]
+        public IEnumerator SetUp()
+        {
+            Debug.Log("Loading Test Scene.");
+            yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{ScenePath}.unity", new LoadSceneParameters(LoadSceneMode.Single));
+        }
+ 
+        [UnityTearDown]
+        public IEnumerator TearDown()
+        {
+            yield return SceneManager.UnloadSceneAsync(ScenePath);
+        }
+        
         [Test]
         public void TestTokenizerSimple()
         {
@@ -24,7 +43,6 @@ namespace Tests
         {
             var tokenizer = new Tokenizer();
             var tokens = tokenizer.Tokenize("/simon*[wittber],-123, 3.14, <:> **");
-            Debug.Log(string.Join(" | ", tokens));
             Assert.AreEqual(TokenType.Slash, tokens[0].type);
             Assert.AreEqual(TokenType.String, tokens[1].type);
             Assert.AreEqual(TokenType.OpenSquare, tokens[2].type);

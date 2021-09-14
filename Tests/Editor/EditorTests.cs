@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Unity.GoQL;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
 
@@ -11,51 +12,22 @@ namespace Tests
 {
     public class EditorTests
     {
-
-        public string[] test_queries = new[]
+        private static string TestScenePath = "Packages/com.unity.selection-groups/Tests/Scenes/GoQLTestScene";
+        private static string EmptyScenePath = "Packages/com.unity.selection-groups/Tests/Scenes/EmptyScene";
+        
+        [UnitySetUp]
+        public IEnumerator SetUp()
         {
-            "/Head",
-            "Head/",
-            "Head/[0]",
-            "Head/[0,1,5]",
-            "Head/[-1]",
-            "Head/[3:5]",
-            "Head<t:Collider>",
-            "Head<m:Glow>",
-            "Head<s:Standard>",
-            "/",
-            "Quad*/<t:AudioSource>[1]",
-            "<t:Transform, t:AudioSource>",
-            "<t:Renderer>/*Audio*/[0:3]",
-            "Cube/Quad/<t:AudioSource>[-1]",
-            "<m:Skin>",
-            "/Environment/**<t:MeshRenderer>",
-        };
-
-        // public object[] expected_test_results = new[]
-        // {
-        //     Head | FilterName
-        //     *Head | FilterName
-        //     Head* | FilterName
-        //     *Head* | FilterName
-        //     EnterChildren | Head | FilterName
-        //     Head | FilterName | EnterChildren
-        //     Head | FilterName | EnterChildren | 0 | 1 | FilterIndex
-        //     Head | FilterName | EnterChildren | 0 | 1 | 5 | 3 | FilterIndex
-        //     Head | FilterName | EnterChildren | -1 | 1 | FilterIndex
-        //     Head | FilterName | EnterChildren | Unity.GoQL.Range | 1 | FilterIndex
-        //     Head | FilterName | t:Collider | 1 | FilterByDiscriminators
-        //     Head | FilterName | m:Glow | 1 | FilterByDiscriminators
-        //     Head | FilterName | s:Standard | 1 | FilterByDiscriminators
-        //     EnterChildren
-        //     Quad* | FilterName | EnterChildren | t:AudioSource | 1 | FilterByDiscriminators | 1 | 1 | FilterIndex
-        //     t:Transform | t:AudioSource | 2 | FilterByDiscriminators
-        //     t:Renderer | 1 | FilterByDiscriminators | EnterChildren | *Audio* | FilterName | EnterChildren | Unity.GoQL.Range | 1 | FilterIndex
-        //     Cube | FilterName | EnterChildren | Quad | FilterName | EnterChildren | t:AudioSource | 1 | FilterByDiscriminators | -1 | 1 | FilterIndex
-        //     m:Skin | 1 | FilterByDiscriminators
-        //     EnterChildren | Environment | FilterName | EnterChildren | CollectAllAncestors | t:MeshRenderer | 1 | FilterByDiscriminators
-        // };
-
+            Debug.Log("Loading Test Scene.");
+            Debug.Log(System.IO.File.Exists($"{TestScenePath}.unity"));
+            yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{TestScenePath}.unity", new LoadSceneParameters(LoadSceneMode.Single));
+        }
+ 
+        [UnityTearDown]
+        public IEnumerator TearDown()
+        {
+            yield return SceneManager.LoadSceneAsync($"{EmptyScenePath}.unity");
+        }
 
         [Test]
         public void TestGoQLExamples1()
