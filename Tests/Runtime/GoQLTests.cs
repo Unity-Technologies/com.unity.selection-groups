@@ -12,7 +12,7 @@ namespace Unity.SelectionGroups.Tests
         {
             var tokenizer = new Tokenizer();
             var tokens = tokenizer.Tokenize("simon,wittber,123");
-            Debug.Log(string.Join(" | ", tokens));
+            //Debug.Log(string.Join(" | ", tokens));
             Assert.AreEqual(TokenType.String, tokens[0].type);
             Assert.AreEqual(TokenType.Comma, tokens[1].type);
             Assert.AreEqual(TokenType.String, tokens[2].type);
