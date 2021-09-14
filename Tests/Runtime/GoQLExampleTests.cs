@@ -18,8 +18,8 @@ namespace Unity.SelectionGroups.Tests
         [UnitySetUp]
         public IEnumerator SetUp()
         {
-            Debug.Log("Loading Test Scene.");
-            Debug.Log(System.IO.File.Exists($"{TestScenePath}.unity"));
+            //Debug.Log("Loading Test Scene.");
+            Assert.IsTrue(System.IO.File.Exists($"{TestScenePath}.unity"));
             yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{TestScenePath}.unity", new LoadSceneParameters(LoadSceneMode.Single));
         }
  
