@@ -2,7 +2,8 @@
     "name": "Unity.SelectionGroups.Tests",
     "references": [
         "GUID:27619889b8ba8c24980f49ee34dbb44a",
-        "GUID:0acc523941302664db1f4e527237feb3"
+        "GUID:0acc523941302664db1f4e527237feb3",
+        "GUID:f05b2c431bca79e4fa618c6f7b09e6c4"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
