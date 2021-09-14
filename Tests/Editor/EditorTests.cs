@@ -26,7 +26,7 @@ namespace Tests
         [UnityTearDown]
         public IEnumerator TearDown()
         {
-            yield return SceneManager.LoadSceneAsync($"{EmptyScenePath}.unity");
+            yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{EmptyScenePath}.unity", new LoadSceneParameters(LoadSceneMode.Single));
         }
 
         [Test]

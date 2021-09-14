@@ -10,20 +10,6 @@ namespace Tests
 {
     public class GoQLTests
     {
-        private static string ScenePath = "GoQLTestScene";
-        
-        [UnitySetUp]
-        public IEnumerator SetUp()
-        {
-            Debug.Log("Loading Test Scene.");
-            yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{ScenePath}.unity", new LoadSceneParameters(LoadSceneMode.Single));
-        }
- 
-        [UnityTearDown]
-        public IEnumerator TearDown()
-        {
-            yield return SceneManager.UnloadSceneAsync(ScenePath);
-        }
         
         [Test]
         public void TestTokenizerSimple()
