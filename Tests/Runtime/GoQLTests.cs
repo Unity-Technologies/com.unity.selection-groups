@@ -1,12 +1,8 @@
-using System.Collections;
 using NUnit.Framework;
 using Unity.GoQL;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.TestTools;
 
-namespace Tests
+namespace Unity.SelectionGroups.Tests 
 {
     public class GoQLTests
     {
@@ -16,7 +12,7 @@ namespace Tests
         {
             var tokenizer = new Tokenizer();
             var tokens = tokenizer.Tokenize("simon,wittber,123");
-            Debug.Log(string.Join(" | ", tokens));
+            //Debug.Log(string.Join(" | ", tokens));
             Assert.AreEqual(TokenType.String, tokens[0].type);
             Assert.AreEqual(TokenType.Comma, tokens[1].type);
             Assert.AreEqual(TokenType.String, tokens[2].type);
