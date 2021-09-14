@@ -90,6 +90,7 @@ Examples:
 * `<m:Skin>`: all **GameObjects** that use materials named "Skin".
 * `/Environment/**<t:MeshRenderer>`: all descendants of root **GameObjects** named "Environment" 
   that have MeshRenderer components.
+* `/Head*!*Unit`: all root gameobjects that have a name that starts with "Head", but do not end with "Unit".
 
     
 

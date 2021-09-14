@@ -12,7 +12,7 @@ namespace Unity.GoQL
         int index = 0;
         string valueAccumulator = "";
         List<Token> _tokens = new List<Token>();
-        HashSet<char> specialChars = new HashSet<char>("<>,:/[]".ToCharArray());
+        HashSet<char> specialChars = new HashSet<char>("<>,:/[]!".ToCharArray());
 
         HashSet<string> operators = new HashSet<string>(new[]
         {
@@ -42,7 +42,7 @@ namespace Unity.GoQL
             if (DataAvailable)
             {
                 var c = PeekChar();
-                if (IsStringChar(c) || _TokenizeFunction == CollectString && char.IsDigit(c))
+                if (IsStringChar(c))
                     ChangeState(CollectString);
                 else if (char.IsNumber(c) || c == '-')
                     ChangeState(CollectNumber);
@@ -55,7 +55,7 @@ namespace Unity.GoQL
 
         private static bool IsStringChar(char c)
         {
-            return char.IsLetter(c) || c == '*' || c == '_' || c == '-';
+            return char.IsLetter(c) || c == '*' || c == '_';
         }
 
         void CollectWhitespace()
@@ -93,15 +93,24 @@ namespace Unity.GoQL
         void CollectNumber()
         {
             var c = PeekChar();
-            if (char.IsNumber(c) || c == '.' || c == '-')
+            if (valueAccumulator.Length == 0) //This is the first char, so collect it.
             {
                 valueAccumulator += c;
                 ConsumeChar();
+                if (!DataAvailable) 
+                    AddToken(TokenType.Number);
             }
-            else
+            else if (specialChars.Contains(c)) //Special chars will end and collect the number
             {
                 AddToken(TokenType.Number);
                 WhatIsMyNextState();
+            }
+            else //This is part of the string being collected.
+            {
+                valueAccumulator += c;
+                ConsumeChar();
+                if (!DataAvailable) 
+                    AddToken(TokenType.Number);
             }
         }
 
@@ -150,6 +159,12 @@ namespace Unity.GoQL
                     valueAccumulator += c;
                     ConsumeChar();
                     AddToken(TokenType.Slash);
+                    WhatIsMyNextState();
+                    break;
+                case '!':
+                    valueAccumulator += c;
+                    ConsumeChar();
+                    AddToken(TokenType.Bang);
                     WhatIsMyNextState();
                     break;
                 default:
