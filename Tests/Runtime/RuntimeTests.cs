@@ -4,7 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Unity.SelectionGroupsEditor.Tests {
+namespace Unity.SelectionGroups.Tests {
 public class RuntimeTests
 {
     // A Test behaves as an ordinary method
