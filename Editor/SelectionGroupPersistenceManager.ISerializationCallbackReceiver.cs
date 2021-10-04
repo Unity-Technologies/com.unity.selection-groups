@@ -20,7 +20,7 @@ namespace Unity.SelectionGroupsEditor
 
         static SelectionGroupPersistenceManager _instance;
 
-        static SelectionGroupPersistenceManager Instance
+        internal static SelectionGroupPersistenceManager Instance
         {
             get
             {

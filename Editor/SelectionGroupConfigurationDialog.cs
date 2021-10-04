@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Reflection;
 using Unity.SelectionGroups;
@@ -5,6 +6,7 @@ using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Unity.SelectionGroupsEditor
 {
@@ -35,6 +37,17 @@ namespace Unity.SelectionGroupsEditor
             dialog.debugInformation = null;
         }
 
+        private void OnEnable()
+        {
+            Undo.undoRedoPerformed -= Repaint;
+            Undo.undoRedoPerformed += Repaint;
+        }
+        
+        private void OnDisable()
+        {
+            Undo.undoRedoPerformed -= Repaint;
+        }
+
         void OnGUI()
         {
             if (group == null)
@@ -51,11 +64,19 @@ namespace Unity.SelectionGroupsEditor
                 var q = group.Query;
                 group.Query = EditorGUILayout.TextField(group.Query);
                 refreshQuery = refreshQuery || (q != group.Query);
+                
                 if (refreshQuery)
                 {
                     var code = GoQL.Parser.Parse(group.Query, out GoQL.ParseResult parseResult);
                     if (parseResult == GoQL.ParseResult.OK)
                     {
+                        {
+                            var obj = group as Object;
+                            if(obj == null)
+                                Undo.RegisterCompleteObjectUndo(SelectionGroupPersistenceManager.Instance, "Query change");
+                            else
+                                Undo.RegisterCompleteObjectUndo(obj, "Query change");
+                        }
                         executor.Code = group.Query;
                         var objects = executor.Execute();
                         message = $"{objects.Length} results.";
