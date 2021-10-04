@@ -69,7 +69,7 @@ namespace Unity.SelectionGroups.Runtime
             }
             set
             {
-                this.name = value;
+                this.name = $"SG_{value}";
                 _name = value;
             }
         }
