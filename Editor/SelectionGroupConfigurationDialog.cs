@@ -39,13 +39,19 @@ namespace Unity.SelectionGroupsEditor
 
         private void OnEnable()
         {
-            Undo.undoRedoPerformed -= Repaint;
-            Undo.undoRedoPerformed += Repaint;
+            Undo.undoRedoPerformed -= OnUndoRedo;
+            Undo.undoRedoPerformed += OnUndoRedo;
         }
-        
+
+        private void OnUndoRedo()
+        {
+            refreshQuery = true;
+            Repaint();
+        }
+
         private void OnDisable()
         {
-            Undo.undoRedoPerformed -= Repaint;
+            Undo.undoRedoPerformed -= OnUndoRedo;
         }
 
         void OnGUI()
@@ -62,21 +68,22 @@ namespace Unity.SelectionGroupsEditor
                 group.Color = EditorGUILayout.ColorField("Color", group.Color);
                 EditorGUILayout.LabelField("GameObject Query");
                 var q = group.Query;
-                group.Query = EditorGUILayout.TextField(group.Query);
-                refreshQuery = refreshQuery || (q != group.Query);
+                var newQuery = EditorGUILayout.TextField(group.Query);
+                refreshQuery = refreshQuery || (q != newQuery);
                 
                 if (refreshQuery)
                 {
+                    {
+                        var obj = group as Object;
+                        if(obj == null)
+                            Undo.RegisterCompleteObjectUndo(SelectionGroupPersistenceManager.Instance, "Query change");
+                        else
+                            Undo.RegisterCompleteObjectUndo(obj, "Query change");
+                    }
+                    group.Query = newQuery;
                     var code = GoQL.Parser.Parse(group.Query, out GoQL.ParseResult parseResult);
                     if (parseResult == GoQL.ParseResult.OK)
                     {
-                        {
-                            var obj = group as Object;
-                            if(obj == null)
-                                Undo.RegisterCompleteObjectUndo(SelectionGroupPersistenceManager.Instance, "Query change");
-                            else
-                                Undo.RegisterCompleteObjectUndo(obj, "Query change");
-                        }
                         executor.Code = group.Query;
                         var objects = executor.Execute();
                         message = $"{objects.Length} results.";
