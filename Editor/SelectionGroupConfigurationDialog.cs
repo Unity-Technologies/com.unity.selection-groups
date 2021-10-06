@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Reflection;
 using Unity.SelectionGroups;
@@ -5,6 +6,7 @@ using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Unity.SelectionGroupsEditor
 {
@@ -35,6 +37,23 @@ namespace Unity.SelectionGroupsEditor
             dialog.debugInformation = null;
         }
 
+        private void OnEnable()
+        {
+            Undo.undoRedoPerformed -= OnUndoRedo;
+            Undo.undoRedoPerformed += OnUndoRedo;
+        }
+
+        private void OnUndoRedo()
+        {
+            refreshQuery = true;
+            Repaint();
+        }
+
+        private void OnDisable()
+        {
+            Undo.undoRedoPerformed -= OnUndoRedo;
+        }
+
         void OnGUI()
         {
             if (group == null)
@@ -49,10 +68,19 @@ namespace Unity.SelectionGroupsEditor
                 group.Color = EditorGUILayout.ColorField("Color", group.Color);
                 EditorGUILayout.LabelField("GameObject Query");
                 var q = group.Query;
-                group.Query = EditorGUILayout.TextField(group.Query);
-                refreshQuery = refreshQuery || (q != group.Query);
+                var newQuery = EditorGUILayout.TextField(group.Query);
+                refreshQuery = refreshQuery || (q != newQuery);
+                
                 if (refreshQuery)
                 {
+                    {
+                        var obj = group as Object;
+                        if(obj == null)
+                            Undo.RegisterCompleteObjectUndo(SelectionGroupPersistenceManager.Instance, "Query change");
+                        else
+                            Undo.RegisterCompleteObjectUndo(obj, "Query change");
+                    }
+                    group.Query = newQuery;
                     var code = GoQL.Parser.Parse(group.Query, out GoQL.ParseResult parseResult);
                     if (parseResult == GoQL.ParseResult.OK)
                     {
