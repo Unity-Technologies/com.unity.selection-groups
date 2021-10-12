@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [0.5.2-preview] - 2021-10-12
+
+### Changed
+
+* add SG_ prefix by default to selection groups in scene.
+
+### Fixed
+
+* fix: support undo for goql query editing
+
 ## [0.5.1-preview] - 2021-09-22
 
 ### Fixed
