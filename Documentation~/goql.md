@@ -34,16 +34,15 @@ Initially, the current applicable set is global,
 and will contain all objects in the hierarchy.   
 This applicable set can be changed by using [a descender](#descenders).
 
-#### Inner Wildcard Limitations
 
-Currently, inner wildcards have the following limitations:
-1. Only one inner wildcard is allowed in each applicable set, e.g: 
-   * `/H*d/C*d` is supported, but
-   * `/H*d*Tail` is not supported
-2. An inner wildcard can't be used together with either a beginning or ending wildcard 
-   in the same applicable set, e.g: 
-   * `/*d/C*d/T*` is supported, but
-   * `/*d*T*` is not supported
+> Currently, inner wildcards have the following limitations:
+> 1. Only one inner wildcard is allowed in each applicable set, e.g: 
+>   * `/H*d/C*d` is supported, but
+>   * `/H*d*Tail` is not supported
+> 2. An inner wildcard can't be used together with either a beginning or ending wildcard 
+>   in the same applicable set, e.g: 
+>   * `/*d/C*d/T*` is supported, but
+>   * `/*d*T*` is not supported
 
 #### Negations
 
@@ -60,14 +59,14 @@ E.g.:
 * `/Head/!Cube/*`: from root **GameObjects** which names are "Head", search their children which are not named "Cube", 
   and select the children of the non-"Cube" **GameObjects**.
 
-Using multiple negations in the same set, such as `/!H!ead*`, is currently not supported. 
+> Currently, negations have the following limitations:
+> 1. Using multiple negations in the same set, such as `/!H!ead*`, is currently not supported.
+> 2. `!` in the middle must be enclosed with `*`, e.g: `/Head*!*Tail`
 
 
 ### Descenders
 
 A descender is defined by a slash character (`/`).
-
-    /
 
 When GoQL reads this symbol, it will narrow the search down into 
 the children of the current applicable set.   
