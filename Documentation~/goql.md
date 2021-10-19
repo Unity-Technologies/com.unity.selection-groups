@@ -47,25 +47,20 @@ Currently, inner wildcards have the following limitations:
 
 #### Negations
 
-A negation will 
- indexer will filter the current set using a numerical index which can be an individual index or a range of indexes.   
+A negation is defined by an exclamation point (`!`), 
+and will negate a name filter from its position 
+until the end position of the current applicable set.
+
 E.g.:
+* `!Head*` : all **GameObjects** that don't begin with  "Head"
+* `Hea*!*d` : all **GameObjects** which begin with  "Hea", but don't end with "d"
+* `!H*d`: all **GameObjects** that don't begin with "H" and don't end with "d"
+* `/!*Head*`: root **GameObjects** that don't have "Head" anywhere
+* `/!*ead/!C*` : from root **GameObjects** that don't have names ending with "ead", select their children which don't start with "C" 
+* `/Head/!Cube/*`: from root **GameObjects** which names are "Head", search their children which are not named "Cube", 
+  and select the children of the non-"Cube" **GameObjects**.
 
-
-* `/!*ead/!C*` : from root gameobjects that don't have names ending with ead, pick their children which don't start with C 
-* `/!Head*` : root gameobjects that don't begin with  head
-* `/!*Head*`: root gameobjects that don't have head anywhere
-* `/!H*d`: root gameobjects that don't begin with h and end with d
-* `!Head`: all gameobjects which don't have head as their names
-* `/Head/!Cube/*`: from all root gameobjects which names are head, search their children which names are not Cube, 
-  and get their children
-
-* `/Head/!Cube`: children of head that are not cube
-* `/Head/!C*`: children of head that don't begin with C
-
-#### Limitations
-
-Multiple negations are not supported in the same set, for example: `/!H!ead*`
+Using multiple negations in the same set, such as `/!H!ead*`, is currently not supported. 
 
 
 ### Descenders
