@@ -45,6 +45,28 @@ Currently, inner wildcards have the following limitations:
    * `/*d/C*d/T*` is supported, but
    * `/*d*T*` is not supported
 
+#### Negations
+
+A negation will 
+ indexer will filter the current set using a numerical index which can be an individual index or a range of indexes.   
+E.g.:
+
+
+* `/!*ead/!C*` : from root gameobjects that don't have names ending with ead, pick their children which don't start with C 
+* `/!Head*` : root gameobjects that don't begin with  head
+* `/!*Head*`: root gameobjects that don't have head anywhere
+* `/!H*d`: root gameobjects that don't begin with h and end with d
+* `!Head`: all gameobjects which don't have head as their names
+* `/Head/!Cube/*`: from all root gameobjects which names are head, search their children which names are not Cube, 
+  and get their children
+
+* `/Head/!Cube`: children of head that are not cube
+* `/Head/!C*`: children of head that don't begin with C
+
+#### Limitations
+
+Multiple negations are not supported in the same set, for example: `/!H!ead*`
+
 
 ### Descenders
 
@@ -86,25 +108,6 @@ Examples:
 * `Head<t:Collider>`: all **GameObjects** named "Head" which also have a Collider component.
 * `Head<m:Glow>`: all **GameObjects** that are named "Head" and use materials named "Glow"
 * `Head<s:Standard>`: all **GameObjects** that are named "Head" and are using "Standard" shader.
-
-### Negation
-
-
-* /!*ead/!C* : from root gameobjects that don't have names ending with ead, pick their children which don't start with C 
-* /!Head* : root gameobjects that don't begin with  head
-* /!*Head*: root gameobjects that don't have head anywhere
-* /!H*d: root gameobjects that don't begin with h and end with d
-* !Head: all gameobjects which don't have head as their names
-* /Head/!Cube/*: from all root gameobjects which names are head, search their children which names are not Cube, 
-  and get their children
-
-* /Head/!Cube: children of head that are not cube
-* /Head/!C*: children of head that don't begin with C
-
-#### Limitations
-
-Multiple negations are not supported in the same set, for example: `/!H!ead*`
-
     
 ## Other Examples
 
