@@ -28,9 +28,9 @@ A name filter can also use wildcards at the beginning and end of the name, e.g.:
 * `Head*`: all **GameObjects** that have names beginning with "Head".
 * `*Head*`: all **GameObjects** that contain the string "Head" anywhere in their names.
 
-Limitation
-E*v*t: only single inner wildcard is supported 
-*E*t*: can't be used together with beginning or ending wildcard
+Limitations
+* E*v*t: only single inner wildcard is supported 
+* *E*t*: can't be used together with beginning or ending wildcard
 
 Note that a name filter will look for matching **GameObjects** in the current applicable set.  
 Initially, the current applicable set is global, 
