@@ -110,25 +110,20 @@ Examples:
 
 ## Other Examples
 
-* `/`: all root **GameObjects**.
-* `Quad*`: all **GameObjects** which have names beginning with "Quad".
-* `Quad*/<t:AudioSource>[1]`: The second audio source component in children of all **GameObjects** 
-  which have names beginning with "Quad".
-* `<t:Transform, t:AudioSource>`: all **GameObjects** that have Transform and AudioSource components.    
-* `<t:Renderer>/*Audio*/[0:3]`: the first 3 children of all **GameObjects** which:
-  * have parent **GameObjects** with Renderer components.
-  * have "Audio" in their names
-* `Cube/Quad/<t:AudioSource>[-1]`: from each **GameObject** named "Cube", 
-  select children that have names starting with "Quad", 
-  then select the last grandchild that has an AudioSource component.
-* `<m:Skin>`: all **GameObjects** that use materials named "Skin".
-* `/Environment/**<t:MeshRenderer>`: all descendants of root **GameObjects** named "Environment" 
-  that have MeshRenderer components.
-* `/!*Head*`: root **GameObjects** that don't have "Head" anywhere
-* `/!*ead/!C*` : from root **GameObjects** that don't have names ending with "ead", select their children which don't start with "C" 
-* `/Head/!Cube/*`: from root **GameObjects** which names are "Head", search their children which are not named "Cube", 
-  and select the children of the non-"Cube" **GameObjects**.
-* `/Head*!*Unit`: all root **GameObjects** which names start with "Head", but do not end with "Unit".
+|**GoQL**            |**Description** |
+|:----------------------------------|:---|
+|`/`                                |All root **GameObjects**.|
+|`Quad*`                            |All **GameObjects** which have names beginning with "Quad".|
+|`Quad*/<t:AudioSource>[1]`         |The second audio source component in children of all **GameObjects** which have names beginning with "Quad".|
+|`<t:Transform, t:AudioSource>`     |All **GameObjects** that have Transform and AudioSource components.|
+|`<t:Renderer>/*Audio*/[0:3]`       |The first 3 children of all **GameObjects** which: <br/>  * have parent **GameObjects** with Renderer components. <br/>  * have "Audio" in their names |
+|`Cube/Quad/<t:AudioSource>[-1]`    |From each **GameObject** named "Cube",  select children that have names starting with "Quad",  then select the last grandchild that has an AudioSource component.|
+|`<m:Skin>`                         |All **GameObjects** that use materials named "Skin".|
+|`/Environment/**<t:MeshRenderer>`  |All descendants of root **GameObjects** named "Environment"  that have MeshRenderer components.|
+|`/!*Head*`                         |Root **GameObjects** that don't have "Head" anywhere|
+|`/!*ead/!C*`                       |From root **GameObjects** that don't have names ending with "ead", select their children which don't start with "C"|
+|`/Head/!Cube/*`                    |From root **GameObjects** which names are "Head", search their children which are not named "Cube",  and select the children of the non-"Cube" **GameObjects**.|
+|`/Head*!*Unit`                     |All root **GameObjects** which names start with "Head", but do not end with "Unit".|
 
     
 
