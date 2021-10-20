@@ -168,7 +168,7 @@ namespace Unity.GoQL
                     WhatIsMyNextState();
                     break;
                 default:
-                    Debug.Log($"Unhandled char: {c}");
+                    Log($"Unhandled char: {c}");
                     ConsumeChar();
                     WhatIsMyNextState();
                     break;
