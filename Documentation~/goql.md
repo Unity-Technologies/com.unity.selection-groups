@@ -72,18 +72,23 @@ If it is the first character of the GoQL string, it will match all root objects 
 A double asterisk (`**`) is a special descender, which matches all descendants of the applicable set.
 
 Examples:
-* `/Head`: any **GameObjects** named "Head" that are in the root of the hierarchy.
-* `Head/`: all immediate children of any **GameObjects** named "Head".
+
+|**GoQL**    |**Description** |
+|:-----------|:---|
+|`/Head`     |Any **GameObjects** named "Head" that are in the root of the hierarchy. |
+|`Head/`     |All immediate children of any **GameObjects** named "Head".|
 
 ### Indexers
 
 An indexer will filter the current set using a numerical index which can be an individual index or a range of indexes.   
 E.g.:
 
-* `Head/[0]`: the first child of all **GameObjects** named "Head".
-* `Head/[0,1,5]`: the children with specified indexes of all **GameObjects** named "Head", if they exist.   
-* `Head/[-1]`: the last child of all **GameObjects** named "Head".
-* `Head/[3:5]`: the children of **GameObjects** named "Head" that have indexes betweeen 3 and 5 (exclusive).
+|**GoQL**      |**Description** |
+|:-------------|:---|
+|`Head/[0]`    |The first child of all **GameObjects** named "Head". |
+|`Head/[0,1,5]`|The children with specified indexes of all **GameObjects** named "Head", if they exist.|
+|`Head/[-1]`   |The last child of all **GameObjects** named "Head". |
+|`Head/[3:5]`  |The children of **GameObjects** named "Head" that have indexes betweeen 3 and 5 (exclusive).|
    
 
 ### Discriminators
