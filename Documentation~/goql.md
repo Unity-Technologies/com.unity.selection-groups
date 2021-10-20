@@ -101,6 +101,7 @@ Discriminators are specified using angle brackets and one of these codes:
 3. 's': shader
 
 Examples:
+
 |**GoQL**            |**Description** |
 |:-------------------|:---|
 |`Head<t:Collider>`  |All **GameObjects** named "Head" which also have a Collider component.|
