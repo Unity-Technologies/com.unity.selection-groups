@@ -46,7 +46,7 @@ This applicable set can be changed by using [a descender](#descenders).
 
 #### Exclusions
 
-An exclusion is defined by an exclamation point (`!`).
+An exclusion is defined by an exclamation point (`!`).  
 Writing a name filter after `!` will exclude **GameObjects** that match the name filter 
 in the current applicable set.
 
