@@ -44,25 +44,18 @@ This applicable set can be changed by using [a descender](#descenders).
 >   * `/*d/C*d/T*` is supported, but
 >   * `/*d*T*` is not supported
 
-#### Negations
+#### Exclusions
 
-A negation is defined by an exclamation point (`!`), 
-and will negate a name filter from its position 
-until the end position of the current applicable set.
+An exclusion is defined by an exclamation point (`!`).
+Writing a name filter after `!` will exclude **GameObjects** that match the name filter 
+in the current applicable set.
 
 E.g.:
 * `!Head*` : all **GameObjects** that don't begin with  "Head"
 * `Hea*!*d` : all **GameObjects** which begin with  "Hea", but don't end with "d"
+* `Hea*!Heat`: all **GameObjects** which begin with  "Hea", but are not "Heat"
+* `/Hea*!Heat!Head`: all **GameObjects** which begin with  "Hea", but are neither "Heat" nor "Head"
 * `!H*d`: all **GameObjects** that don't begin with "H" and don't end with "d"
-* `/!*Head*`: root **GameObjects** that don't have "Head" anywhere
-* `/!*ead/!C*` : from root **GameObjects** that don't have names ending with "ead", select their children which don't start with "C" 
-* `/Head/!Cube/*`: from root **GameObjects** which names are "Head", search their children which are not named "Cube", 
-  and select the children of the non-"Cube" **GameObjects**.
-
-> Currently, negations have the following limitations:
-> 1. Using multiple negations in the same set, such as `/!H!ead*`, is currently not supported.
-> 2. `!` in the middle must be enclosed with `*`, e.g: `/Head*!*Tail`
-
 
 ### Descenders
 
@@ -119,6 +112,10 @@ Examples:
 * `<m:Skin>`: all **GameObjects** that use materials named "Skin".
 * `/Environment/**<t:MeshRenderer>`: all descendants of root **GameObjects** named "Environment" 
   that have MeshRenderer components.
+* `/!*Head*`: root **GameObjects** that don't have "Head" anywhere
+* `/!*ead/!C*` : from root **GameObjects** that don't have names ending with "ead", select their children which don't start with "C" 
+* `/Head/!Cube/*`: from root **GameObjects** which names are "Head", search their children which are not named "Cube", 
+  and select the children of the non-"Cube" **GameObjects**.
 * `/Head*!*Unit`: all root gameobjects that have a name that starts with "Head", but do not end with "Unit".
 
     
