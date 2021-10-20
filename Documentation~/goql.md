@@ -122,7 +122,7 @@ Examples:
 |`/Env/**<t:MeshRenderer>`      |All descendants of root **GameObjects** named "Env"  that have MeshRenderer components.|
 |`/!*Head*`                     |Root **GameObjects** that don't have "Head" anywhere|
 |`/!*ead/!C*`                   |From root **GameObjects** that don't have names ending with "ead", select their children which don't start with "C"|
-|`/Head/!Cube/*`                |From root **GameObjects** which names are "Head", search their children which are not named "Cube",  and select the children of the non-"Cube" **GameObjects**.|
+|`/Head/!Cube/*`                |From root **GameObjects** which names are "Head", select their children which are not named "Cube", then select their children.|
 |`/Head*!*Unit`                 |All root **GameObjects** which names start with "Head", but do not end with "Unit".|
 
     
