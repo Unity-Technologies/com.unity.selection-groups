@@ -35,11 +35,11 @@ and will contain all objects in the hierarchy.
 This applicable set can be changed by using [a descender](#descenders).
 
 
-> Currently, inner wildcards have the following limitations:
-> 1. Only one inner wildcard is allowed in each applicable set, e.g: 
+> Currently, middle wildcards have the following limitations:
+> 1. Only one middle wildcard is allowed in each applicable set, e.g: 
 >   * `/H*d/C*d` is supported, but
 >   * `/H*d*Tail` is not supported
-> 2. An inner wildcard can't be used together with either a beginning or ending wildcard 
+> 2. A middle wildcard can't be used together with either a beginning or ending wildcard 
 >   in the same applicable set, e.g: 
 >   * `/*d/C*d/T*` is supported, but
 >   * `/*d*T*` is not supported
