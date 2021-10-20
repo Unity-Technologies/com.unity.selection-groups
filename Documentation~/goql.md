@@ -114,7 +114,7 @@ Examples:
 |:----------------------------------|:---|
 |`/`                            |All root **GameObjects**.|
 |`Quad*`                        |All **GameObjects** which have names beginning with "Quad".|
-|`Quad*/<t:AudioSource>[1]`     |The second audio source component in children of all **GameObjects** which have names beginning with "Quad".|
+|`Quad*/<t:AudioSource>[1]`     |The second audio source component in the children of all **GameObjects** which have names beginning with "Quad".|
 |`<t:Transform, t:AudioSource>` |All **GameObjects** that have Transform and AudioSource components.|
 |`<t:Renderer>/*Audio*/[0:3]`   |The first 3 children of all **GameObjects** which: <br/>  * have parent **GameObjects** with Renderer components. <br/>  * have "Audio" in their names |
 |`Cube/Quad/<t:AudioSource>[-1]`|From each **GameObject** named "Cube",  select children that have names starting with "Quad",  then select the last grandchild that has an AudioSource component.|
