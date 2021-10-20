@@ -22,22 +22,44 @@ The name of a **GameObject** can be specified directly. E.g.:
 
 will match all **GameObjects** that are named "Head".   
 
-A name filter can also use wildcards at the beginning and end of the name, e.g.:
+A name filter can also use wildcards at the beginning, middle, or end of the name, e.g.:
 
 * `*Head`: all **GameObjects** that have names ending with "Head".
 * `Head*`: all **GameObjects** that have names beginning with "Head".
 * `*Head*`: all **GameObjects** that contain the string "Head" anywhere in their names.
+* `H*d`: all **GameObjects** that begin with "H" and end with "d".
 
 Note that a name filter will look for matching **GameObjects** in the current applicable set.  
 Initially, the current applicable set is global, 
 and will contain all objects in the hierarchy.   
-The applicable set can be changed by using [a descender](#descenders).
+This applicable set can be changed by using [a descender](#descenders).
+
+
+> Currently, middle wildcards have the following limitations:
+> 1. Only one middle wildcard is allowed in each applicable set, e.g: 
+>   * `/H*d/C*d` is supported, but
+>   * `/H*d*Tail` is not supported
+> 2. A middle wildcard can't be used together with either a beginning or ending wildcard 
+>   in the same applicable set, e.g: 
+>   * `/*d/C*d/T*` is supported, but
+>   * `/*d*T*` is not supported
+
+#### Exclusions
+
+An exclusion is defined by an exclamation point (`!`).  
+Writing a name filter after `!` will exclude **GameObjects** that match the name filter 
+in the current applicable set.
+
+E.g.:
+* `!Head*` : all **GameObjects** that don't begin with  "Head"
+* `Hea*!*d` : all **GameObjects** which begin with  "Hea", but don't end with "d"
+* `Hea*!Heat`: all **GameObjects** which begin with  "Hea", but are not "Heat"
+* `/Hea*!Heat!Head`: all **GameObjects** which begin with  "Hea", but are neither "Heat" nor "Head"
+* `!H*d`: all **GameObjects** that don't begin with "H" and don't end with "d"
 
 ### Descenders
 
 A descender is defined by a slash character (`/`).
-
-    /
 
 When GoQL reads this symbol, it will narrow the search down into 
 the children of the current applicable set.   
@@ -90,7 +112,11 @@ Examples:
 * `<m:Skin>`: all **GameObjects** that use materials named "Skin".
 * `/Environment/**<t:MeshRenderer>`: all descendants of root **GameObjects** named "Environment" 
   that have MeshRenderer components.
-* `/Head*!*Unit`: all root gameobjects that have a name that starts with "Head", but do not end with "Unit".
+* `/!*Head*`: root **GameObjects** that don't have "Head" anywhere
+* `/!*ead/!C*` : from root **GameObjects** that don't have names ending with "ead", select their children which don't start with "C" 
+* `/Head/!Cube/*`: from root **GameObjects** which names are "Head", search their children which are not named "Cube", 
+  and select the children of the non-"Cube" **GameObjects**.
+* `/Head*!*Unit`: all root **GameObjects** which names start with "Head", but do not end with "Unit".
 
     
 
