@@ -57,7 +57,7 @@ in the current applicable set, e.g.:
 |`!Head*`           |All **GameObjects** that do not have names beginning with  "Head" |
 |`Hea*!*d`          |All **GameObjects** which names begin with  "Hea", but don't end with "d" |
 |`Hea*!Heat`        |All **GameObjects** which names begin with  "Hea", but are not "Heat" |
-|`/Hea*!Heat!Head`  |Root **GameObjects** which names begin with  "Hea", but are neither "Heat" nor "Head" |
+|`Hea*!Heat!Head`   |All **GameObjects** which names begin with  "Hea", but are neither "Heat" nor "Head" |
 |`!H*d`             |All **GameObjects** which names don't begin with "H" and don't end with "d" |
 
 
