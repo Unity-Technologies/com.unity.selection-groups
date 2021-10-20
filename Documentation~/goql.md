@@ -50,14 +50,16 @@ This applicable set can be changed by using [a descender](#descenders).
 
 An exclusion is defined by an exclamation point (`!`).  
 Writing a name filter after `!` will exclude **GameObjects** that match the name filter 
-in the current applicable set.
+in the current applicable set, e.g.:
 
-E.g.:
-* `!Head*` : all **GameObjects** that don't begin with  "Head"
-* `Hea*!*d` : all **GameObjects** which begin with  "Hea", but don't end with "d"
-* `Hea*!Heat`: all **GameObjects** which begin with  "Hea", but are not "Heat"
-* `/Hea*!Heat!Head`: all **GameObjects** which begin with  "Hea", but are neither "Heat" nor "Head"
-* `!H*d`: all **GameObjects** that don't begin with "H" and don't end with "d"
+|**GoQL**           |**Description** |
+|:------------------|:---|
+|`!Head*`           |All **GameObjects** that do not have names beginning with  "Head" |
+|`Hea*!*d`          |All **GameObjects** which names begin with  "Hea", but don't end with "d" |
+|`Hea*!Heat`        |All **GameObjects** which names begin with  "Hea", but are not "Heat" |
+|`/Hea*!Heat!Head`  |Root **GameObjects** which names begin with  "Hea", but are neither "Heat" nor "Head" |
+|`!H*d`             |All **GameObjects** which names don't begin with "H" and don't end with "d" |
+
 
 ### Descenders
 
