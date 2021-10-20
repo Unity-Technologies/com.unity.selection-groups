@@ -116,7 +116,7 @@ Examples:
 * `/!*ead/!C*` : from root **GameObjects** that don't have names ending with "ead", select their children which don't start with "C" 
 * `/Head/!Cube/*`: from root **GameObjects** which names are "Head", search their children which are not named "Cube", 
   and select the children of the non-"Cube" **GameObjects**.
-* `/Head*!*Unit`: all root gameobjects that have a name that starts with "Head", but do not end with "Unit".
+* `/Head*!*Unit`: all root **GameObjects** which names start with "Head", but do not end with "Unit".
 
     
 
