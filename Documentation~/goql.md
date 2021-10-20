@@ -26,10 +26,10 @@ A name filter can also use wildcards at the beginning, middle, or end of the nam
 
 |**GoQL** |**Description** |
 |:--------|:---|
-|`*Head`  |all **GameObjects** that have names ending with "Head".|
-|`Head*`  |all **GameObjects** that have names beginning with "Head".|
-|`*Head*` |all **GameObjects** that contain the string "Head" anywhere in their names.|
-|`H*d`    |all **GameObjects** that begin with "H" and end with "d".|
+|`*Head`  |All **GameObjects** that have names ending with "Head".|
+|`Head*`  |All **GameObjects** that have names beginning with "Head".|
+|`*Head*` |All **GameObjects** that contain the string "Head" anywhere in their names.|
+|`H*d`    |All **GameObjects** that begin with "H" and end with "d".|
 
 Note that a name filter will look for matching **GameObjects** in the current applicable set.  
 Initially, the current applicable set is global, 
