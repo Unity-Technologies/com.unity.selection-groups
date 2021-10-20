@@ -101,10 +101,12 @@ Discriminators are specified using angle brackets and one of these codes:
 3. 's': shader
 
 Examples:
-* `Head<t:Collider>`: all **GameObjects** named "Head" which also have a Collider component.
-* `Head<m:Glow>`: all **GameObjects** that are named "Head" and use materials named "Glow"
-* `Head<s:Standard>`: all **GameObjects** that are named "Head" and are using "Standard" shader.
-    
+|**GoQL**            |**Description** |
+|:-------------------|:---|
+|`Head<t:Collider>`  |All **GameObjects** named "Head" which also have a Collider component.|
+|`Head<m:Glow>`      |All **GameObjects** that are named "Head" and use materials named "Glow" |
+|`Head<s:Standard>`  |All **GameObjects** that are named "Head" and are using "Standard" shader. |
+
 ## Other Examples
 
 * `/`: all root **GameObjects**.
