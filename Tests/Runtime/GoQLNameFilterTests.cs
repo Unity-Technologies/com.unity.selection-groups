@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Unity.GoQL;
 using UnityEditor.SceneManagement;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
@@ -20,39 +21,23 @@ internal class GoQLNameFilterTests
     }
 
     [Test]
-    public void Simple()
-    {
-        var e = new GoQLExecutor("Head");
-        var results = e.Execute();
-        Assert.AreEqual(ParseResult.OK, e.parseResult);
-        Assert.AreEqual(2, results.Length);
+    public void Simple() {
+        TestUtility.ExecuteGoQLAndVerify("Head", 2);
     }
     
     [Test]
-    public void BeginningWildcard()
-    {
-        var e = new GoQLExecutor("*Head");
-        var results = e.Execute();
-        Assert.AreEqual(ParseResult.OK, e.parseResult);
-        Assert.AreEqual(3, results.Length);
+    public void BeginningWildcard() {
+        TestUtility.ExecuteGoQLAndVerify("*Head", 3);
     }
     
     [Test]
-    public void EndingWildcard()
-    {
-        var e = new GoQLExecutor("Head*");
-        var results = e.Execute();
-        Assert.AreEqual(ParseResult.OK, e.parseResult);
-        Assert.AreEqual(3, results.Length);
+    public void EndingWildcard() {
+        TestUtility.ExecuteGoQLAndVerify("Head*", 3);
     }
     
     [Test]
-    public void BeginningAndEndingWildcard()
-    {
-        var e = new GoQLExecutor("*Head*");
-        var results = e.Execute();
-        Assert.AreEqual(ParseResult.OK, e.parseResult);
-        Assert.AreEqual(4, results.Length);
+    public void BeginningAndEndingWildcard() {
+        TestUtility.ExecuteGoQLAndVerify("*Head*", 4);
     }
     
 
