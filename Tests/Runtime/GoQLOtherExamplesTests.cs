@@ -22,68 +22,86 @@ namespace Unity.SelectionGroups.Tests
          
         [Test]
         public void RootGameObjects() {
-            TestUtility.ExecuteGoQLAndVerify("/", 7);
+            TestUtility.ExecuteGoQLAndVerify("/", 15,(Transform t) => null == t.parent);
         }
         
         [Test]
         public void FromQuadWildcardGetSecondChildWithAudioSource()
         {
-            GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Quad*/<t:AudioSource>[1]", 1);
-            Assert.IsTrue(results[0].GetComponent<AudioSource>() != null);
+            TestUtility.ExecuteGoQLAndVerify("Quad*/<t:AudioSource>[1]", 2,(Transform t) => {
+                return null!=t.parent && t.parent.name.StartsWith("Quad") && null != t.GetComponent<AudioSource>();
+            });
             
         }
         
         [Test]
         public void GameObjectsHavingTransformAndAudioSource()
         {
-            GameObject[] results = TestUtility.ExecuteGoQLAndVerify("<t:Transform, t:AudioSource>", 8);
-            Assert.IsTrue(results[0].GetComponent<AudioSource>() != null);
-            Assert.IsTrue(results[1].GetComponent<AudioSource>() != null);
-            Assert.IsTrue(results[2].GetComponent<AudioSource>() != null);
+            TestUtility.ExecuteGoQLAndVerify("<t:Transform, t:AudioSource>", 7, 
+                (Transform t) => null != t.GetComponent<AudioSource>()
+            );            
         }
         
         [Test]
         public void FromRendererGetAudioWildcardThenGetRangedChildren()
-        {
-            GameObject[] results = TestUtility.ExecuteGoQLAndVerify("<t:Renderer>/*Audio*/[0:3]", 1);
-            Assert.AreEqual("GameObject", results[0].name);
+        {            
+            int startIndex = 0;
+            int endIndex   = 3;
+            
+            List<Transform> results = TestUtility.ExecuteGoQLAndVerify($"<t:Renderer>/*Audio*/[{startIndex}:{endIndex}]", 
+                3, (Transform t) => null!=t.parent && t.parent.name.Contains("Audio")
+            );
+            foreach (Transform t in results) {
+                bool found = false;
+
+                for (int i = startIndex; !found && i < endIndex; ++i) {
+                    if (t.name.EndsWith($"Child ({i})"))
+                        found = true;
+                }
+                Assert.IsTrue(found);
+            }                     
+            
         }
         
         [Test]
         public void FromCubeGetQuadThenGetLastAudioSource()
         {
-            GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Cube/Quad/<t:AudioSource>[-1]", 1);
-            Assert.AreEqual("ChildWithAudio (2)", results[0].name);
+            TestUtility.ExecuteGoQLAndVerify("Cube/Quad/<t:AudioSource>[-1]", 1,(Transform t) => {
+                return null!=t.parent && t.parent.name == "Quad" && null != t.GetComponent<AudioSource>();
+            });
         }
         
         [Test]
         public void SkinMaterial()
-        {
-            GameObject[] results = TestUtility.ExecuteGoQLAndVerify("<m:Skin>", 3);
-            Assert.AreEqual(3, results.Length);
+        {            
+            TestUtility.ExecuteGoQLAndVerify("<m:Skin>", 3, (Transform t) => {
+                MeshRenderer mr = t.GetComponent<MeshRenderer>();
+                return null!=mr && mr.sharedMaterial.name == "Skin";
+            });            
             
         }
         
         [Test]
-        public void FromEnvironmentGetMeshRenderer()
+        public void FromEnvGetMeshRenderer()
         {
-            TestUtility.ExecuteGoQLAndVerify("/Environment/**<t:MeshRenderer>", 8);
+            TestUtility.ExecuteGoQLAndVerify("/Env/**<t:MeshRenderer>", 7,
+                (Transform t) => t.GetComponent<MeshRenderer>()!=null
+            );
         }
         
         [Test]
         public void InnerWildcard()
         {
-            GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Env*ent", 2);
-            Assert.AreEqual("Environment", results[0].name);
-            Assert.AreEqual("Environment", results[1].name);
+            TestUtility.ExecuteGoQLAndVerify("Env*ent", 5, (Transform t) => t.name.StartsWith("Env") && t.name.EndsWith("ent"));
         }
         
         
         [Test]
         public void WildcardsWithExclusion()
         {
-            GameObject[] results = TestUtility.ExecuteGoQLAndVerify("/Head*!*Unit", 1);
-            Assert.AreEqual("Head", results[0].name);
+            TestUtility.ExecuteGoQLAndVerify("/Head*!*Unit", 4, (Transform t) => {
+                return null == t.parent && t.name.StartsWith("Head") && !t.name.EndsWith("Unit");
+            });
         }
         
         
