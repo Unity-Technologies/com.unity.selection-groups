@@ -20,20 +20,20 @@ internal class GoQLDiscriminatorTests
     
     [Test]
     public void ColliderComponent() {
-        var results = TestUtility.ExecuteGoQLAndVerify("Head<t:Collider>", 1);
+        GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Head<t:Collider>", 1);
         Assert.IsTrue(results[0].GetComponent<Collider>() != null);
     }
     
     [Test]
     public void GlowMaterial() {
-        var results = TestUtility.ExecuteGoQLAndVerify("Head<m:Glow>", 1);
+        GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Head<m:Glow>", 1);
         Assert.IsTrue(results[0].GetComponent<MeshRenderer>() != null);
         Assert.IsTrue(results[0].GetComponent<MeshRenderer>().sharedMaterial.name == "Glow");
     }
     
     [Test]
     public void StandardShader() {
-        var results = TestUtility.ExecuteGoQLAndVerify("Head<s:Standard>", 1);
+        GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Head<s:Standard>", 1);
         Assert.IsTrue(results[0].GetComponent<MeshRenderer>() != null);
         Assert.IsTrue(results[0].GetComponent<MeshRenderer>().sharedMaterial.shader.name == "Standard");
     }
