@@ -19,7 +19,7 @@ internal class GoQLDiscriminatorTests
     
     [Test]
     public void ColliderComponent() {
-        TestUtility.ExecuteGoQLAndVerify("Head<t:Collider>", 1,
+        TestUtility.ExecuteGoQLAndVerify("Head<t:Collider>", 3,
             (Transform t) => t.name == "Head" && t.GetComponent<Collider>() != null);
     }
     
