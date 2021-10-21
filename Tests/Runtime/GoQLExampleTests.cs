@@ -29,38 +29,6 @@ namespace Unity.SelectionGroups.Tests
         }
         
         [Test]
-        public void TestGoQLExamples11()
-        {
-            var e = new GoQLExecutor("Head<t:Collider>");
-            var results = e.Execute();
-            Assert.AreEqual(ParseResult.OK, e.parseResult);
-            Assert.AreEqual(1, results.Length);
-            Assert.IsTrue(results[0].GetComponent<Collider>() != null);
-        }
-        
-        [Test]
-        public void TestGoQLExamples12()
-        {
-            var e = new GoQLExecutor("Head<m:Glow>");
-            var results = e.Execute();
-            Assert.AreEqual(ParseResult.OK, e.parseResult);
-            Assert.AreEqual(1, results.Length);
-            Assert.IsTrue(results[0].GetComponent<MeshRenderer>() != null);
-            Assert.IsTrue(results[0].GetComponent<MeshRenderer>().sharedMaterial.name == "Glow");
-        }
-        
-        [Test]
-        public void TestGoQLExamples13()
-        {
-            var e = new GoQLExecutor("Head<s:Standard>");
-            var results = e.Execute();
-            Assert.AreEqual(ParseResult.OK, e.parseResult);
-            Assert.AreEqual(1, results.Length);
-            Assert.IsTrue(results[0].GetComponent<MeshRenderer>() != null);
-            Assert.IsTrue(results[0].GetComponent<MeshRenderer>().sharedMaterial.shader.name == "Standard");
-        }
-        
-        [Test]
         public void TestGoQLExamples14()
         {
             var e = new GoQLExecutor("/");
