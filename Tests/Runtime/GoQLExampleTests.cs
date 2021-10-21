@@ -10,7 +10,7 @@ using UnityEngine.TestTools;
 
 namespace Unity.SelectionGroups.Tests 
 {
-    public class GoQLOtherExamplesTests
+    public class GoQLExampleTests
     {
         [UnitySetUp]
         public IEnumerator SetUp()
