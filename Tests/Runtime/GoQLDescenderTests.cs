@@ -8,13 +8,12 @@ using UnityEngine.TestTools;
 
 namespace Unity.SelectionGroups.Tests 
 {
-public class GoQLDescenderTests
+internal class GoQLDescenderTests
 {
     
     [UnitySetUp]
     public IEnumerator SetUp()
     {
-        //Debug.Log("Loading Test Scene.");
         Assert.IsTrue(System.IO.File.Exists($"{SelectionGroupsTestsConstants.TestScenePath}.unity"));
         yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{SelectionGroupsTestsConstants.TestScenePath}.unity", 
             new LoadSceneParameters(LoadSceneMode.Single));

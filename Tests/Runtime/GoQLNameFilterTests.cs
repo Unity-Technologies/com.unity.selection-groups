@@ -14,7 +14,6 @@ internal class GoQLNameFilterTests
     [UnitySetUp]
     public IEnumerator SetUp()
     {
-        //Debug.Log("Loading Test Scene.");
         Assert.IsTrue(System.IO.File.Exists($"{SelectionGroupsTestsConstants.TestScenePath}.unity"));
         yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{SelectionGroupsTestsConstants.TestScenePath}.unity", 
             new LoadSceneParameters(LoadSceneMode.Single));
