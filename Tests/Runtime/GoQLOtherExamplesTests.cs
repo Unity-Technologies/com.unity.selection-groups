@@ -21,21 +21,14 @@ namespace Unity.SelectionGroups.Tests
         }
          
         [Test]
-        public void RootGameObjects()
-        {
-            var e = new GoQLExecutor("/");
-            var results = e.Execute();
-            Assert.AreEqual(ParseResult.OK, e.parseResult);
-            Assert.AreEqual(7, results.Length);
+        public void RootGameObjects() {
+            TestUtility.ExecuteGoQLAndVerify("/", 7);
         }
         
         [Test]
         public void FromQuadWildcardGetSecondChildWithAudioSource()
         {
-            var e = new GoQLExecutor("Quad*/<t:AudioSource>[1]");
-            var results = e.Execute();
-            Assert.AreEqual(ParseResult.OK, e.parseResult);
-            Assert.AreEqual(1, results.Length);
+            GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Quad*/<t:AudioSource>[1]", 1);
             Assert.IsTrue(results[0].GetComponent<AudioSource>() != null);
             
         }
@@ -43,10 +36,7 @@ namespace Unity.SelectionGroups.Tests
         [Test]
         public void GameObjectsHavingTransformAndAudioSource()
         {
-            var e = new GoQLExecutor("<t:Transform, t:AudioSource>");
-            var results = e.Execute();
-            Assert.AreEqual(ParseResult.OK, e.parseResult);
-            Assert.AreEqual(8, results.Length);
+            GameObject[] results = TestUtility.ExecuteGoQLAndVerify("<t:Transform, t:AudioSource>", 8);
             Assert.IsTrue(results[0].GetComponent<AudioSource>() != null);
             Assert.IsTrue(results[1].GetComponent<AudioSource>() != null);
             Assert.IsTrue(results[2].GetComponent<AudioSource>() != null);
@@ -55,29 +45,21 @@ namespace Unity.SelectionGroups.Tests
         [Test]
         public void FromRendererGetAudioWildcardThenGetRangedChildren()
         {
-            var e = new GoQLExecutor("<t:Renderer>/*Audio*/[0:3]");
-            var results = e.Execute();
-            Assert.AreEqual(ParseResult.OK, e.parseResult);
-            Assert.AreEqual(1, results.Length);
+            GameObject[] results = TestUtility.ExecuteGoQLAndVerify("<t:Renderer>/*Audio*/[0:3]", 1);
             Assert.AreEqual("GameObject", results[0].name);
         }
         
         [Test]
         public void FromCubeGetQuadThenGetLastAudioSource()
         {
-            var e = new GoQLExecutor("Cube/Quad/<t:AudioSource>[-1]");
-            var results = e.Execute();
-            Assert.AreEqual(ParseResult.OK, e.parseResult);
-            Assert.AreEqual(1, results.Length);
+            GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Cube/Quad/<t:AudioSource>[-1]", 1);
             Assert.AreEqual("ChildWithAudio (2)", results[0].name);
         }
         
         [Test]
         public void SkinMaterial()
         {
-            var e = new GoQLExecutor("<m:Skin>");
-            var results = e.Execute();
-            Assert.AreEqual(ParseResult.OK, e.parseResult);
+            GameObject[] results = TestUtility.ExecuteGoQLAndVerify("<m:Skin>", 3);
             Assert.AreEqual(3, results.Length);
             
         }
@@ -85,19 +67,13 @@ namespace Unity.SelectionGroups.Tests
         [Test]
         public void FromEnvironmentGetMeshRenderer()
         {
-            var e = new GoQLExecutor("/Environment/**<t:MeshRenderer>");
-            var results = e.Execute();
-            Assert.AreEqual(ParseResult.OK, e.parseResult);
-            Assert.AreEqual(8, results.Length);
+            TestUtility.ExecuteGoQLAndVerify("/Environment/**<t:MeshRenderer>", 8);
         }
         
         [Test]
         public void InnerWildcard()
         {
-            var e = new GoQLExecutor("Env*ent");
-            var results = e.Execute();
-            Assert.AreEqual(ParseResult.OK, e.parseResult);
-            Assert.AreEqual(2, results.Length);
+            GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Env*ent", 2);
             Assert.AreEqual("Environment", results[0].name);
             Assert.AreEqual("Environment", results[1].name);
         }
@@ -106,10 +82,7 @@ namespace Unity.SelectionGroups.Tests
         [Test]
         public void WildcardsWithExclusion()
         {
-            var e = new GoQLExecutor("/Head*!*Unit");
-            var results = e.Execute();
-            Assert.AreEqual(ParseResult.OK, e.parseResult);
-            Assert.AreEqual(1, results.Length);
+            GameObject[] results = TestUtility.ExecuteGoQLAndVerify("/Head*!*Unit", 1);
             Assert.AreEqual("Head", results[0].name);
         }
         
