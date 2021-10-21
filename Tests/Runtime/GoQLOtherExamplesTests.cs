@@ -28,7 +28,7 @@ namespace Unity.SelectionGroups.Tests
         }
         
         [Test]
-        public void TestGoQLExamples14()
+        public void RootGameObjects()
         {
             var e = new GoQLExecutor("/");
             var results = e.Execute();
@@ -37,7 +37,7 @@ namespace Unity.SelectionGroups.Tests
         }
         
         [Test]
-        public void TestGoQLExamples15()
+        public void FirstAudioSourceOfQuadWildcard()
         {
             var e = new GoQLExecutor("Quad*/<t:AudioSource>[1]");
             var results = e.Execute();
@@ -48,7 +48,7 @@ namespace Unity.SelectionGroups.Tests
         }
         
         [Test]
-        public void TestGoQLExamples16()
+        public void GameObjectsHavingTransformAndAudioSource()
         {
             var e = new GoQLExecutor("<t:Transform, t:AudioSource>");
             var results = e.Execute();
@@ -60,7 +60,7 @@ namespace Unity.SelectionGroups.Tests
         }
         
         [Test]
-        public void TestGoQLExamples17()
+        public void FromRendererGetAudioWildcardThenGetRangedChildren()
         {
             var e = new GoQLExecutor("<t:Renderer>/*Audio*/[0:3]");
             var results = e.Execute();
@@ -70,7 +70,7 @@ namespace Unity.SelectionGroups.Tests
         }
         
         [Test]
-        public void TestGoQLExamples18()
+        public void FromCubeGetQuadThenGetLastAudioSource()
         {
             var e = new GoQLExecutor("Cube/Quad/<t:AudioSource>[-1]");
             var results = e.Execute();
@@ -80,7 +80,7 @@ namespace Unity.SelectionGroups.Tests
         }
         
         [Test]
-        public void TestGoQLExamples19()
+        public void SkinMaterial()
         {
             var e = new GoQLExecutor("<m:Skin>");
             var results = e.Execute();
@@ -90,7 +90,7 @@ namespace Unity.SelectionGroups.Tests
         }
         
         [Test]
-        public void TestGoQLExamples20()
+        public void FromEnvironmentGetMeshRenderer()
         {
             var e = new GoQLExecutor("/Environment/**<t:MeshRenderer>");
             var results = e.Execute();
@@ -99,7 +99,7 @@ namespace Unity.SelectionGroups.Tests
         }
         
         [Test]
-        public void TestGoQLExamples21()
+        public void InnerWildcard()
         {
             var e = new GoQLExecutor("Env*ent");
             var results = e.Execute();
@@ -111,7 +111,7 @@ namespace Unity.SelectionGroups.Tests
         
         
         [Test]
-        public void TestGoQLExamples22()
+        public void WildcardsWithExclusion()
         {
             var e = new GoQLExecutor("/Head*!*Unit");
             var results = e.Execute();
