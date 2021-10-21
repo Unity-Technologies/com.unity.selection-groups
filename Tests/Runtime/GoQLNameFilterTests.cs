@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Unity.GoQL;
 using UnityEditor.SceneManagement;
@@ -22,22 +23,22 @@ internal class GoQLNameFilterTests
 
     [Test]
     public void Simple() {
-        TestUtility.ExecuteGoQLAndVerify("Head", 2);
+        TestUtility.ExecuteGoQLAndVerify("Head", 3, (Transform t) => t.name == "Head");
     }
     
     [Test]
     public void BeginningWildcard() {
-        TestUtility.ExecuteGoQLAndVerify("*Head", 3);
+        TestUtility.ExecuteGoQLAndVerify("*Head", 4, (Transform t) => t.name.EndsWith("Head"));
     }
     
     [Test]
     public void EndingWildcard() {
-        TestUtility.ExecuteGoQLAndVerify("Head*", 3);
+        TestUtility.ExecuteGoQLAndVerify("Head*", 5, (Transform t) => t.name.StartsWith("Head"));
     }
     
     [Test]
     public void BeginningAndEndingWildcard() {
-        TestUtility.ExecuteGoQLAndVerify("*Head*", 4);
+        TestUtility.ExecuteGoQLAndVerify("Head*", 6, (Transform t) => t.name.Contains("Head"));
     }
     
 
