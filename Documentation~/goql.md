@@ -58,7 +58,7 @@ in the current applicable set, e.g.:
 |`Hea*!*d`          |All **GameObjects** which names begin with  "Hea", but don't end with "d" |
 |`Hea*!Heat`        |All **GameObjects** which names begin with  "Hea", but are not "Heat" |
 |`Hea*!Heat!Head`   |All **GameObjects** which names begin with  "Hea", but are neither "Heat" nor "Head" |
-|`!H*d`             |All **GameObjects** which names don't begin with "H" and don't end with "d" |
+|`!H*d`             |All **GameObjects** which names neither begin with "H" nor end with "d" |
 
 
 ### Descenders
