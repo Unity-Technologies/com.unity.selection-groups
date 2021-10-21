@@ -41,6 +41,39 @@ internal class GoQLNameFilterTests
         TestUtility.ExecuteGoQLAndVerify("Head*", 6, (Transform t) => t.name.Contains("Head"));
     }
     
+    [Test]
+    public void InnerWildCard() {
+        TestUtility.ExecuteGoQLAndVerify("H*d", 4, (Transform t) => t.name.StartsWith("H") && t.name.EndsWith("d"));
+    }
+    
+
+    [Test]
+    public void ExclusionEndingWildcard() {
+        TestUtility.ExecuteGoQLAndVerify("!Head*", 21, (Transform t) => !t.name.StartsWith("Head"));
+    }
+
+    [Test]
+    public void EndingWildcardAndExclusionBeginningWildcard() {
+        TestUtility.ExecuteGoQLAndVerify("Hea*!*d", 3, (Transform t) => t.name.StartsWith("Hea") && !t.name.EndsWith("d"));
+    }
+
+    [Test]
+    public void EndingWildcardAndSingleExclusion() {
+        TestUtility.ExecuteGoQLAndVerify("Hea*!Heat", 6, (Transform t) => t.name.StartsWith("Hea") && t.name!="Heat");
+    }
+
+    [Test]
+    public void EndingWildcardAndDoubleExclusion() {
+        TestUtility.ExecuteGoQLAndVerify("Hea*!Heat!Head", 3, (Transform t) => t.name.StartsWith("H") && t.name!="Heat" && t.name!="Head");
+    }
+
+    [Test]
+    public void ExclusionInnerWildcard() {
+        TestUtility.ExecuteGoQLAndVerify("!H*d", 22, (Transform t) => !t.name.StartsWith("H") || !t.name.EndsWith("d"));
+    }
+    
+
+    
 
 //----------------------------------------------------------------------------------------------------------------------
     
