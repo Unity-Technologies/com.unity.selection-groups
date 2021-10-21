@@ -46,6 +46,8 @@ internal class GoQLNameFilterTests
         TestUtility.ExecuteGoQLAndVerify("H*d", 4, (Transform t) => t.name.StartsWith("H") && t.name.EndsWith("d"));
     }
     
+//----------------------------------------------------------------------------------------------------------------------
+    #region Exclusion
 
     [Test]
     public void ExclusionEndingWildcard() {
@@ -72,8 +74,7 @@ internal class GoQLNameFilterTests
         TestUtility.ExecuteGoQLAndVerify("!H*d", 22, (Transform t) => !t.name.StartsWith("H") || !t.name.EndsWith("d"));
     }
     
-
-    
+    #endregion    
 
 //----------------------------------------------------------------------------------------------------------------------
     
