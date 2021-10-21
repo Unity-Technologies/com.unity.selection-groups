@@ -46,6 +46,7 @@ internal class GoQLIndexerTests
     }
     
     
+    [Ignore("LastChild")]
     [Test]
     public void LastChild()
     {
