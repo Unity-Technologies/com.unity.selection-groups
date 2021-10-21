@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using NUnit.Framework;
-using Unity.GoQL;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,22 +19,24 @@ internal class GoQLDiscriminatorTests
     
     [Test]
     public void ColliderComponent() {
-        GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Head<t:Collider>", 1);
-        Assert.IsTrue(results[0].GetComponent<Collider>() != null);
+        TestUtility.ExecuteGoQLAndVerify("Head<t:Collider>", 1,
+            (Transform t) => t.name == "Head" && t.GetComponent<Collider>() != null);
     }
     
     [Test]
     public void GlowMaterial() {
-        GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Head<m:Glow>", 1);
-        Assert.IsTrue(results[0].GetComponent<MeshRenderer>() != null);
-        Assert.IsTrue(results[0].GetComponent<MeshRenderer>().sharedMaterial.name == "Glow");
+        TestUtility.ExecuteGoQLAndVerify("Head<m:Glow>", 1, (Transform t) => {
+            MeshRenderer mr = t.GetComponent<MeshRenderer>();
+            return t.name == "Head" && null!=mr && mr.sharedMaterial.name == "Glow";
+        });
     }
     
     [Test]
     public void StandardShader() {
-        GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Head<s:Standard>", 1);
-        Assert.IsTrue(results[0].GetComponent<MeshRenderer>() != null);
-        Assert.IsTrue(results[0].GetComponent<MeshRenderer>().sharedMaterial.shader.name == "Standard");
+        TestUtility.ExecuteGoQLAndVerify("Head<s:Standard>", 2,(Transform t) => {
+            MeshRenderer mr = t.GetComponent<MeshRenderer>();
+            return t.name == "Head" && null!=mr && mr.sharedMaterial.shader.name == "Standard";
+        });
     }
     
 //----------------------------------------------------------------------------------------------------------------------
