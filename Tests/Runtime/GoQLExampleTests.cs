@@ -30,42 +30,6 @@ namespace Unity.SelectionGroups.Tests
         }
 
         [Test]
-        public void TestGoQLExamples1()
-        {
-            var e = new GoQLExecutor("Head");
-            var results = e.Execute();
-            Assert.AreEqual(ParseResult.OK, e.parseResult);
-            Assert.AreEqual(2, results.Length);
-        }
-        
-        [Test]
-        public void TestGoQLExamples2()
-        {
-            var e = new GoQLExecutor("*Head");
-            var results = e.Execute();
-            Assert.AreEqual(ParseResult.OK, e.parseResult);
-            Assert.AreEqual(3, results.Length);
-        }
-        
-        [Test]
-        public void TestGoQLExamples3()
-        {
-            var e = new GoQLExecutor("Head*");
-            var results = e.Execute();
-            Assert.AreEqual(ParseResult.OK, e.parseResult);
-            Assert.AreEqual(3, results.Length);
-        }
-        
-        [Test]
-        public void TestGoQLExamples4()
-        {
-            var e = new GoQLExecutor("*Head*");
-            var results = e.Execute();
-            Assert.AreEqual(ParseResult.OK, e.parseResult);
-            Assert.AreEqual(4, results.Length);
-        }
-        
-        [Test]
         public void TestGoQLExamples5()
         {
             var e = new GoQLExecutor("/Head");
