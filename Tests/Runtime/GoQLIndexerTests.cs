@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using NUnit.Framework;
-using Unity.GoQL;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
