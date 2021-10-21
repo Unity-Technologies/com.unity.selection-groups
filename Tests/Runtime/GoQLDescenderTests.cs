@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using NUnit.Framework;
 using UnityEditor.SceneManagement;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
@@ -21,12 +22,12 @@ internal class GoQLDescenderTests
 
     [Test]
     public void Root() {
-        TestUtility.ExecuteGoQLAndVerify("/Head", 1);
+        TestUtility.ExecuteGoQLAndVerify("/Head", 1, (Transform t) => (t.parent == null) && t.name == "Head");
     }
     
     [Test]
     public void AllChildren() {
-        TestUtility.ExecuteGoQLAndVerify("Head/", 11);
+        TestUtility.ExecuteGoQLAndVerify("Head/", 11, (Transform t) => t.parent.name == "Head");
     }
 
 //----------------------------------------------------------------------------------------------------------------------
