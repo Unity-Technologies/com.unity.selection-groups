@@ -37,7 +37,7 @@ namespace Unity.SelectionGroups.Tests
         }
         
         [Test]
-        public void FirstAudioSourceOfQuadWildcard()
+        public void FromQuadWildcardGetSecondChildWithAudioSource()
         {
             var e = new GoQLExecutor("Quad*/<t:AudioSource>[1]");
             var results = e.Execute();
