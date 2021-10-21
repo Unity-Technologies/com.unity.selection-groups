@@ -19,14 +19,15 @@ internal class GoQLDiscriminatorTests
     
     [Test]
     public void ColliderComponent() {
-        TestUtility.ExecuteGoQLAndVerify("Head<t:Collider>", 1,(Transform t) => t.GetComponent<Collider>() != null);
+        TestUtility.ExecuteGoQLAndVerify("Head<t:Collider>", 1,
+            (Transform t) => t.name == "Head" && t.GetComponent<Collider>() != null);
     }
     
     [Test]
     public void GlowMaterial() {
         TestUtility.ExecuteGoQLAndVerify("Head<m:Glow>", 1, (Transform t) => {
             MeshRenderer mr = t.GetComponent<MeshRenderer>();
-            return null!=mr && mr.sharedMaterial.name == "Glow";
+            return t.name == "Head" && null!=mr && mr.sharedMaterial.name == "Glow";
         });
     }
     
@@ -34,7 +35,7 @@ internal class GoQLDiscriminatorTests
     public void StandardShader() {
         TestUtility.ExecuteGoQLAndVerify("Head<s:Standard>", 2,(Transform t) => {
             MeshRenderer mr = t.GetComponent<MeshRenderer>();
-            return null!=mr && mr.sharedMaterial.shader.name == "Standard";
+            return t.name == "Head" && null!=mr && mr.sharedMaterial.shader.name == "Standard";
         });
     }
     
