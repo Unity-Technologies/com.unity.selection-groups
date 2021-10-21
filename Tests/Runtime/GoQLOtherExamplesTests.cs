@@ -19,14 +19,7 @@ namespace Unity.SelectionGroups.Tests
             yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{SelectionGroupsTestsConstants.TestScenePath}.unity", 
                 new LoadSceneParameters(LoadSceneMode.Single));
         }
- 
-        [UnityTearDown]
-        public IEnumerator TearDown()
-        {
-            yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{SelectionGroupsTestsConstants.EmptyScenePath}.unity", 
-                new LoadSceneParameters(LoadSceneMode.Single));
-        }
-        
+         
         [Test]
         public void RootGameObjects()
         {

@@ -19,13 +19,6 @@ internal class GoQLNameFilterTests
             new LoadSceneParameters(LoadSceneMode.Single));
     }
 
-    [UnityTearDown]
-    public IEnumerator TearDown()
-    {
-        yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{SelectionGroupsTestsConstants.EmptyScenePath}.unity", 
-            new LoadSceneParameters(LoadSceneMode.Single));
-    }
-
     [Test]
     public void Simple()
     {
