@@ -28,7 +28,7 @@ public class GoQLIndexerTests
     }
     
     [Test]
-    public void FirstChildDescender()
+    public void FirstChild()
     {
         var e = new GoQLExecutor("Head/[0]");
         var results = e.Execute();
@@ -38,7 +38,7 @@ public class GoQLIndexerTests
     }
     
     [Test]
-    public void IndexedChildrenDescender()
+    public void IndexedChildren()
     {
         var e = new GoQLExecutor("Head/[0,1,5]");
         var results = e.Execute();
@@ -50,7 +50,7 @@ public class GoQLIndexerTests
     }
     
     [Test]
-    public void LastChildDescender()
+    public void LastChild()
     {
         var e = new GoQLExecutor("Head/[-1]");
         var results = e.Execute();
@@ -60,7 +60,7 @@ public class GoQLIndexerTests
     }
     
     [Test]
-    public void RangedChildrenDescender()
+    public void RangedChildren()
     {
         var e = new GoQLExecutor("Head/[3:5]");
         var results = e.Execute();
