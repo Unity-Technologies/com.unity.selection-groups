@@ -58,7 +58,7 @@ in the current applicable set, e.g.:
 |`Hea*!*d`          |All **GameObjects** which names begin with  "Hea", but don't end with "d" |
 |`Hea*!Heat`        |All **GameObjects** which names begin with  "Hea", but are not "Heat" |
 |`Hea*!Heat!Head`   |All **GameObjects** which names begin with  "Hea", but are neither "Heat" nor "Head" |
-|`!H*d`             |All **GameObjects** which names don't begin with "H" and don't end with "d" |
+|`!H*d`             |All **GameObjects** which names neither begin with "H" nor end with "d" |
 
 
 ### Descenders
@@ -114,7 +114,7 @@ Examples:
 |:----------------------------------|:---|
 |`/`                            |All root **GameObjects**.|
 |`Quad*`                        |All **GameObjects** which have names beginning with "Quad".|
-|`Quad*/<t:AudioSource>[1]`     |The second audio source component in the children of all **GameObjects** which have names beginning with "Quad".|
+|`Quad*/<t:AudioSource>[1]`     |The second child with AudioSource of all **GameObjects** which have names beginning with "Quad".|
 |`<t:Transform, t:AudioSource>` |All **GameObjects** that have Transform and AudioSource components.|
 |`<t:Renderer>/*Audio*/[0:3]`   |The first 3 children of all **GameObjects** which: <br/>  * have parent **GameObjects** with Renderer components. <br/>  * have "Audio" in their names |
 |`Cube/Quad/<t:AudioSource>[-1]`|From each **GameObject** named "Cube",  select children that have names starting with "Quad",  then select the last grandchild that has an AudioSource component.|
