@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Unity.GoQL;
 using UnityEditor.SceneManagement;
@@ -22,24 +23,58 @@ internal class GoQLNameFilterTests
 
     [Test]
     public void Simple() {
-        TestUtility.ExecuteGoQLAndVerify("Head", 2);
+        TestUtility.ExecuteGoQLAndVerify("Head", 3, (Transform t) => t.name == "Head");
     }
     
     [Test]
     public void BeginningWildcard() {
-        TestUtility.ExecuteGoQLAndVerify("*Head", 3);
+        TestUtility.ExecuteGoQLAndVerify("*Head", 4, (Transform t) => t.name.EndsWith("Head"));
     }
     
     [Test]
     public void EndingWildcard() {
-        TestUtility.ExecuteGoQLAndVerify("Head*", 3);
+        TestUtility.ExecuteGoQLAndVerify("Head*", 5, (Transform t) => t.name.StartsWith("Head"));
     }
     
     [Test]
     public void BeginningAndEndingWildcard() {
-        TestUtility.ExecuteGoQLAndVerify("*Head*", 4);
+        TestUtility.ExecuteGoQLAndVerify("Head*", 6, (Transform t) => t.name.Contains("Head"));
     }
     
+    [Test]
+    public void InnerWildCard() {
+        TestUtility.ExecuteGoQLAndVerify("H*d", 4, (Transform t) => t.name.StartsWith("H") && t.name.EndsWith("d"));
+    }
+    
+//----------------------------------------------------------------------------------------------------------------------
+    #region Exclusion
+
+    [Test]
+    public void ExclusionEndingWildcard() {
+        TestUtility.ExecuteGoQLAndVerify("!Head*", 21, (Transform t) => !t.name.StartsWith("Head"));
+    }
+
+    [Test]
+    public void EndingWildcardAndExclusionBeginningWildcard() {
+        TestUtility.ExecuteGoQLAndVerify("Hea*!*d", 3, (Transform t) => t.name.StartsWith("Hea") && !t.name.EndsWith("d"));
+    }
+
+    [Test]
+    public void EndingWildcardAndSingleExclusion() {
+        TestUtility.ExecuteGoQLAndVerify("Hea*!Heat", 6, (Transform t) => t.name.StartsWith("Hea") && t.name!="Heat");
+    }
+
+    [Test]
+    public void EndingWildcardAndDoubleExclusion() {
+        TestUtility.ExecuteGoQLAndVerify("Hea*!Heat!Head", 3, (Transform t) => t.name.StartsWith("H") && t.name!="Heat" && t.name!="Head");
+    }
+
+    [Test]
+    public void ExclusionInnerWildcard() {
+        TestUtility.ExecuteGoQLAndVerify("!H*d", 22, (Transform t) => !t.name.StartsWith("H") || !t.name.EndsWith("d"));
+    }
+    
+    #endregion    
 
 //----------------------------------------------------------------------------------------------------------------------
     
