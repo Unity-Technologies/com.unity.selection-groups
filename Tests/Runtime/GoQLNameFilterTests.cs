@@ -10,23 +10,23 @@ using UnityEngine.TestTools;
 
 namespace Unity.SelectionGroups.Tests 
 {
-public class GoQLNameFilterTests
+internal class GoQLNameFilterTests
 {
-    private static string TestScenePath = "Packages/com.unity.selection-groups/Tests/Scenes/GoQLTestScene";
-    private static string EmptyScenePath = "Packages/com.unity.selection-groups/Tests/Scenes/EmptyScene";
     
     [UnitySetUp]
     public IEnumerator SetUp()
     {
         //Debug.Log("Loading Test Scene.");
-        Assert.IsTrue(System.IO.File.Exists($"{TestScenePath}.unity"));
-        yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{TestScenePath}.unity", new LoadSceneParameters(LoadSceneMode.Single));
+        Assert.IsTrue(System.IO.File.Exists($"{SelectionGroupsTestsConstants.TestScenePath}.unity"));
+        yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{SelectionGroupsTestsConstants.TestScenePath}.unity", 
+            new LoadSceneParameters(LoadSceneMode.Single));
     }
 
     [UnityTearDown]
     public IEnumerator TearDown()
     {
-        yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{EmptyScenePath}.unity", new LoadSceneParameters(LoadSceneMode.Single));
+        yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{SelectionGroupsTestsConstants.EmptyScenePath}.unity", 
+            new LoadSceneParameters(LoadSceneMode.Single));
     }
 
     [Test]
