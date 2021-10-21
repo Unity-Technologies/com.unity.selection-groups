@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -20,34 +21,54 @@ internal class GoQLIndexerTests
     
     [Test]
     public void FirstChild() {
-        GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Head/[0]", 2);
-        Assert.AreEqual("Child (0)", results[0].name);
+        TestUtility.ExecuteGoQLAndVerify("Head/[0]", 2, 
+            (Transform t) => null!=t.parent && t.parent.name == "Head" && t.name.EndsWith("Child (0)")
+        );
     }
     
     [Test]
-    public void IndexedChildren()
-    {
-        GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Head/[0,1,5]", 5);
-        // Assert.AreEqual("Child (0)", results[0].name);
-        // Assert.AreEqual("Child (1)", results[1].name);
-        // Assert.AreEqual("Child (5)", results[2].name);
+    public void IndexedChildren() {
+        int[] indexes = new[] { 0, 1, 5 };       
+        List<Transform> results = TestUtility.ExecuteGoQLAndVerify($"Head/[{string.Join(",", indexes)}]", 6, 
+            (Transform t) => null!=t.parent && t.parent.name == "Head"
+        );
+
+        int numIndexes = indexes.Length;
+        foreach (Transform t in results) {
+            bool found = false;
+
+            for (int i = 0; !found && i < numIndexes; ++i) {
+                if (t.name.EndsWith($"Child ({indexes[i]})"))
+                    found = true;
+            }
+            Assert.IsTrue(found);
+        } 
     }
+    
     
     [Test]
     public void LastChild()
     {
-        GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Head/[-1]", 1);
-        Assert.AreEqual("Head", results[0].name);
+        TestUtility.ExecuteGoQLAndVerify("Head/[-1]", 2, (Transform t) => null!=t.parent && t.parent.name == "Head");
     }
     
     [Test]
-    public void RangedChildren()
-    {
-        GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Head/[3:5]", 4);
-        Assert.AreEqual("Child (3)", results[0].name);
-        Assert.AreEqual("Quad 1", results[1].name);
-        Assert.AreEqual("Child (4)", results[2].name);
-        Assert.AreEqual("Quad 2", results[3].name);
+    public void RangedChildren() {
+        int startIndex = 3;
+        int endIndex   = 5;
+            
+        List<Transform> results = TestUtility.ExecuteGoQLAndVerify($"Head/[{startIndex}:{endIndex}]", 4, 
+            (Transform t) => null!=t.parent && t.parent.name == "Head"
+        );
+        foreach (Transform t in results) {
+            bool found = false;
+
+            for (int i = startIndex; !found && i < endIndex; ++i) {
+                if (t.name.EndsWith($"Child ({i})"))
+                    found = true;
+            }
+            Assert.IsTrue(found);
+        }         
     }
     
 //----------------------------------------------------------------------------------------------------------------------
