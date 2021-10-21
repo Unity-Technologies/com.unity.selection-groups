@@ -1,9 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Unity.GoQL;
 using UnityEditor.SceneManagement;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
@@ -30,7 +28,7 @@ internal class GoQLNameFilterTests
     }
 
     [Test]
-    public void TestGoQLExamples1()
+    public void Simple()
     {
         var e = new GoQLExecutor("Head");
         var results = e.Execute();
@@ -39,7 +37,7 @@ internal class GoQLNameFilterTests
     }
     
     [Test]
-    public void TestGoQLExamples2()
+    public void BeginningWildcard()
     {
         var e = new GoQLExecutor("*Head");
         var results = e.Execute();
@@ -48,7 +46,7 @@ internal class GoQLNameFilterTests
     }
     
     [Test]
-    public void TestGoQLExamples3()
+    public void EndingWildcard()
     {
         var e = new GoQLExecutor("Head*");
         var results = e.Execute();
@@ -57,7 +55,7 @@ internal class GoQLNameFilterTests
     }
     
     [Test]
-    public void TestGoQLExamples4()
+    public void BeginningAndEndingWildcard()
     {
         var e = new GoQLExecutor("*Head*");
         var results = e.Execute();
