@@ -4,6 +4,13 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.5.3-preview] - 2021-10-21
+
+### Added
+* doc: add/update the wildcard and exclusion in the GoQL documentation
+
+### Fixed
+* fix: suppress GoQL log if not in debug mode 
 
 ## [0.5.2-preview] - 2021-10-12
 
