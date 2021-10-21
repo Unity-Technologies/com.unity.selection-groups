@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Unity.GoQL;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,7 +21,7 @@ namespace Unity.SelectionGroups.Tests
          
         [Test]
         public void RootGameObjects() {
-            TestUtility.ExecuteGoQLAndVerify("/", 15,(Transform t) => null == t.parent);
+            TestUtility.ExecuteGoQLAndVerify("/", 13,(Transform t) => null == t.parent);
         }
         
         [Test]
@@ -95,6 +94,31 @@ namespace Unity.SelectionGroups.Tests
             TestUtility.ExecuteGoQLAndVerify("Env*ent", 5, (Transform t) => t.name.StartsWith("Env") && t.name.EndsWith("ent"));
         }
         
+
+        [Test]
+        public void ExclusionBeginningAndEndingWildcard()
+        {
+            TestUtility.ExecuteGoQLAndVerify("/!*Head*", 7, (Transform t) => !t.name.Contains("Head"));
+        }
+
+        [Test]
+        public void ExclusionBeginningWildCardThenExclusionEndingWildcard()
+        {
+            TestUtility.ExecuteGoQLAndVerify("/!*ead/!C*", 14, (Transform t) => {
+                Transform p = t.parent; 
+                return null!=p && !p.name.EndsWith("ead") && !t.name.StartsWith("C");
+            });
+        }
+
+
+        [Test]
+        public void ExclusionThenWildcard()
+        {
+            TestUtility.ExecuteGoQLAndVerify("/Head/!Cube/*", 3, (Transform t) => {
+                Transform p = t.parent; 
+                return null!=p && p.name != "Cube";
+            });
+        }
         
         [Test]
         public void WildcardsWithExclusion()
