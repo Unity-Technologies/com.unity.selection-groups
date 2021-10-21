@@ -12,51 +12,35 @@ namespace Unity.SelectionGroups.Tests
 internal class GoQLDiscriminatorTests
 {
     [UnitySetUp]
-    public IEnumerator SetUp()
-    {
-        Assert.IsTrue(System.IO.File.Exists($"{SelectionGroupsTestsConstants.TestScenePath}.unity"));
-        yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{SelectionGroupsTestsConstants.TestScenePath}.unity", 
-            new LoadSceneParameters(LoadSceneMode.Single));
-    }
-
-    [UnityTearDown]
-    public IEnumerator TearDown()
-    {
-        yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{SelectionGroupsTestsConstants.EmptyScenePath}.unity", 
+    public IEnumerator SetUp() {
+        Assert.IsTrue(System.IO.File.Exists($"{TestScenePath}.unity"));
+        yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{TestScenePath}.unity", 
             new LoadSceneParameters(LoadSceneMode.Single));
     }
     
     [Test]
-    public void ColliderComponent()
-    {
-        var e = new GoQLExecutor("Head<t:Collider>");
-        var results = e.Execute();
-        Assert.AreEqual(ParseResult.OK, e.parseResult);
-        Assert.AreEqual(1, results.Length);
+    public void ColliderComponent() {
+        GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Head<t:Collider>", 1);
         Assert.IsTrue(results[0].GetComponent<Collider>() != null);
     }
     
     [Test]
-    public void GlowMaterial()
-    {
-        var e = new GoQLExecutor("Head<m:Glow>");
-        var results = e.Execute();
-        Assert.AreEqual(ParseResult.OK, e.parseResult);
-        Assert.AreEqual(1, results.Length);
+    public void GlowMaterial() {
+        GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Head<m:Glow>", 1);
         Assert.IsTrue(results[0].GetComponent<MeshRenderer>() != null);
         Assert.IsTrue(results[0].GetComponent<MeshRenderer>().sharedMaterial.name == "Glow");
     }
     
     [Test]
-    public void StandardShader()
-    {
-        var e = new GoQLExecutor("Head<s:Standard>");
-        var results = e.Execute();
-        Assert.AreEqual(ParseResult.OK, e.parseResult);
-        Assert.AreEqual(1, results.Length);
+    public void StandardShader() {
+        GameObject[] results = TestUtility.ExecuteGoQLAndVerify("Head<s:Standard>", 1);
         Assert.IsTrue(results[0].GetComponent<MeshRenderer>() != null);
         Assert.IsTrue(results[0].GetComponent<MeshRenderer>().sharedMaterial.shader.name == "Standard");
     }
+    
+//----------------------------------------------------------------------------------------------------------------------
+    
+    const string TestScenePath = "Packages/com.unity.selection-groups/Tests/Scenes/GoQLDiscriminatorTestScene";
     
 
 
