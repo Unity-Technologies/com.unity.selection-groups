@@ -13,8 +13,8 @@ internal class GoQLDiscriminatorTests
 {
     [UnitySetUp]
     public IEnumerator SetUp() {
-        Assert.IsTrue(System.IO.File.Exists($"{SelectionGroupsTestsConstants.TestScenePath}.unity"));
-        yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{SelectionGroupsTestsConstants.TestScenePath}.unity", 
+        Assert.IsTrue(System.IO.File.Exists($"{TestScenePath}.unity"));
+        yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{TestScenePath}.unity", 
             new LoadSceneParameters(LoadSceneMode.Single));
     }
     
@@ -37,6 +37,10 @@ internal class GoQLDiscriminatorTests
         Assert.IsTrue(results[0].GetComponent<MeshRenderer>() != null);
         Assert.IsTrue(results[0].GetComponent<MeshRenderer>().sharedMaterial.shader.name == "Standard");
     }
+    
+//----------------------------------------------------------------------------------------------------------------------
+    
+    const string TestScenePath = "Packages/com.unity.selection-groups/Tests/Scenes/GoQLDiscriminatorTestScene";
     
 
 

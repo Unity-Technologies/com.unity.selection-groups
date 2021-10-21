@@ -13,8 +13,8 @@ internal class GoQLIndexerTests
     
     [UnitySetUp]
     public IEnumerator SetUp() {
-        Assert.IsTrue(System.IO.File.Exists($"{SelectionGroupsTestsConstants.TestScenePath}.unity"));
-        yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{SelectionGroupsTestsConstants.TestScenePath}.unity", 
+        Assert.IsTrue(System.IO.File.Exists($"{TestScenePath}.unity"));
+        yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{TestScenePath}.unity", 
             new LoadSceneParameters(LoadSceneMode.Single));
     }
     
@@ -50,6 +50,9 @@ internal class GoQLIndexerTests
         Assert.AreEqual("Quad 2", results[3].name);
     }
     
+//----------------------------------------------------------------------------------------------------------------------
+    
+    const string TestScenePath = "Packages/com.unity.selection-groups/Tests/Scenes/GoQLIndexerTestScene";
 
 }
 

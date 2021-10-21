@@ -15,8 +15,8 @@ internal class GoQLNameFilterTests
     [UnitySetUp]
     public IEnumerator SetUp()
     {
-        Assert.IsTrue(System.IO.File.Exists($"{SelectionGroupsTestsConstants.TestScenePath}.unity"));
-        yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{SelectionGroupsTestsConstants.TestScenePath}.unity", 
+        Assert.IsTrue(System.IO.File.Exists($"{TestScenePath}.unity"));
+        yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{TestScenePath}.unity", 
             new LoadSceneParameters(LoadSceneMode.Single));
     }
 
@@ -41,6 +41,10 @@ internal class GoQLNameFilterTests
     }
     
 
+//----------------------------------------------------------------------------------------------------------------------
+    
+    const string TestScenePath = "Packages/com.unity.selection-groups/Tests/Scenes/GoQLNameFilterTestScene";
+    
 
 }
 
