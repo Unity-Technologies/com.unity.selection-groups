@@ -28,7 +28,7 @@ public class GoQLDescenderTests
     }
 
     [Test]
-    public void RootDescender()
+    public void Root()
     {
         var e = new GoQLExecutor("/Head");
         var results = e.Execute();
@@ -37,7 +37,7 @@ public class GoQLDescenderTests
     }
     
     [Test]
-    public void AllChildrenDescender()
+    public void AllChildren()
     {
         var e = new GoQLExecutor("Head/");
         var results = e.Execute();
