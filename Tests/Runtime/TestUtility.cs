@@ -22,6 +22,8 @@ internal static class TestUtility
         GameObject[] results = e.Execute();
 
         Assert.AreEqual(ParseResult.OK, e.parseResult);
+        Assert.AreEqual(numExpectedResults, results.Length);
+        
         List<Transform> ret = new List<Transform>(results.Length);
         foreach (GameObject go in results) {
             Transform t = go.transform;
