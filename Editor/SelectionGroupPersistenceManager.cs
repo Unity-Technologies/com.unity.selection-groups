@@ -65,7 +65,6 @@ namespace Unity.SelectionGroupsEditor
                 Name = name,
                 Color = color,
                 ShowMembers = true,
-                Scope = SelectionGroupDataLocation.Editor,
                 Query = query
             };
             g.Add(members);

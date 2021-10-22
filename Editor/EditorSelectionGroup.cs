@@ -16,7 +16,6 @@ namespace Unity.SelectionGroupsEditor
         [SerializeField] bool showMembers;
         [SerializeField] string query = string.Empty;
         [SerializeField] int groupId;
-        [SerializeField] SelectionGroupDataLocation scope = SelectionGroupDataLocation.Editor;
         HashSet<string> enabledTools = new HashSet<string>();
         
         /// <summary>
