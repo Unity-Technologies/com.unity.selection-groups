@@ -63,7 +63,7 @@ namespace Unity.SelectionGroupsEditor
             }
 
             //Null for SelectionGroup (scene), which is a MonoBehaviour, must be checked against null using its type
-            if (group is SelectionGroup sceneSelectionGroup && sceneSelectionGroup == null){
+            if (group is Component component && component == null){
                 Close();
                 return;                
             }
