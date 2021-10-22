@@ -33,7 +33,7 @@ namespace Unity.SelectionGroups.Runtime
         /// <summary>
         /// Sets/gets the data location of the SelectionGroup
         /// </summary>
-        SelectionGroupDataLocation Scope { get; set; }
+        SelectionGroupDataLocation Scope { get; }
 
         /// <summary>
         /// Gets the number of members in this SelectionGroup
