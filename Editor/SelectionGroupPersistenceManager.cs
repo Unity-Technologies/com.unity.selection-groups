@@ -52,7 +52,6 @@ namespace Unity.SelectionGroupsEditor
             group.Name = name;
             group.Query = query;
             group.Color = color;
-            group.Scope = SelectionGroupDataLocation.Scene;
             group.ShowMembers = true;
             group.Add(members);
             SelectionGroupManager.Register(group);
@@ -65,7 +64,6 @@ namespace Unity.SelectionGroupsEditor
                 Name = name,
                 Color = color,
                 ShowMembers = true,
-                Scope = SelectionGroupDataLocation.Editor,
                 Query = query
             };
             g.Add(members);

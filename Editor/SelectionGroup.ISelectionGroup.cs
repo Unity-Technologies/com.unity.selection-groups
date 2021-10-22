@@ -42,8 +42,7 @@ namespace Unity.SelectionGroupsEditor
 
         public SelectionGroupDataLocation Scope
         {
-            get => scope;
-            set => scope = value;
+            get => SelectionGroupDataLocation.Editor;
         }
 
         public void OnDelete(ISelectionGroup group)
