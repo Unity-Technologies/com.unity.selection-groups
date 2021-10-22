@@ -14,7 +14,7 @@ namespace Unity.SelectionGroupsEditor
     [InitializeOnLoad]
     internal partial class SelectionGroupPersistenceManager: ISerializationCallbackReceiver
     {
-        [SerializeField] SelectionGroup[] _values;
+        [SerializeField] EditorSelectionGroup[] _values;
 
         string[] _names;
 
