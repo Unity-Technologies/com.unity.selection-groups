@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Unity.SelectionGroupsEditor
 {
 
-    internal partial class SelectionGroup : ISerializationCallbackReceiver
+    internal partial class SelectionGroupEditor : ISerializationCallbackReceiver
     {
 
         [SerializeField] string[] _enabledTools;

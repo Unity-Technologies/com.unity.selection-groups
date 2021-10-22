@@ -14,7 +14,7 @@ namespace Unity.SelectionGroupsEditor
     {
         HashSet<GameObject> toDestroy = new HashSet<GameObject>();
 
-        HashSet<SelectionGroup> editorGroups = new HashSet<SelectionGroup>();
+        HashSet<SelectionGroupEditor> editorGroups = new HashSet<SelectionGroupEditor>();
         
         void OnEnable()
         {
@@ -60,7 +60,7 @@ namespace Unity.SelectionGroupsEditor
 
         void CreateEditorSelectionGroup(string name, string query, Color color, IList<Object> members)
         {
-            var g = new SelectionGroup
+            var g = new SelectionGroupEditor
             {
                 Name = name,
                 Color = color,
@@ -85,7 +85,7 @@ namespace Unity.SelectionGroupsEditor
             
             if (group is Unity.SelectionGroups.Runtime.SelectionGroup runtimeGroup)
                 toDestroy.Add(runtimeGroup.gameObject);
-            if (group is SelectionGroup editorGroup)
+            if (group is SelectionGroupEditor editorGroup)
             {
                 Undo.RegisterCompleteObjectUndo(this, "Delete Editor Selection Group");
                 editorGroups.Remove(editorGroup);
