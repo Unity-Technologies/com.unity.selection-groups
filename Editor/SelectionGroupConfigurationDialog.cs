@@ -61,6 +61,14 @@ namespace Unity.SelectionGroupsEditor
                 Close();
                 return;
             }
+
+            //Null for SelectionGroup (scene), which is a MonoBehaviour, must be checked against null using its type
+            if (group is Component component && component == null){
+                Close();
+                return;                
+            }
+
+
             using (var cc = new EditorGUI.ChangeCheckScope())
             {
                 GUILayout.Label("Selection Group Properties", EditorStyles.largeLabel);
