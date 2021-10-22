@@ -71,7 +71,7 @@ namespace Unity.SelectionGroupsEditor
                 EditorUtility.SetDirty(runtimeGroup);
             }
 
-            if (group is SelectionGroupEditor editorGroup)
+            if (group is EditorSelectionGroup editorGroup)
             {
                 SelectionGroupPersistenceManager.RegisterUndo(msg);
             }

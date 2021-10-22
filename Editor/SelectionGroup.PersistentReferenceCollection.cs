@@ -2,7 +2,7 @@
 
 namespace Unity.SelectionGroupsEditor
 {
-    internal partial class SelectionGroupEditor
+    internal partial class EditorSelectionGroup
     {
         [SerializeField] PersistentReferenceCollection PersistentReferenceCollection = new PersistentReferenceCollection();
     }
