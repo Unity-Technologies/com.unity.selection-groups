@@ -23,8 +23,6 @@ namespace Unity.SelectionGroups.Runtime
         /// </summary>
         [SerializeField] string query = string.Empty;
 
-        [SerializeField] SelectionGroupDataLocation scope = SelectionGroupDataLocation.Scene;
-
         //Obsolete
         [HideInInspector][FormerlySerializedAs("_members")] [SerializeField] Object[] _legacyMembers;
         
@@ -98,8 +96,10 @@ namespace Unity.SelectionGroups.Runtime
         /// <inheritdoc/>
         public SelectionGroupDataLocation Scope
         {
-            get => scope; 
-            set => scope = value;
+            get => SelectionGroupDataLocation.Scene;
+            set  {
+                //[TODO-sin: 2021-10-22] Remove set starting from version 0.6.0
+            }
         }
 
         /// <inheritdoc/>
