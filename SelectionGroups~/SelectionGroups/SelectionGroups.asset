@@ -13,14 +13,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _values:
-  - _enabledTools:
-    - LockIcon-On.Toggle Lock.Enable and disable editing of objects.
-    PersistentReferenceCollection:
-      _objectIds:
-      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-858381675-0
-    name: LightGroup
+  - name: LightGroup
     color: {r: 0.089983225, g: 0.12710112, b: 0.93305725, a: 1}
     showMembers: 0
     query: 
     groupId: 0
-    scope: 0
+    _enabledTools:
+    - LockIcon-On.Toggle Lock.Enable and disable editing of objects.
+    PersistentReferenceCollection:
+      _objectIds:
+      - GlobalObjectId_V1-2-9fc0d4010bbf28b4594072e72b8655ab-858381675-0
