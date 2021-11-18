@@ -113,7 +113,6 @@ namespace Unity.SelectionGroups.Runtime
         /// <inheritdoc/>
         public void Add(IList<Object> objects) 
         {
-            var myScene = gameObject.scene;
             foreach (var i in objects) 
             {
                 if (i == null)
@@ -128,7 +127,6 @@ namespace Unity.SelectionGroups.Runtime
         /// <inheritdoc/>
         public void SetMembers(IList<Object> objects) 
         {
-            var myScene = gameObject.scene;
             members.Clear();
             foreach (var i in objects) 
             {
