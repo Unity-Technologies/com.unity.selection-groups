@@ -119,8 +119,6 @@ namespace Unity.SelectionGroups.Runtime
                 if (i == null)
                     continue;
                 
-                if (i is GameObject go && go.scene != myScene)
-                    continue;
                 if(!members.Contains(i))
                     members.Add(i);
             }
@@ -135,8 +133,6 @@ namespace Unity.SelectionGroups.Runtime
             foreach (var i in objects) 
             {
                 if (i == null)
-                    continue;
-                if (i is GameObject go && go.scene != myScene)
                     continue;
                 members.Add(i);
             }
