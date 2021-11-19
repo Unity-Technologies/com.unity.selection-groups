@@ -113,14 +113,11 @@ namespace Unity.SelectionGroups.Runtime
         /// <inheritdoc/>
         public void Add(IList<Object> objects) 
         {
-            var myScene = gameObject.scene;
             foreach (var i in objects) 
             {
                 if (i == null)
                     continue;
                 
-                if (i is GameObject go && go.scene != myScene)
-                    continue;
                 if(!members.Contains(i))
                     members.Add(i);
             }
@@ -130,13 +127,10 @@ namespace Unity.SelectionGroups.Runtime
         /// <inheritdoc/>
         public void SetMembers(IList<Object> objects) 
         {
-            var myScene = gameObject.scene;
             members.Clear();
             foreach (var i in objects) 
             {
                 if (i == null)
-                    continue;
-                if (i is GameObject go && go.scene != myScene)
                     continue;
                 members.Add(i);
             }
