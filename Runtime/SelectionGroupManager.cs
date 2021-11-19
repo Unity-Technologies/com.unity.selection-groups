@@ -3,6 +3,10 @@ using System.Linq;
 using Unity.GoQL;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace Unity.SelectionGroups.Runtime
 {
     internal static class SelectionGroupManager
@@ -33,6 +37,23 @@ namespace Unity.SelectionGroups.Runtime
         public static IList<ISelectionGroup> Groups => groups.List;
         
         public static IEnumerable<string> GroupNames => groups.OrderBy(i => i.Name).Select(g => g.Name);
+
+        
+        internal static SelectionGroup CreateSceneSelectionGroup(string name, string query, Color color, IList<Object> members)
+        {
+            GameObject g = new GameObject(name);
+#if UNITY_EDITOR        
+            Undo.RegisterCreatedObjectUndo(g,"New Scene Selection Group");
+#endif        
+            SelectionGroup group = g.AddComponent<SelectionGroup>();
+            group.Name        = name;
+            group.Query       = query;
+            group.Color       = color;
+            group.ShowMembers = true;
+            group.Add(members);
+            SelectionGroupManager.Register(group);
+            return group;
+        }
 
         public static void Register(ISelectionGroup @group)
         {
