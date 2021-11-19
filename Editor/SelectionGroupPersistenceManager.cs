@@ -44,17 +44,18 @@ namespace Unity.SelectionGroupsEditor
             }
         }
 
-        void CreateSceneSelectionGroup(string name, string query, Color color, IList<Object> members)
+        SelectionGroup CreateSceneSelectionGroup(string name, string query, Color color, IList<Object> members)
         {
             var g = new GameObject(name);
             Undo.RegisterCreatedObjectUndo(g,"New Scene Selection Group");
-            var group = g.AddComponent<Unity.SelectionGroups.Runtime.SelectionGroup>();
-            group.Name = name;
-            group.Query = query;
-            group.Color = color;
+            var group = g.AddComponent<SelectionGroup>();
+            group.Name        = name;
+            group.Query       = query;
+            group.Color       = color;
             group.ShowMembers = true;
             group.Add(members);
             SelectionGroupManager.Register(group);
+            return group;
         }
 
         void CreateEditorSelectionGroup(string name, string query, Color color, IList<Object> members)
