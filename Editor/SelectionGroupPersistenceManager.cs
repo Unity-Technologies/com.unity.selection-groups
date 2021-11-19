@@ -37,25 +37,13 @@ namespace Unity.SelectionGroupsEditor
                     CreateEditorSelectionGroup(name, query, color, members);
                     break;
                 case SelectionGroupDataLocation.Scene:
-                    CreateSceneSelectionGroup(name, query, color, members);
+                    SelectionGroupManager.CreateSceneSelectionGroup(name, query, color, members);
                     break;
                 default:
                     throw new System.ArgumentOutOfRangeException(nameof(scope), scope, null);
             }
         }
 
-        void CreateSceneSelectionGroup(string name, string query, Color color, IList<Object> members)
-        {
-            var g = new GameObject(name);
-            Undo.RegisterCreatedObjectUndo(g,"New Scene Selection Group");
-            var group = g.AddComponent<Unity.SelectionGroups.Runtime.SelectionGroup>();
-            group.Name = name;
-            group.Query = query;
-            group.Color = color;
-            group.ShowMembers = true;
-            group.Add(members);
-            SelectionGroupManager.Register(group);
-        }
 
         void CreateEditorSelectionGroup(string name, string query, Color color, IList<Object> members)
         {
