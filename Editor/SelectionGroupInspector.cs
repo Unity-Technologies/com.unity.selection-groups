@@ -14,8 +14,9 @@ namespace Unity.SelectionGroupsEditor
             base.OnInspectorGUI();
             if(group.Query != query)
                 SelectionGroupManager.ExecuteQuery(group);
-            if(group.Scope != scope) 
-                SelectionGroupManager.ChangeGroupScope(group, group.Scope);
+            //[TODO-sin:2021-12-20] Remove in version 0.7.0 
+            // if(group.Scope != scope) 
+            //     SelectionGroupManager.ChangeGroupScope(group, group.Scope);
         }
     }
 }

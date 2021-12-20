@@ -33,9 +33,10 @@ namespace Unity.SelectionGroupsEditor
         {
             switch (scope)
             {
-                case SelectionGroupDataLocation.Editor:
-                    CreateEditorSelectionGroup(name, query, color, members);
-                    break;
+                //[TODO-sin:2021-12-20] Remove in version 0.7.0 
+                // case SelectionGroupDataLocation.Editor:
+                //     CreateEditorSelectionGroup(name, query, color, members);
+                //     break;
                 case SelectionGroupDataLocation.Scene:
                     SelectionGroupManager.CreateSceneSelectionGroup(name, query, color, members);
                     break;
@@ -45,21 +46,22 @@ namespace Unity.SelectionGroupsEditor
         }
 
 
-        void CreateEditorSelectionGroup(string name, string query, Color color, IList<Object> members)
-        {
-            var g = new EditorSelectionGroup
-            {
-                Name = name,
-                Color = color,
-                ShowMembers = true,
-                Query = query
-            };
-            g.Add(members);
-            Undo.RegisterCompleteObjectUndo(this, "New Editor Selection Group");
-            editorGroups.Add(g);
-            Save();
-            SelectionGroupManager.Register(g);
-        }
+        //[TODO-sin:2021-12-20] Remove in version 0.7.0 
+        // void CreateEditorSelectionGroup(string name, string query, Color color, IList<Object> members)
+        // {
+        //     var g = new EditorSelectionGroup
+        //     {
+        //         Name = name,
+        //         Color = color,
+        //         ShowMembers = true,
+        //         Query = query
+        //     };
+        //     g.Add(members);
+        //     Undo.RegisterCompleteObjectUndo(this, "New Editor Selection Group");
+        //     editorGroups.Add(g);
+        //     Save();
+        //     SelectionGroupManager.Register(g);
+        // }
 
         static void OnUndoRedoPerformed()
         {

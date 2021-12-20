@@ -102,9 +102,11 @@ namespace Unity.SelectionGroupsEditor
         {
             editorGroups.Clear();
             editorGroups.UnionWith(_values);
-            SelectionGroupManager.ClearEditorGroups();
-            foreach (var i in _values)
-                SelectionGroupManager.Register(i);
+            
+            //[TODO-sin:2021-12-20] Remove in version 0.7.0             
+            // SelectionGroupManager.ClearEditorGroups();
+            // foreach (var i in _values)
+            //     SelectionGroupManager.Register(i);
         }
     }
 }
