@@ -60,7 +60,8 @@ namespace Unity.SelectionGroupsEditor
 
         static void CreateNewGroup()
         {
-            SelectionGroupManager.Create(SelectionGroupDataLocation.Scene, "New Group", string.Empty, Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f)), new List<Object>());
+            SelectionGroupManager.CreateSceneSelectionGroup("New Group", string.Empty,
+                Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f)), new List<Object>());
         }
 
         void RegisterUndo(ISelectionGroup @group, string msg)
