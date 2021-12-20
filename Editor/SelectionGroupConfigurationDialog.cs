@@ -83,10 +83,14 @@ namespace Unity.SelectionGroupsEditor
                 {
                     {
                         var obj = group as Object;
-                        if(obj == null)
-                            Undo.RegisterCompleteObjectUndo(SelectionGroupPersistenceManager.Instance, "Query change");
-                        else
-                            Undo.RegisterCompleteObjectUndo(obj, "Query change");
+                        //[TODO-sin:2021-12-20] Remove in version 0.7.0 
+                        // if(obj == null)
+                        //     Undo.RegisterCompleteObjectUndo(SelectionGroupPersistenceManager.Instance, "Query change");
+                        // else
+                        //    Undo.RegisterCompleteObjectUndo(obj, "Query change");
+                        
+                        Undo.RegisterCompleteObjectUndo(obj, "Query change");
+                        
                     }
                     group.Query = newQuery;
                     var code = GoQL.Parser.Parse(group.Query, out GoQL.ParseResult parseResult);
