@@ -286,7 +286,7 @@ namespace Unity.SelectionGroupsEditor
             //     content.text = $"{group.Name}";    
             // }
             
-            content.text = $"{group.Name}";                
+            content.text = $"{group.Name}";
 
             //
             const float FOLDOUT_WIDTH    = 16;
