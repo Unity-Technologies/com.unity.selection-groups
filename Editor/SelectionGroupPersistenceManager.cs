@@ -22,8 +22,6 @@ namespace Unity.SelectionGroupsEditor
             Instance = this;
             EditorApplication.hierarchyChanged -= OnHierarchyChanged;
             EditorApplication.hierarchyChanged += OnHierarchyChanged;
-            Undo.undoRedoPerformed -= OnUndoRedoPerformed;
-            Undo.undoRedoPerformed += OnUndoRedoPerformed;;
             EditorApplication.update -= OnUpdate;
             EditorApplication.update += OnUpdate;
             SelectionGroupManager.Delete += OnDeleteSelectionGroup;
@@ -64,10 +62,6 @@ namespace Unity.SelectionGroupsEditor
         //     SelectionGroupManager.Register(g);
         // }
 
-        static void OnUndoRedoPerformed()
-        {
-            
-        }
 
         void OnDeleteSelectionGroup(ISelectionGroup group)
         {
@@ -100,7 +94,6 @@ namespace Unity.SelectionGroupsEditor
         {
             Save();
             EditorApplication.hierarchyChanged -= OnHierarchyChanged;
-            Undo.undoRedoPerformed -= OnUndoRedoPerformed;
             EditorApplication.update -= OnUpdate;
         }
 
