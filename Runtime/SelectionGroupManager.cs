@@ -14,6 +14,7 @@ namespace Unity.SelectionGroups.Runtime
         public delegate void CreateEvent(SelectionGroupDataLocation scope, string name, string query, Color color, IList<Object> members);
         public delegate void DeleteEvent(ISelectionGroup group);
 
+        //[TODO-sin: 2021-12-20] Check these functions if we still need them
         public static CreateEvent Create;
         public static DeleteEvent Delete;
 
