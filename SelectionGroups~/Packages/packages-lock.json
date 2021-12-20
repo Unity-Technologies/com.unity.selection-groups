@@ -33,7 +33,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.package-validation-suite": {
-      "version": "0.23.3-preview",
+      "version": "0.23.4-preview",
       "depth": 0,
       "source": "registry",
       "dependencies": {
