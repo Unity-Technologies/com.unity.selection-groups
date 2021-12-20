@@ -35,7 +35,8 @@ namespace Unity.SelectionGroupsEditor
         {
             EditorApplication.delayCall += CreateAndLoad;
         }
-        internal static void CreateAndLoad()
+
+        private static void CreateAndLoad()
         {
 
             System.Diagnostics.Debug.Assert(_instance == null);
