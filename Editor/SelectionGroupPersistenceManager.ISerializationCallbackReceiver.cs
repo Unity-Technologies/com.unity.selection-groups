@@ -79,7 +79,7 @@ namespace Unity.SelectionGroupsEditor
             Instance = _instance;
         }
 
-        internal static void Save()
+        private static void Save()
         {
             if (Instance != null)
             {
