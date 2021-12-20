@@ -14,7 +14,8 @@ namespace Unity.SelectionGroupsEditor
     [InitializeOnLoad]
     internal partial class SelectionGroupPersistenceManager: ISerializationCallbackReceiver
     {
-        [SerializeField] EditorSelectionGroup[] _values;
+        //[TODO-sin:2021-12-20] Remove in version 0.7.0
+        //[SerializeField] EditorSelectionGroup[] _values;
 
         string[] _names;
 
@@ -95,15 +96,17 @@ namespace Unity.SelectionGroupsEditor
 
         public void OnBeforeSerialize()
         {
-            _values = editorGroups.ToArray();
+            //[TODO-sin:2021-12-20] Remove in version 0.7.0
+            //_values = editorGroups.ToArray();
         }
 
         public void OnAfterDeserialize()
         {
-            editorGroups.Clear();
-            editorGroups.UnionWith(_values);
+            //[TODO-sin:2021-12-20] Remove in version 0.7.0
+            //editorGroups.Clear();
+            //editorGroups.UnionWith(_values);
             
-            //[TODO-sin:2021-12-20] Remove in version 0.7.0             
+            //[TODO-sin:2021-12-20] Remove in version 0.7.0
             // SelectionGroupManager.ClearEditorGroups();
             // foreach (var i in _values)
             //     SelectionGroupManager.Register(i);

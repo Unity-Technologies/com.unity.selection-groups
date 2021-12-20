@@ -14,7 +14,8 @@ namespace Unity.SelectionGroupsEditor
     {
         HashSet<GameObject> toDestroy = new HashSet<GameObject>();
 
-        HashSet<EditorSelectionGroup> editorGroups = new HashSet<EditorSelectionGroup>();
+        //[TODO-sin:2021-12-20] Remove in version 0.7.0
+        //HashSet<EditorSelectionGroup> editorGroups = new HashSet<EditorSelectionGroup>();
         
         void OnEnable()
         {
@@ -73,11 +74,12 @@ namespace Unity.SelectionGroupsEditor
             
             if (group is Unity.SelectionGroups.Runtime.SelectionGroup runtimeGroup)
                 toDestroy.Add(runtimeGroup.gameObject);
-            if (group is EditorSelectionGroup editorGroup)
-            {
-                Undo.RegisterCompleteObjectUndo(this, "Delete Editor Selection Group");
-                editorGroups.Remove(editorGroup);
-            }
+            //[TODO-sin:2021-12-20] Remove in version 0.7.0
+            // if (group is EditorSelectionGroup editorGroup)
+            // {
+            //     Undo.RegisterCompleteObjectUndo(this, "Delete Editor Selection Group");
+            //     editorGroups.Remove(editorGroup);
+            // }
             EditorApplication.delayCall += Save;
         }
         

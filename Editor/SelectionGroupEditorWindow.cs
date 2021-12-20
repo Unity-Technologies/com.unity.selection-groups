@@ -71,10 +71,11 @@ namespace Unity.SelectionGroupsEditor
                 EditorUtility.SetDirty(runtimeGroup);
             }
 
-            if (group is EditorSelectionGroup editorGroup)
-            {
-                SelectionGroupPersistenceManager.RegisterUndo(msg);
-            }
+            //[TODO-sin:2021-12-20] Remove in version 0.7.0
+            // if (group is EditorSelectionGroup editorGroup)
+            // {
+            //     SelectionGroupPersistenceManager.RegisterUndo(msg);
+            // }
         }
     }
 }
