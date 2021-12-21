@@ -83,10 +83,14 @@ namespace Unity.SelectionGroupsEditor
                 {
                     {
                         var obj = group as Object;
-                        if(obj == null)
-                            Undo.RegisterCompleteObjectUndo(SelectionGroupPersistenceManager.Instance, "Query change");
-                        else
-                            Undo.RegisterCompleteObjectUndo(obj, "Query change");
+                        //[TODO-sin:2021-12-20] Remove in version 0.7.0 
+                        // if(obj == null)
+                        //     Undo.RegisterCompleteObjectUndo(SelectionGroupPersistenceManager.Instance, "Query change");
+                        // else
+                        //    Undo.RegisterCompleteObjectUndo(obj, "Query change");
+                        
+                        Undo.RegisterCompleteObjectUndo(obj, "Query change");
+                        
                     }
                     group.Query = newQuery;
                     var code = GoQL.Parser.Parse(group.Query, out GoQL.ParseResult parseResult);
@@ -110,13 +114,16 @@ namespace Unity.SelectionGroupsEditor
                     EditorGUILayout.HelpBox(message, MessageType.Info);
                 }
                 GUILayout.Space(5);
-                var scope = @group.Scope;
-                scope = (SelectionGroupDataLocation) EditorGUILayout.EnumPopup(@group.Scope);
-                if (scope != @group.Scope)
-                {
-                    SelectionGroupManager.ChangeGroupScope(group, scope);
-                    Close();
-                }
+                
+                //[TODO-sin:2021-12-20] Remove in version 0.7.0 
+                // SelectionGroupDataLocation scope = @group.Scope;
+                // scope = (SelectionGroupDataLocation) EditorGUILayout.EnumPopup(@group.Scope);
+                // if (scope != @group.Scope)
+                // {
+                //     SelectionGroupManager.ChangeGroupScope(group, scope);
+                //     Close();
+                // }
+                
                 GUILayout.BeginVertical("box");
                 GUILayout.Label("Enabled Toolbar Buttons", EditorStyles.largeLabel);
                 foreach (var i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>())

@@ -14,6 +14,7 @@ namespace Unity.SelectionGroups.Runtime
         public delegate void CreateEvent(SelectionGroupDataLocation scope, string name, string query, Color color, IList<Object> members);
         public delegate void DeleteEvent(ISelectionGroup group);
 
+        //[TODO-sin: 2021-12-20] Check these functions if we still need them
         public static CreateEvent Create;
         public static DeleteEvent Delete;
 
@@ -74,18 +75,20 @@ namespace Unity.SelectionGroups.Runtime
         static void OnCreate(SelectionGroupDataLocation scope, string name, string query, Color color, IList<Object> members)
         {
         }
-        
-        public static void ClearEditorGroups()
-        {
-            foreach(var i in groups.ToArray())
-                if(i.Scope == SelectionGroupDataLocation.Editor) Unregister(i);
-        }
 
-        public static void ChangeGroupScope(ISelectionGroup @group, SelectionGroupDataLocation scope)
-        {
-            Create(scope, @group.Name, @group.Query, @group.Color, @group.Members);
-            Delete(@group);
-        }
+        //[TODO-sin:2021-12-20] Remove in version 0.7.0 
+        // public static void ClearEditorGroups()
+        // {
+        //     foreach(var i in groups.ToArray())
+        //         if(i.Scope == SelectionGroupDataLocation.Editor) Unregister(i);
+        // }
+
+        //[TODO-sin:2021-12-20] Remove in version 0.7.0 
+        // public static void ChangeGroupScope(ISelectionGroup @group, SelectionGroupDataLocation scope)
+        // {
+        //     Create(scope, @group.Name, @group.Query, @group.Color, @group.Members);
+        //     Delete(@group);
+        // }
 
         public static void ExecuteQuery(ISelectionGroup group)
         {
