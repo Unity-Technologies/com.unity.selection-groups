@@ -7,6 +7,16 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.film-internal-utilities": {
+      "version": "0.12.2-preview",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.uielements": "1.0.0",
+        "com.unity.timeline": "1.2.14"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.ide.rider": {
       "version": "3.0.7",
       "depth": 0,
@@ -54,7 +64,9 @@
       "version": "file:com.unity.selection-groups",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {}
+      "dependencies": {
+        "com.unity.film-internal-utilities": "0.12.2-preview"
+      }
     },
     "com.unity.test-framework": {
       "version": "1.1.30",
