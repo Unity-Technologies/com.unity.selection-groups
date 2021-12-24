@@ -77,7 +77,12 @@ namespace Unity.SelectionGroups.Runtime
             get => this.query; 
             set => this.query = value;
         }
-
+        
+        /// <inheritdoc/>
+        public bool IsAutoFilled() {
+            return !string.IsNullOrEmpty(Query);
+        }
+        
         /// <inheritdoc/>
         public Color Color
         {
@@ -136,12 +141,14 @@ namespace Unity.SelectionGroups.Runtime
         }
 
         /// <inheritdoc/>
-        public void Remove(IList<Object> objectReferences)
-        {
+        public void Remove(IEnumerable<Object> objectReferences) {
+            if (IsAutoFilled())
+                return;
+            
             members.RemoveAll(a=> objectReferences.Contains(a));
             RemoveNullMembers();
         }
-
+        
         /// <inheritdoc/>
         public void Clear()
         {

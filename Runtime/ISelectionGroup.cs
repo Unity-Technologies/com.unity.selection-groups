@@ -21,6 +21,11 @@ namespace Unity.SelectionGroups.Runtime
         string Query { get; set;  }
 
         /// <summary>
+        /// Gets whether the group is automatically filled
+        /// </summary>
+        bool IsAutoFilled();
+        
+        /// <summary>
         /// Sets/gets the color of the SelectionGroup 
         /// </summary>
         Color Color { get; set; }
@@ -61,7 +66,7 @@ namespace Unity.SelectionGroups.Runtime
         /// Removes a list of objects from the SelectionGroup 
         /// </summary>
         /// <param name="objects">A list of objects to be removed</param>
-        void Remove(IList<Object> objects);
+        void Remove(IEnumerable<Object> objects);
         
         /// <summary>
         /// Clears the members of the SelectionGroup
