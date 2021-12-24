@@ -261,7 +261,7 @@ namespace Unity.SelectionGroupsEditor
 
         }
         
-        Rect DrawHeader(Rect cursor, ISelectionGroup group, out bool showChildren) 
+        Rect DrawHeader(Rect cursor, SelectionGroup group, out bool showChildren) 
         {           
             bool isPaint = Event.current.type == EventType.Repaint;            
             Rect rect = new Rect(cursor) {x = 0, };            
@@ -312,7 +312,7 @@ namespace Unity.SelectionGroupsEditor
                 rect.width        =  labelWidth;
             }
             if(isAvailableInEditMode)
-                HandleHeaderMouseEvents(rect, group.Name, group);
+                HandleHeaderMouseEvents(rect, group);
             if (isPaint) 
             {
                 Label.normal.textColor = EditorGUIUtility.isProSkin ? ProTextColor: Color.black;
@@ -434,7 +434,7 @@ namespace Unity.SelectionGroupsEditor
             menu.DropDown(rect);
         }
 
-        void HandleHeaderMouseEvents(Rect rect, string groupName, ISelectionGroup group)
+        void HandleHeaderMouseEvents(Rect rect, SelectionGroup group)
         {
             var e = Event.current;
             if (rect.Contains(e.mousePosition))
@@ -445,7 +445,7 @@ namespace Unity.SelectionGroupsEditor
                         switch (e.button)
                         {
                             case RIGHT_MOUSE_BUTTON:
-                                ShowGroupContextMenu(rect, groupName, group);
+                                ShowGroupContextMenu(rect, group.Name, group);
                                 break;
                             case LEFT_MOUSE_BUTTON:
                                 if (e.clickCount == 1)
@@ -458,8 +458,8 @@ namespace Unity.SelectionGroupsEditor
                         break;
                     case EventType.MouseDrag:
                         DragAndDrop.PrepareStartDrag();
-                        DragAndDrop.StartDrag(groupName);
-                        DragAndDrop.objectReferences = group.Members.ToArray();
+                        DragAndDrop.objectReferences = new[] { group.gameObject };
+                        DragAndDrop.StartDrag(group.Name);
                         e.Use();
                         break;
                 }
