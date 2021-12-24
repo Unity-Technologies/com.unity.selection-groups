@@ -534,8 +534,10 @@ namespace Unity.SelectionGroupsEditor
                         }
                         
                     } else {
-                        m_selectedGroupMembers.Clear();
-                        
+                        if (!isControl) {
+                            m_selectedGroupMembers.Clear();
+                        }
+
                         //add objects from shift pivot
                         GroupMembersSelection selectedMembersByShift = SelectMembersInBetween(
                             m_shiftPivotGroup, m_shiftPivotGroupMember, 
