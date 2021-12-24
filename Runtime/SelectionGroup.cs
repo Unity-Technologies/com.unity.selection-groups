@@ -31,9 +31,7 @@ namespace Unity.SelectionGroups.Runtime
 #pragma warning disable 414    
         [HideInInspector][SerializeField] private int sgVersion      = CUR_SG_VERSION; 
 #pragma warning restore 414
-        
-        private const int CUR_SG_VERSION = (int) SGVersion.INITIAL;        
-        
+                
 
         GoQL.ParseResult parseResult;
         List<object> code;
@@ -48,6 +46,11 @@ namespace Unity.SelectionGroups.Runtime
         {
             executor = new GoQL.GoQLExecutor();
             executor.Code = query;
+
+            if (!m_registerOnEnable) 
+                return;
+            SelectionGroupManager.GetOrCreateInstance().Register(this);
+            m_registerOnEnable = false;
         }
 
         /// <inheritdoc/>
@@ -188,13 +191,24 @@ namespace Unity.SelectionGroups.Runtime
                 members.AddRange(_legacyMembers);                 
                 _legacyMembers = null; //clear
             }
+
+            if (sgVersion < (int) SGVersion.ORDERED_0_6_0) {
+                m_registerOnEnable = true;
+            }
             
             sgVersion = CUR_SG_VERSION;            
         }        
+
+//----------------------------------------------------------------------------------------------------------------------
+        
+        private const int  CUR_SG_VERSION     = (int) SGVersion.ORDERED_0_6_0;
+        private       bool m_registerOnEnable = false;
+        
         
         
         enum SGVersion {
             INITIAL = 1,    //initial
+            ORDERED_0_6_0 = 2, //The order of selection groups is maintained by SelectionGroupManager
 
         }        
     }
