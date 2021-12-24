@@ -81,7 +81,7 @@ namespace Unity.SelectionGroupsEditor
                     //early out if this group yMax is above window rect (not visible).
                     // if (rect.yMax - scroll.y < 0)
                         // continue;
-                    cursor = DrawAllGroupMembers(cursor, group, allowRemove: true);
+                    cursor = DrawAllGroupMembers(cursor, group);
                 }
                 try
                 {
@@ -114,7 +114,7 @@ namespace Unity.SelectionGroupsEditor
             }
         }
 
-        Rect DrawAllGroupMembers(Rect rect, ISelectionGroup group, bool allowRemove)
+        Rect DrawAllGroupMembers(Rect rect, ISelectionGroup group)
         {
             rect.height = EditorGUIUtility.singleLineHeight;
             foreach (Object i in group.Members) 
@@ -126,13 +126,13 @@ namespace Unity.SelectionGroupsEditor
                 if (rect.yMin - scroll.y > position.height) return rect;
                 //if rect is in window, draw.
                 if (rect.yMax - scroll.y > 0)
-                    DrawGroupMember(rect, group, i, allowRemove);
+                    DrawGroupMember(rect, group, i);
                 rect.y += rect.height;
             }
             return rect;
         }
 
-        void DrawGroupMember(Rect rect, ISelectionGroup group, UnityEngine.Object g, bool allowRemove) 
+        void DrawGroupMember(Rect rect, ISelectionGroup group, UnityEngine.Object g) 
         {
             Assert.IsNotNull(g);
             Event e = Event.current;
@@ -158,6 +158,7 @@ namespace Unity.SelectionGroupsEditor
                 }
 
                 rect.x           += 24;
+                bool allowRemove = string.IsNullOrEmpty(group.Query);
                 GUI.contentColor =  allowRemove ? Color.white : Color.Lerp(Color.white, Color.yellow, 0.25f);
                 GUI.Label(rect, content);
                 GUI.contentColor = Color.white;
@@ -305,19 +306,16 @@ namespace Unity.SelectionGroupsEditor
             }
         }
 
-        void ShowGameObjectContextMenu(Rect rect, ISelectionGroup group, UnityEngine.Object g, bool allowRemove)
+        void ShowGameObjectContextMenu(Rect rect, ISelectionGroup group, UnityEngine.Object g)
         {
             var menu = new GenericMenu();
             var content = new GUIContent("Remove From Group");
-            if (allowRemove)
-                menu.AddItem(content, false, () =>
-                {
-                    RegisterUndo(group, "Remove Member");
-                    group.Query = "";
-                    group.Remove(Selection.objects);
-                });
-            else
-                menu.AddDisabledItem(content);
+            menu.AddItem(content, false, () => {
+                RegisterUndo(group, "Remove Member");
+                group.Query = "";
+                group.Remove(Selection.objects);
+            });
+            
             menu.DropDown(rect);
         }
 
@@ -418,7 +416,7 @@ namespace Unity.SelectionGroupsEditor
                     }
                     
                     if (isRightMouseClick && isGroupMemberSelected)                    {
-                        ShowGameObjectContextMenu(rect, group, groupMember, allowRemove:true);
+                        ShowGameObjectContextMenu(rect, group, groupMember);
                         e.Use();
                     }
                     
