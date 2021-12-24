@@ -134,6 +134,8 @@ namespace Unity.SelectionGroupsEditor
             Assert.IsNotNull(g);
             var e = Event.current;
             var content = EditorGUIUtility.ObjectContent(g, g.GetType());
+
+            //[TODO-sin: 2021-12-24] if the gameobject belongs to two groups then selecting it will select it in both groups
             var isInSelection = activeSelection.Contains(g);
             var isMouseOver = rect.Contains(e.mousePosition);
             var isMouseDrag = e.type == EventType.MouseDrag;
