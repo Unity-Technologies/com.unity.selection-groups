@@ -166,25 +166,18 @@ namespace Unity.SelectionGroupsEditor
             // var isMouseDrag = e.type == EventType.MouseDrag;
             // var isManySelected = activeSelection.Count > 1;
             // var isAnySelected = activeSelection.Count > 0;
-            // var isLeftButton = e.button == LEFT_MOUSE_BUTTON;
             // var isRightButton = e.button == RIGHT_MOUSE_BUTTON;
-            // var isMouseDown = e.type == EventType.MouseDown;
             // var isMouseUp = e.type == EventType.MouseUp;
             // var isNoSelection = activeSelection.Count == 0;
             // var isControl = e.control;
             // var isShift = e.shift;
+            // var isMouseDown = e.type == EventType.MouseDown;
             // var isLeftMouseDown = isMouseOver && isLeftButton && isMouseDown;
             // var isLeftMouseUp = isMouseOver && isLeftButton && isMouseUp;
             // var isHotMember = g == hotMember;
             // var updateSelectionObjects = false;
-            HandleGroupMemberMouseEvents(rect);
+            HandleGroupMemberMouseEvents(rect, group, g);
             
-            // if (isLeftMouseDown)
-            // {
-            //     hotMember = g;
-            //     activeSelectionGroup = group;
-            //     e.Use();
-            // }
             //
             // if (isControl)
             // {
@@ -474,15 +467,32 @@ namespace Unity.SelectionGroupsEditor
         }
 
         
-        void HandleGroupMemberMouseEvents(Rect rect)
+        void HandleGroupMemberMouseEvents(Rect rect, ISelectionGroup group, Object groupMember)
         {
             Event e = Event.current;
             if (!rect.Contains(e.mousePosition)) 
                 return;
+
+            // var isMouseDown = e.type == EventType.MouseDown;
+            // var isLeftMouseDown = isMouseOver && isLeftButton && isMouseDown;
+            
+            // var isLeftButton = e.button == LEFT_MOUSE_BUTTON;
+            // if (isLeftMouseDown)
+            // {
+            //     hotMember = g;
+            //     activeSelectionGroup = group;
+            //     e.Use();
+            // }
             
             switch (e.type) {
+                case EventType.MouseDown: {
+                    ClearSelectedGroupMembers();
+                    AddSelectedGroupMember(group, groupMember);
+                    break;
+                }
+                
                 case EventType.MouseDrag:
-                    //Convert the dragged objects
+                    //Prepare the selected objects to be dragged: Convert to array
                     HashSet<Object> uniqueDraggedObjects = new HashSet<Object>();
                     foreach (KeyValuePair<ISelectionGroup, HashSet<Object>> members in m_selectedGroupMembers) {
                         uniqueDraggedObjects.UnionWith(members.Value);
@@ -556,18 +566,36 @@ namespace Unity.SelectionGroupsEditor
                         ShowNotification(new GUIContent(e.Message));
                     }
                     evt.Use();
+                    ClearSelectedGroupMembers();
 
                     break;
             }
             return false;
         }
 
+        
+
+//----------------------------------------------------------------------------------------------------------------------        
+        void AddSelectedGroupMember(ISelectionGroup group, Object member) {
+            if (!m_selectedGroupMembers.ContainsKey(group)) {
+                m_selectedGroupMembers.Add(group, new HashSet<Object>(){member});
+                return;
+            }
+
+            m_selectedGroupMembers[group].Add(member);
+        }
+        
         bool IsGroupMemberSelected(ISelectionGroup group, Object member) {
             if (!m_selectedGroupMembers.ContainsKey(group))
                 return false;
 
-            return (!m_selectedGroupMembers[group].Contains(member));
+            return (m_selectedGroupMembers[group].Contains(member));
         }
+        
+        void ClearSelectedGroupMembers() {
+            m_selectedGroupMembers.Clear();
+        }
+        
         
 //----------------------------------------------------------------------------------------------------------------------        
 
