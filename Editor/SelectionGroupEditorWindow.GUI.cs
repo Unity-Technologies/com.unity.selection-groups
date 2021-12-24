@@ -142,10 +142,10 @@ namespace Unity.SelectionGroupsEditor
             if (isMouseOver && isPaint)
                 EditorGUI.DrawRect(rect, HOVER_COLOR);
 
-            bool isInSelection = IsGroupMemberSelected(group, g);
+            bool isGroupMemberSelected = IsGroupMemberSelected(group, g);
 
             if (isPaint) {
-                if (isInSelection)
+                if (isGroupMemberSelected)
                     EditorGUI.DrawRect(rect, SELECTION_COLOR);
 
                 if (g.hideFlags.HasFlag(HideFlags.NotEditable)) {
@@ -176,7 +176,7 @@ namespace Unity.SelectionGroupsEditor
             // var isLeftMouseUp = isMouseOver && isLeftButton && isMouseUp;
             // var isHotMember = g == hotMember;
             // var updateSelectionObjects = false;
-            HandleGroupMemberMouseEvents(rect, group, g);
+            HandleGroupMemberMouseEvents(rect, group, g, isGroupMemberSelected);
             
             //
             // if (isControl)
@@ -467,7 +467,7 @@ namespace Unity.SelectionGroupsEditor
         }
 
         
-        void HandleGroupMemberMouseEvents(Rect rect, ISelectionGroup group, Object groupMember)
+        void HandleGroupMemberMouseEvents(Rect rect, ISelectionGroup group, Object groupMember, bool isGroupMemberSelected)
         {
             Event e = Event.current;
             if (!rect.Contains(e.mousePosition)) 
@@ -486,8 +486,25 @@ namespace Unity.SelectionGroupsEditor
             
             switch (e.type) {
                 case EventType.MouseDown: {
-                    ClearSelectedGroupMembers();
-                    AddSelectedGroupMember(group, groupMember);
+                    
+                    bool isControl = e.control;
+                    bool isShift = e.shift;
+
+                    bool canRemove = isControl || isShift; //can only remove members if control or shift is pressed
+
+                    if (!isGroupMemberSelected) {
+                        if (!canRemove) {
+                            ClearSelectedGroupMembers();
+                        }
+                        AddSelectedGroupMember(group, groupMember);
+                        
+                    } else {
+                        if (canRemove) {
+                            RemoveSelectedGroupMember(group, groupMember);
+                        }
+                    }
+                    
+                    
                     break;
                 }
                 
@@ -566,7 +583,6 @@ namespace Unity.SelectionGroupsEditor
                         ShowNotification(new GUIContent(e.Message));
                     }
                     evt.Use();
-                    ClearSelectedGroupMembers();
 
                     break;
             }
@@ -583,6 +599,14 @@ namespace Unity.SelectionGroupsEditor
             }
 
             m_selectedGroupMembers[group].Add(member);
+        }
+
+        void RemoveSelectedGroupMember(ISelectionGroup group, Object member) {
+            if (!m_selectedGroupMembers.ContainsKey(group)) {
+                return;
+            }
+
+            m_selectedGroupMembers[group].Remove(member);
         }
         
         bool IsGroupMemberSelected(ISelectionGroup group, Object member) {
