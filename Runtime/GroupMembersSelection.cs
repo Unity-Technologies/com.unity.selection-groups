@@ -27,6 +27,23 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<ISelectionGroup,
         m_selectedGroupMembers[group].Add(member);
     }
 
+    internal void Add(GroupMembersSelection otherSelection) {
+        foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in otherSelection) {
+            ISelectionGroup    group             = kv.Key;
+            OrderedSet<Object> membersCollection = null;
+            if (!m_selectedGroupMembers.ContainsKey(group)) {
+                membersCollection = new OrderedSet<Object>() { };
+                m_selectedGroupMembers.Add(group, membersCollection);
+            } else {
+                membersCollection = m_selectedGroupMembers[group];
+            }
+
+            foreach (Object m in kv.Value) {
+                membersCollection.Add(m);
+            }
+        }
+    }
+
     internal void Remove(ISelectionGroup group, Object member) {
         if (!m_selectedGroupMembers.ContainsKey(group)) {
             return;
