@@ -478,16 +478,18 @@ namespace Unity.SelectionGroupsEditor
             Event e = Event.current;
             if (!rect.Contains(e.mousePosition)) 
                 return;
+            
             switch (e.type) {
                 case EventType.MouseDrag:
+                    int numSelectedObjects = objects.Length;
+                    if (numSelectedObjects <= 0)
+                        break;
+                    
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.objectReferences = objects;
-                    DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP_MEMBERS);                    
-                    StringBuilder sb = new StringBuilder();
-                    foreach (Object obj in objects) {
-                        sb.AppendLine(obj.name);
-                    }
-                    DragAndDrop.StartDrag(sb.ToString());
+                    DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP_MEMBERS);
+                    string dragText = numSelectedObjects > 1 ? objects[0].name + " ..." : objects[0].name;                        
+                    DragAndDrop.StartDrag(dragText);
                     e.Use();
                     break;
             }
