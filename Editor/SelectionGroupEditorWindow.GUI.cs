@@ -648,14 +648,14 @@ namespace Unity.SelectionGroupsEditor
         //Find object between (pivotGroup, pivotGroupMember) and (endGroup,endMember).
         //The order between them is not guaranteed.
         [CanBeNull]
-        static Dictionary<ISelectionGroup, OrderedSet<Object>> SelectMembersInBetween(
+        static GroupMembersSelection SelectMembersInBetween(
             SelectionGroup pivotGroup, Object pivotMember, 
             SelectionGroup endGroup, Object endMember, IList<SelectionGroup> allGroups) 
         {
             if (allGroups.Count == 0)
                 return null;
 
-            Dictionary<ISelectionGroup, OrderedSet<Object>> ret = new Dictionary<ISelectionGroup, OrderedSet<Object>>();
+            GroupMembersSelection ret = new GroupMembersSelection();
             
             bool startAdd = (null == pivotGroup);
 
@@ -667,16 +667,15 @@ namespace Unity.SelectionGroupsEditor
                     
                     if (startAdd) {
                         
-                        //Add
-
-
+                        ret.Add(group,m);
                         if (shouldToggleState)
                             return ret;
                     } else {
-                        if (shouldToggleState) {
-                            startAdd = true;
-                            //Add
-                        }
+                        if (!shouldToggleState) 
+                            continue;
+                        
+                        startAdd = true;
+                        ret.Add(@group,m);
 
                     }
                 }
