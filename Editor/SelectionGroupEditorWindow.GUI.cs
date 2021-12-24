@@ -33,10 +33,9 @@ namespace Unity.SelectionGroupsEditor
             window.Show();
         }
 
-        float CalculateHeight()
+        static float CalculateHeight(IList<SelectionGroup> groups)
         {
             var height = EditorGUIUtility.singleLineHeight;
-            var groups = SelectionGroupManager.GetOrCreateInstance().Groups;
             for (var i=0; i<groups.Count; i++)
             {
                 var group = groups[i];
@@ -51,9 +50,11 @@ namespace Unity.SelectionGroupsEditor
 
         void DrawGUI()
         {
+            m_groupsToDraw = SelectionGroupManager.GetOrCreateInstance().Groups;
+            
             var viewRect = Rect.zero;
             viewRect.width = position.width-16;
-            viewRect.height = CalculateHeight();
+            viewRect.height = CalculateHeight(m_groupsToDraw);
             var windowRect = new Rect(0, 0, position.width, position.height);
             scroll = GUI.BeginScrollView(windowRect, scroll, viewRect);
             
@@ -61,10 +62,9 @@ namespace Unity.SelectionGroupsEditor
             if (GUI.Button(cursor, AddGroup)) CreateNewGroup();
             cursor.y += cursor.height;
 
-            var groups = SelectionGroupManager.GetOrCreateInstance().Groups;
-            for (var i=0; i<groups.Count; i++)
+            for (var i=0; i<m_groupsToDraw.Count; i++)
             {
-                var group = groups[i];
+                var group = m_groupsToDraw[i];
                 if (group == null) continue;
                 cursor.y += 3;
                 
@@ -678,6 +678,8 @@ namespace Unity.SelectionGroupsEditor
 
         readonly Dictionary<ISelectionGroup, OrderedSet<Object>> m_selectedGroupMembers 
             = new Dictionary<ISelectionGroup, OrderedSet<Object>>();
+
+        private IList<SelectionGroup> m_groupsToDraw = null;
         
         private const string DRAG_ITEM_TYPE = "SelectionGroupsWindows";
 
