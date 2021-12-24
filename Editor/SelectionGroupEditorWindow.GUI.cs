@@ -490,11 +490,11 @@ namespace Unity.SelectionGroupsEditor
 
             switch (e.type) {
                 case EventType.MouseDown: {
-                    if (!isGroupMemberSelected) {
-                        if (!isControl) {
-                            m_selectedGroupMembers.Clear();
-                        }
-                    }
+                    // if (!isGroupMemberSelected) {
+                    //     if (!isControl) {
+                    //         m_selectedGroupMembers.Clear();
+                    //     }
+                    // }
 
                     // if (!isShift) {
                     //
@@ -521,14 +521,18 @@ namespace Unity.SelectionGroupsEditor
                 }
                 case EventType.MouseUp: {
                     if (!isShift) {
-                        if (!isGroupMemberSelected) {
+                        if (!isControl) {
+                            m_selectedGroupMembers.Clear();
                             m_selectedGroupMembers.Add(group, groupMember);
-                        } else {
-                            if (isControl) {
+                        }
+                        else {
+                            if (!isGroupMemberSelected) {
+                                m_selectedGroupMembers.Add(group, groupMember);
+                            } else {
                                 m_selectedGroupMembers.Remove(group, groupMember);
                             }
+                        }
                         
-                        }                        
                     } else {
                         m_selectedGroupMembers.Clear();
                         
