@@ -30,8 +30,6 @@ namespace Unity.SelectionGroupsEditor
         HashSet<Object> activeSelection = new HashSet<Object>();
         Object hotMember;
 
-        //[TODO-sin: 2021-12-24] Remove isReadOnly
-        private bool isReadOnly = false;
         private static float? performQueryRefresh = null;
 
         

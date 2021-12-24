@@ -532,7 +532,7 @@ namespace Unity.SelectionGroupsEditor
                     bool targetGroupContainsQuery = string.IsNullOrEmpty(group.Query);
                     bool draggedItemIsGroup       = (null != dragItemType && dragItemType == DragItemType.GROUP);
 
-                    if (!targetGroupContainsQuery || isReadOnly || draggedItemIsGroup) 
+                    if (!targetGroupContainsQuery || draggedItemIsGroup) 
                         DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
                     else
                         DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
@@ -540,20 +540,17 @@ namespace Unity.SelectionGroupsEditor
                     break;
                 case EventType.DragPerform:
                     //This will only get called when a valid Drop occurs (determined by the above DragUpdated code)
-                    if (!isReadOnly)
+                    DragAndDrop.AcceptDrag();
+                    RegisterUndo(group, "Add Members");
+                    try
                     {
-                        DragAndDrop.AcceptDrag();
-                        RegisterUndo(group, "Add Members");
-                        try
-                        {
-                            group.Add(DragAndDrop.objectReferences);
-                        }
-                        catch (SelectionGroupException e)
-                        {
-                            ShowNotification(new GUIContent(e.Message));
-                        }
-                        evt.Use();
+                        group.Add(DragAndDrop.objectReferences);
                     }
+                    catch (SelectionGroupException e)
+                    {
+                        ShowNotification(new GUIContent(e.Message));
+                    }
+                    evt.Use();
 
                     break;
             }
