@@ -649,21 +649,24 @@ namespace Unity.SelectionGroupsEditor
         //The order between them is not guaranteed.
         [CanBeNull]
         static GroupMembersSelection SelectMembersInBetween(
-            SelectionGroup pivotGroup, Object pivotMember, 
-            SelectionGroup endGroup, Object endMember, IList<SelectionGroup> allGroups) 
+            ISelectionGroup pivotGroup, Object pivotMember, 
+            ISelectionGroup endGroup, Object endMember, IList<SelectionGroup> allGroups) 
         {
             if (allGroups.Count == 0)
                 return null;
 
             GroupMembersSelection ret = new GroupMembersSelection();
             
-            bool startAdd = (null == pivotGroup);
+            SelectionGroup pivotSG = pivotGroup as SelectionGroup;
+            SelectionGroup endSG = endGroup as SelectionGroup;
+            
+            bool startAdd = (null == pivotSG);
 
             foreach (SelectionGroup group in allGroups) {
                 foreach (Object m in group.Members) {
 
-                    bool shouldToggleState = (group == pivotGroup && m == pivotMember)
-                        || (group == endGroup && m == endMember);                    
+                    bool shouldToggleState = (group == pivotSG && m == pivotMember)
+                        || (group == endSG && m == endMember);
                     
                     if (startAdd) {
                         
