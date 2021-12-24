@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -141,7 +142,7 @@ namespace Unity.SelectionGroupsEditor
             if (isMouseOver && isPaint)
                 EditorGUI.DrawRect(rect, HOVER_COLOR);
 
-            bool isInSelection = activeSelection.Contains(g);
+            bool isInSelection = IsGroupMemberSelected(group, g);
 
             if (isPaint) {
                 if (isInSelection)
@@ -176,7 +177,7 @@ namespace Unity.SelectionGroupsEditor
             // var isLeftMouseUp = isMouseOver && isLeftButton && isMouseUp;
             // var isHotMember = g == hotMember;
             // var updateSelectionObjects = false;
-            HandleGroupMemberMouseEvents(rect, activeSelection.ToArray());            
+            HandleGroupMemberMouseEvents(rect);
             
             // if (isLeftMouseDown)
             // {
@@ -473,7 +474,7 @@ namespace Unity.SelectionGroupsEditor
         }
 
         
-        void HandleGroupMemberMouseEvents(Rect rect, Object[] objects)
+        void HandleGroupMemberMouseEvents(Rect rect)
         {
             Event e = Event.current;
             if (!rect.Contains(e.mousePosition)) 
@@ -481,14 +482,20 @@ namespace Unity.SelectionGroupsEditor
             
             switch (e.type) {
                 case EventType.MouseDrag:
-                    int numSelectedObjects = objects.Length;
-                    if (numSelectedObjects <= 0)
+                    //Convert the dragged objects
+                    HashSet<Object> uniqueDraggedObjects = new HashSet<Object>();
+                    foreach (KeyValuePair<ISelectionGroup, HashSet<Object>> members in m_selectedGroupMembers) {
+                        uniqueDraggedObjects.UnionWith(members.Value);
+                    }
+                    int numDraggedObjects  = uniqueDraggedObjects.Count;
+                    if (numDraggedObjects <= 0)
                         break;
-                    
+
+                    Object[] objects = uniqueDraggedObjects.ToArray();                    
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.objectReferences = objects;
                     DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP_MEMBERS);
-                    string dragText = numSelectedObjects > 1 ? objects[0].name + " ..." : objects[0].name;                        
+                    string dragText = numDraggedObjects > 1 ? objects[0].name + " ..." : objects[0].name;                        
                     DragAndDrop.StartDrag(dragText);
                     e.Use();
                     break;
@@ -554,9 +561,19 @@ namespace Unity.SelectionGroupsEditor
             }
             return false;
         }
+
+        bool IsGroupMemberSelected(ISelectionGroup group, Object member) {
+            if (!m_selectedGroupMembers.ContainsKey(group))
+                return false;
+
+            return (!m_selectedGroupMembers[group].Contains(member));
+        }
         
 //----------------------------------------------------------------------------------------------------------------------        
 
+        readonly Dictionary<ISelectionGroup, HashSet<Object>> m_selectedGroupMembers 
+            = new Dictionary<ISelectionGroup, HashSet<Object>>();
+        
         private const string DRAG_ITEM_TYPE = "SelectionGroupsWindows";
     }
 } //end namespace
