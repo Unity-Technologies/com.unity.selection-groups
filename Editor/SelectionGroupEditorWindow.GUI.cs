@@ -405,43 +405,54 @@ namespace Unity.SelectionGroupsEditor
             if (!rect.Contains(e.mousePosition)) 
                 return;
 
-            bool isControl = e.control;
-            bool isShift   = e.shift;
+            bool isControl         = e.control;
+            bool isShift           = e.shift;
+            bool isRightMouseClick = e.button == RIGHT_MOUSE_BUTTON;
+            bool isLeftMouseClick  = e.button == LEFT_MOUSE_BUTTON;
 
             switch (e.type) {
                 case EventType.MouseDown: {
-                    if (!isShift) {
+                    if (isLeftMouseClick && !isShift) {
                         m_shiftPivotGroup       = group;
                         m_shiftPivotGroupMember = groupMember;
                     }
+                    
+                    if (isRightMouseClick && isGroupMemberSelected)                    {
+                        ShowGameObjectContextMenu(rect, group, groupMember, allowRemove:true);
+                        e.Use();
+                    }
+                    
+                    
                     e.Use();
                     break;
                 }
                 case EventType.MouseUp: {
-                    if (!isShift) {
-                        if (!isControl) {
-                            m_selectedGroupMembers.Clear();
-                            m_selectedGroupMembers.Add(group, groupMember);
-                        }
-                        else {
-                            if (!isGroupMemberSelected) {
+                    if (isLeftMouseClick) {
+                        if (!isShift) {
+                            if (!isControl) {
+                                m_selectedGroupMembers.Clear();
                                 m_selectedGroupMembers.Add(group, groupMember);
-                            } else {
-                                m_selectedGroupMembers.Remove(group, groupMember);
                             }
-                        }
+                            else {
+                                if (!isGroupMemberSelected) {
+                                    m_selectedGroupMembers.Add(group, groupMember);
+                                } else {
+                                    m_selectedGroupMembers.Remove(group, groupMember);
+                                }
+                            }
                         
-                    } else {
-                        if (!isControl) {
-                            m_selectedGroupMembers.Clear();
-                        }
+                        } else {
+                            if (!isControl) {
+                                m_selectedGroupMembers.Clear();
+                            }
 
-                        //add objects from shift pivot
-                        GroupMembersSelection selectedMembersByShift = SelectMembersInBetween(
-                            m_shiftPivotGroup, m_shiftPivotGroupMember, 
-                            group, groupMember, m_groupsToDraw);
-                        m_selectedGroupMembers.Add(selectedMembersByShift);
-                    }
+                            //add objects from shift pivot
+                            GroupMembersSelection selectedMembersByShift = SelectMembersInBetween(
+                                m_shiftPivotGroup, m_shiftPivotGroupMember, 
+                                group, groupMember, m_groupsToDraw);
+                            m_selectedGroupMembers.Add(selectedMembersByShift);
+                        } //end shift
+                    } //end left mouse click
 
                     e.Use();
 
