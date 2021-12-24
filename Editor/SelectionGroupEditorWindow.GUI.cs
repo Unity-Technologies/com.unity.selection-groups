@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using NUnit.Framework;
 using Unity.SelectionGroups;
 using Unity.SelectionGroups.Runtime;
@@ -481,8 +482,12 @@ namespace Unity.SelectionGroupsEditor
                 case EventType.MouseDrag:
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.objectReferences = objects;
-                    DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP_MEMBER);                        
-                    DragAndDrop.StartDrag("Dragging group members");
+                    DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP_MEMBERS);                    
+                    StringBuilder sb = new StringBuilder();
+                    foreach (Object obj in objects) {
+                        sb.AppendLine(obj.name);
+                    }
+                    DragAndDrop.StartDrag(sb.ToString());
                     e.Use();
                     break;
             }
