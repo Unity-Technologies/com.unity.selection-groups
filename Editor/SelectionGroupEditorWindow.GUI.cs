@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using JetBrains.Annotations;
 using NUnit.Framework;
 using Unity.SelectionGroups;
 using Unity.SelectionGroups.Runtime;
@@ -642,7 +643,48 @@ namespace Unity.SelectionGroupsEditor
             return false;
         }
 
+
         
+        //Find object between (pivotGroup, pivotGroupMember) and (endGroup,endMember).
+        //The order between them is not guaranteed.
+        [CanBeNull]
+        static Dictionary<ISelectionGroup, OrderedSet<Object>> SelectMembersInBetween(
+            SelectionGroup pivotGroup, Object pivotMember, 
+            SelectionGroup endGroup, Object endMember, IList<SelectionGroup> allGroups) 
+        {
+            if (allGroups.Count == 0)
+                return null;
+
+            Dictionary<ISelectionGroup, OrderedSet<Object>> ret = new Dictionary<ISelectionGroup, OrderedSet<Object>>();
+            
+            bool startAdd = (null == pivotGroup);
+
+            foreach (SelectionGroup group in allGroups) {
+                foreach (Object m in group.Members) {
+
+                    bool shouldToggleState = (group == pivotGroup && m == pivotMember)
+                        || (group == endGroup && m == endMember);                    
+                    
+                    if (startAdd) {
+                        
+                        //Add
+
+
+                        if (shouldToggleState)
+                            return ret;
+                    } else {
+                        if (shouldToggleState) {
+                            startAdd = true;
+                            //Add
+                        }
+
+                    }
+                }
+                
+            }
+
+            return ret;
+        }        
 
 //----------------------------------------------------------------------------------------------------------------------        
         void AddSelectedGroupMember(ISelectionGroup group, Object member) {
