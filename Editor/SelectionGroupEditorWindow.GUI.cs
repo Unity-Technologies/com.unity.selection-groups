@@ -484,30 +484,54 @@ namespace Unity.SelectionGroupsEditor
             //     e.Use();
             // }
             
+            bool isControl = e.control;
+            bool isShift   = e.shift;
+
             switch (e.type) {
                 case EventType.MouseDown: {
-                    
-                    bool isControl = e.control;
-                    bool isShift = e.shift;
-
-                    bool canRemove = isControl || isShift; //can only remove members if control or shift is pressed
-
                     if (!isGroupMemberSelected) {
-                        if (!canRemove) {
+                        if (!isControl) {
                             ClearSelectedGroupMembers();
                         }
-                        AddSelectedGroupMember(group, groupMember);
-                        
-                    } else {
-                        if (canRemove) {
-                            RemoveSelectedGroupMember(group, groupMember);
-                        }
                     }
-                    
-                    
+
+                    // if (!isShift) {
+                    //
+                    //         AddSelectedGroupMember(group, groupMember);
+                    //     } else {
+                    //         // if (isControl) {
+                    //         //     RemoveSelectedGroupMember(group, groupMember);
+                    //         // }
+                    //     }
+                    //
+                    //
+                    // } else {
+                    //     
+                    // }
+                    //
+
+                    if (!isShift) {
+                        m_shiftPivotGroup       = group;
+                        m_shiftPivotGroupMember = groupMember;
+                    }
+
+                    e.Use();
                     break;
                 }
-                
+                case EventType.MouseUp: {
+                    if (!isGroupMemberSelected) {
+                        AddSelectedGroupMember(group, groupMember);
+                    } else {
+                        if (isControl) {
+                            RemoveSelectedGroupMember(group, groupMember);
+                        }
+                        
+                    }
+                    e.Use();
+
+                    break;
+                }
+
                 case EventType.MouseDrag:
                     //Prepare the selected objects to be dragged: Convert to array
                     HashSet<Object> uniqueDraggedObjects = new HashSet<Object>();
@@ -627,5 +651,9 @@ namespace Unity.SelectionGroupsEditor
             = new Dictionary<ISelectionGroup, OrderedSet<Object>>();
         
         private const string DRAG_ITEM_TYPE = "SelectionGroupsWindows";
+
+        private ISelectionGroup m_shiftPivotGroup       = null;
+        private Object         m_shiftPivotGroupMember = null;
+
     }
 } //end namespace
