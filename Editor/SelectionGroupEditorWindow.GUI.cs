@@ -158,7 +158,7 @@ namespace Unity.SelectionGroupsEditor
                 }
 
                 rect.x           += 24;
-                bool allowRemove = string.IsNullOrEmpty(group.Query);
+                bool allowRemove = !group.IsAutoFilled();
                 GUI.contentColor =  allowRemove ? Color.white : Color.Lerp(Color.white, Color.yellow, 0.25f);
                 GUI.Label(rect, content);
                 GUI.contentColor = Color.white;
@@ -178,17 +178,7 @@ namespace Unity.SelectionGroupsEditor
             // var isLeftMouseUp = isMouseOver && isLeftButton && isMouseUp;
             // var isHotMember = g == hotMember;
             // var updateSelectionObjects = false;
-            HandleGroupMemberMouseEvents(rect, group, g, isGroupMemberSelected);
-            
-            // if (isRightButton && isMouseOver && isMouseDown && isInSelection)
-            // {
-            //     ShowGameObjectContextMenu(rect, group, g, allowRemove);
-            //     e.Use();
-            // }
-            //
-            // if (updateSelectionObjects)
-            //     Selection.objects = activeSelection.ToArray();
-
+            HandleGroupMemberMouseEvents(rect, group, g, isGroupMemberSelected);            
         }
         
         Rect DrawHeader(Rect cursor, SelectionGroup group, out bool showChildren) 
@@ -306,14 +296,16 @@ namespace Unity.SelectionGroupsEditor
             }
         }
 
-        void ShowGameObjectContextMenu(Rect rect, ISelectionGroup group, UnityEngine.Object g)
+        void ShowGroupMemberContextMenu(Rect rect)
         {
             var menu = new GenericMenu();
             var content = new GUIContent("Remove From Group");
             menu.AddItem(content, false, () => {
-                RegisterUndo(group, "Remove Member");
-                group.Query = "";
-                group.Remove(Selection.objects);
+                foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in m_selectedGroupMembers) {
+                    ISelectionGroup group = kv.Key;
+                    RegisterUndo(group, "Remove Member");
+                    group.Remove(kv.Value);
+                }
             });
             
             menu.DropDown(rect);
@@ -416,7 +408,7 @@ namespace Unity.SelectionGroupsEditor
                     }
                     
                     if (isRightMouseClick && isGroupMemberSelected)                    {
-                        ShowGameObjectContextMenu(rect, group, groupMember);
+                        ShowGroupMemberContextMenu(rect);
                         e.Use();
                     }
                     
@@ -581,7 +573,9 @@ namespace Unity.SelectionGroupsEditor
             }
 
             return ret;
-        }        
+        }
+
+
         
 //----------------------------------------------------------------------------------------------------------------------        
 
