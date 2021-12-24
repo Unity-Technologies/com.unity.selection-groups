@@ -157,6 +157,8 @@ namespace Unity.SelectionGroupsEditor
             if (isMouseOver && isPaint)
                 EditorGUI.DrawRect(rect, HOVER_COLOR);
 
+            HandleGroupMemberMouseEvents(rect, activeSelection.ToArray());            
+            
             if (isLeftMouseDown)
             {
                 hotMember = g;
@@ -469,6 +471,23 @@ namespace Unity.SelectionGroupsEditor
             }
         }
 
+        
+        void HandleGroupMemberMouseEvents(Rect rect, Object[] objects)
+        {
+            Event e = Event.current;
+            if (!rect.Contains(e.mousePosition)) 
+                return;
+            switch (e.type) {
+                case EventType.MouseDrag:
+                    DragAndDrop.PrepareStartDrag();
+                    DragAndDrop.objectReferences = objects;
+                    DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP_MEMBER);                        
+                    DragAndDrop.StartDrag("Dragging group members");
+                    e.Use();
+                    break;
+            }
+        }
+        
 //----------------------------------------------------------------------------------------------------------------------        
 
         private const string DRAG_ITEM_TYPE = "SelectionGroupsWindows";
