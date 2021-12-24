@@ -511,7 +511,7 @@ namespace Unity.SelectionGroupsEditor
                 case EventType.MouseDrag:
                     //Prepare the selected objects to be dragged: Convert to array
                     HashSet<Object> uniqueDraggedObjects = new HashSet<Object>();
-                    foreach (KeyValuePair<ISelectionGroup, HashSet<Object>> members in m_selectedGroupMembers) {
+                    foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> members in m_selectedGroupMembers) {
                         uniqueDraggedObjects.UnionWith(members.Value);
                     }
                     int numDraggedObjects  = uniqueDraggedObjects.Count;
@@ -594,7 +594,7 @@ namespace Unity.SelectionGroupsEditor
 //----------------------------------------------------------------------------------------------------------------------        
         void AddSelectedGroupMember(ISelectionGroup group, Object member) {
             if (!m_selectedGroupMembers.ContainsKey(group)) {
-                m_selectedGroupMembers.Add(group, new HashSet<Object>(){member});
+                m_selectedGroupMembers.Add(group, new OrderedSet<Object>(){member});
                 return;
             }
 
@@ -623,8 +623,8 @@ namespace Unity.SelectionGroupsEditor
         
 //----------------------------------------------------------------------------------------------------------------------        
 
-        readonly Dictionary<ISelectionGroup, HashSet<Object>> m_selectedGroupMembers 
-            = new Dictionary<ISelectionGroup, HashSet<Object>>();
+        readonly Dictionary<ISelectionGroup, OrderedSet<Object>> m_selectedGroupMembers 
+            = new Dictionary<ISelectionGroup, OrderedSet<Object>>();
         
         private const string DRAG_ITEM_TYPE = "SelectionGroupsWindows";
     }
