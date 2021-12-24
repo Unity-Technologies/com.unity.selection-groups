@@ -133,136 +133,134 @@ namespace Unity.SelectionGroupsEditor
         void DrawGroupMember(Rect rect, ISelectionGroup group, UnityEngine.Object g, bool allowRemove) 
         {
             Assert.IsNotNull(g);
-            var e = Event.current;
-            var content = EditorGUIUtility.ObjectContent(g, g.GetType());
-
-            //[TODO-sin: 2021-12-24] if the gameobject belongs to two groups then selecting it will select it in both groups
-            var isInSelection = activeSelection.Contains(g);
-            var isMouseOver = rect.Contains(e.mousePosition);
-            var isMouseDrag = e.type == EventType.MouseDrag;
-            var isManySelected = activeSelection.Count > 1;
-            var isAnySelected = activeSelection.Count > 0;
-            var isLeftButton = e.button == LEFT_MOUSE_BUTTON;
-            var isRightButton = e.button == RIGHT_MOUSE_BUTTON;
-            var isMouseDown = e.type == EventType.MouseDown;
-            var isMouseUp = e.type == EventType.MouseUp;
-            var isNoSelection = activeSelection.Count == 0;
-            var isControl = e.control;
-            var isShift = e.shift;
-            var isLeftMouseDown = isMouseOver && isLeftButton && isMouseDown;
-            var isLeftMouseUp = isMouseOver && isLeftButton && isMouseUp;
-            var isHotMember = g == hotMember;
-            var updateSelectionObjects = false;
-            var isPaint = e.type == EventType.Repaint;
+            Event e = Event.current;
+            GUIContent content = EditorGUIUtility.ObjectContent(g, g.GetType());
+            bool isMouseOver = rect.Contains(e.mousePosition);
+            bool isPaint = e.type == EventType.Repaint;
 
             if (isMouseOver && isPaint)
                 EditorGUI.DrawRect(rect, HOVER_COLOR);
 
-            HandleGroupMemberMouseEvents(rect, activeSelection.ToArray());            
-            
-            if (isLeftMouseDown)
-            {
-                hotMember = g;
-                activeSelectionGroup = group;
-                e.Use();
-            }
+            bool isInSelection = activeSelection.Contains(g);
 
-            if (isControl)
-            {
-                if (isLeftMouseUp && isHotMember && isInSelection)
-                {
-                    activeSelection.Remove(g);
-                    activeSelectionGroup = group;
-                    updateSelectionObjects = true;
-                    hotMember = null;
-                    e.Use();
-                }
-                if (isLeftMouseUp && isHotMember && !isInSelection)
-                {
-                    activeSelection.Add(g);
-                    activeSelectionGroup = group;
-                    updateSelectionObjects = true;
-                    hotMember = null;
-                    e.Use();
-                }
-            }
-            else if (isShift)
-            {
-                if (isLeftMouseUp && isHotMember)
-                {
-                    activeSelection.Add(g);
-                    int firstIndex = -1, lastIndex = -1;
-                    var objects = group.Members;
-                    for (var i = 0; i < objects.Count; i++)
-                    {
-                        if (activeSelection.Contains(objects[i]))
-                        {
-                            if (firstIndex < 0)
-                                firstIndex = i;
-                            lastIndex = i;
-                        }
-                    }
-                    for (var i = firstIndex; i < lastIndex; i++)
-                        activeSelection.Add(objects[i]);
-                    updateSelectionObjects = true;
-                    hotMember = null;
-                    e.Use();
-                }
-            }
-            else
-            {
-                if (isLeftMouseUp && isHotMember)
-                {
-                    if (isInSelection && isManySelected)
-                    {
-                        activeSelection.Clear();
-                        activeSelection.Add(g);
-                        updateSelectionObjects = true;
-                        e.Use();
-                    }
-                    else if (!isInSelection)
-                    {
-                        activeSelection.Clear();
-                        activeSelection.Add(g);
-                        updateSelectionObjects = true;
-                        e.Use();
-                    }
-                    else
-                    {
-                        //TODO: add a rename overlay
-                    }
-                    hotMember = null;
-                }
-            }
-
-            if (isPaint)
-            {
+            if (isPaint) {
                 if (isInSelection)
                     EditorGUI.DrawRect(rect, SELECTION_COLOR);
 
-                if (g.hideFlags.HasFlag(HideFlags.NotEditable))
-                {
-                    var icon = InspectorLock;
-                    var irect = rect;
-                    irect.width = 16;
+                if (g.hideFlags.HasFlag(HideFlags.NotEditable)) {
+                    GUIContent icon  = InspectorLock;
+                    Rect irect = rect;
+                    irect.width  = 16;
                     irect.height = 14;
                     GUI.DrawTexture(irect, icon.image);
                 }
 
-                rect.x += 24;
-                GUI.contentColor = allowRemove ? Color.white : Color.Lerp(Color.white, Color.yellow, 0.25f);
+                rect.x           += 24;
+                GUI.contentColor =  allowRemove ? Color.white : Color.Lerp(Color.white, Color.yellow, 0.25f);
                 GUI.Label(rect, content);
                 GUI.contentColor = Color.white;
             }
-
-            if (isRightButton && isMouseOver && isMouseDown && isInSelection)
-            {
-                ShowGameObjectContextMenu(rect, group, g, allowRemove);
-                e.Use();
-            }
             
-            if (updateSelectionObjects)
-                Selection.objects = activeSelection.ToArray();
+            //[TODO-sin: 2021-12-24] if the gameobject belongs to two groups then selecting it will select it in both groups
+            // var isMouseDrag = e.type == EventType.MouseDrag;
+            // var isManySelected = activeSelection.Count > 1;
+            // var isAnySelected = activeSelection.Count > 0;
+            // var isLeftButton = e.button == LEFT_MOUSE_BUTTON;
+            // var isRightButton = e.button == RIGHT_MOUSE_BUTTON;
+            // var isMouseDown = e.type == EventType.MouseDown;
+            // var isMouseUp = e.type == EventType.MouseUp;
+            // var isNoSelection = activeSelection.Count == 0;
+            // var isControl = e.control;
+            // var isShift = e.shift;
+            // var isLeftMouseDown = isMouseOver && isLeftButton && isMouseDown;
+            // var isLeftMouseUp = isMouseOver && isLeftButton && isMouseUp;
+            // var isHotMember = g == hotMember;
+            // var updateSelectionObjects = false;
+            HandleGroupMemberMouseEvents(rect, activeSelection.ToArray());            
+            
+            // if (isLeftMouseDown)
+            // {
+            //     hotMember = g;
+            //     activeSelectionGroup = group;
+            //     e.Use();
+            // }
+            //
+            // if (isControl)
+            // {
+            //     if (isLeftMouseUp && isHotMember && isInSelection)
+            //     {
+            //         activeSelection.Remove(g);
+            //         activeSelectionGroup = group;
+            //         updateSelectionObjects = true;
+            //         hotMember = null;
+            //         e.Use();
+            //     }
+            //     if (isLeftMouseUp && isHotMember && !isInSelection)
+            //     {
+            //         activeSelection.Add(g);
+            //         activeSelectionGroup = group;
+            //         updateSelectionObjects = true;
+            //         hotMember = null;
+            //         e.Use();
+            //     }
+            // }
+            // else if (isShift)
+            // {
+            //     if (isLeftMouseUp && isHotMember)
+            //     {
+            //         activeSelection.Add(g);
+            //         int firstIndex = -1, lastIndex = -1;
+            //         var objects = group.Members;
+            //         for (var i = 0; i < objects.Count; i++)
+            //         {
+            //             if (activeSelection.Contains(objects[i]))
+            //             {
+            //                 if (firstIndex < 0)
+            //                     firstIndex = i;
+            //                 lastIndex = i;
+            //             }
+            //         }
+            //         for (var i = firstIndex; i < lastIndex; i++)
+            //             activeSelection.Add(objects[i]);
+            //         updateSelectionObjects = true;
+            //         hotMember = null;
+            //         e.Use();
+            //     }
+            // }
+            // else
+            // {
+            //     if (isLeftMouseUp && isHotMember)
+            //     {
+            //         if (isInSelection && isManySelected)
+            //         {
+            //             activeSelection.Clear();
+            //             activeSelection.Add(g);
+            //             updateSelectionObjects = true;
+            //             e.Use();
+            //         }
+            //         else if (!isInSelection)
+            //         {
+            //             activeSelection.Clear();
+            //             activeSelection.Add(g);
+            //             updateSelectionObjects = true;
+            //             e.Use();
+            //         }
+            //         else
+            //         {
+            //             //TODO: add a rename overlay
+            //         }
+            //         hotMember = null;
+            //     }
+            // }
+            //
+            // if (isRightButton && isMouseOver && isMouseDown && isInSelection)
+            // {
+            //     ShowGameObjectContextMenu(rect, group, g, allowRemove);
+            //     e.Use();
+            // }
+            //
+            // if (updateSelectionObjects)
+            //     Selection.objects = activeSelection.ToArray();
 
         }
         
