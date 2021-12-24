@@ -30,7 +30,6 @@ namespace Unity.SelectionGroupsEditor
         HashSet<Object> activeSelection = new HashSet<Object>();
         Object hotMember;
 
-        private bool isReadOnly = false;
         private static float? performQueryRefresh = null;
 
         

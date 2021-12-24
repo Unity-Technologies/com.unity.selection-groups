@@ -35,8 +35,6 @@ namespace Unity.SelectionGroupsEditor
                 var e = Event.current;
                 if (e.type == EventType.Layout) return;
                 
-                isReadOnly = EditorApplication.isPlayingOrWillChangePlaymode;
-
                 SetupStyles();
                 DrawGUI();
 
@@ -79,13 +77,10 @@ namespace Unity.SelectionGroupsEditor
                         current.Use();
                         break;
                     case "SoftDelete":
-                        if (!isReadOnly)
-                        {
-                            activeSelectionGroup.Remove(Selection.objects);
-                            Selection.objects = null;
-                            UpdateActiveSelection();
-                            current.Use();
-                        }
+                        activeSelectionGroup.Remove(Selection.objects);
+                        Selection.objects = null;
+                        UpdateActiveSelection();
+                        current.Use();
                         return;
                 }
         }
