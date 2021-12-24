@@ -3,6 +3,7 @@ using System.Linq;
 using Unity.FilmInternalUtilities;
 using Unity.GoQL;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -52,6 +53,11 @@ namespace Unity.SelectionGroups.Runtime
             FilmInternalUtilities.ObjectUtility.Destroy(sceneSelectionGroup.gameObject, forceImmediate:true);
             
             m_sceneSelectionGroups.Remove(sceneSelectionGroup);
+        }
+
+        internal void Register(SelectionGroup group) {
+            Assert.IsNotNull(group);
+            m_sceneSelectionGroups.Add(group);            
         }
        
         //[TODO-sin:2021-12-20] Remove in version 0.7.0 
