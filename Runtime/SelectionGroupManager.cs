@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Unity.FilmInternalUtilities;
 using Unity.GoQL;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ using UnityEditor;
 
 namespace Unity.SelectionGroups.Runtime
 {
-    internal static class SelectionGroupManager
+    internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupManager>
     {
         public delegate void CreateEvent(SelectionGroupDataLocation scope, string name, string query, Color color, IList<Object> members);
         public delegate void DeleteEvent(ISelectionGroup group);
