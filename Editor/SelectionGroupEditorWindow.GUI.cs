@@ -179,75 +179,6 @@ namespace Unity.SelectionGroupsEditor
             // var updateSelectionObjects = false;
             HandleGroupMemberMouseEvents(rect, group, g, isGroupMemberSelected);
             
-            //
-            // if (isControl)
-            // {
-            //     if (isLeftMouseUp && isHotMember && isInSelection)
-            //     {
-            //         activeSelection.Remove(g);
-            //         activeSelectionGroup = group;
-            //         updateSelectionObjects = true;
-            //         hotMember = null;
-            //         e.Use();
-            //     }
-            //     if (isLeftMouseUp && isHotMember && !isInSelection)
-            //     {
-            //         activeSelection.Add(g);
-            //         activeSelectionGroup = group;
-            //         updateSelectionObjects = true;
-            //         hotMember = null;
-            //         e.Use();
-            //     }
-            // }
-            // else if (isShift)
-            // {
-            //     if (isLeftMouseUp && isHotMember)
-            //     {
-            //         activeSelection.Add(g);
-            //         int firstIndex = -1, lastIndex = -1;
-            //         var objects = group.Members;
-            //         for (var i = 0; i < objects.Count; i++)
-            //         {
-            //             if (activeSelection.Contains(objects[i]))
-            //             {
-            //                 if (firstIndex < 0)
-            //                     firstIndex = i;
-            //                 lastIndex = i;
-            //             }
-            //         }
-            //         for (var i = firstIndex; i < lastIndex; i++)
-            //             activeSelection.Add(objects[i]);
-            //         updateSelectionObjects = true;
-            //         hotMember = null;
-            //         e.Use();
-            //     }
-            // }
-            // else
-            // {
-            //     if (isLeftMouseUp && isHotMember)
-            //     {
-            //         if (isInSelection && isManySelected)
-            //         {
-            //             activeSelection.Clear();
-            //             activeSelection.Add(g);
-            //             updateSelectionObjects = true;
-            //             e.Use();
-            //         }
-            //         else if (!isInSelection)
-            //         {
-            //             activeSelection.Clear();
-            //             activeSelection.Add(g);
-            //             updateSelectionObjects = true;
-            //             e.Use();
-            //         }
-            //         else
-            //         {
-            //             //TODO: add a rename overlay
-            //         }
-            //         hotMember = null;
-            //     }
-            // }
-            //
             // if (isRightButton && isMouseOver && isMouseDown && isInSelection)
             // {
             //     ShowGameObjectContextMenu(rect, group, g, allowRemove);
@@ -474,48 +405,15 @@ namespace Unity.SelectionGroupsEditor
             if (!rect.Contains(e.mousePosition)) 
                 return;
 
-            // var isMouseDown = e.type == EventType.MouseDown;
-            // var isLeftMouseDown = isMouseOver && isLeftButton && isMouseDown;
-            
-            // var isLeftButton = e.button == LEFT_MOUSE_BUTTON;
-            // if (isLeftMouseDown)
-            // {
-            //     hotMember = g;
-            //     activeSelectionGroup = group;
-            //     e.Use();
-            // }
-            
             bool isControl = e.control;
             bool isShift   = e.shift;
 
             switch (e.type) {
                 case EventType.MouseDown: {
-                    // if (!isGroupMemberSelected) {
-                    //     if (!isControl) {
-                    //         m_selectedGroupMembers.Clear();
-                    //     }
-                    // }
-
-                    // if (!isShift) {
-                    //
-                    //         AddSelectedGroupMember(group, groupMember);
-                    //     } else {
-                    //         // if (isControl) {
-                    //         //     RemoveSelectedGroupMember(group, groupMember);
-                    //         // }
-                    //     }
-                    //
-                    //
-                    // } else {
-                    //     
-                    // }
-                    //
-
                     if (!isShift) {
                         m_shiftPivotGroup       = group;
                         m_shiftPivotGroupMember = groupMember;
                     }
-
                     e.Use();
                     break;
                 }
