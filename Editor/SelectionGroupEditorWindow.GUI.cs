@@ -143,7 +143,7 @@ namespace Unity.SelectionGroupsEditor
             if (isMouseOver && isPaint)
                 EditorGUI.DrawRect(rect, HOVER_COLOR);
 
-            bool isGroupMemberSelected = IsGroupMemberSelected(group, g);
+            bool isGroupMemberSelected = m_selectedGroupMembers.Contains(group, g);
 
             if (isPaint) {
                 if (isGroupMemberSelected)
@@ -492,7 +492,7 @@ namespace Unity.SelectionGroupsEditor
                 case EventType.MouseDown: {
                     if (!isGroupMemberSelected) {
                         if (!isControl) {
-                            ClearSelectedGroupMembers();
+                            m_selectedGroupMembers.Clear();
                         }
                     }
 
@@ -522,15 +522,15 @@ namespace Unity.SelectionGroupsEditor
                 case EventType.MouseUp: {
                     if (!isShift) {
                         if (!isGroupMemberSelected) {
-                            AddSelectedGroupMember(group, groupMember);
+                            m_selectedGroupMembers.Add(group, groupMember);
                         } else {
                             if (isControl) {
-                                RemoveSelectedGroupMember(group, groupMember);
+                                m_selectedGroupMembers.Remove(group, groupMember);
                             }
                         
                         }                        
                     } else {
-                        ClearSelectedGroupMembers();
+                        m_selectedGroupMembers.Clear();
 
                         //add objects from shift pivot
                         
@@ -685,41 +685,10 @@ namespace Unity.SelectionGroupsEditor
 
             return ret;
         }        
-
-//----------------------------------------------------------------------------------------------------------------------        
-        void AddSelectedGroupMember(ISelectionGroup group, Object member) {
-            if (!m_selectedGroupMembers.ContainsKey(group)) {
-                m_selectedGroupMembers.Add(group, new OrderedSet<Object>(){member});
-                return;
-            }
-
-            m_selectedGroupMembers[group].Add(member);
-        }
-
-        void RemoveSelectedGroupMember(ISelectionGroup group, Object member) {
-            if (!m_selectedGroupMembers.ContainsKey(group)) {
-                return;
-            }
-
-            m_selectedGroupMembers[group].Remove(member);
-        }
-        
-        bool IsGroupMemberSelected(ISelectionGroup group, Object member) {
-            if (!m_selectedGroupMembers.ContainsKey(group))
-                return false;
-
-            return (m_selectedGroupMembers[group].Contains(member));
-        }
-        
-        void ClearSelectedGroupMembers() {
-            m_selectedGroupMembers.Clear();
-        }
-        
         
 //----------------------------------------------------------------------------------------------------------------------        
 
-        readonly Dictionary<ISelectionGroup, OrderedSet<Object>> m_selectedGroupMembers 
-            = new Dictionary<ISelectionGroup, OrderedSet<Object>>();
+        readonly GroupMembersSelection m_selectedGroupMembers = new GroupMembersSelection();
 
         private IList<SelectionGroup> m_groupsToDraw = null;
         
