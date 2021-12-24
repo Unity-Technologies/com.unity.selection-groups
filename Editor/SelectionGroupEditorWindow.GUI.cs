@@ -519,14 +519,43 @@ namespace Unity.SelectionGroupsEditor
                     break;
                 }
                 case EventType.MouseUp: {
-                    if (!isGroupMemberSelected) {
-                        AddSelectedGroupMember(group, groupMember);
+                    if (!isShift) {
+                        if (!isGroupMemberSelected) {
+                            AddSelectedGroupMember(group, groupMember);
+                        } else {
+                            if (isControl) {
+                                RemoveSelectedGroupMember(group, groupMember);
+                            }
+                        
+                        }                        
                     } else {
-                        if (isControl) {
-                            RemoveSelectedGroupMember(group, groupMember);
-                        }
+                        ClearSelectedGroupMembers();
+
+                        //add objects from shift pivot
+                        
+                        
+                        //         activeSelection.Add(g);
+                        //         int firstIndex = -1, lastIndex = -1;
+                        //         var objects = group.Members;
+                        //         for (var i = 0; i < objects.Count; i++)
+                        //         {
+                        //             if (activeSelection.Contains(objects[i]))
+                        //             {
+                        //                 if (firstIndex < 0)
+                        //                     firstIndex = i;
+                        //                 lastIndex = i;
+                        //             }
+                        //         }
+                        //         for (var i = firstIndex; i < lastIndex; i++)
+                        //             activeSelection.Add(objects[i]);
+                        //         updateSelectionObjects = true;
+                        //         hotMember = null;
+                        //         e.Use();
+                        //     }
+                        
                         
                     }
+
                     e.Use();
 
                     break;
