@@ -1,12 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Object = UnityEngine.Object;
 
 namespace Unity.SelectionGroups.Runtime
 {
 
-internal class GroupsMembersSelection    
+internal class GroupMembersSelection : IEnumerable<KeyValuePair<ISelectionGroup, OrderedSet<Object>>>
 {
-    void Add(ISelectionGroup group, Object member) {
+
+    public IEnumerator<KeyValuePair<ISelectionGroup, OrderedSet<Object>>> GetEnumerator() {
+        return m_selectedGroupMembers.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() {
+        return this.GetEnumerator();
+    }
+    
+//----------------------------------------------------------------------------------------------------------------------
+    
+    internal void Add(ISelectionGroup group, Object member) {
         if (!m_selectedGroupMembers.ContainsKey(group)) {
             m_selectedGroupMembers.Add(group, new OrderedSet<Object>(){member});
             return;
@@ -15,7 +27,7 @@ internal class GroupsMembersSelection
         m_selectedGroupMembers[group].Add(member);
     }
 
-    void Remove(ISelectionGroup group, Object member) {
+    internal void Remove(ISelectionGroup group, Object member) {
         if (!m_selectedGroupMembers.ContainsKey(group)) {
             return;
         }
@@ -23,14 +35,14 @@ internal class GroupsMembersSelection
         m_selectedGroupMembers[group].Remove(member);
     }
         
-    bool Contains(ISelectionGroup group, Object member) {
+    internal bool Contains(ISelectionGroup group, Object member) {
         if (!m_selectedGroupMembers.ContainsKey(group))
             return false;
 
         return (m_selectedGroupMembers[group].Contains(member));
     }
         
-    void Clear() {
+    internal void Clear() {
         m_selectedGroupMembers.Clear();
     }
 
