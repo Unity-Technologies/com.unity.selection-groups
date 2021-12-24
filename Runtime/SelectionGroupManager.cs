@@ -12,36 +12,20 @@ namespace Unity.SelectionGroups.Runtime
 {
     internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupManager>
     {
-        public delegate void CreateEvent(SelectionGroupDataLocation scope, string name, string query, Color color, IList<Object> members);
-        public delegate void DeleteEvent(ISelectionGroup group);
-
-        //[TODO-sin: 2021-12-20] Check these functions if we still need them
-        public static CreateEvent Create;
-        public static DeleteEvent Delete;
-
-        private static OrderedSet<ISelectionGroup> groups;
-        
-        static SelectionGroupManager()
-        {
-            groups = new OrderedSet<ISelectionGroup>();
-            Create += OnCreate;
-            Delete += OnDelete;
-        }
-        
         public static void ExecuteSelectionGroupQueries()
         {
-            foreach (var i in groups)
+            foreach (var i in SelectionGroupManager.GetOrCreateInstance().m_sceneSelectionGroups)
             {
                 if(!string.IsNullOrEmpty(i.Query)) ExecuteQuery(i);
             }
         }
 
-        public static IList<ISelectionGroup> Groups => groups.List;
+        internal IList<SelectionGroup> Groups => m_sceneSelectionGroups;
         
-        public static IEnumerable<string> GroupNames => groups.OrderBy(i => i.Name).Select(g => g.Name);
+        internal IEnumerable<string> GroupNames => m_sceneSelectionGroups.Select(g => g.Name);
 
         
-        internal static SelectionGroup CreateSceneSelectionGroup(string name, string query, Color color, IList<Object> members)
+        internal SelectionGroup CreateSceneSelectionGroup(string name, string query, Color color, IList<Object> members)
         {
             GameObject g = new GameObject(name);
 #if UNITY_EDITOR        
@@ -53,30 +37,21 @@ namespace Unity.SelectionGroups.Runtime
             group.Color       = color;
             group.ShowMembers = true;
             group.Add(members);
-            SelectionGroupManager.Register(group);
+            
+            m_sceneSelectionGroups.Add(group);
             return group;
         }
 
-        public static void Register(ISelectionGroup @group)
-        {
-            Unregister(@group);
-            groups.Add(group);
+        internal void DeleteSceneSelectionGroup(ISelectionGroup group) {
+            
+            //[TODO-sin: 2021-12-24] Simplify this by removing ISelectionGroup interface
+            SelectionGroup sceneSelectionGroup = group as SelectionGroup;
+            if (null == sceneSelectionGroup)
+                return;
+            
+            m_sceneSelectionGroups.Remove(sceneSelectionGroup);
         }
-        
-        public static void Unregister(ISelectionGroup @group)
-        {
-            groups.Remove(group);
-        }
-
-        static void OnDelete(ISelectionGroup group)
-        {
-            Unregister(group);
-        }
-        
-        static void OnCreate(SelectionGroupDataLocation scope, string name, string query, Color color, IList<Object> members)
-        {
-        }
-
+       
         //[TODO-sin:2021-12-20] Remove in version 0.7.0 
         // public static void ClearEditorGroups()
         // {
@@ -102,5 +77,11 @@ namespace Unity.SelectionGroups.Runtime
                 group.SetMembers(objects);
             }
         }
+        
+//----------------------------------------------------------------------------------------------------------------------
+        
+        [SerializeField] private List<SelectionGroup> m_sceneSelectionGroups = new List<SelectionGroup>();
+        
+        
     }
 }

@@ -48,12 +48,6 @@ namespace Unity.SelectionGroups.Runtime
         {
             executor = new GoQL.GoQLExecutor();
             executor.Code = query;
-            SelectionGroupManager.Register(this);
-        }
-
-        void OnDisable()
-        {
-            SelectionGroupManager.Unregister(this);
         }
 
         /// <inheritdoc/>
