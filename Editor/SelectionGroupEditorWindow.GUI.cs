@@ -531,10 +531,14 @@ namespace Unity.SelectionGroupsEditor
                         }                        
                     } else {
                         m_selectedGroupMembers.Clear();
-
+                        
                         //add objects from shift pivot
-                        
-                        
+                        GroupMembersSelection selectedMembersByShift = SelectMembersInBetween(
+                            m_shiftPivotGroup, m_shiftPivotGroupMember, 
+                            group, groupMember, m_groupsToDraw);
+                        m_selectedGroupMembers.Add(selectedMembersByShift);
+
+
                         //         activeSelection.Add(g);
                         //         int firstIndex = -1, lastIndex = -1;
                         //         var objects = group.Members;
