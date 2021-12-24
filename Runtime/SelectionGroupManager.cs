@@ -49,6 +49,8 @@ namespace Unity.SelectionGroups.Runtime
             if (null == sceneSelectionGroup)
                 return;
             
+            FilmInternalUtilities.ObjectUtility.Destroy(sceneSelectionGroup.gameObject, forceImmediate:true);
+            
             m_sceneSelectionGroups.Remove(sceneSelectionGroup);
         }
        
