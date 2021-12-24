@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace Unity.SelectionGroups
 {
-    //[TODO-sin: 2021-12-24] Remove this class. Unused
-
     /// <summary>
     /// A HashSet which retains order of items as they are added or inserted.
     /// or
