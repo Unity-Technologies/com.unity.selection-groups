@@ -4,6 +4,7 @@ using Unity.FilmInternalUtilities;
 using Unity.GoQL;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Object = UnityEngine.Object;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -11,8 +12,14 @@ using UnityEditor;
 
 namespace Unity.SelectionGroups.Runtime
 {
+    [ExecuteAlways]
     internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupManager>
     {
+        private void OnEnable() {
+            this.gameObject.hideFlags = HideFlags.HideInHierarchy;
+        }
+
+
         public static void ExecuteSelectionGroupQueries()
         {
             foreach (var i in SelectionGroupManager.GetOrCreateInstance().m_sceneSelectionGroups)
