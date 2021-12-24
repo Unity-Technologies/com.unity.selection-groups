@@ -47,6 +47,8 @@ namespace Unity.SelectionGroups.Runtime
             executor = new GoQL.GoQLExecutor();
             executor.Code = query;
 
+            this.gameObject.hideFlags = HideFlags.HideInHierarchy;
+
             if (!m_registerOnEnable) 
                 return;
             SelectionGroupManager.GetOrCreateInstance().Register(this);

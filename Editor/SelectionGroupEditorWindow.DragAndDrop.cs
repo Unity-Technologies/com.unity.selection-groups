@@ -15,17 +15,7 @@ namespace Unity.SelectionGroupsEditor
             if (!rect.Contains(evt.mousePosition))
             {
                 return false;
-            }
-                
-            switch (evt.type)
-            {
-                case EventType.DragExited:
-                case EventType.DragPerform:
-                case EventType.DragUpdated:
-                case EventType.MouseDrag:
-                    // Debug.Log($"{evt.type} {group.Name}");
-                    break;
-            }
+            }                
 
             switch (evt.type)
             {
@@ -49,8 +39,12 @@ namespace Unity.SelectionGroupsEditor
                 case EventType.DragUpdated:
                     //This event can occur ay any time. VisualMode must be assigned a value other than Rejected, else
                     //the DragPerform event will not be triggered.
-                    var canDrop = string.IsNullOrEmpty(group.Query);
-                    if (!canDrop || isReadOnly)
+                    DragItemType? dragItemType = DragAndDrop.GetGenericData(DRAG_ITEM_TYPE) as DragItemType?;
+
+                    bool targetGroupContainsQuery = string.IsNullOrEmpty(group.Query);
+                    bool draggedItemIsGroup       = (null != dragItemType && dragItemType == DragItemType.GROUP);
+
+                    if (!targetGroupContainsQuery || isReadOnly || draggedItemIsGroup) 
                         DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
                     else
                         DragAndDrop.visualMode = DragAndDropVisualMode.Copy;

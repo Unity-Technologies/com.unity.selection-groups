@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using NUnit.Framework;
 using Unity.SelectionGroups;
 using Unity.SelectionGroups.Runtime;
@@ -134,6 +135,8 @@ namespace Unity.SelectionGroupsEditor
             Assert.IsNotNull(g);
             var e = Event.current;
             var content = EditorGUIUtility.ObjectContent(g, g.GetType());
+
+            //[TODO-sin: 2021-12-24] if the gameobject belongs to two groups then selecting it will select it in both groups
             var isInSelection = activeSelection.Contains(g);
             var isMouseOver = rect.Contains(e.mousePosition);
             var isMouseDrag = e.type == EventType.MouseDrag;
@@ -155,6 +158,8 @@ namespace Unity.SelectionGroupsEditor
             if (isMouseOver && isPaint)
                 EditorGUI.DrawRect(rect, HOVER_COLOR);
 
+            HandleGroupMemberMouseEvents(rect, activeSelection.ToArray());            
+            
             if (isLeftMouseDown)
             {
                 hotMember = g;
@@ -261,7 +266,7 @@ namespace Unity.SelectionGroupsEditor
 
         }
         
-        Rect DrawHeader(Rect cursor, ISelectionGroup group, out bool showChildren) 
+        Rect DrawHeader(Rect cursor, SelectionGroup group, out bool showChildren) 
         {           
             bool isPaint = Event.current.type == EventType.Repaint;            
             Rect rect = new Rect(cursor) {x = 0, };            
@@ -295,7 +300,7 @@ namespace Unity.SelectionGroupsEditor
             float       currentViewWidth = EditorGUIUtility.currentViewWidth;
             
             //background
-            Color backgroundColor = group == activeSelectionGroup ? Color.white * 0.6f : Color.white * 0.3f;
+            Color backgroundColor = ((ISelectionGroup) group == activeSelectionGroup) ? Color.white * 0.6f : Color.white * 0.3f;
             if (isPaint) 
             {
                 rect.width = currentViewWidth - RightMargin - COLOR_WIDTH;                
@@ -312,7 +317,7 @@ namespace Unity.SelectionGroupsEditor
                 rect.width        =  labelWidth;
             }
             if(isAvailableInEditMode)
-                HandleHeaderMouseEvents(rect, group.Name, group);
+                HandleHeaderMouseEvents(rect, group);
             if (isPaint) 
             {
                 Label.normal.textColor = EditorGUIUtility.isProSkin ? ProTextColor: Color.black;
@@ -434,7 +439,7 @@ namespace Unity.SelectionGroupsEditor
             menu.DropDown(rect);
         }
 
-        void HandleHeaderMouseEvents(Rect rect, string groupName, ISelectionGroup group)
+        void HandleHeaderMouseEvents(Rect rect, SelectionGroup group)
         {
             var e = Event.current;
             if (rect.Contains(e.mousePosition))
@@ -445,7 +450,7 @@ namespace Unity.SelectionGroupsEditor
                         switch (e.button)
                         {
                             case RIGHT_MOUSE_BUTTON:
-                                ShowGroupContextMenu(rect, groupName, group);
+                                ShowGroupContextMenu(rect, group.Name, group);
                                 break;
                             case LEFT_MOUSE_BUTTON:
                                 if (e.clickCount == 1)
@@ -458,12 +463,40 @@ namespace Unity.SelectionGroupsEditor
                         break;
                     case EventType.MouseDrag:
                         DragAndDrop.PrepareStartDrag();
-                        DragAndDrop.StartDrag(groupName);
-                        DragAndDrop.objectReferences = group.Members.ToArray();
+                        DragAndDrop.objectReferences = new[] { group.gameObject };
+                        DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP);                        
+                        DragAndDrop.StartDrag(group.Name);
                         e.Use();
                         break;
                 }
             }
         }
+
+        
+        void HandleGroupMemberMouseEvents(Rect rect, Object[] objects)
+        {
+            Event e = Event.current;
+            if (!rect.Contains(e.mousePosition)) 
+                return;
+            
+            switch (e.type) {
+                case EventType.MouseDrag:
+                    int numSelectedObjects = objects.Length;
+                    if (numSelectedObjects <= 0)
+                        break;
+                    
+                    DragAndDrop.PrepareStartDrag();
+                    DragAndDrop.objectReferences = objects;
+                    DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP_MEMBERS);
+                    string dragText = numSelectedObjects > 1 ? objects[0].name + " ..." : objects[0].name;                        
+                    DragAndDrop.StartDrag(dragText);
+                    e.Use();
+                    break;
+            }
+        }
+        
+//----------------------------------------------------------------------------------------------------------------------        
+
+        private const string DRAG_ITEM_TYPE = "SelectionGroupsWindows";
     }
-}
+} //end namespace
