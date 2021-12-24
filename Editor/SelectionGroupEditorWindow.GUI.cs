@@ -34,7 +34,7 @@ namespace Unity.SelectionGroupsEditor
         float CalculateHeight()
         {
             var height = EditorGUIUtility.singleLineHeight;
-            var groups = SelectionGroupManager.Groups;
+            var groups = SelectionGroupManager.GetOrCreateInstance().Groups;
             for (var i=0; i<groups.Count; i++)
             {
                 var group = groups[i];
@@ -59,7 +59,7 @@ namespace Unity.SelectionGroupsEditor
             if (GUI.Button(cursor, AddGroup)) CreateNewGroup();
             cursor.y += cursor.height;
 
-            var groups = SelectionGroupManager.Groups;
+            var groups = SelectionGroupManager.GetOrCreateInstance().Groups;
             for (var i=0; i<groups.Count; i++)
             {
                 var group = groups[i];
@@ -429,7 +429,7 @@ namespace Unity.SelectionGroupsEditor
 
             menu.AddItem(new GUIContent("Delete Group"), false, () =>
             {
-                SelectionGroupManager.Delete(group);
+                SelectionGroupManager.GetOrCreateInstance().DeleteSceneSelectionGroup(group);
             });
             menu.DropDown(rect);
         }

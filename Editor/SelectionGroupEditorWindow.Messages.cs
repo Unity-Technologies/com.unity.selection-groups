@@ -19,27 +19,12 @@ namespace Unity.SelectionGroupsEditor
         {
             titleContent.text = "Selection Groups";
             wantsMouseMove = false;
-            SelectionGroupManager.Create -= RepaintOnCreate;
-            SelectionGroupManager.Create += RepaintOnCreate;
-            SelectionGroupManager.Delete -= RepaintOnDelete;
-            SelectionGroupManager.Delete += RepaintOnDelete;
             
             //[TODO-sin:2021-12-20] Remove in version 0.7.0             
             //editorHeaderContent = EditorGUIUtility.IconContent("d_Project");
             sceneHeaderContent = EditorGUIUtility.IconContent("SceneAsset Icon");
         }
-
-        void RepaintOnDelete(ISelectionGroup @group) => 
-            Repaint();
-
-        void RepaintOnCreate(SelectionGroupDataLocation scope, string s, string query, Color color, IList<Object> members) =>
-            Repaint();
-
-        void OnDisable()
-        {
-            SelectionGroupManager.Create -= RepaintOnCreate;
-            SelectionGroupManager.Delete -= RepaintOnDelete;
-        }
+        
         
         void OnGUI()
         {
