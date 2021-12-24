@@ -461,8 +461,7 @@ namespace Unity.SelectionGroupsEditor
                     case EventType.MouseDrag:
                         DragAndDrop.PrepareStartDrag();
                         DragAndDrop.objectReferences = new[] { group.gameObject };
-                        DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP);
-                        
+                        DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP);                        
                         DragAndDrop.StartDrag(group.Name);
                         e.Use();
                         break;
