@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using JetBrains.Annotations;
 using NUnit.Framework;
 using Unity.SelectionGroups;
@@ -164,20 +163,6 @@ namespace Unity.SelectionGroupsEditor
                 GUI.contentColor = Color.white;
             }
             
-            //[TODO-sin: 2021-12-24] if the gameobject belongs to two groups then selecting it will select it in both groups
-            // var isMouseDrag = e.type == EventType.MouseDrag;
-            // var isManySelected = activeSelection.Count > 1;
-            // var isAnySelected = activeSelection.Count > 0;
-            // var isRightButton = e.button == RIGHT_MOUSE_BUTTON;
-            // var isMouseUp = e.type == EventType.MouseUp;
-            // var isNoSelection = activeSelection.Count == 0;
-            // var isControl = e.control;
-            // var isShift = e.shift;
-            // var isMouseDown = e.type == EventType.MouseDown;
-            // var isLeftMouseDown = isMouseOver && isLeftButton && isMouseDown;
-            // var isLeftMouseUp = isMouseOver && isLeftButton && isMouseUp;
-            // var isHotMember = g == hotMember;
-            // var updateSelectionObjects = false;
             HandleGroupMemberMouseEvents(rect, group, g, isGroupMemberSelected);            
         }
         
