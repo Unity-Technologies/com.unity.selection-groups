@@ -295,7 +295,7 @@ namespace Unity.SelectionGroupsEditor
             float       currentViewWidth = EditorGUIUtility.currentViewWidth;
             
             //background
-            Color backgroundColor = group == activeSelectionGroup ? Color.white * 0.6f : Color.white * 0.3f;
+            Color backgroundColor = ((ISelectionGroup) group == activeSelectionGroup) ? Color.white * 0.6f : Color.white * 0.3f;
             if (isPaint) 
             {
                 rect.width = currentViewWidth - RightMargin - COLOR_WIDTH;                
