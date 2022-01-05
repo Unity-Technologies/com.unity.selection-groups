@@ -406,11 +406,11 @@ namespace Unity.SelectionGroupsEditor
                         if (!isShift) {
                             if (!isControl) {
                                 m_selectedGroupMembers.Clear();
-                                m_selectedGroupMembers.Add(group, groupMember);
+                                m_selectedGroupMembers.AddGroupMember(group, groupMember);
                             }
                             else {
                                 if (!isGroupMemberSelected) {
-                                    m_selectedGroupMembers.Add(group, groupMember);
+                                    m_selectedGroupMembers.AddGroupMember(group, groupMember);
                                 } else {
                                     m_selectedGroupMembers.Remove(group, groupMember);
                                 }
@@ -542,7 +542,7 @@ namespace Unity.SelectionGroupsEditor
                     
                     if (startAdd) {
                         
-                        ret.Add(group,m);
+                        ret.AddGroupMember(group,m);
                         if (shouldToggleState)
                             return ret;
                     } else {
@@ -550,7 +550,7 @@ namespace Unity.SelectionGroupsEditor
                             continue;
                         
                         startAdd = true;
-                        ret.Add(@group,m);
+                        ret.AddGroupMember(@group,m);
 
                     }
                 }
