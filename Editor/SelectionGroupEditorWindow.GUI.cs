@@ -343,63 +343,62 @@ namespace Unity.SelectionGroupsEditor
         void HandleHeaderMouseEvents(Rect rect, SelectionGroup group)
         {
             Event evt = Event.current;
-            if (rect.Contains(evt.mousePosition))
-            {
-                switch (evt.type)
-                {
-                    case EventType.MouseDown:
-                        switch (evt.button)
-                        {
-                            case RIGHT_MOUSE_BUTTON:
-                                ShowGroupContextMenu(rect, group.Name, group);
-                                break;
-                            case LEFT_MOUSE_BUTTON:
-                                if (evt.clickCount == 1)
-                                    activeSelectionGroup = group;
-                                else
-                                    SelectionGroupConfigurationDialog.Open(group, this);
-                                break;
-                        }
-
-                        break;
-                    case EventType.MouseDrag:
-                        DragAndDrop.PrepareStartDrag();
-                        DragAndDrop.objectReferences = new[] { group.gameObject };
-                        DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP);                        
-                        DragAndDrop.StartDrag(group.Name);
-                        evt.Use();
-                        break;
-                    case EventType.DragUpdated:
-                        //This event can occur ay any time. VisualMode must be assigned a value other than Rejected, else
-                        //the DragPerform event will not be triggered.
-                        DragItemType? dragItemType = DragAndDrop.GetGenericData(DRAG_ITEM_TYPE) as DragItemType?;
-
-                        bool targetGroupIsAuto  = group.IsAutoFilled();
-                        bool draggedItemIsGroup = (null != dragItemType && dragItemType == DragItemType.GROUP);
-
-                        if (targetGroupIsAuto || draggedItemIsGroup)
-                            DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
-                        else
-                            DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
-                        evt.Use();
-                        break;
-                    case EventType.DragPerform:
-                        //This will only get called when a valid Drop occurs (determined by the above DragUpdated code)
-                        DragAndDrop.AcceptDrag();
-                        RegisterUndo(group, "Add Members");
-                        try
-                        {
-                            group.Add(DragAndDrop.objectReferences);
-                        }
-                        catch (SelectionGroupException e)
-                        {
-                            ShowNotification(new GUIContent(e.Message));
-                        }
-                        evt.Use();
-
-                        break;
-                    }
+            if (!rect.Contains(evt.mousePosition)) 
+                return;
                 
+            switch (evt.type)
+            {
+                case EventType.MouseDown:
+                    switch (evt.button)
+                    {
+                        case RIGHT_MOUSE_BUTTON:
+                            ShowGroupContextMenu(rect, @group.Name, @group);
+                            break;
+                        case LEFT_MOUSE_BUTTON:
+                            if (evt.clickCount == 1)
+                                activeSelectionGroup = @group;
+                            else
+                                SelectionGroupConfigurationDialog.Open(@group, this);
+                            break;
+                    }
+
+                    break;
+                case EventType.MouseDrag:
+                    DragAndDrop.PrepareStartDrag();
+                    DragAndDrop.objectReferences = new[] { @group.gameObject };
+                    DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP);
+                    DragAndDrop.StartDrag(@group.Name);
+                    evt.Use();
+                    break;
+                case EventType.DragUpdated:
+                    //This event can occur ay any time. VisualMode must be assigned a value other than Rejected, else
+                    //the DragPerform event will not be triggered.
+                    DragItemType? dragItemType = DragAndDrop.GetGenericData(DRAG_ITEM_TYPE) as DragItemType?;
+
+                    bool targetGroupIsAuto  = @group.IsAutoFilled();
+                    bool draggedItemIsGroup = (null != dragItemType && dragItemType == DragItemType.GROUP);
+
+                    if (targetGroupIsAuto || draggedItemIsGroup)
+                        DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
+                    else
+                        DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+                    evt.Use();
+                    break;
+                case EventType.DragPerform:
+                    //This will only get called when a valid Drop occurs (determined by the above DragUpdated code)
+                    DragAndDrop.AcceptDrag();
+                    RegisterUndo(@group, "Add Members");
+                    try
+                    {
+                        @group.Add(DragAndDrop.objectReferences);
+                    }
+                    catch (SelectionGroupException e)
+                    {
+                        ShowNotification(new GUIContent(e.Message));
+                    }
+                    evt.Use();
+
+                    break;
             }
         }
 
