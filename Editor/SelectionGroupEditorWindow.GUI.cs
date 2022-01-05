@@ -487,10 +487,10 @@ namespace Unity.SelectionGroupsEditor
                     //the DragPerform event will not be triggered.
                     DragItemType? dragItemType = DragAndDrop.GetGenericData(DRAG_ITEM_TYPE) as DragItemType?;
 
-                    bool targetGroupContainsQuery = string.IsNullOrEmpty(group.Query);
-                    bool draggedItemIsGroup       = (null != dragItemType && dragItemType == DragItemType.GROUP);
+                    bool targetGroupIsAuto  = group.IsAutoFilled();
+                    bool draggedItemIsGroup = (null != dragItemType && dragItemType == DragItemType.GROUP);
 
-                    if (!targetGroupContainsQuery || draggedItemIsGroup) 
+                    if (targetGroupIsAuto || draggedItemIsGroup)
                         DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
                     else
                         DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
