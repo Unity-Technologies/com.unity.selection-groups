@@ -18,7 +18,7 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<ISelectionGroup,
     
 //----------------------------------------------------------------------------------------------------------------------
     
-    internal void AddGroupMember(ISelectionGroup group, Object member) {
+    internal void AddObjectToSelection(ISelectionGroup group, Object member) {
         if (!m_selectedGroupMembers.ContainsKey(group)) {
             m_selectedGroupMembers.Add(group, new OrderedSet<Object>(){member});
             return;
