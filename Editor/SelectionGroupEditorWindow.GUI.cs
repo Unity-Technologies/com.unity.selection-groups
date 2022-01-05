@@ -376,16 +376,16 @@ namespace Unity.SelectionGroupsEditor
         
         void HandleGroupMemberMouseEvents(Rect rect, ISelectionGroup group, Object groupMember, bool isGroupMemberSelected)
         {
-            Event e = Event.current;
-            if (!rect.Contains(e.mousePosition)) 
+            Event evt = Event.current;
+            if (!rect.Contains(evt.mousePosition)) 
                 return;
 
-            bool isControl         = e.control;
-            bool isShift           = e.shift;
-            bool isRightMouseClick = e.button == RIGHT_MOUSE_BUTTON;
-            bool isLeftMouseClick  = e.button == LEFT_MOUSE_BUTTON;
+            bool isControl         = evt.control;
+            bool isShift           = evt.shift;
+            bool isRightMouseClick = evt.button == RIGHT_MOUSE_BUTTON;
+            bool isLeftMouseClick  = evt.button == LEFT_MOUSE_BUTTON;
 
-            switch (e.type) {
+            switch (evt.type) {
                 case EventType.MouseDown: {
                     if (isLeftMouseClick && !isShift) {
                         m_shiftPivotGroup       = group;
@@ -394,11 +394,11 @@ namespace Unity.SelectionGroupsEditor
                     
                     if (isRightMouseClick && isGroupMemberSelected)                    {
                         ShowGroupMemberContextMenu(rect);
-                        e.Use();
+                        evt.Use();
                     }
                     
                     
-                    e.Use();
+                    evt.Use();
                     break;
                 }
                 case EventType.MouseUp: {
@@ -429,7 +429,7 @@ namespace Unity.SelectionGroupsEditor
                         } //end shift
                     } //end left mouse click
 
-                    e.Use();
+                    evt.Use();
 
                     break;
                 }
@@ -450,7 +450,7 @@ namespace Unity.SelectionGroupsEditor
                     DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP_MEMBERS);
                     string dragText = numDraggedObjects > 1 ? objects[0].name + " ..." : objects[0].name;                        
                     DragAndDrop.StartDrag(dragText);
-                    e.Use();
+                    evt.Use();
                     break;
             }
         }
@@ -487,10 +487,10 @@ namespace Unity.SelectionGroupsEditor
                     //the DragPerform event will not be triggered.
                     DragItemType? dragItemType = DragAndDrop.GetGenericData(DRAG_ITEM_TYPE) as DragItemType?;
 
-                    bool targetGroupContainsQuery = string.IsNullOrEmpty(group.Query);
-                    bool draggedItemIsGroup       = (null != dragItemType && dragItemType == DragItemType.GROUP);
+                    bool targetGroupIsAuto  = group.IsAutoFilled();
+                    bool draggedItemIsGroup = (null != dragItemType && dragItemType == DragItemType.GROUP);
 
-                    if (!targetGroupContainsQuery || draggedItemIsGroup) 
+                    if (targetGroupIsAuto || draggedItemIsGroup)
                         DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
                     else
                         DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
