@@ -17,19 +17,19 @@ namespace Unity.SelectionGroups.Runtime
         /// <summary>
         /// A color assigned to this group.
         /// </summary>
-        [SerializeField] Color color;
+        [HideInInspector][SerializeField] Color color;
         /// <summary>
         /// If not empty, this is a GoQL query string used to create the set of matching objects for this group.
         /// </summary>
-        [SerializeField] string query = string.Empty;
+        [HideInInspector][SerializeField] string query = string.Empty;
 
         //Obsolete
         [HideInInspector][FormerlySerializedAs("_members")] [SerializeField] Object[] _legacyMembers;
         
-        [SerializeField] List<Object> members = new List<Object>();
+        [HideInInspector][SerializeField] List<Object> members = new List<Object>();
         
 #pragma warning disable 414    
-        [HideInInspector][SerializeField] private int sgVersion      = CUR_SG_VERSION; 
+        [HideInInspector][SerializeField] private int sgVersion = CUR_SG_VERSION; 
 #pragma warning restore 414
                 
 
