@@ -27,7 +27,7 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<ISelectionGroup,
         m_selectedGroupMembers[group].Add(member);
     }
 
-    internal void AddGroupMembers(ISelectionGroup group) {
+    internal void AddGroupMembersToSelection(ISelectionGroup group) {
         AddObjectsToSelection(group, group.Members);
     }
     
