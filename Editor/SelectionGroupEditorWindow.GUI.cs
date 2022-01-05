@@ -355,9 +355,18 @@ namespace Unity.SelectionGroupsEditor
             Event evt = Event.current;
             if (!rect.Contains(evt.mousePosition)) 
                 return;
-                
+   
+            
             switch (evt.type)
             {
+                case EventType.Repaint: {
+                    if (DragAndDrop.visualMode == DragAndDropVisualMode.Move) {
+                        Rect dropRect = rect;
+                        dropRect.height = 1;
+                        EditorGUI.DrawRect(dropRect, Color.red);
+                    }
+                    break;
+                }
                 case EventType.MouseDown:
                     switch (evt.button)
                     {
@@ -390,22 +399,34 @@ namespace Unity.SelectionGroupsEditor
                     DragItemType? dragItemType = DragAndDrop.GetGenericData(DRAG_ITEM_TYPE) as DragItemType?;
 
                     bool targetGroupIsAuto  = @group.IsAutoFilled();
-                    bool draggedItemIsGroup = (null != dragItemType && dragItemType == DragItemType.GROUP);
+                    bool draggedItemIsGroup = (dragItemType == DragItemType.GROUP);
 
-                    if (targetGroupIsAuto || draggedItemIsGroup)
+                    if (targetGroupIsAuto)
                         DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
-                    else
+                    else if (draggedItemIsGroup) {
+                        Debug.Log(rect.y - evt.mousePosition.y);
+                        DragAndDrop.visualMode = DragAndDropVisualMode.Move;                        
+                    } else
                         DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
                     evt.Use();
                     break;
                 case EventType.DragPerform:
-                    //This will only get called when a valid Drop occurs (determined by the above DragUpdated code)
+                    //DragPerform will only arrive when a valid Drop occurs (determined by the above DragUpdated code)
                     DragAndDrop.AcceptDrag();
-                    RegisterUndo(@group, "Add Members");
-                    try
-                    {
-                        @group.Add(DragAndDrop.objectReferences);
-                    }
+
+                    try {
+                        switch (DragAndDrop.visualMode) {
+                            case DragAndDropVisualMode.Copy: {
+                                RegisterUndo(@group, "Add Members");
+                                @group.Add(DragAndDrop.objectReferences);
+                                break;
+                            }
+                            case DragAndDropVisualMode.Move: {
+                                //move list
+                                break;
+                            }
+                        }
+                    }                    
                     catch (SelectionGroupException e)
                     {
                         ShowNotification(new GUIContent(e.Message));
