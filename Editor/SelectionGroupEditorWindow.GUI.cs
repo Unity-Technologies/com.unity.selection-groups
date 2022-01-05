@@ -1,6 +1,7 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
+using JetBrains.Annotations;
 using NUnit.Framework;
 using Unity.SelectionGroups;
 using Unity.SelectionGroups.Runtime;
@@ -32,10 +33,9 @@ namespace Unity.SelectionGroupsEditor
             window.Show();
         }
 
-        float CalculateHeight()
+        static float CalculateHeight(IList<SelectionGroup> groups)
         {
             var height = EditorGUIUtility.singleLineHeight;
-            var groups = SelectionGroupManager.GetOrCreateInstance().Groups;
             for (var i=0; i<groups.Count; i++)
             {
                 var group = groups[i];
@@ -50,9 +50,11 @@ namespace Unity.SelectionGroupsEditor
 
         void DrawGUI()
         {
+            m_groupsToDraw = SelectionGroupManager.GetOrCreateInstance().Groups;
+            
             var viewRect = Rect.zero;
             viewRect.width = position.width-16;
-            viewRect.height = CalculateHeight();
+            viewRect.height = CalculateHeight(m_groupsToDraw);
             var windowRect = new Rect(0, 0, position.width, position.height);
             scroll = GUI.BeginScrollView(windowRect, scroll, viewRect);
             
@@ -60,10 +62,9 @@ namespace Unity.SelectionGroupsEditor
             if (GUI.Button(cursor, AddGroup)) CreateNewGroup();
             cursor.y += cursor.height;
 
-            var groups = SelectionGroupManager.GetOrCreateInstance().Groups;
-            for (var i=0; i<groups.Count; i++)
+            for (var i=0; i<m_groupsToDraw.Count; i++)
             {
-                var group = groups[i];
+                var group = m_groupsToDraw[i];
                 if (group == null) continue;
                 cursor.y += 3;
                 
@@ -79,7 +80,7 @@ namespace Unity.SelectionGroupsEditor
                     //early out if this group yMax is above window rect (not visible).
                     // if (rect.yMax - scroll.y < 0)
                         // continue;
-                    cursor = DrawAllGroupMembers(cursor, group, allowRemove: true);
+                    cursor = DrawAllGroupMembers(cursor, group);
                 }
                 try
                 {
@@ -112,7 +113,7 @@ namespace Unity.SelectionGroupsEditor
             }
         }
 
-        Rect DrawAllGroupMembers(Rect rect, ISelectionGroup group, bool allowRemove)
+        Rect DrawAllGroupMembers(Rect rect, ISelectionGroup group)
         {
             rect.height = EditorGUIUtility.singleLineHeight;
             foreach (Object i in group.Members) 
@@ -124,146 +125,45 @@ namespace Unity.SelectionGroupsEditor
                 if (rect.yMin - scroll.y > position.height) return rect;
                 //if rect is in window, draw.
                 if (rect.yMax - scroll.y > 0)
-                    DrawGroupMember(rect, group, i, allowRemove);
+                    DrawGroupMember(rect, group, i);
                 rect.y += rect.height;
             }
             return rect;
         }
 
-        void DrawGroupMember(Rect rect, ISelectionGroup group, UnityEngine.Object g, bool allowRemove) 
+        void DrawGroupMember(Rect rect, ISelectionGroup group, UnityEngine.Object g) 
         {
             Assert.IsNotNull(g);
-            var e = Event.current;
-            var content = EditorGUIUtility.ObjectContent(g, g.GetType());
-
-            //[TODO-sin: 2021-12-24] if the gameobject belongs to two groups then selecting it will select it in both groups
-            var isInSelection = activeSelection.Contains(g);
-            var isMouseOver = rect.Contains(e.mousePosition);
-            var isMouseDrag = e.type == EventType.MouseDrag;
-            var isManySelected = activeSelection.Count > 1;
-            var isAnySelected = activeSelection.Count > 0;
-            var isLeftButton = e.button == LEFT_MOUSE_BUTTON;
-            var isRightButton = e.button == RIGHT_MOUSE_BUTTON;
-            var isMouseDown = e.type == EventType.MouseDown;
-            var isMouseUp = e.type == EventType.MouseUp;
-            var isNoSelection = activeSelection.Count == 0;
-            var isControl = e.control;
-            var isShift = e.shift;
-            var isLeftMouseDown = isMouseOver && isLeftButton && isMouseDown;
-            var isLeftMouseUp = isMouseOver && isLeftButton && isMouseUp;
-            var isHotMember = g == hotMember;
-            var updateSelectionObjects = false;
-            var isPaint = e.type == EventType.Repaint;
+            Event e = Event.current;
+            GUIContent content = EditorGUIUtility.ObjectContent(g, g.GetType());
+            bool isMouseOver = rect.Contains(e.mousePosition);
+            bool isPaint = e.type == EventType.Repaint;
 
             if (isMouseOver && isPaint)
                 EditorGUI.DrawRect(rect, HOVER_COLOR);
 
-            HandleGroupMemberMouseEvents(rect, activeSelection.ToArray());            
-            
-            if (isLeftMouseDown)
-            {
-                hotMember = g;
-                activeSelectionGroup = group;
-                e.Use();
-            }
+            bool isGroupMemberSelected = m_selectedGroupMembers.Contains(group, g);
 
-            if (isControl)
-            {
-                if (isLeftMouseUp && isHotMember && isInSelection)
-                {
-                    activeSelection.Remove(g);
-                    activeSelectionGroup = group;
-                    updateSelectionObjects = true;
-                    hotMember = null;
-                    e.Use();
-                }
-                if (isLeftMouseUp && isHotMember && !isInSelection)
-                {
-                    activeSelection.Add(g);
-                    activeSelectionGroup = group;
-                    updateSelectionObjects = true;
-                    hotMember = null;
-                    e.Use();
-                }
-            }
-            else if (isShift)
-            {
-                if (isLeftMouseUp && isHotMember)
-                {
-                    activeSelection.Add(g);
-                    int firstIndex = -1, lastIndex = -1;
-                    var objects = group.Members;
-                    for (var i = 0; i < objects.Count; i++)
-                    {
-                        if (activeSelection.Contains(objects[i]))
-                        {
-                            if (firstIndex < 0)
-                                firstIndex = i;
-                            lastIndex = i;
-                        }
-                    }
-                    for (var i = firstIndex; i < lastIndex; i++)
-                        activeSelection.Add(objects[i]);
-                    updateSelectionObjects = true;
-                    hotMember = null;
-                    e.Use();
-                }
-            }
-            else
-            {
-                if (isLeftMouseUp && isHotMember)
-                {
-                    if (isInSelection && isManySelected)
-                    {
-                        activeSelection.Clear();
-                        activeSelection.Add(g);
-                        updateSelectionObjects = true;
-                        e.Use();
-                    }
-                    else if (!isInSelection)
-                    {
-                        activeSelection.Clear();
-                        activeSelection.Add(g);
-                        updateSelectionObjects = true;
-                        e.Use();
-                    }
-                    else
-                    {
-                        //TODO: add a rename overlay
-                    }
-                    hotMember = null;
-                }
-            }
-
-            if (isPaint)
-            {
-                if (isInSelection)
+            if (isPaint) {
+                if (isGroupMemberSelected)
                     EditorGUI.DrawRect(rect, SELECTION_COLOR);
 
-                if (g.hideFlags.HasFlag(HideFlags.NotEditable))
-                {
-                    var icon = InspectorLock;
-                    var irect = rect;
-                    irect.width = 16;
+                if (g.hideFlags.HasFlag(HideFlags.NotEditable)) {
+                    GUIContent icon  = InspectorLock;
+                    Rect irect = rect;
+                    irect.width  = 16;
                     irect.height = 14;
                     GUI.DrawTexture(irect, icon.image);
                 }
 
-                rect.x += 24;
-                GUI.contentColor = allowRemove ? Color.white : Color.Lerp(Color.white, Color.yellow, 0.25f);
+                rect.x           += 24;
+                bool allowRemove = !group.IsAutoFilled();
+                GUI.contentColor =  allowRemove ? Color.white : Color.Lerp(Color.white, Color.yellow, 0.25f);
                 GUI.Label(rect, content);
                 GUI.contentColor = Color.white;
             }
-
-            if (isRightButton && isMouseOver && isMouseDown && isInSelection)
-            {
-                ShowGameObjectContextMenu(rect, group, g, allowRemove);
-                e.Use();
-            }
             
-            if (updateSelectionObjects)
-                Selection.objects = activeSelection.ToArray();
-
+            HandleGroupMemberMouseEvents(rect, group, g, isGroupMemberSelected);            
         }
         
         Rect DrawHeader(Rect cursor, SelectionGroup group, out bool showChildren) 
@@ -381,19 +281,18 @@ namespace Unity.SelectionGroupsEditor
             }
         }
 
-        void ShowGameObjectContextMenu(Rect rect, ISelectionGroup group, UnityEngine.Object g, bool allowRemove)
+        void ShowGroupMemberContextMenu(Rect rect)
         {
             var menu = new GenericMenu();
             var content = new GUIContent("Remove From Group");
-            if (allowRemove)
-                menu.AddItem(content, false, () =>
-                {
+            menu.AddItem(content, false, () => {
+                foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in m_selectedGroupMembers) {
+                    ISelectionGroup group = kv.Key;
                     RegisterUndo(group, "Remove Member");
-                    group.Query = "";
-                    group.Remove(Selection.objects);
-                });
-            else
-                menu.AddDisabledItem(content);
+                    group.Remove(kv.Value);
+                }
+            });
+            
             menu.DropDown(rect);
         }
 
@@ -475,22 +374,81 @@ namespace Unity.SelectionGroupsEditor
         }
 
         
-        void HandleGroupMemberMouseEvents(Rect rect, Object[] objects)
+        void HandleGroupMemberMouseEvents(Rect rect, ISelectionGroup group, Object groupMember, bool isGroupMemberSelected)
         {
             Event e = Event.current;
             if (!rect.Contains(e.mousePosition)) 
                 return;
-            
+
+            bool isControl         = e.control;
+            bool isShift           = e.shift;
+            bool isRightMouseClick = e.button == RIGHT_MOUSE_BUTTON;
+            bool isLeftMouseClick  = e.button == LEFT_MOUSE_BUTTON;
+
             switch (e.type) {
-                case EventType.MouseDrag:
-                    int numSelectedObjects = objects.Length;
-                    if (numSelectedObjects <= 0)
-                        break;
+                case EventType.MouseDown: {
+                    if (isLeftMouseClick && !isShift) {
+                        m_shiftPivotGroup       = group;
+                        m_shiftPivotGroupMember = groupMember;
+                    }
                     
+                    if (isRightMouseClick && isGroupMemberSelected)                    {
+                        ShowGroupMemberContextMenu(rect);
+                        e.Use();
+                    }
+                    
+                    
+                    e.Use();
+                    break;
+                }
+                case EventType.MouseUp: {
+                    if (isLeftMouseClick) {
+                        if (!isShift) {
+                            if (!isControl) {
+                                m_selectedGroupMembers.Clear();
+                                m_selectedGroupMembers.Add(group, groupMember);
+                            }
+                            else {
+                                if (!isGroupMemberSelected) {
+                                    m_selectedGroupMembers.Add(group, groupMember);
+                                } else {
+                                    m_selectedGroupMembers.Remove(group, groupMember);
+                                }
+                            }
+                        
+                        } else {
+                            if (!isControl) {
+                                m_selectedGroupMembers.Clear();
+                            }
+
+                            //add objects from shift pivot
+                            GroupMembersSelection selectedMembersByShift = SelectMembersInBetween(
+                                m_shiftPivotGroup, m_shiftPivotGroupMember, 
+                                group, groupMember, m_groupsToDraw);
+                            m_selectedGroupMembers.Add(selectedMembersByShift);
+                        } //end shift
+                    } //end left mouse click
+
+                    e.Use();
+
+                    break;
+                }
+
+                case EventType.MouseDrag:
+                    //Prepare the selected objects to be dragged: Convert to array
+                    HashSet<Object> uniqueDraggedObjects = new HashSet<Object>();
+                    foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> members in m_selectedGroupMembers) {
+                        uniqueDraggedObjects.UnionWith(members.Value);
+                    }
+                    int numDraggedObjects  = uniqueDraggedObjects.Count;
+                    if (numDraggedObjects <= 0)
+                        break;
+
+                    Object[] objects = uniqueDraggedObjects.ToArray();                    
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.objectReferences = objects;
                     DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP_MEMBERS);
-                    string dragText = numSelectedObjects > 1 ? objects[0].name + " ..." : objects[0].name;                        
+                    string dragText = numDraggedObjects > 1 ? objects[0].name + " ..." : objects[0].name;                        
                     DragAndDrop.StartDrag(dragText);
                     e.Use();
                     break;
@@ -556,9 +514,64 @@ namespace Unity.SelectionGroupsEditor
             }
             return false;
         }
+
+
+        
+        //Find object between (pivotGroup, pivotGroupMember) and (endGroup,endMember).
+        //The order between them is not guaranteed.
+        [CanBeNull]
+        static GroupMembersSelection SelectMembersInBetween(
+            ISelectionGroup pivotGroup, Object pivotMember, 
+            ISelectionGroup endGroup, Object endMember, IList<SelectionGroup> allGroups) 
+        {
+            if (allGroups.Count == 0)
+                return null;
+
+            GroupMembersSelection ret = new GroupMembersSelection();
+            
+            SelectionGroup pivotSG = pivotGroup as SelectionGroup;
+            SelectionGroup endSG = endGroup as SelectionGroup;
+            
+            bool startAdd = (null == pivotSG);
+
+            foreach (SelectionGroup group in allGroups) {
+                foreach (Object m in group.Members) {
+
+                    bool shouldToggleState = (group == pivotSG && m == pivotMember)
+                        || (group == endSG && m == endMember);
+                    
+                    if (startAdd) {
+                        
+                        ret.Add(group,m);
+                        if (shouldToggleState)
+                            return ret;
+                    } else {
+                        if (!shouldToggleState) 
+                            continue;
+                        
+                        startAdd = true;
+                        ret.Add(@group,m);
+
+                    }
+                }
+                
+            }
+
+            return ret;
+        }
+
+
         
 //----------------------------------------------------------------------------------------------------------------------        
 
+        readonly GroupMembersSelection m_selectedGroupMembers = new GroupMembersSelection();
+
+        private IList<SelectionGroup> m_groupsToDraw = null;
+        
         private const string DRAG_ITEM_TYPE = "SelectionGroupsWindows";
+
+        private ISelectionGroup m_shiftPivotGroup       = null;
+        private Object         m_shiftPivotGroupMember = null;
+
     }
 } //end namespace

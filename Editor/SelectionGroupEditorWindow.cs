@@ -27,7 +27,6 @@ namespace Unity.SelectionGroupsEditor
         ISelectionGroup activeSelectionGroup;
         float width;
         GUIStyle miniButtonStyle;
-        HashSet<Object> activeSelection = new HashSet<Object>();
         Object hotMember;
 
         private static float? performQueryRefresh = null;

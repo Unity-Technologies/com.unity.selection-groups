@@ -92,9 +92,9 @@ namespace Unity.SelectionGroupsEditor
 
         void UpdateActiveSelection()
         {
-            activeSelection.Clear();
-            if (Selection.objects != null)
-                activeSelection.UnionWith(Selection.objects);
+            // activeSelection.Clear();
+            // if (Selection.objects != null)
+            //     activeSelection.UnionWith(Selection.objects);
         }
 
         void OnValidateCommand(Event current)
