@@ -82,14 +82,6 @@ namespace Unity.SelectionGroupsEditor
                         // continue;
                     cursor = DrawAllGroupMembers(cursor, group);
                 }
-                try
-                {
-                    HandleDragEvents(dropRect, group);
-                }
-                catch (SelectionGroupException ex)
-                {
-                    ShowNotification(new GUIContent(ex.Message));
-                }
             }
             //Handle clicks on blank areas of window.
             if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
@@ -483,13 +475,6 @@ namespace Unity.SelectionGroupsEditor
                     break;
             }
         }
-        
-        bool HandleDragEvents(Rect rect, ISelectionGroup group)
-        {
-            return false;
-        }
-
-
         
         //Find object between (pivotGroup, pivotGroupMember) and (endGroup,endMember).
         //The order between them is not guaranteed.
