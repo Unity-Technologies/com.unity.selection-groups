@@ -369,10 +369,6 @@ namespace Unity.SelectionGroupsEditor
                         DragAndDrop.StartDrag(group.Name);
                         evt.Use();
                         break;
-                    case EventType.DragExited:
-                        //This event occurs when MouseUp occurs, or the cursor leaves the EditorWindow.
-                        ////The cursor may come back into the EditorWindow, however MouseDrag will not be triggered.
-                        break;
                     case EventType.DragUpdated:
                         //This event can occur ay any time. VisualMode must be assigned a value other than Rejected, else
                         //the DragPerform event will not be triggered.
