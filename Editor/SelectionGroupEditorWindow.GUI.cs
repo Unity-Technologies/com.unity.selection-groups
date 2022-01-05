@@ -299,10 +299,8 @@ namespace Unity.SelectionGroupsEditor
         void ShowGroupContextMenu(Rect rect, string groupName, ISelectionGroup group)
         {
             var menu = new GenericMenu();
-            menu.AddItem(new GUIContent("Select All"), false, () =>
-            {
-                Selection.objects = activeSelectionGroup.Members.ToArray();
-                UpdateActiveSelection();
+            menu.AddItem(new GUIContent("Select All"), false, () => {
+                m_selectedGroupMembers.AddGroupMembersToSelection(group);
             });
             menu.AddSeparator(string.Empty);
             menu.AddItem(new GUIContent("Clear Group"), false, () =>
@@ -406,11 +404,11 @@ namespace Unity.SelectionGroupsEditor
                         if (!isShift) {
                             if (!isControl) {
                                 m_selectedGroupMembers.Clear();
-                                m_selectedGroupMembers.Add(group, groupMember);
+                                m_selectedGroupMembers.AddObjectToSelection(group, groupMember);
                             }
                             else {
                                 if (!isGroupMemberSelected) {
-                                    m_selectedGroupMembers.Add(group, groupMember);
+                                    m_selectedGroupMembers.AddObjectToSelection(group, groupMember);
                                 } else {
                                     m_selectedGroupMembers.Remove(group, groupMember);
                                 }
@@ -542,7 +540,7 @@ namespace Unity.SelectionGroupsEditor
                     
                     if (startAdd) {
                         
-                        ret.Add(group,m);
+                        ret.AddObjectToSelection(group,m);
                         if (shouldToggleState)
                             return ret;
                     } else {
@@ -550,7 +548,7 @@ namespace Unity.SelectionGroupsEditor
                             continue;
                         
                         startAdd = true;
-                        ret.Add(@group,m);
+                        ret.AddObjectToSelection(@group,m);
 
                     }
                 }
