@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -12,6 +10,7 @@ namespace Unity.SelectionGroups.Runtime
     /// A component to group a number of GameObjects under a common name.
     /// </summary>
     [ExecuteAlways]
+    [AddComponentMenu("")]
     public class SelectionGroup : MonoBehaviour, ISelectionGroup, ISerializationCallbackReceiver    
     {
         /// <summary>
