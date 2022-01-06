@@ -302,7 +302,12 @@ namespace Unity.SelectionGroupsEditor
                     group.Clear();
                 });
             }
-            menu.AddItem(new GUIContent("Configure Group"), false, () => SelectionGroupConfigurationDialog.Open(group, this));
+            
+            
+            //[TODO-sin:2022-01-06] Remove in version 0.7.0 
+            //menu.AddItem(new GUIContent("Configure Group"), false, () => SelectionGroupConfigurationDialog.Open(group, this));
+            
+            //[TODO-sin:2022-01-06] Remove this code. The items should be updated automatically as necessary 
             if(!string.IsNullOrEmpty(group.Query))
                 menu.AddItem(new GUIContent("Update Query Results"), false, () => SelectionGroupManager.ExecuteQuery(group));
             else
@@ -352,8 +357,11 @@ namespace Unity.SelectionGroupsEditor
                             if (evt.clickCount == 1) {                                
                                 SetUnityEditorSelection(group);
                                 m_selectedGroupMembers.Clear();
-                            } else
-                                SelectionGroupConfigurationDialog.Open(@group, this);
+                            }
+                            else {
+                                //[TODO-sin:2022-01-06] Remove in version 0.7.0 
+                                //SelectionGroupConfigurationDialog.Open(@group, this);
+                            }
                             break;
                     }
                     evt.Use();
