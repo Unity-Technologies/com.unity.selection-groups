@@ -61,6 +61,8 @@ namespace Unity.SelectionGroups.Runtime
 
         private void OnDestroy() {
             
+            SelectionGroupManager.GetOrCreateInstance().DeleteSceneSelectionGroup(this);
+            
 #if UNITY_EDITOR
             GameObject curGameObject = this.gameObject;
             EditorApplication.delayCall += ()=> {
