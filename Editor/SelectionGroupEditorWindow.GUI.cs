@@ -49,6 +49,9 @@ namespace Unity.SelectionGroupsEditor
             for (var i=0; i<groups.Count; i++)
             {
                 var group = groups[i];
+                if (null == group)
+                    continue;
+                
                 height += EditorGUIUtility.singleLineHeight + 3;
                 if (group.ShowMembers)
                 {
