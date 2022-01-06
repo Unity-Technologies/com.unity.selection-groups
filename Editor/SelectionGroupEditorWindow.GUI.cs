@@ -371,7 +371,7 @@ namespace Unity.SelectionGroupsEditor
                             dropRect.y += rect.height + GROUP_HEADER_PADDING;
                             dropPos    =  DragDropPos.BELOW;
                         }  
-                        DragAndDrop.SetGenericData(DRAG_GROUP_POS,dropPos);                        
+                        DragAndDrop.SetGenericData(DRAG_DROP_POS,dropPos);
                         
                         EditorGUI.DrawRect(dropRect, Color.red);
                     }
@@ -400,6 +400,7 @@ namespace Unity.SelectionGroupsEditor
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.objectReferences = new[] { @group.gameObject };
                     DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP);
+                    DragAndDrop.SetGenericData(DRAG_GROUP,group);
                     DragAndDrop.StartDrag(@group.Name);
                     evt.Use();
                     break;
@@ -410,7 +411,6 @@ namespace Unity.SelectionGroupsEditor
 
                     bool targetGroupIsAuto  = @group.IsAutoFilled();
                     bool draggedItemIsGroup = (dragItemType == DragItemType.GROUP);
-
 
                     if (draggedItemIsGroup) {
                         DragAndDrop.visualMode = DragAndDropVisualMode.Move;
@@ -590,7 +590,8 @@ namespace Unity.SelectionGroupsEditor
         private IList<SelectionGroup> m_groupsToDraw = null;
         
         private const string DRAG_ITEM_TYPE = "SelectionGroupsDragItemType";
-        private const string DRAG_GROUP_POS = "SelectionGroupsDragGroupPos";
+        private const string DRAG_DROP_POS  = "SelectionGroupsDragDropPos";
+        private const string DRAG_GROUP     = "SelectionGroupsDragGroup";
         
         private const int    GROUP_HEADER_PADDING = 3;
 
