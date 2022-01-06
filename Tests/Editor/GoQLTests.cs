@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Tests
 {
-    public class GoQLTests
+    internal class GoQLTests
     {
         [Test]
         public void TestTokenizerSimple()
