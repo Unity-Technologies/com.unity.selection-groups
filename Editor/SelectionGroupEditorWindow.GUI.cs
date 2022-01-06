@@ -92,6 +92,8 @@ namespace Unity.SelectionGroupsEditor
                         // continue;
                     cursor = DrawAllGroupMembers(cursor, group);
                 }
+                
+                group.SetOnDestroyedCallback(TryRepaint);
             }
             //Handle clicks on blank areas of window.
             if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
