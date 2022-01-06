@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using Unity.FilmInternalUtilities.Editor;
 using Unity.SelectionGroups;
 using Unity.SelectionGroups.Runtime;
 using UnityEditor;
@@ -13,17 +14,17 @@ internal class SelectionGroupInspector : Editor {
     public override void OnInspectorGUI() {
         serializedObject.Update();
 
-        bool repaintWindow = DrawUndoableGUI(m_group, "Group Name",
+        bool repaintWindow = EditorGUIDrawerUtility.DrawUndoableGUI(m_group, "Group Name",
             () => EditorGUILayout.TextField("Group Name", m_group.Name),
             (string groupName) => { m_group.Name = groupName; }
         );
         
-        repaintWindow = repaintWindow || DrawUndoableGUI(m_group, "Group Color",
+        repaintWindow = repaintWindow || EditorGUIDrawerUtility.DrawUndoableGUI(m_group, "Group Color",
             () => EditorGUILayout.ColorField("Color", m_group.Color),
             (Color groupColor) => { m_group.Color = groupColor; }
         );
 
-        repaintWindow = repaintWindow || DrawUndoableGUI(m_group, "Group Query",
+        repaintWindow = repaintWindow || EditorGUIDrawerUtility.DrawUndoableGUI(m_group, "Group Query",
             () => EditorGUILayout.TextField("Group Query", m_group.Query),
             (string query) => {
                 {
@@ -112,22 +113,7 @@ internal class SelectionGroupInspector : Editor {
         Undo.undoRedoPerformed -= OnUndoRedo;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-    //[TODO: 2022-1-6]: Use FilmInternalUtilities
-    private static bool DrawUndoableGUI<V>(UnityEngine.Object target, string undoText,  
-        Func<V> guiFunc, 
-        Action<V> updateFunc)   
-    {
-        EditorGUI.BeginChangeCheck();
-        V newValue = guiFunc();
-        if (!EditorGUI.EndChangeCheck()) 
-            return false;
-        
-        Undo.RecordObject(target, undoText);
-        updateFunc(newValue);
-        return true;
-    }
-    
+   
 //----------------------------------------------------------------------------------------------------------------------    
     
 
