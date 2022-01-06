@@ -40,12 +40,6 @@ namespace Unity.SelectionGroups.Runtime
         /// </summary>
         int Count { get; }
 
-        
-        /// <summary>
-        /// Sets/gets the members visibility in the SelectionGroups window
-        /// </summary>
-        bool ShowMembers { get; set; }
-        
         /// <summary>
         /// Get the members of the SelectionGroup
         /// </summary>
