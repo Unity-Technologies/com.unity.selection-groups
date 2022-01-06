@@ -405,7 +405,7 @@ namespace Unity.SelectionGroupsEditor
                         DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
                     else if (draggedItemIsGroup) {
                         Debug.Log(rect.y - evt.mousePosition.y);
-                        DragAndDrop.visualMode = DragAndDropVisualMode.Move;                        
+                        DragAndDrop.visualMode = DragAndDropVisualMode.Move;
                     } else
                         DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
                     evt.Use();
