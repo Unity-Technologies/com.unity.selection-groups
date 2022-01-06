@@ -5,6 +5,7 @@ using Object = UnityEngine.Object;
 namespace Unity.SelectionGroups.Runtime
 {
 
+//A class to hold selected members from selected groups
 internal class GroupMembersSelection : IEnumerable<KeyValuePair<ISelectionGroup, OrderedSet<Object>>>
 {
 
