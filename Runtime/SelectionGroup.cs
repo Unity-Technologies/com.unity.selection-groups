@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Unity.GoQL;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
@@ -32,7 +33,6 @@ namespace Unity.SelectionGroups.Runtime
 #pragma warning restore 414
                 
 
-        GoQL.ParseResult parseResult;
         List<object> code;
         GoQL.GoQLExecutor executor;
         HashSet<string> enabledTools = new HashSet<string>();
@@ -74,8 +74,35 @@ namespace Unity.SelectionGroups.Runtime
         public string Query
         {
             get => this.query; 
-            set => this.query = value;
+            set => this.query = value; //[TODO-sin: 2022-1-6] remove setter, or maybe the whole interface
         }
+
+        /// <summary>
+        /// Sets the query which will automatically include GameObjects from the hierarchy that match the query into the group.
+        /// Returns early when the query is not valid (GoQL.ParseResult.OK).
+        /// </summary>
+        /// <param name="q">The query</param>
+        /// <returns>The parse result of the query.</returns>
+        public void SetQuery(string q) {
+
+            if (string.IsNullOrEmpty(q)) {
+                this.query = q;
+                return;
+            }
+            
+            executor = new GoQL.GoQLExecutor();
+            GoQL.Parser.Parse(q, out m_queryParseResult);
+            if (m_queryParseResult != GoQL.ParseResult.OK) 
+                return;
+            
+            this.query    = q;
+            executor.Code = this.query;
+            GameObject[] objects = executor.Execute();
+            SetMembers(objects);
+        }
+
+        public GoQL.ParseResult GetLastQueryParseResult() => m_queryParseResult;
+        
         
         /// <inheritdoc/>
         public bool IsAutoFilled() {
@@ -208,11 +235,11 @@ namespace Unity.SelectionGroups.Runtime
         }        
 
 //----------------------------------------------------------------------------------------------------------------------
+
+        private GoQL.ParseResult m_queryParseResult = ParseResult.Empty;       
         
         private const int  CUR_SG_VERSION     = (int) SGVersion.ORDERED_0_6_0;
         private       bool m_registerOnEnable = false;
-        
-        
         
         enum SGVersion {
             INITIAL = 1,    //initial

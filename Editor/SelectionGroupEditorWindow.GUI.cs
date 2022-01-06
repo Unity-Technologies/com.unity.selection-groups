@@ -86,8 +86,7 @@ namespace Unity.SelectionGroupsEditor
             //Handle clicks on blank areas of window.
             if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
             {
-                Selection.objects = new Object[] { };
-                UpdateActiveSelection();
+                m_selectedGroupMembers.Clear();
                 Event.current.Use();
             }
             GUI.EndScrollView();
@@ -192,7 +191,7 @@ namespace Unity.SelectionGroupsEditor
             float       currentViewWidth = EditorGUIUtility.currentViewWidth;
             
             //background
-            Color backgroundColor = ((ISelectionGroup) group == activeSelectionGroup) ? Color.white * 0.6f : Color.white * 0.3f;
+            Color backgroundColor = ((ISelectionGroup) group == m_activeSelectionGroup) ? Color.white * 0.6f : Color.white * 0.3f;
             if (isPaint) 
             {
                 rect.width = currentViewWidth - RightMargin - COLOR_WIDTH;                
@@ -350,13 +349,14 @@ namespace Unity.SelectionGroupsEditor
                             ShowGroupContextMenu(rect, @group.Name, @group);
                             break;
                         case LEFT_MOUSE_BUTTON:
-                            if (evt.clickCount == 1)
-                                activeSelectionGroup = @group;
-                            else
+                            if (evt.clickCount == 1) {                                
+                                SetUnityEditorSelection(group);
+                                m_selectedGroupMembers.Clear();
+                            } else
                                 SelectionGroupConfigurationDialog.Open(@group, this);
                             break;
                     }
-
+                    evt.Use();
                     break;
                 case EventType.MouseDrag:
                     DragAndDrop.PrepareStartDrag();
@@ -392,7 +392,6 @@ namespace Unity.SelectionGroupsEditor
                         ShowNotification(new GUIContent(e.Message));
                     }
                     evt.Use();
-
                     break;
             }
         }
@@ -420,7 +419,8 @@ namespace Unity.SelectionGroupsEditor
                         ShowGroupMemberContextMenu(rect);
                         evt.Use();
                     }
-                    
+
+                    SetUnityEditorSelection(null);
                     
                     evt.Use();
                     break;
@@ -522,8 +522,12 @@ namespace Unity.SelectionGroupsEditor
             return ret;
         }
 
-
         
+        private void SetUnityEditorSelection(SelectionGroup group) {
+            m_activeSelectionGroup  = @group;
+            Selection.objects       = new Object[] { null == group ? null : group.gameObject };
+        }
+
 //----------------------------------------------------------------------------------------------------------------------        
 
         readonly GroupMembersSelection m_selectedGroupMembers = new GroupMembersSelection();

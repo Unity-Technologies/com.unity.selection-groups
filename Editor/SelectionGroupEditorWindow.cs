@@ -24,7 +24,7 @@ namespace Unity.SelectionGroupsEditor
 
         ReorderableList list;
         Vector2 scroll;
-        ISelectionGroup activeSelectionGroup;
+        ISelectionGroup m_activeSelectionGroup;
         float width;
         GUIStyle miniButtonStyle;
         Object hotMember;

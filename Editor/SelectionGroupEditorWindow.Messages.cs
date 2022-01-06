@@ -58,11 +58,11 @@ namespace Unity.SelectionGroupsEditor
 
         void OnExecuteCommand(Event current)
         {
-            if (activeSelectionGroup != null)
+            if (m_activeSelectionGroup != null)
                 switch (current.commandName)
                 {
                     case "SelectAll":
-                        Selection.objects = activeSelectionGroup.Members.ToArray();
+                        Selection.objects = m_activeSelectionGroup.Members.ToArray();
                         UpdateActiveSelection();
                         current.Use();
                         break;
@@ -72,12 +72,12 @@ namespace Unity.SelectionGroupsEditor
                         current.Use();
                         break;
                     case "InvertSelection":
-                        Selection.objects = new HashSet<Object>(activeSelectionGroup.Members).Except(Selection.objects).ToArray();
+                        Selection.objects = new HashSet<Object>(m_activeSelectionGroup.Members).Except(Selection.objects).ToArray();
                         UpdateActiveSelection();
                         current.Use();
                         break;
                     case "SoftDelete":
-                        activeSelectionGroup.Remove(Selection.objects);
+                        m_activeSelectionGroup.Remove(Selection.objects);
                         Selection.objects = null;
                         UpdateActiveSelection();
                         current.Use();
@@ -111,7 +111,7 @@ namespace Unity.SelectionGroupsEditor
                     current.Use();
                     return;
                 case "SoftDelete":
-                    if (activeSelectionGroup != null)
+                    if (m_activeSelectionGroup != null)
                         current.Use();
                     return;
             }
