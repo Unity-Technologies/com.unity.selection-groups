@@ -50,7 +50,7 @@ namespace Unity.SelectionGroups.Runtime
             this.gameObject.hideFlags = HideFlags.HideInHierarchy;
             this.transform.hideFlags  = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
 
-            if (m_setNameOnEnable) {
+            if (m_setGroupNameOnEnable) {
                 m_groupName = gameObject.name;
             }
             
@@ -240,7 +240,7 @@ namespace Unity.SelectionGroups.Runtime
             }
 
             if (sgVersion < (int) SGVersion.NAME_0_6_0) {
-                m_setNameOnEnable = true;
+                m_setGroupNameOnEnable = true;
             }
             
             sgVersion = CUR_SG_VERSION;            
@@ -261,7 +261,7 @@ namespace Unity.SelectionGroups.Runtime
         
         private const int  CUR_SG_VERSION     = (int) SGVersion.NAME_0_6_0;
         private       bool m_registerOnEnable = false;
-        private       bool m_setNameOnEnable  = false;
+        private       bool m_setGroupNameOnEnable  = false;
 
 #if UNITY_EDITOR        
         private Action m_onDestroyedInEditorCB = null;
