@@ -30,8 +30,7 @@ internal class SelectionGroupInspector : Editor {
         Undo.undoRedoPerformed += OnUndoRedo;
     }
 
-    private void OnUndoRedo()
-    {
+    private void OnUndoRedo() {
         refreshQuery = true;
         Repaint();
     }
@@ -74,7 +73,6 @@ internal class SelectionGroupInspector : Editor {
                     var objects = executor.Execute();
                     message = $"{objects.Length} results.";
                     m_group.SetMembers(objects);
-                    parentWindow.Repaint();
                 }
                 else
                 {
@@ -136,7 +134,6 @@ internal class SelectionGroupInspector : Editor {
     ISelectionGroup                m_group;
     
     GoQL.GoQLExecutor              executor = new GoQL.GoQLExecutor();
-    SelectionGroupEditorWindow     parentWindow;
     string                         message      = string.Empty;
     bool                           refreshQuery = true;
     bool                           showDebug    = false;
