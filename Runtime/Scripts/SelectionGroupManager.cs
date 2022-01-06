@@ -13,6 +13,7 @@ using UnityEditor;
 namespace Unity.SelectionGroups.Runtime {
 
 [ExecuteAlways]
+[AddComponentMenu("")]
 internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupManager> {
     private void OnEnable() {
         this.gameObject.hideFlags = HideFlags.HideInHierarchy;
