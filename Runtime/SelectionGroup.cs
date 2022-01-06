@@ -47,7 +47,7 @@ namespace Unity.SelectionGroups.Runtime
             executor.Code = query;
 
             this.gameObject.hideFlags = HideFlags.HideInHierarchy;
-            this.transform.hideFlags  = HideFlags.HideInInspector;
+            this.transform.hideFlags  = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
 
             if (!m_registerOnEnable) 
                 return;
