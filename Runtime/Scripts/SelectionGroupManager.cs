@@ -23,7 +23,9 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
 
     public static void ExecuteSelectionGroupQueries() {
         foreach (var i in SelectionGroupManager.GetOrCreateInstance().m_sceneSelectionGroups) {
-            if (!string.IsNullOrEmpty(i.Query)) ExecuteQuery(i);
+            if (!string.IsNullOrEmpty(i.Query)) {
+                i.UpdateQueryResults();
+            }
         }
     }
 
@@ -108,18 +110,6 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
     //     Create(scope, @group.Name, @group.Query, @group.Color, @group.Members);
     //     Delete(@group);
     // }
-    
-    public static void ExecuteQuery(ISelectionGroup group) {
-        //[TODO-sin: 2022-1-6] Execute the method inside the group
-        
-        var executor = new GoQLExecutor();
-        var code     = GoQL.Parser.Parse(group.Query, out GoQL.ParseResult parseResult);
-        if (parseResult == GoQL.ParseResult.OK) {
-            executor.Code = group.Query;
-            var objects = executor.Execute();
-            group.SetMembers(objects);
-        }
-    }
 
 //----------------------------------------------------------------------------------------------------------------------
 
