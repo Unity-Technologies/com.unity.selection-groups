@@ -361,16 +361,18 @@ namespace Unity.SelectionGroupsEditor
             {
                 case EventType.Repaint: {
                     if (DragAndDrop.visualMode == DragAndDropVisualMode.Move) {
+                        //Show lines to indicate where to drop the dragged group
                         Rect dropRect = rect;
                         dropRect.height = 1;
 
-                        //move the order of groups
+                        DragDropPos dropPos = DragDropPos.ABOVE;                        
                         float halfHeight = rect.height * 0.5f;
                         if (evt.mousePosition.y - rect.y > halfHeight) {
                             dropRect.y += rect.height + GROUP_HEADER_PADDING;
+                            dropPos    =  DragDropPos.BELOW;
                         }  
+                        DragAndDrop.SetGenericData(DRAG_GROUP_POS,dropPos);                        
                         
-                        //EditorGUIUtility.singleLineHeight
                         EditorGUI.DrawRect(dropRect, Color.red);
                     }
                     break;
@@ -587,7 +589,9 @@ namespace Unity.SelectionGroupsEditor
 
         private IList<SelectionGroup> m_groupsToDraw = null;
         
-        private const string DRAG_ITEM_TYPE       = "SelectionGroupsWindows";
+        private const string DRAG_ITEM_TYPE = "SelectionGroupsDragItemType";
+        private const string DRAG_GROUP_POS = "SelectionGroupsDragGroupPos";
+        
         private const int    GROUP_HEADER_PADDING = 3;
 
         private ISelectionGroup m_shiftPivotGroup       = null;
