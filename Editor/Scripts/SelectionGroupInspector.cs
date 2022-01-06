@@ -87,18 +87,16 @@ internal class SelectionGroupInspector : Editor {
         } else {
             m_debugInformation = null;
         }
-        serializedObject.ApplyModifiedProperties();        
+        serializedObject.ApplyModifiedProperties();
 
-        if (!changed)
+        if (!changed || !EditorWindow.HasOpenInstances<SelectionGroupEditorWindow>())
             return;
-
-        // Repaint SelectionGroupEditorWindow
-        if (EditorWindow.HasOpenInstances<SelectionGroupEditorWindow>()) {
-            SelectionGroupEditorWindow window = EditorWindow.GetWindow<SelectionGroupEditorWindow>(
-                utility:false, title:"", focus:false);
-            window.Repaint();
-        }        
         
+        // Repaint SelectionGroupEditorWindow
+        SelectionGroupEditorWindow window = EditorWindow.GetWindow<SelectionGroupEditorWindow>(
+            utility:false, title:"", focus:false);
+        window.Repaint();
+
     }
     
 //----------------------------------------------------------------------------------------------------------------------    
