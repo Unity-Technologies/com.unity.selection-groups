@@ -364,9 +364,9 @@ namespace Unity.SelectionGroupsEditor
                     if (DragAndDrop.visualMode == DragAndDropVisualMode.Move) {
                         //Show lines to indicate where to drop the dragged group
                         Rect dropRect = rect;
-                        dropRect.height = 1;
+                        dropRect.height = 2;
 
-                        DragDropPos dropPos = DragDropPos.ABOVE;                        
+                        DragDropPos dropPos = DragDropPos.ABOVE;
                         float halfHeight = rect.height * 0.5f;
                         if (evt.mousePosition.y - rect.y > halfHeight) {
                             dropRect.y += rect.height + GROUP_HEADER_PADDING;
@@ -374,7 +374,7 @@ namespace Unity.SelectionGroupsEditor
                         }  
                         DragAndDrop.SetGenericData(DRAG_DROP_POS,dropPos);
                         
-                        EditorGUI.DrawRect(dropRect, Color.red);
+                        EditorGUI.DrawRect(dropRect, new Color(0.2f, 0.35f, 0.85f, 1f));
                     }
                     break;
                 }
