@@ -201,7 +201,7 @@ namespace Unity.SelectionGroupsEditor
 
             //
             const float FOLDOUT_WIDTH    = 16;
-            const float COLOR_WIDTH      = 128;
+            const float COLOR_WIDTH      = 32;
             const float SEPARATOR_WIDTH  = 8;
             float       currentViewWidth = EditorGUIUtility.currentViewWidth;
             
