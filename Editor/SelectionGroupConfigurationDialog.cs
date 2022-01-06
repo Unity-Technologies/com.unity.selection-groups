@@ -26,16 +26,17 @@ namespace Unity.SelectionGroupsEditor
         bool showDebug = false;
         SelectionGroupDebugInformation debugInformation;
 
-        internal static void Open(ISelectionGroup group, SelectionGroupEditorWindow parentWindow)
-        {
-            var dialog = EditorWindow.GetWindow<SelectionGroupConfigurationDialog>();
-            dialog.group = group;
-            dialog.parentWindow = parentWindow;
-            dialog.refreshQuery = true;
-            dialog.titleContent.text = $"Configure {group.Name}";
-            dialog.ShowPopup();
-            dialog.debugInformation = null;
-        }
+        //[TODO-sin:2022-01-06] Remove in version 0.7.0 
+        // internal static void Open(ISelectionGroup group, SelectionGroupEditorWindow parentWindow)
+        // {
+        //     var dialog = EditorWindow.GetWindow<SelectionGroupConfigurationDialog>();
+        //     dialog.group = group;
+        //     dialog.parentWindow = parentWindow;
+        //     dialog.refreshQuery = true;
+        //     dialog.titleContent.text = $"Configure {group.Name}";
+        //     dialog.ShowPopup();
+        //     dialog.debugInformation = null;
+        // }
 
         private void OnEnable()
         {
