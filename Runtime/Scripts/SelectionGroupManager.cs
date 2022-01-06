@@ -15,7 +15,7 @@ namespace Unity.SelectionGroups.Runtime {
 
 [ExecuteAlways]
 [AddComponentMenu("")]
-internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupManager> {
+internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupManager>, ISerializationCallbackReceiver {
     private void OnEnable() {
         this.gameObject.hideFlags = HideFlags.HideInHierarchy;
     }
@@ -102,7 +102,7 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
     //     Create(scope, @group.Name, @group.Query, @group.Color, @group.Members);
     //     Delete(@group);
     // }
-
+    
     public static void ExecuteQuery(ISelectionGroup group) {
         //[TODO-sin: 2022-1-6] Execute the method inside the group
         
@@ -114,6 +114,17 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
             group.SetMembers(objects);
         }
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+
+    ///<inheritdoc/>
+    public void OnBeforeSerialize() {
+        m_sceneSelectionGroups.RemoveAll((g) => null == g);
+    }
+
+    ///<inheritdoc/>
+    public void OnAfterDeserialize() { }
+    
 
 //----------------------------------------------------------------------------------------------------------------------
 

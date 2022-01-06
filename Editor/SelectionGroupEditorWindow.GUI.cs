@@ -33,12 +33,25 @@ namespace Unity.SelectionGroupsEditor
             window.Show();
         }
 
+        internal static void TryRepaint() {
+            if (!EditorWindow.HasOpenInstances<SelectionGroupEditorWindow>())
+                return;
+            
+            SelectionGroupEditorWindow window = EditorWindow.GetWindow<SelectionGroupEditorWindow>(
+                utility:false, title:"", focus:false);
+            window.Repaint();
+        }
+        
+
         static float CalculateHeight(IList<SelectionGroup> groups)
         {
             var height = EditorGUIUtility.singleLineHeight;
             for (var i=0; i<groups.Count; i++)
             {
                 var group = groups[i];
+                if (null == group)
+                    continue;
+                
                 height += EditorGUIUtility.singleLineHeight + 3;
                 if (group.ShowMembers)
                 {
@@ -82,6 +95,8 @@ namespace Unity.SelectionGroupsEditor
                         // continue;
                     cursor = DrawAllGroupMembers(cursor, group);
                 }
+                
+                group.SetOnDestroyedInEditorCallback(TryRepaint);
             }
             //Handle clicks on blank areas of window.
             if (Event.current.type == EventType.MouseDown && Event.current.button == 0)

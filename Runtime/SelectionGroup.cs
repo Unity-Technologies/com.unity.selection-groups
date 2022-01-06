@@ -1,9 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.GoQL;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Unity.SelectionGroups.Runtime
 {
@@ -54,6 +59,21 @@ namespace Unity.SelectionGroups.Runtime
             SelectionGroupManager.GetOrCreateInstance().Register(this);
             m_registerOnEnable = false;
         }
+
+        private void OnDestroy() {
+            
+            
+#if UNITY_EDITOR
+            GameObject curGameObject = this.gameObject;
+            EditorApplication.delayCall += ()=> {
+                SelectionGroupManager.GetOrCreateInstance().DeleteSceneSelectionGroup(this);
+                m_onDestroyedInEditorCB?.Invoke();
+            };
+#else            
+            SelectionGroupManager.GetOrCreateInstance().DeleteSceneSelectionGroup(this);
+#endif
+        }
+
 
         /// <inheritdoc/>
         public string Name
@@ -223,7 +243,13 @@ namespace Unity.SelectionGroups.Runtime
             }
             
             sgVersion = CUR_SG_VERSION;            
-        }        
+        }
+
+#if UNITY_EDITOR        
+        internal void SetOnDestroyedInEditorCallback(Action cb) {
+            m_onDestroyedInEditorCB = cb;
+        }
+#endif        
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -231,6 +257,10 @@ namespace Unity.SelectionGroups.Runtime
         
         private const int  CUR_SG_VERSION     = (int) SGVersion.ORDERED_0_6_0;
         private       bool m_registerOnEnable = false;
+
+#if UNITY_EDITOR        
+        private Action m_onDestroyedInEditorCB = null;
+#endif        
         
         enum SGVersion {
             INITIAL = 1,    //initial

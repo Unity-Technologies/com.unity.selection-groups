@@ -3,6 +3,7 @@ using System.Reflection;
 using Unity.SelectionGroups;
 using Unity.SelectionGroups.Runtime;
 using UnityEditor;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
     
 namespace Unity.SelectionGroupsEditor {
@@ -89,13 +90,10 @@ internal class SelectionGroupInspector : Editor {
         }
         serializedObject.ApplyModifiedProperties();
 
-        if (!repaintWindow || !EditorWindow.HasOpenInstances<SelectionGroupEditorWindow>())
+        if (!repaintWindow)
             return;
         
-        // Repaint SelectionGroupEditorWindow
-        SelectionGroupEditorWindow window = EditorWindow.GetWindow<SelectionGroupEditorWindow>(
-            utility:false, title:"", focus:false);
-        window.Repaint();
+        SelectionGroupEditorWindow.TryRepaint();
 
     }
     
