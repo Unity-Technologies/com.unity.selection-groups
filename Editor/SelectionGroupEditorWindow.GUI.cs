@@ -437,6 +437,12 @@ namespace Unity.SelectionGroupsEditor
                                 break;
                             }
                             case DragAndDropVisualMode.Move: {
+                                SelectionGroup draggedGroup = DragAndDrop.GetGenericData(DRAG_GROUP) as SelectionGroup;
+                                DragDropPos?   dropPos      = DragAndDrop.GetGenericData(DRAG_DROP_POS) as DragDropPos?;
+                                if (null == draggedGroup || !dropPos.HasValue || draggedGroup == group) {
+                                    break;
+                                }
+                                
                                 //move list
                                 break;
                             }
