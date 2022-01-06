@@ -4,7 +4,6 @@ using Unity.SelectionGroups;
 using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEngine;
-using Unity.FilmInternalUtilities.Editor;
     
 namespace Unity.SelectionGroupsEditor {
 
@@ -122,8 +121,6 @@ internal class SelectionGroupInspector : Editor {
         updateFunc(newValue);
         return true;
     }
-
-    
     
 //----------------------------------------------------------------------------------------------------------------------    
     
