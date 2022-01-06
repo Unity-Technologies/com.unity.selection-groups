@@ -18,62 +18,54 @@ internal class SelectionGroupInspector : Editor {
             (string groupName) => { m_group.Name = groupName; }
         );
         
-        DrawUndoableGUI(m_group, "Group Name",
+        DrawUndoableGUI(m_group, "Group Color",
             () => EditorGUILayout.ColorField("Color", m_group.Color),
             (Color groupColor) => { m_group.Color = groupColor; }
         );
+        serializedObject.ApplyModifiedProperties();        
+
+        DrawUndoableGUI(m_group, "Group Query",
+            () => EditorGUILayout.TextField("Group Query", m_group.Query),
+            (string query) => {
+                {
+                    //[TODO-sin:2021-12-20] Remove in version 0.7.0 
+                    //var obj = m_group as Object;
+                    // if(obj == null)
+                    //     Undo.RegisterCompleteObjectUndo(SelectionGroupPersistenceManager.Instance, "Query change");
+                    // else
+                    //    Undo.RegisterCompleteObjectUndo(obj, "Query change");
+                
+                    Undo.RegisterCompleteObjectUndo(m_group, "Query change");
+                
+                }
+                m_group.SetQuery(query);
+            }
+        );
+
+        if (m_group.IsAutoFilled()) {
+            GoQL.ParseResult parseResult = m_group.GetLastQueryParseResult();
+            
+            message = (parseResult == GoQL.ParseResult.OK) 
+                ? $"{m_group.Members.Count} results." 
+                : parseResult.ToString();
+
+            GUILayout.Space(5);
+            EditorGUILayout.HelpBox(message, MessageType.Info);
+        }
+        
+        //[TODO-sin:2021-12-20] Remove in version 0.7.0 
+        // SelectionGroupDataLocation scope = @group.Scope;
+        // scope = (SelectionGroupDataLocation) EditorGUILayout.EnumPopup(@group.Scope);
+        // if (scope != @group.Scope)
+        // {
+        //     SelectionGroupManager.ChangeGroupScope(group, scope);
+        //     Close();
+        // }
+
 
         
         using (var cc = new EditorGUI.ChangeCheckScope())
         {                        
-            // EditorGUILayout.LabelField("GameObject Query");
-            // var q = m_group.Query;
-            // var newQuery = EditorGUILayout.TextField(m_group.Query);
-            // refreshQuery = refreshQuery || (q != newQuery);
-            //
-            // if (refreshQuery)
-            // {
-            //     {
-            //         var obj = m_group as Object;
-            //         //[TODO-sin:2021-12-20] Remove in version 0.7.0 
-            //         // if(obj == null)
-            //         //     Undo.RegisterCompleteObjectUndo(SelectionGroupPersistenceManager.Instance, "Query change");
-            //         // else
-            //         //    Undo.RegisterCompleteObjectUndo(obj, "Query change");
-            //         
-            //         Undo.RegisterCompleteObjectUndo(obj, "Query change");
-            //         
-            //     }
-            //     m_group.Query = newQuery;
-            //     var code = GoQL.Parser.Parse(m_group.Query, out GoQL.ParseResult parseResult);
-            //     if (parseResult == GoQL.ParseResult.OK)
-            //     {
-            //         executor.Code = m_group.Query;
-            //         var objects = executor.Execute();
-            //         message = $"{objects.Length} results.";
-            //         m_group.SetMembers(objects);
-            //     }
-            //     else
-            //     {
-            //         message = parseResult.ToString();
-            //     }
-            //     refreshQuery = false;
-            // }
-            // if (message != string.Empty)
-            // {
-            //     GUILayout.Space(5);
-            //     EditorGUILayout.HelpBox(message, MessageType.Info);
-            // }
-            // GUILayout.Space(5);
-            //
-            // //[TODO-sin:2021-12-20] Remove in version 0.7.0 
-            // // SelectionGroupDataLocation scope = @group.Scope;
-            // // scope = (SelectionGroupDataLocation) EditorGUILayout.EnumPopup(@group.Scope);
-            // // if (scope != @group.Scope)
-            // // {
-            // //     SelectionGroupManager.ChangeGroupScope(group, scope);
-            // //     Close();
-            // // }
             //
             // GUILayout.BeginVertical("box");
             // GUILayout.Label("Enabled Toolbar Buttons", EditorStyles.largeLabel);
@@ -106,7 +98,6 @@ internal class SelectionGroupInspector : Editor {
             // }
         }
         
-        serializedObject.ApplyModifiedProperties();        
         
     }
     
