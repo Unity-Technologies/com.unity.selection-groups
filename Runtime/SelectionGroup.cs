@@ -65,7 +65,7 @@ namespace Unity.SelectionGroups.Runtime
             GameObject curGameObject = this.gameObject;
             EditorApplication.delayCall += ()=> {
                 FilmInternalUtilities.ObjectUtility.Destroy(curGameObject);
-                m_onDestroyedCB?.Invoke();
+                m_onDestroyedInEditorCB?.Invoke();
             };
 #endif
         }
@@ -241,9 +241,11 @@ namespace Unity.SelectionGroups.Runtime
             sgVersion = CUR_SG_VERSION;            
         }
 
-        internal void SetOnDestroyedCallback(Action cb) {
-            m_onDestroyedCB = cb;
+#if UNITY_EDITOR        
+        internal void SetOnDestroyedInEditorCallback(Action cb) {
+            m_onDestroyedInEditorCB = cb;
         }
+#endif        
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -252,8 +254,9 @@ namespace Unity.SelectionGroups.Runtime
         private const int  CUR_SG_VERSION     = (int) SGVersion.ORDERED_0_6_0;
         private       bool m_registerOnEnable = false;
 
-        private Action m_onDestroyedCB = null;
-        
+#if UNITY_EDITOR        
+        private Action m_onDestroyedInEditorCB = null;
+#endif        
         
         enum SGVersion {
             INITIAL = 1,    //initial
