@@ -102,6 +102,7 @@ namespace Unity.SelectionGroupsEditor
             if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
             {
                 m_selectedGroupMembers.Clear();
+                UpdateUnityEditorSelectionWithMembers();
                 Event.current.Use();
             }
             GUI.EndScrollView();
@@ -311,6 +312,7 @@ namespace Unity.SelectionGroupsEditor
             var menu = new GenericMenu();
             menu.AddItem(new GUIContent("Select All"), false, () => {
                 m_selectedGroupMembers.AddGroupMembersToSelection(group);
+                UpdateUnityEditorSelectionWithMembers();
             });
             menu.AddSeparator(string.Empty);
             if (group.IsAutoFilled()) {
@@ -319,6 +321,7 @@ namespace Unity.SelectionGroupsEditor
                 menu.AddItem(new GUIContent("Clear Group"), false, () => {
                     m_selectedGroupMembers.RemoveGroupFromSelection(group);
                     group.Clear();
+                    UpdateUnityEditorSelectionWithMembers();
                 });
             }
             
@@ -344,6 +347,7 @@ namespace Unity.SelectionGroupsEditor
             {
                 m_selectedGroupMembers.RemoveGroupFromSelection(group);
                 SelectionGroupManager.GetOrCreateInstance().DeleteSceneSelectionGroup(group);
+                UpdateUnityEditorSelectionWithMembers();
             });
             menu.DropDown(rect);
         }
@@ -533,6 +537,7 @@ namespace Unity.SelectionGroupsEditor
                                 group, groupMember, m_groupsToDraw);
                             m_selectedGroupMembers.Add(selectedMembersByShift);
                         } //end shift
+                        UpdateUnityEditorSelectionWithMembers();
                     } //end left mouse click
 
                     evt.Use();
@@ -604,11 +609,17 @@ namespace Unity.SelectionGroupsEditor
             return ret;
         }
 
+//----------------------------------------------------------------------------------------------------------------------        
         
         private void SetUnityEditorSelection(SelectionGroup group) {
             m_activeSelectionGroup  = @group;
             Selection.objects       = new Object[] { null == group ? null : group.gameObject };
         }
+
+        private void UpdateUnityEditorSelectionWithMembers() {
+            Selection.objects = m_selectedGroupMembers.ConvertMembersToArray();
+        }
+        
 
 //----------------------------------------------------------------------------------------------------------------------        
 
