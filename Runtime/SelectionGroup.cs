@@ -124,15 +124,6 @@ namespace Unity.SelectionGroups.Runtime
         }
 
         /// <inheritdoc/>
-        public SelectionGroupDataLocation Scope
-        {
-            get => SelectionGroupDataLocation.Scene;
-            set  {
-                //[TODO-sin: 2021-10-22] Remove set starting from version 0.6.0
-            }
-        }
-
-        /// <inheritdoc/>
         public int Count => members.Count;
         /// <inheritdoc/>
         public bool ShowMembers { get; set; }

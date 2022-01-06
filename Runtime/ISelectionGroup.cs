@@ -36,11 +36,6 @@ namespace Unity.SelectionGroups.Runtime
         HashSet<string> EnabledTools { get; set; }
         
         /// <summary>
-        /// Sets/gets the data location of the SelectionGroup
-        /// </summary>
-        SelectionGroupDataLocation Scope { get; }
-
-        /// <summary>
         /// Gets the number of members in this SelectionGroup
         /// </summary>
         int Count { get; }
