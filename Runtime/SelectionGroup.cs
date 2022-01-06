@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.GoQL;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
@@ -109,17 +110,22 @@ namespace Unity.SelectionGroups.Runtime
                 this.query = q;
                 return;
             }
-            
+
+            this.query = q;
+            UpdateQueryResults();
+        }
+
+        internal void UpdateQueryResults() {
             executor = new GoQL.GoQLExecutor();
-            GoQL.Parser.Parse(q, out m_queryParseResult);
+            GoQL.Parser.Parse(this.query, out m_queryParseResult);
             if (m_queryParseResult != GoQL.ParseResult.OK) 
                 return;
             
-            this.query    = q;
             executor.Code = this.query;
             GameObject[] objects = executor.Execute();
             SetMembers(objects);
         }
+        
 
         public GoQL.ParseResult GetLastQueryParseResult() => m_queryParseResult;
         
