@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Unity.SelectionGroups;
@@ -7,6 +8,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 
 namespace Unity.SelectionGroupsEditor
@@ -22,10 +24,15 @@ namespace Unity.SelectionGroupsEditor
             
             //[TODO-sin:2021-12-20] Remove in version 0.7.0             
             //editorHeaderContent = EditorGUIUtility.IconContent("d_Project");
-            sceneHeaderContent = EditorGUIUtility.IconContent("SceneAsset Icon");
+            sceneHeaderContent     =  EditorGUIUtility.IconContent("SceneAsset Icon");
+            Undo.undoRedoPerformed += OnUndoRedoPerformed;
         }
-        
-        
+
+        private void OnDisable() {
+            Undo.undoRedoPerformed -= OnUndoRedoPerformed;
+        }
+
+
         void OnGUI()
         {
             try
@@ -116,5 +123,10 @@ namespace Unity.SelectionGroupsEditor
                     return;
             }
         }
+        
+        private void OnUndoRedoPerformed() {
+            Repaint();
+        }
+        
     }
 }
