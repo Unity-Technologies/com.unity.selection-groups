@@ -18,7 +18,7 @@ namespace Unity.SelectionGroups.Runtime
         /// <summary>
         /// Sets/gets the query which will automatically include GameObjects from the hierarchy that match the query into the group.
         /// </summary>
-        string Query { get; set;  }
+        string Query { get; }
 
         /// <summary>
         /// Gets whether the group is automatically filled
@@ -36,21 +36,10 @@ namespace Unity.SelectionGroups.Runtime
         HashSet<string> EnabledTools { get; set; }
         
         /// <summary>
-        /// Sets/gets the data location of the SelectionGroup
-        /// </summary>
-        SelectionGroupDataLocation Scope { get; }
-
-        /// <summary>
         /// Gets the number of members in this SelectionGroup
         /// </summary>
         int Count { get; }
 
-        
-        /// <summary>
-        /// Sets/gets the members visibility in the SelectionGroups window
-        /// </summary>
-        bool ShowMembers { get; set; }
-        
         /// <summary>
         /// Get the members of the SelectionGroup
         /// </summary>

@@ -74,7 +74,6 @@ namespace Unity.SelectionGroups.Runtime
         public string Query
         {
             get => this.query; 
-            set => this.query = value; //[TODO-sin: 2022-1-6] remove setter, or maybe the whole interface
         }
 
         /// <summary>
@@ -121,15 +120,6 @@ namespace Unity.SelectionGroups.Runtime
         {
             get => enabledTools;
             set => enabledTools = value;
-        }
-
-        /// <inheritdoc/>
-        public SelectionGroupDataLocation Scope
-        {
-            get => SelectionGroupDataLocation.Scene;
-            set  {
-                //[TODO-sin: 2021-10-22] Remove set starting from version 0.6.0
-            }
         }
 
         /// <inheritdoc/>
