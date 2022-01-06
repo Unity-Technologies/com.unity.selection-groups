@@ -33,6 +33,16 @@ namespace Unity.SelectionGroupsEditor
             window.Show();
         }
 
+        internal static void TryRepaint() {
+            if (!EditorWindow.HasOpenInstances<SelectionGroupEditorWindow>())
+                return;
+            
+            SelectionGroupEditorWindow window = EditorWindow.GetWindow<SelectionGroupEditorWindow>(
+                utility:false, title:"", focus:false);
+            window.Repaint();
+        }
+        
+
         static float CalculateHeight(IList<SelectionGroup> groups)
         {
             var height = EditorGUIUtility.singleLineHeight;
