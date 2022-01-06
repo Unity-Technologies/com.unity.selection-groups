@@ -327,6 +327,7 @@ namespace Unity.SelectionGroupsEditor
 
             menu.AddItem(new GUIContent("Delete Group"), false, () =>
             {
+                m_selectedGroupMembers.Clear();
                 SelectionGroupManager.GetOrCreateInstance().DeleteSceneSelectionGroup(group);
             });
             menu.DropDown(rect);
