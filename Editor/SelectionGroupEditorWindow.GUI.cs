@@ -85,7 +85,7 @@ namespace Unity.SelectionGroupsEditor
                 if ((cursor.yMin - scroll.y) > position.height) break;
                 var dropRect = cursor;
                 
-                cursor = DrawHeader(cursor, group, out bool showChildren);
+                cursor = DrawHeader(cursor, i, out bool showChildren);
 
                 if (showChildren)
                 {
@@ -172,12 +172,12 @@ namespace Unity.SelectionGroupsEditor
             HandleGroupMemberMouseEvents(rect, group, g, isGroupMemberSelected);            
         }
         
-        Rect DrawHeader(Rect cursor, SelectionGroup group, out bool showChildren) 
-        {           
-            bool isPaint = Event.current.type == EventType.Repaint;            
-            Rect rect = new Rect(cursor) {x = 0, };            
-            bool isAvailableInEditMode = true;
-            GUIContent content = sceneHeaderContent;
+        Rect DrawHeader(Rect cursor, int groupIndex, out bool showChildren) {
+            SelectionGroup group                 = m_groupsToDraw[groupIndex];
+            bool           isPaint               = Event.current.type == EventType.Repaint;
+            Rect           rect                  = new Rect(cursor) {x = 0, };
+            bool           isAvailableInEditMode = true;
+            GUIContent     content               = sceneHeaderContent;
             
             //[TODO-sin:2021-12-20] Remove in version 0.7.0             
             // if (group.Scope == SelectionGroupDataLocation.Editor)
@@ -223,7 +223,7 @@ namespace Unity.SelectionGroupsEditor
                 rect.width        =  labelWidth;
             }
             if(isAvailableInEditMode)
-                HandleHeaderMouseEvents(rect, group);
+                HandleHeaderMouseEvents(rect, groupIndex);
             if (isPaint) 
             {
                 Label.normal.textColor = EditorGUIUtility.isProSkin ? ProTextColor: Color.black;
@@ -350,12 +350,13 @@ namespace Unity.SelectionGroupsEditor
 
 //----------------------------------------------------------------------------------------------------------------------        
         
-        void HandleHeaderMouseEvents(Rect rect, SelectionGroup group)
+        void HandleHeaderMouseEvents(Rect rect, int groupIndex)
         {
             Event evt = Event.current;
             if (!rect.Contains(evt.mousePosition)) 
                 return;
-   
+
+            SelectionGroup group = m_groupsToDraw[groupIndex];
             
             switch (evt.type)
             {
