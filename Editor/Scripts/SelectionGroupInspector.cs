@@ -62,6 +62,8 @@ internal class SelectionGroupInspector : Editor {
         //     Close();
         // }
 
+        
+        //[TODO-sin: 2022-01-06] Update the SelectionGroupEditorWindow immediately
 
         
         using (var cc = new EditorGUI.ChangeCheckScope())
