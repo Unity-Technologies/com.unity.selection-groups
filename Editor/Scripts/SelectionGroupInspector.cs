@@ -14,7 +14,7 @@ internal class SelectionGroupInspector : Editor {
     public override void OnInspectorGUI() {
         serializedObject.Update();
 
-        bool repaintWindow = EditorGUIDrawerUtility.DrawUndoableGUI(m_group, "Group Name",
+        bool repaintWindow = EditorGUIDrawerUtility.DrawUndoableGUI(m_group.gameObject, "Group Name",
             () => EditorGUILayout.TextField("Group Name", m_group.Name),
             (string groupName) => { m_group.Name = groupName; }
         );
