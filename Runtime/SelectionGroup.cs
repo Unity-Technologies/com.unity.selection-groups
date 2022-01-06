@@ -74,12 +74,8 @@ namespace Unity.SelectionGroups.Runtime
         /// <inheritdoc/>
         public string Name
         {
-            get {
-                return gameObject.name;
-            }
-            set {
-                gameObject.name = value;
-            }
+            get { return gameObject.name; }
+            set { gameObject.name = value; }
         }
 
 
