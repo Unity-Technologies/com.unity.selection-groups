@@ -44,7 +44,7 @@ internal class SelectionGroupInspector : Editor {
         if (m_group.IsAutoFilled()) {
             GoQL.ParseResult parseResult = m_group.GetLastQueryParseResult();
             
-            message = (parseResult == GoQL.ParseResult.OK) 
+            string message = (parseResult == GoQL.ParseResult.OK) 
                 ? $"{m_group.Members.Count} results." 
                 : parseResult.ToString();
 
@@ -78,12 +78,12 @@ internal class SelectionGroupInspector : Editor {
         }
         GUILayout.EndVertical();
         
-        showDebug = GUILayout.Toggle(showDebug, "Show Debug Info", "button");
-        if (showDebug) {
-            if (debugInformation == null) debugInformation = new SelectionGroupDebugInformation(m_group);
-            EditorGUILayout.TextArea(debugInformation.text);
+        m_showDebug = GUILayout.Toggle(m_showDebug, "Show Debug Info", "button");
+        if (m_showDebug) {
+            if (m_debugInformation == null) m_debugInformation = new SelectionGroupDebugInformation(m_group);
+            EditorGUILayout.TextArea(m_debugInformation.text);
         } else {
-            debugInformation = null;
+            m_debugInformation = null;
         }
         
         
@@ -98,7 +98,6 @@ internal class SelectionGroupInspector : Editor {
     }
 
     private void OnUndoRedo() {
-        refreshQuery = true;
         Repaint();
     }
 
@@ -125,14 +124,10 @@ internal class SelectionGroupInspector : Editor {
 //----------------------------------------------------------------------------------------------------------------------    
     
 
-    SelectionGroup                 m_group;
+    SelectionGroup m_group;
     
-    GoQL.GoQLExecutor              executor = new GoQL.GoQLExecutor();
-    string                         message      = string.Empty;
-    bool                           refreshQuery = true;
-    bool                           showDebug    = false;
-    SelectionGroupDebugInformation debugInformation;
-    
+    bool                           m_showDebug  = false;
+    SelectionGroupDebugInformation m_debugInformation;
 }
 
 } //end namespace
