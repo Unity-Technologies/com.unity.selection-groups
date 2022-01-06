@@ -21,7 +21,7 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
     }
 
 
-    public static void ExecuteSelectionGroupQueries() {
+    public static void UpdateQueryResults() {
         foreach (var i in SelectionGroupManager.GetOrCreateInstance().m_sceneSelectionGroups) {
             if (!string.IsNullOrEmpty(i.Query)) {
                 i.UpdateQueryResults();
