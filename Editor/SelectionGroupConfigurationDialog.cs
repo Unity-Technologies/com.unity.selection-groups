@@ -73,7 +73,8 @@ namespace Unity.SelectionGroupsEditor
             using (var cc = new EditorGUI.ChangeCheckScope())
             {
                 GUILayout.Label("Selection Group Properties", EditorStyles.largeLabel);
-                group.Name = EditorGUILayout.TextField("Group Name", group.Name);
+                //[TODO-sin:2022-01-06] Remove in version 0.7.0 
+                //group.Name = EditorGUILayout.TextField("Group Name", group.Name);
                 group.Color = EditorGUILayout.ColorField("Color", group.Color);
                 EditorGUILayout.LabelField("GameObject Query");
                 var q = group.Query;
