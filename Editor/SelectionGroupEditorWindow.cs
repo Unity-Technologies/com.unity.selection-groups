@@ -56,10 +56,12 @@ namespace Unity.SelectionGroupsEditor
             performQueryRefresh = (float) (EditorApplication.timeSinceStartup + 0.2f);
         }
 
-        static void CreateNewGroup()
-        {
-            SelectionGroupManager.GetOrCreateInstance().CreateSceneSelectionGroup("New Group",
-                Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f)),  string.Empty);
+        static void CreateNewGroup() {
+            SelectionGroupManager sgManager = SelectionGroupManager.GetOrCreateInstance();
+            
+            int numGroups = sgManager.Groups.Count;
+            sgManager.CreateSceneSelectionGroup($"New Group {numGroups}",
+                Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f)));
         }
 
         void RegisterUndo(ISelectionGroup @group, string msg)
