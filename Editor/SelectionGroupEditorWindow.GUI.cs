@@ -295,10 +295,14 @@ namespace Unity.SelectionGroupsEditor
                 m_selectedGroupMembers.AddGroupMembersToSelection(group);
             });
             menu.AddSeparator(string.Empty);
-            menu.AddItem(new GUIContent("Clear Group"), false, () =>
-            {
-                group.Clear();
-            });
+            if (group.IsAutoFilled()) {
+                menu.AddDisabledItem(new GUIContent("Clear Group"), false);
+            } else {
+                menu.AddItem(new GUIContent("Clear Group"), false, () => {
+                    m_selectedGroupMembers.Clear();
+                    group.Clear();
+                });
+            }
             menu.AddItem(new GUIContent("Configure Group"), false, () => SelectionGroupConfigurationDialog.Open(group, this));
             if(!string.IsNullOrEmpty(group.Query))
                 menu.AddItem(new GUIContent("Update Query Results"), false, () => SelectionGroupManager.ExecuteQuery(group));
