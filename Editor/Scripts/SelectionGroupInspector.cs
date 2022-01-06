@@ -13,17 +13,19 @@ internal class SelectionGroupInspector : Editor {
     public override void OnInspectorGUI() {
         serializedObject.Update();
 
-        DrawUndoableGUI<string>(m_group, "Group Name",
+        DrawUndoableGUI(m_group, "Group Name",
             () => EditorGUILayout.TextField("Group Name", m_group.Name),
-            (string groupName) => {
-                m_group.Name = groupName;
-            });
+            (string groupName) => { m_group.Name = groupName; }
+        );
         
+        DrawUndoableGUI(m_group, "Group Name",
+            () => EditorGUILayout.ColorField("Color", m_group.Color),
+            (Color groupColor) => { m_group.Color = groupColor; }
+        );
+
         
         using (var cc = new EditorGUI.ChangeCheckScope())
         {                        
-            //m_group.Name = EditorGUILayout.TextField("Group Name", m_group.Name);
-            //m_group.Color = EditorGUILayout.ColorField("Color", m_group.Color);
             // EditorGUILayout.LabelField("GameObject Query");
             // var q = m_group.Query;
             // var newQuery = EditorGUILayout.TextField(m_group.Query);
