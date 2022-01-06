@@ -321,14 +321,6 @@ namespace Unity.SelectionGroupsEditor
             
             //[TODO-sin:2022-01-06] Remove in version 0.7.0 
             //menu.AddItem(new GUIContent("Configure Group"), false, () => SelectionGroupConfigurationDialog.Open(group, this));
-            
-            //[TODO-sin:2022-01-06] Remove this code. The items should be updated automatically as necessary 
-            if(!string.IsNullOrEmpty(group.Query))
-                menu.AddItem(new GUIContent("Update Query Results"), false, () => SelectionGroupManager.ExecuteQuery(group));
-            else
-                menu.AddDisabledItem(new GUIContent("Update Query Results"), false);
-            
-            //[TODO-sin:2021-12-20] Remove in version 0.7.0             
             // if (group.Scope == SelectionGroupDataLocation.Editor)
             // {
             //     menu.AddItem(new GUIContent("Move to Scene"), false, () =>
