@@ -78,6 +78,8 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
     // }
 
     public static void ExecuteQuery(ISelectionGroup group) {
+        //[TODO-sin: 2022-1-6] Execute the method inside the group
+        
         var executor = new GoQLExecutor();
         var code     = GoQL.Parser.Parse(group.Query, out GoQL.ParseResult parseResult);
         if (parseResult == GoQL.ParseResult.OK) {
