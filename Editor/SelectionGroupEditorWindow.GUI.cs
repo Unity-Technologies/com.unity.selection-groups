@@ -86,8 +86,7 @@ namespace Unity.SelectionGroupsEditor
             //Handle clicks on blank areas of window.
             if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
             {
-                Selection.objects = new Object[] { };
-                UpdateActiveSelection();
+                m_selectedGroupMembers.Clear();
                 Event.current.Use();
             }
             GUI.EndScrollView();
@@ -350,13 +349,14 @@ namespace Unity.SelectionGroupsEditor
                             ShowGroupContextMenu(rect, @group.Name, @group);
                             break;
                         case LEFT_MOUSE_BUTTON:
-                            if (evt.clickCount == 1)
+                            if (evt.clickCount == 1) {                                
                                 activeSelectionGroup = @group;
-                            else
+                                Selection.objects    = new Object[] { group.gameObject };
+                            } else
                                 SelectionGroupConfigurationDialog.Open(@group, this);
                             break;
                     }
-
+                    evt.Use();
                     break;
                 case EventType.MouseDrag:
                     DragAndDrop.PrepareStartDrag();
@@ -392,7 +392,6 @@ namespace Unity.SelectionGroupsEditor
                         ShowNotification(new GUIContent(e.Message));
                     }
                     evt.Use();
-
                     break;
             }
         }
