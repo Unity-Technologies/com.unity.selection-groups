@@ -83,6 +83,16 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<ISelectionGroup,
         m_selectedGroupMembers.Clear();
     }
 
+    internal Object[] ConvertMembersToArray() {
+        HashSet<Object> set = new HashSet<Object>();
+        foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in m_selectedGroupMembers) {
+            set.UnionWith(kv.Value);
+        }
+        Object[] arr = new Object[set.Count];
+        set.CopyTo(arr);
+        return arr;
+    }
+
 //----------------------------------------------------------------------------------------------------------------------    
     readonly Dictionary<ISelectionGroup, OrderedSet<Object>> m_selectedGroupMembers 
         = new Dictionary<ISelectionGroup, OrderedSet<Object>>();
