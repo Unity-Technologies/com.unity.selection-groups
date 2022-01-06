@@ -12,10 +12,6 @@ namespace Unity.SelectionGroups.Runtime
     internal interface ISelectionGroup
     {
         /// <summary>
-        /// Sets/gets the name of the SelectionGroup
-        /// </summary>
-        string Name { get; set;  }
-        /// <summary>
         /// Sets/gets the query which will automatically include GameObjects from the hierarchy that match the query into the group.
         /// </summary>
         string Query { get; }
