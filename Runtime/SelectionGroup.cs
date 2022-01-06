@@ -85,8 +85,10 @@ namespace Unity.SelectionGroups.Runtime
         /// <returns>The parse result of the query.</returns>
         public void SetQuery(string q) {
 
-            if (string.IsNullOrEmpty(q))
+            if (string.IsNullOrEmpty(q)) {
+                this.query = q;
                 return;
+            }
             
             executor = new GoQL.GoQLExecutor();
             GoQL.Parser.Parse(q, out m_queryParseResult);
