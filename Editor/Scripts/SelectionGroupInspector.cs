@@ -1,23 +1,27 @@
+using System;
 using System.Reflection;
 using Unity.SelectionGroups;
 using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEngine;
-
+using Unity.FilmInternalUtilities.Editor;
+    
 namespace Unity.SelectionGroupsEditor {
 
 [CustomEditor(typeof(Unity.SelectionGroups.Runtime.SelectionGroup))]
 internal class SelectionGroupInspector : Editor {
     public override void OnInspectorGUI() {
         serializedObject.Update();
+
+        DrawUndoableGUI<string>(m_group, "Group Name",
+            () => EditorGUILayout.TextField("Group Name", m_group.Name),
+            (string groupName) => {
+                m_group.Name = groupName;
+            });
+        
         
         using (var cc = new EditorGUI.ChangeCheckScope())
-        {
-            GUILayout.Label("Selection Group Properties", EditorStyles.largeLabel);
-            
-            EditorGUILayout.TextField("Group Name", m_group.Name);
-            EditorGUILayout.ColorField("Color", m_group.Color);
-            
+        {                        
             //m_group.Name = EditorGUILayout.TextField("Group Name", m_group.Name);
             //m_group.Color = EditorGUILayout.ColorField("Color", m_group.Color);
             // EditorGUILayout.LabelField("GameObject Query");
@@ -106,7 +110,7 @@ internal class SelectionGroupInspector : Editor {
     
 //----------------------------------------------------------------------------------------------------------------------    
     private void OnEnable() {
-        m_group = target as ISelectionGroup;
+        m_group = target as SelectionGroup;
         Undo.undoRedoPerformed -= OnUndoRedo;
         Undo.undoRedoPerformed += OnUndoRedo;
     }
@@ -120,15 +124,28 @@ internal class SelectionGroupInspector : Editor {
         Undo.undoRedoPerformed -= OnUndoRedo;
     }
 
-//----------------------------------------------------------------------------------------------------------------------    
-    void OnGUI()
+//----------------------------------------------------------------------------------------------------------------------
+    //[TODO: 2022-1-6]: Use FilmInternalUtilities
+    private static bool DrawUndoableGUI<V>(UnityEngine.Object target, string undoText,  
+        Func<V> guiFunc, 
+        Action<V> updateFunc)   
     {
+        EditorGUI.BeginChangeCheck();
+        V newValue = guiFunc();
+        if (!EditorGUI.EndChangeCheck()) 
+            return false;
+        
+        Undo.RecordObject(target, undoText);
+        updateFunc(newValue);
+        return true;
     }
 
+    
+    
 //----------------------------------------------------------------------------------------------------------------------    
     
 
-    ISelectionGroup                m_group;
+    SelectionGroup                 m_group;
     
     GoQL.GoQLExecutor              executor = new GoQL.GoQLExecutor();
     string                         message      = string.Empty;
