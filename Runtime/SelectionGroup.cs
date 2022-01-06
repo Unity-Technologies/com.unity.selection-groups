@@ -241,7 +241,7 @@ namespace Unity.SelectionGroups.Runtime
             sgVersion = CUR_SG_VERSION;            
         }
 
-        public void SetOnDestroyedCallback(Action cb) {
+        internal void SetOnDestroyedCallback(Action cb) {
             m_onDestroyedCB = cb;
         }
 
