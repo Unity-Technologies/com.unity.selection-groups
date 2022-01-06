@@ -1,10 +1,9 @@
 using NUnit.Framework;
 using Unity.GoQL;
-using UnityEngine;
 
 namespace Unity.SelectionGroups.Tests 
 {
-    public class GoQLTests
+    internal class GoQLTests
     {
         
         [Test]
