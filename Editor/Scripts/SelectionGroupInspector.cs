@@ -12,17 +12,17 @@ internal class SelectionGroupInspector : Editor {
     public override void OnInspectorGUI() {
         serializedObject.Update();
 
-        bool changed = DrawUndoableGUI(m_group, "Group Name",
+        bool repaintWindow = DrawUndoableGUI(m_group, "Group Name",
             () => EditorGUILayout.TextField("Group Name", m_group.Name),
             (string groupName) => { m_group.Name = groupName; }
         );
         
-        changed = changed || DrawUndoableGUI(m_group, "Group Color",
+        repaintWindow = repaintWindow || DrawUndoableGUI(m_group, "Group Color",
             () => EditorGUILayout.ColorField("Color", m_group.Color),
             (Color groupColor) => { m_group.Color = groupColor; }
         );
 
-        changed = changed || DrawUndoableGUI(m_group, "Group Query",
+        repaintWindow = repaintWindow || DrawUndoableGUI(m_group, "Group Query",
             () => EditorGUILayout.TextField("Group Query", m_group.Query),
             (string query) => {
                 {
@@ -71,11 +71,11 @@ internal class SelectionGroupInspector : Editor {
             var isEnabledNow = EditorGUILayout.ToggleLeft(content, isEnabledPrev, "button");
             if (isEnabledPrev && !isEnabledNow) {
                 m_group.EnabledTools.Remove(attr.toolId);
-                changed = true;
+                repaintWindow = true;
             }
             if (!isEnabledPrev && isEnabledNow) {
                 m_group.EnabledTools.Add(attr.toolId);
-                changed = true;
+                repaintWindow = true;
             }
         }
         GUILayout.EndVertical();
@@ -89,7 +89,7 @@ internal class SelectionGroupInspector : Editor {
         }
         serializedObject.ApplyModifiedProperties();
 
-        if (!changed || !EditorWindow.HasOpenInstances<SelectionGroupEditorWindow>())
+        if (!repaintWindow || !EditorWindow.HasOpenInstances<SelectionGroupEditorWindow>())
             return;
         
         // Repaint SelectionGroupEditorWindow
