@@ -89,6 +89,12 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         m_sceneSelectionGroups.Add(group);
     }
 
+
+    internal void MoveGroup(int prevIndex, int newIndex) {
+        Undo.RegisterCompleteObjectUndo(this, "Move Group");
+        m_sceneSelectionGroups.Move(prevIndex, newIndex);
+    }
+
     //[TODO-sin:2021-12-20] Remove in version 0.7.0 
     // public static void ClearEditorGroups()
     // {

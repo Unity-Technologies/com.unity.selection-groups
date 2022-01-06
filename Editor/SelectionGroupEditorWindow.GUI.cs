@@ -79,13 +79,13 @@ namespace Unity.SelectionGroupsEditor
             {
                 var group = m_groupsToDraw[i];
                 if (group == null) continue;
-                cursor.y += 3;
+                cursor.y += GROUP_HEADER_PADDING; 
                 
                 //early out if this group yMin is below window rect (not visible).
                 if ((cursor.yMin - scroll.y) > position.height) break;
                 var dropRect = cursor;
                 
-                cursor = DrawHeader(cursor, group, out bool showChildren);
+                cursor = DrawHeader(cursor, i, out bool showChildren);
 
                 if (showChildren)
                 {
@@ -172,12 +172,12 @@ namespace Unity.SelectionGroupsEditor
             HandleGroupMemberMouseEvents(rect, group, g, isGroupMemberSelected);            
         }
         
-        Rect DrawHeader(Rect cursor, SelectionGroup group, out bool showChildren) 
-        {           
-            bool isPaint = Event.current.type == EventType.Repaint;            
-            Rect rect = new Rect(cursor) {x = 0, };            
-            bool isAvailableInEditMode = true;
-            GUIContent content = sceneHeaderContent;
+        Rect DrawHeader(Rect cursor, int groupIndex, out bool showChildren) {
+            SelectionGroup group                 = m_groupsToDraw[groupIndex];
+            bool           isPaint               = Event.current.type == EventType.Repaint;
+            Rect           rect                  = new Rect(cursor) {x = 0, };
+            bool           isAvailableInEditMode = true;
+            GUIContent     content               = sceneHeaderContent;
             
             //[TODO-sin:2021-12-20] Remove in version 0.7.0             
             // if (group.Scope == SelectionGroupDataLocation.Editor)
@@ -223,7 +223,7 @@ namespace Unity.SelectionGroupsEditor
                 rect.width        =  labelWidth;
             }
             if(isAvailableInEditMode)
-                HandleHeaderMouseEvents(rect, group);
+                HandleHeaderMouseEvents(rect, groupIndex);
             if (isPaint) 
             {
                 Label.normal.textColor = EditorGUIUtility.isProSkin ? ProTextColor: Color.black;
@@ -350,14 +350,34 @@ namespace Unity.SelectionGroupsEditor
 
 //----------------------------------------------------------------------------------------------------------------------        
         
-        void HandleHeaderMouseEvents(Rect rect, SelectionGroup group)
+        void HandleHeaderMouseEvents(Rect rect, int groupIndex)
         {
             Event evt = Event.current;
             if (!rect.Contains(evt.mousePosition)) 
                 return;
-                
+
+            SelectionGroup group = m_groupsToDraw[groupIndex];
+            
             switch (evt.type)
             {
+                case EventType.Repaint: {
+                    if (DragAndDrop.visualMode == DragAndDropVisualMode.Move) {
+                        //Show lines to indicate where to drop the dragged group
+                        Rect dropRect = rect;
+                        dropRect.height = 2;
+
+                        DragDropPos dropPos = DragDropPos.ABOVE;
+                        float halfHeight = rect.height * 0.5f;
+                        if (evt.mousePosition.y - rect.y > halfHeight) {
+                            dropRect.y += rect.height + GROUP_HEADER_PADDING;
+                            dropPos    =  DragDropPos.BELOW;
+                        }  
+                        DragAndDrop.SetGenericData(DRAG_DROP_POS,dropPos);
+                        
+                        EditorGUI.DrawRect(dropRect, new Color(0.2f, 0.35f, 0.85f, 1f));
+                    }
+                    break;
+                }
                 case EventType.MouseDown:
                     switch (evt.button)
                     {
@@ -381,37 +401,80 @@ namespace Unity.SelectionGroupsEditor
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.objectReferences = new[] { @group.gameObject };
                     DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP);
+                    DragAndDrop.SetGenericData(DRAG_GROUP_INDEX,groupIndex);
                     DragAndDrop.StartDrag(@group.Name);
                     evt.Use();
                     break;
-                case EventType.DragUpdated:
+                case EventType.DragUpdated: {
                     //This event can occur ay any time. VisualMode must be assigned a value other than Rejected, else
                     //the DragPerform event will not be triggered.
                     DragItemType? dragItemType = DragAndDrop.GetGenericData(DRAG_ITEM_TYPE) as DragItemType?;
 
                     bool targetGroupIsAuto  = @group.IsAutoFilled();
-                    bool draggedItemIsGroup = (null != dragItemType && dragItemType == DragItemType.GROUP);
+                    bool draggedItemIsGroup = (dragItemType == DragItemType.GROUP);
 
-                    if (targetGroupIsAuto || draggedItemIsGroup)
+                    if (draggedItemIsGroup) {
+                        DragAndDrop.visualMode = DragAndDropVisualMode.Move;
+                    }
+                    else if (targetGroupIsAuto) { 
+                        //copying/moving members to auto group. Invalid 
                         DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
-                    else
+                    } else {
+                        //copying/moving members to normal  group. Valid 
                         DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+                    }
+                    
                     evt.Use();
                     break;
-                case EventType.DragPerform:
-                    //This will only get called when a valid Drop occurs (determined by the above DragUpdated code)
+                }
+                case EventType.DragPerform: {
+                    //DragPerform will only arrive when a valid Drop occurs (determined by the above DragUpdated code)
                     DragAndDrop.AcceptDrag();
-                    RegisterUndo(@group, "Add Members");
-                    try
-                    {
-                        @group.Add(DragAndDrop.objectReferences);
+
+                    DragItemType? dragItemType = DragAndDrop.GetGenericData(DRAG_ITEM_TYPE) as DragItemType?;
+                    if (!dragItemType.HasValue) {
+                        evt.Use();
+                        break;
                     }
-                    catch (SelectionGroupException e)
-                    {
+
+                    try {
+                        switch (dragItemType.Value) {
+                            case DragItemType.GROUP_MEMBERS: {
+                                RegisterUndo(@group, "Add Members");
+                                @group.Add(DragAndDrop.objectReferences);
+                                break;
+                            }
+                            case DragItemType.GROUP: {
+
+                                Object[] draggedObjects = DragAndDrop.objectReferences;
+                                if (null == draggedObjects || draggedObjects.Length <= 0 || null == draggedObjects[0])
+                                    break;
+
+                                int?         dragGroupIndex = DragAndDrop.GetGenericData(DRAG_GROUP_INDEX) as int?;
+                                DragDropPos? dropPos        = DragAndDrop.GetGenericData(DRAG_DROP_POS) as DragDropPos?;
+                                if (!dragGroupIndex.HasValue || !dropPos.HasValue) {
+                                    break;
+                                }
+
+                                if (dragGroupIndex == groupIndex
+                                    || dropPos == DragDropPos.ABOVE && dragGroupIndex == groupIndex - 1
+                                    || dropPos == DragDropPos.BELOW && dragGroupIndex == groupIndex + 1
+                                   ) {
+                                    break;
+                                }
+
+                                SelectionGroupManager.GetOrCreateInstance().MoveGroup(dragGroupIndex.Value, groupIndex);
+                                Repaint();
+                                break;
+                            }
+                        }
+                    } catch (SelectionGroupException e) {
                         ShowNotification(new GUIContent(e.Message));
                     }
+
                     evt.Use();
                     break;
+                }
             }
         }
 
@@ -553,7 +616,11 @@ namespace Unity.SelectionGroupsEditor
 
         private IList<SelectionGroup> m_groupsToDraw = null;
         
-        private const string DRAG_ITEM_TYPE = "SelectionGroupsWindows";
+        private const string DRAG_ITEM_TYPE   = "SelectionGroupsDragItemType";
+        private const string DRAG_DROP_POS    = "SelectionGroupsDragDropPos";
+        private const string DRAG_GROUP_INDEX = "SelectionGroupsDragGroup";
+        
+        private const int    GROUP_HEADER_PADDING = 3;
 
         private ISelectionGroup m_shiftPivotGroup       = null;
         private Object         m_shiftPivotGroupMember = null;
