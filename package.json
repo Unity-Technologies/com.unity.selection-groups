@@ -9,7 +9,7 @@
     "Sindharta Tanuwijaya <sindharta.tanuwijaya@unity3d.com> (https://github.com/sindharta)"
   ],
   "dependencies": {
-    "com.unity.film-internal-utilities": "0.12.3-preview"
+    "com.unity.film-internal-utilities": "0.12.4-preview"
   }
   
 }
