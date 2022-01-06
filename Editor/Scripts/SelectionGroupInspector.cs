@@ -15,8 +15,8 @@ internal class SelectionGroupInspector : Editor {
         serializedObject.Update();
 
         bool repaintWindow = EditorGUIDrawerUtility.DrawUndoableGUI(m_group, "Group Name",
-            () => EditorGUILayout.TextField("Group Name", m_group.Name),
-            (string groupName) => { m_group.Name = groupName; }
+            () => EditorGUILayout.TextField("Group Name", m_group.GetGroupName()),
+            (string groupName) => { m_group.SetGroupName(groupName); }
         );
         
         repaintWindow = repaintWindow || EditorGUIDrawerUtility.DrawUndoableGUI(m_group, "Group Color",

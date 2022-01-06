@@ -42,10 +42,6 @@ namespace Unity.SelectionGroups.Runtime
         GoQL.GoQLExecutor executor;
         HashSet<string> enabledTools = new HashSet<string>();
         
-        
-        string _name;
-        
-        
         void OnEnable()
         {
             executor = new GoQL.GoQLExecutor();
@@ -54,6 +50,10 @@ namespace Unity.SelectionGroups.Runtime
             this.gameObject.hideFlags = HideFlags.HideInHierarchy;
             this.transform.hideFlags  = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
 
+            if (m_setNameOnEnable) {
+                m_groupName = gameObject.name;
+            }
+            
             if (!m_registerOnEnable) 
                 return;
             SelectionGroupManager.GetOrCreateInstance().Register(this);
@@ -75,20 +75,17 @@ namespace Unity.SelectionGroups.Runtime
         }
 
 
-        /// <inheritdoc/>
-        public string Name
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_name))
-                    _name = this.name;
-                return _name;
-            }
-            set
-            {
-                this.name = value;
-                _name = value;
-            }
+        /// <summary>
+        /// Gets the name of the SelectionGroup
+        /// </summary>
+        public string GetGroupName() => m_groupName;
+
+        /// <summary>
+        /// Sets the name of the SelectionGroup
+        /// </summary>
+        /// <param name="groupName">The group name</param>
+        public void SetGroupName(string groupName) {
+            m_groupName = groupName;
         }
 
         /// <inheritdoc/>
@@ -241,6 +238,10 @@ namespace Unity.SelectionGroups.Runtime
             if (sgVersion < (int) SGVersion.ORDERED_0_6_0) {
                 m_registerOnEnable = true;
             }
+
+            if (sgVersion < (int) SGVersion.NAME_0_6_0) {
+                m_setNameOnEnable = true;
+            }
             
             sgVersion = CUR_SG_VERSION;            
         }
@@ -253,10 +254,14 @@ namespace Unity.SelectionGroups.Runtime
 
 //----------------------------------------------------------------------------------------------------------------------
 
+        [SerializeField] string m_groupName;
+
+        
         private GoQL.ParseResult m_queryParseResult = ParseResult.Empty;       
         
-        private const int  CUR_SG_VERSION     = (int) SGVersion.ORDERED_0_6_0;
+        private const int  CUR_SG_VERSION     = (int) SGVersion.NAME_0_6_0;
         private       bool m_registerOnEnable = false;
+        private       bool m_setNameOnEnable  = false;
 
 #if UNITY_EDITOR        
         private Action m_onDestroyedInEditorCB = null;
@@ -265,7 +270,7 @@ namespace Unity.SelectionGroups.Runtime
         enum SGVersion {
             INITIAL = 1,    //initial
             ORDERED_0_6_0 = 2, //The order of selection groups is maintained by SelectionGroupManager
-
+            NAME_0_6_0 = 3, //Stored the name in the component
         }        
     }
 } //end namespace

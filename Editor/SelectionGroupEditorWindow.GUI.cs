@@ -197,7 +197,7 @@ namespace Unity.SelectionGroupsEditor
             //     content.text = $"{group.Name}";    
             // }
             
-            content.text = $"{group.Name}";
+            content.text = $"{group.GetGroupName()}";
 
             //
             const float FOLDOUT_WIDTH    = 16;
@@ -362,7 +362,7 @@ namespace Unity.SelectionGroupsEditor
                     switch (evt.button)
                     {
                         case RIGHT_MOUSE_BUTTON:
-                            ShowGroupContextMenu(rect, @group.Name, @group);
+                            ShowGroupContextMenu(rect, @group.GetGroupName(), @group);
                             break;
                         case LEFT_MOUSE_BUTTON:
                             if (evt.clickCount == 1) {                                
@@ -381,7 +381,7 @@ namespace Unity.SelectionGroupsEditor
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.objectReferences = new[] { @group.gameObject };
                     DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP);
-                    DragAndDrop.StartDrag(@group.Name);
+                    DragAndDrop.StartDrag(@group.GetGroupName());
                     evt.Use();
                     break;
                 case EventType.DragUpdated:
