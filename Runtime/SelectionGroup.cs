@@ -74,7 +74,6 @@ namespace Unity.SelectionGroups.Runtime
         public string Query
         {
             get => this.query; 
-            set => this.query = value; //[TODO-sin: 2022-1-6] remove setter, or maybe the whole interface
         }
 
         /// <summary>

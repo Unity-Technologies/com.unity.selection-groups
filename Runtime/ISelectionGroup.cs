@@ -18,7 +18,7 @@ namespace Unity.SelectionGroups.Runtime
         /// <summary>
         /// Sets/gets the query which will automatically include GameObjects from the hierarchy that match the query into the group.
         /// </summary>
-        string Query { get; set;  }
+        string Query { get; }
 
         /// <summary>
         /// Gets whether the group is automatically filled

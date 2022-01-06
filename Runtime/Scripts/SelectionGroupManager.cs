@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.FilmInternalUtilities;
 using Unity.GoQL;
@@ -31,22 +32,54 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
     internal IEnumerable<string> GroupNames => m_sceneSelectionGroups.Select(g => g.Name);
 
 
-    internal SelectionGroup CreateSceneSelectionGroup(string name, string query, Color color, IList<Object> members) {
-        GameObject g = new GameObject(name);
+    [Obsolete]
+    internal SelectionGroup CreateSceneSelectionGroup(string groupName, string query, Color color, IList<Object> members) {
+        GameObject g = new GameObject(groupName);
 #if UNITY_EDITOR
         Undo.RegisterCreatedObjectUndo(g, "New Scene Selection Group");
 #endif
         SelectionGroup group = g.AddComponent<SelectionGroup>();
-        group.Name        = name;
-        group.Query       = query;
+        group.Name        = groupName;        
         group.Color       = color;
         group.ShowMembers = true;
-        group.Add(members);
+        group.SetQuery(query);
+
+        if (!group.IsAutoFilled()) {
+            group.Add(members);
+        }
 
         m_sceneSelectionGroups.Add(group);
         return group;
     }
 
+    internal SelectionGroup CreateSceneSelectionGroup(string groupName, Color color, string query) {
+        GameObject g = new GameObject(groupName);
+#if UNITY_EDITOR
+        Undo.RegisterCreatedObjectUndo(g, "New Scene Selection Group");
+#endif
+        SelectionGroup group = g.AddComponent<SelectionGroup>();
+        group.Name = groupName;
+        group.SetQuery(query);
+        group.Color = color;
+        group.ShowMembers = true;
+        m_sceneSelectionGroups.Add(group);
+        return group;
+    }
+
+    internal SelectionGroup CreateSceneSelectionGroup(string groupName, Color color, IList<Object> members) {
+        GameObject g = new GameObject(groupName);
+#if UNITY_EDITOR
+        Undo.RegisterCreatedObjectUndo(g, "New Scene Selection Group");
+#endif
+        SelectionGroup group = g.AddComponent<SelectionGroup>();
+        group.Name        = groupName;
+        group.Color       = color;
+        group.ShowMembers = true;
+        group.Add(members);
+        m_sceneSelectionGroups.Add(group);
+        return group;
+    }
+    
     internal void DeleteSceneSelectionGroup(ISelectionGroup group) {
         //[TODO-sin: 2021-12-24] Simplify this by removing ISelectionGroup interface
         SelectionGroup sceneSelectionGroup = group as SelectionGroup;
