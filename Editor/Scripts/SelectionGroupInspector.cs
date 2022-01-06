@@ -63,44 +63,32 @@ internal class SelectionGroupInspector : Editor {
         // }
 
         
-        //[TODO-sin: 2022-01-06] Update the SelectionGroupEditorWindow immediately
-
+        GUILayout.BeginVertical("box");
+        GUILayout.Label("Enabled Toolbar Buttons", EditorStyles.largeLabel);
+        foreach (MethodInfo i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>()) {
+            SelectionGroupToolAttribute attr = i.GetCustomAttribute<SelectionGroupToolAttribute>();
+            bool isEnabledPrev = m_group.EnabledTools.Contains(attr.toolId);
+            GUIContent content = EditorGUIUtility.IconContent(attr.icon);
+            var isEnabledNow = EditorGUILayout.ToggleLeft(content, isEnabledPrev, "button");
+            if (isEnabledPrev && !isEnabledNow) {
+                m_group.EnabledTools.Remove(attr.toolId);
+            }
+            if (!isEnabledPrev && isEnabledNow) {
+                m_group.EnabledTools.Add(attr.toolId);
+            }
+        }
+        GUILayout.EndVertical();
         
-        using (var cc = new EditorGUI.ChangeCheckScope())
-        {                        
-            //
-            // GUILayout.BeginVertical("box");
-            // GUILayout.Label("Enabled Toolbar Buttons", EditorStyles.largeLabel);
-            // foreach (var i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>())
-            // {
-            //     var attr = i.GetCustomAttribute<SelectionGroupToolAttribute>();
-            //     var enabled = m_group.EnabledTools.Contains(attr.toolId);
-            //     var content = EditorGUIUtility.IconContent(attr.icon);
-            //     var _enabled = EditorGUILayout.ToggleLeft(content, enabled, "button");
-            //     if (enabled && !_enabled)
-            //     {
-            //         m_group.EnabledTools.Remove(attr.toolId);
-            //     }
-            //     if (!enabled && _enabled)
-            //     {
-            //         m_group.EnabledTools.Add(attr.toolId);
-            //     }
-            // }
-            // GUILayout.EndVertical();
-            
-            // showDebug = GUILayout.Toggle(showDebug, "Show Debug Info", "button");
-            // if (showDebug)
-            // {
-            //     if (debugInformation == null) debugInformation = new SelectionGroupDebugInformation(m_group);
-            //     EditorGUILayout.TextArea(debugInformation.text);
-            // }
-            // else
-            // {
-            //     debugInformation = null;
-            // }
+        showDebug = GUILayout.Toggle(showDebug, "Show Debug Info", "button");
+        if (showDebug) {
+            if (debugInformation == null) debugInformation = new SelectionGroupDebugInformation(m_group);
+            EditorGUILayout.TextArea(debugInformation.text);
+        } else {
+            debugInformation = null;
         }
         
         
+        //[TODO-sin: 2022-01-06] Update the SelectionGroupEditorWindow immediately
     }
     
 //----------------------------------------------------------------------------------------------------------------------    
