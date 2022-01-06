@@ -79,7 +79,7 @@ namespace Unity.SelectionGroupsEditor
             {
                 var group = m_groupsToDraw[i];
                 if (group == null) continue;
-                cursor.y += 3;
+                cursor.y += GROUP_HEADER_PADDING; 
                 
                 //early out if this group yMin is below window rect (not visible).
                 if ((cursor.yMin - scroll.y) > position.height) break;
@@ -363,6 +363,14 @@ namespace Unity.SelectionGroupsEditor
                     if (DragAndDrop.visualMode == DragAndDropVisualMode.Move) {
                         Rect dropRect = rect;
                         dropRect.height = 1;
+
+                        //move the order of groups
+                        float halfHeight = rect.height * 0.5f;
+                        if (evt.mousePosition.y - rect.y > halfHeight) {
+                            dropRect.y += rect.height + GROUP_HEADER_PADDING;
+                        }  
+                        
+                        //EditorGUIUtility.singleLineHeight
                         EditorGUI.DrawRect(dropRect, Color.red);
                     }
                     break;
@@ -403,8 +411,6 @@ namespace Unity.SelectionGroupsEditor
 
 
                     if (draggedItemIsGroup) {
-                        //move the order of groups
-                        Debug.Log(rect.y - evt.mousePosition.y);
                         DragAndDrop.visualMode = DragAndDropVisualMode.Move;
                     }
                     else if (targetGroupIsAuto) { 
@@ -581,7 +587,8 @@ namespace Unity.SelectionGroupsEditor
 
         private IList<SelectionGroup> m_groupsToDraw = null;
         
-        private const string DRAG_ITEM_TYPE = "SelectionGroupsWindows";
+        private const string DRAG_ITEM_TYPE       = "SelectionGroupsWindows";
+        private const int    GROUP_HEADER_PADDING = 3;
 
         private ISelectionGroup m_shiftPivotGroup       = null;
         private Object         m_shiftPivotGroupMember = null;
