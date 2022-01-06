@@ -299,7 +299,7 @@ namespace Unity.SelectionGroupsEditor
                 menu.AddDisabledItem(new GUIContent("Clear Group"), false);
             } else {
                 menu.AddItem(new GUIContent("Clear Group"), false, () => {
-                    m_selectedGroupMembers.Clear();
+                    m_selectedGroupMembers.RemoveGroupFromSelection(group);
                     group.Clear();
                 });
             }
@@ -327,7 +327,7 @@ namespace Unity.SelectionGroupsEditor
 
             menu.AddItem(new GUIContent("Delete Group"), false, () =>
             {
-                m_selectedGroupMembers.Clear();
+                m_selectedGroupMembers.RemoveGroupFromSelection(group);
                 SelectionGroupManager.GetOrCreateInstance().DeleteSceneSelectionGroup(group);
             });
             menu.DropDown(rect);
