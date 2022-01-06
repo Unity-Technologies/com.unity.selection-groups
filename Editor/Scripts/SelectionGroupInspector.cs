@@ -12,18 +12,17 @@ internal class SelectionGroupInspector : Editor {
     public override void OnInspectorGUI() {
         serializedObject.Update();
 
-        DrawUndoableGUI(m_group, "Group Name",
+        bool changed = DrawUndoableGUI(m_group, "Group Name",
             () => EditorGUILayout.TextField("Group Name", m_group.Name),
             (string groupName) => { m_group.Name = groupName; }
         );
         
-        DrawUndoableGUI(m_group, "Group Color",
+        changed = changed || DrawUndoableGUI(m_group, "Group Color",
             () => EditorGUILayout.ColorField("Color", m_group.Color),
             (Color groupColor) => { m_group.Color = groupColor; }
         );
-        serializedObject.ApplyModifiedProperties();        
 
-        DrawUndoableGUI(m_group, "Group Query",
+        changed = changed || DrawUndoableGUI(m_group, "Group Query",
             () => EditorGUILayout.TextField("Group Query", m_group.Query),
             (string query) => {
                 {
@@ -41,6 +40,7 @@ internal class SelectionGroupInspector : Editor {
             }
         );
 
+        //Query results
         if (m_group.IsAutoFilled()) {
             GoQL.ParseResult parseResult = m_group.GetLastQueryParseResult();
             
@@ -71,9 +71,11 @@ internal class SelectionGroupInspector : Editor {
             var isEnabledNow = EditorGUILayout.ToggleLeft(content, isEnabledPrev, "button");
             if (isEnabledPrev && !isEnabledNow) {
                 m_group.EnabledTools.Remove(attr.toolId);
+                changed = true;
             }
             if (!isEnabledPrev && isEnabledNow) {
                 m_group.EnabledTools.Add(attr.toolId);
+                changed = true;
             }
         }
         GUILayout.EndVertical();
@@ -85,9 +87,18 @@ internal class SelectionGroupInspector : Editor {
         } else {
             m_debugInformation = null;
         }
+        serializedObject.ApplyModifiedProperties();        
+
+        if (!changed)
+            return;
+
+        // Repaint SelectionGroupEditorWindow
+        if (EditorWindow.HasOpenInstances<SelectionGroupEditorWindow>()) {
+            SelectionGroupEditorWindow window = EditorWindow.GetWindow<SelectionGroupEditorWindow>(
+                utility:false, title:"", focus:false);
+            window.Repaint();
+        }        
         
-        
-        //[TODO-sin: 2022-01-06] Update the SelectionGroupEditorWindow immediately
     }
     
 //----------------------------------------------------------------------------------------------------------------------    
