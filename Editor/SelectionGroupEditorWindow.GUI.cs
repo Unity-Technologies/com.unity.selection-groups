@@ -287,17 +287,21 @@ namespace Unity.SelectionGroupsEditor
             }
         }
 
-        void ShowGroupMemberContextMenu(Rect rect)
+        void ShowGroupMemberContextMenu(Rect rect, ISelectionGroup clickedGroup)
         {
             var menu = new GenericMenu();
             var content = new GUIContent("Remove From Group");
-            menu.AddItem(content, false, () => {
-                foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in m_selectedGroupMembers) {
-                    ISelectionGroup group = kv.Key;
-                    RegisterUndo(group, "Remove Member");
-                    group.Remove(kv.Value);
-                }
-            });
+            if (clickedGroup.IsAutoFilled()) {
+                menu.AddDisabledItem(content,false);
+            } else {
+                menu.AddItem(content, false, () => {
+                    foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in m_selectedGroupMembers) {
+                        ISelectionGroup group = kv.Key;
+                        RegisterUndo(group, "Remove Member");
+                        group.Remove(kv.Value);
+                    }
+                });
+            }
             
             menu.DropDown(rect);
         }
@@ -430,8 +434,8 @@ namespace Unity.SelectionGroupsEditor
                         m_shiftPivotGroupMember = groupMember;
                     }
                     
-                    if (isRightMouseClick && isGroupMemberSelected)                    {
-                        ShowGroupMemberContextMenu(rect);
+                    if (isRightMouseClick && isGroupMemberSelected) {
+                        ShowGroupMemberContextMenu(rect, group);
                         evt.Use();
                     }
 
