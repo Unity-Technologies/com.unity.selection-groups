@@ -401,13 +401,20 @@ namespace Unity.SelectionGroupsEditor
                     bool targetGroupIsAuto  = @group.IsAutoFilled();
                     bool draggedItemIsGroup = (dragItemType == DragItemType.GROUP);
 
-                    if (targetGroupIsAuto)
-                        DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
-                    else if (draggedItemIsGroup) {
+
+                    if (draggedItemIsGroup) {
+                        //move the order of groups
                         Debug.Log(rect.y - evt.mousePosition.y);
                         DragAndDrop.visualMode = DragAndDropVisualMode.Move;
-                    } else
+                    }
+                    else if (targetGroupIsAuto) { 
+                        //copying/moving members to auto group. Invalid 
+                        DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
+                    } else {
+                        //copying/moving members to normal  group. Valid 
                         DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+                    }
+                    
                     evt.Use();
                     break;
                 case EventType.DragPerform:
