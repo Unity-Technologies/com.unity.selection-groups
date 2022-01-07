@@ -65,31 +65,29 @@ namespace Unity.SelectionGroupsEditor
 
         void OnExecuteCommand(Event current)
         {
-            if (m_activeSelectionGroup != null)
-                switch (current.commandName)
-                {
-                    case "SelectAll":
-                        Selection.objects = m_activeSelectionGroup.Members.ToArray();
-                        UpdateActiveSelection();
-                        current.Use();
-                        break;
-                    case "DeselectAll":
-                        Selection.objects = null;
-                        UpdateActiveSelection();
-                        current.Use();
-                        break;
-                    case "InvertSelection":
-                        Selection.objects = new HashSet<Object>(m_activeSelectionGroup.Members).Except(Selection.objects).ToArray();
-                        UpdateActiveSelection();
-                        current.Use();
-                        break;
-                    case "SoftDelete":
-                        m_activeSelectionGroup.Remove(Selection.objects);
-                        Selection.objects = null;
-                        UpdateActiveSelection();
-                        current.Use();
-                        return;
-                }
+            switch (current.commandName)
+            {
+                case "SelectAll":
+                    Selection.objects = m_activeSelectionGroup.Members.ToArray();
+                    UpdateActiveSelection();
+                    current.Use();
+                    break;
+                case "DeselectAll":
+                    Selection.objects = null;
+                    UpdateActiveSelection();
+                    current.Use();
+                    break;
+                case "InvertSelection":
+                    Selection.objects = new HashSet<Object>(m_activeSelectionGroup.Members).Except(Selection.objects).ToArray();
+                    UpdateActiveSelection();
+                    current.Use();
+                    break;
+                case "SoftDelete": //When "Delete button is pressed"
+                    m_activeSelectionGroup.Remove(Selection.objects);
+                    Selection.objects = null;
+                    UpdateActiveSelection();
+                    current.Use();
+                    return;
         }
         
         void OnSelectionChange()
