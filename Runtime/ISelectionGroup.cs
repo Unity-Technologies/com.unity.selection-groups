@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Unity.SelectionGroups.Runtime
+namespace Unity.SelectionGroups
 {
     
     internal interface ISelectionGroupContainer : IEnumerable<ISelectionGroup>

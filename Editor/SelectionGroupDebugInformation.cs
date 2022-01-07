@@ -1,4 +1,4 @@
-﻿using Unity.SelectionGroups.Runtime;
+﻿using Unity.SelectionGroups;
 using UnityEditor;
 
 namespace Unity.SelectionGroups.Editor

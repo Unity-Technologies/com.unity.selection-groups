@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Unity.SelectionGroups;
-using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;

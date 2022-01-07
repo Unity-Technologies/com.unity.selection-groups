@@ -1,7 +1,6 @@
 ﻿using Unity.SelectionGroups;
 using UnityEditor;
 using UnityEngine;
-using Unity.SelectionGroups.Runtime;
 
 namespace Unity.SelectionGroups.Editor
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Object = UnityEngine.Object;
 
-namespace Unity.SelectionGroups.Runtime
+namespace Unity.SelectionGroups
 {
 
 //A class to hold selected members from selected groups

@@ -11,7 +11,7 @@ using Object = UnityEngine.Object;
 using UnityEditor;
 #endif
 
-namespace Unity.SelectionGroups.Runtime {
+namespace Unity.SelectionGroups {
 
 [ExecuteAlways]
 [AddComponentMenu("")]
