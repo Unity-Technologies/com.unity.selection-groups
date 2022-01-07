@@ -68,7 +68,7 @@ namespace Unity.SelectionGroupsEditor
             switch (current.commandName) {
                 case "SelectAll":
                     foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().Groups) {
-                        m_selectedGroupMembers.AddGroupMembersToSelection(group);
+                        m_selectedGroupMembers.AddGroupMembers(group);
                     }
                     UpdateUnityEditorSelectionWithMembers();
                     current.Use();
