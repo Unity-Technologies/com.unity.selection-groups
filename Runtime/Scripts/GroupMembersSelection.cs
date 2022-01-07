@@ -9,6 +9,21 @@ namespace Unity.SelectionGroups.Runtime
 internal class GroupMembersSelection : IEnumerable<KeyValuePair<ISelectionGroup, OrderedSet<Object>>>
 {
 
+    internal GroupMembersSelection() { }
+
+    internal GroupMembersSelection(GroupMembersSelection other) {
+
+        foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in other) {
+            OrderedSet<Object> collection = new OrderedSet<Object>() { };
+            foreach (Object member in kv.Value) {
+                collection.Add(member);
+            }
+
+            m_selectedGroupMembers[kv.Key] = collection;
+        }
+    }
+//----------------------------------------------------------------------------------------------------------------------
+    
     public IEnumerator<KeyValuePair<ISelectionGroup, OrderedSet<Object>>> GetEnumerator() {
         return m_selectedGroupMembers.GetEnumerator();
     }

@@ -65,43 +65,39 @@ namespace Unity.SelectionGroupsEditor
 
         void OnExecuteCommand(Event current)
         {
-            if (m_activeSelectionGroup != null)
-                switch (current.commandName)
-                {
-                    case "SelectAll":
-                        Selection.objects = m_activeSelectionGroup.Members.ToArray();
-                        UpdateActiveSelection();
-                        current.Use();
-                        break;
-                    case "DeselectAll":
-                        Selection.objects = null;
-                        UpdateActiveSelection();
-                        current.Use();
-                        break;
-                    case "InvertSelection":
-                        Selection.objects = new HashSet<Object>(m_activeSelectionGroup.Members).Except(Selection.objects).ToArray();
-                        UpdateActiveSelection();
-                        current.Use();
-                        break;
-                    case "SoftDelete":
-                        m_activeSelectionGroup.Remove(Selection.objects);
-                        Selection.objects = null;
-                        UpdateActiveSelection();
-                        current.Use();
-                        return;
-                }
-        }
-        
-        void OnSelectionChange()
-        {
-            UpdateActiveSelection();
-        }
-
-        void UpdateActiveSelection()
-        {
-            // activeSelection.Clear();
-            // if (Selection.objects != null)
-            //     activeSelection.UnionWith(Selection.objects);
+            switch (current.commandName) {
+                case "SelectAll":
+                    foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().Groups) {
+                        m_selectedGroupMembers.AddGroupMembersToSelection(group);
+                    }
+                    UpdateUnityEditorSelectionWithMembers();
+                    current.Use();
+                    break;
+                case "DeselectAll":
+                    ClearSelectedMembers();
+                    current.Use();
+                    break;
+                case "InvertSelection":
+                    GroupMembersSelection prevSelectedMembers = new GroupMembersSelection(m_selectedGroupMembers);
+                    m_selectedGroupMembers.Clear();
+                    
+                    foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().Groups) {
+                        foreach (Object m in group.Members) {
+                            if (prevSelectedMembers.Contains(group, m))
+                                continue;
+                            m_selectedGroupMembers.AddObjectToSelection(group,m);
+                        }
+                    }
+                    current.Use();
+                    break;
+                case "SoftDelete": //When "Delete button is pressed"
+                    if (null != m_activeSelectionGroup) {
+                        DeleteGroup(m_activeSelectionGroup);
+                    } else {
+                        RemoveSelectedMembersFromGroup();  
+                    }
+                    return;
+            }
         }
 
         void OnValidateCommand(Event current)
@@ -118,8 +114,7 @@ namespace Unity.SelectionGroupsEditor
                     current.Use();
                     return;
                 case "SoftDelete":
-                    if (m_activeSelectionGroup != null)
-                        current.Use();
+                    current.Use();
                     return;
             }
         }
