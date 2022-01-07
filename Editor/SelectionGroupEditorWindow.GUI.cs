@@ -657,7 +657,8 @@ namespace Unity.SelectionGroupsEditor
         private const string DRAG_DROP_POS    = "SelectionGroupsDragDropPos";
         private const string DRAG_GROUP_INDEX = "SelectionGroupsDragGroup";
         
-        private const int    GROUP_HEADER_PADDING = 3;
+        private const   int   GROUP_HEADER_PADDING = 3;
+        static readonly Color HOVER_COLOR          = new Color32(112, 112, 112, 128);
 
         private ISelectionGroup m_shiftPivotGroup       = null;
         private Object         m_shiftPivotGroupMember = null;
