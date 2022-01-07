@@ -462,7 +462,9 @@ namespace Unity.SelectionGroupsEditor
                                     break;
                                 }
 
-                                SelectionGroupManager.GetOrCreateInstance().MoveGroup(dragGroupIndex.Value, groupIndex);
+                                int targetIndex = (DragDropPos.BELOW == dropPos) ? groupIndex +1 : groupIndex;
+
+                                SelectionGroupManager.GetOrCreateInstance().MoveGroup(dragGroupIndex.Value, targetIndex);
                                 Repaint();
                                 break;
                             }
