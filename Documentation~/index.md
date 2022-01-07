@@ -20,14 +20,12 @@ instead of individual **GameObjects**.
    
    ![](images/SelectionGroupMembers.png)
 
-1. Double click the group name, and a configuration dialog box will appear.
+1. Click the group name, and the inspector window will display the following properties:
 
    ![](images/SelectionGroupConfiguration.png)
 
-   The dialog box contains the following properties:
    1. Group name 
    1. Group color
-   1. [Data Location](#data-location)
    1. GameObject Query  
       Specifies a query which will automatically assign **GameObjects** from the hierarchy
       that match the query to the group.  
@@ -40,23 +38,4 @@ instead of individual **GameObjects**.
       1. Lock: to enable or disable the editing of all the **GameObjects** in the group.  
 
       ![](images/SelectionGroupTools.png)
-
-## Data Location
-
-The data of each group can be stored in one of these two locations:
-1. Scene: in a scene (default).  
-   This allows scripts to access the data.
-2. Editor: in an asset file outside scenes.  
-   * Merits: 
-     - allows a decoupling between the groups and the scenes.
-     - enables group sharing among multiple scenes.  
-   * Demerits:
-     - the group data cannot be used by scripts.     
-
-Note that the Selection Group window will only show grouped **GameObjects** 
-that exist in the opened scene.
-
-> When the group data is stored in the Editor, the group saves references to **GameObjects** using 
-> [GlobalObjectId API](https://docs.unity3d.com/ScriptReference/GlobalObjectId.html),
-> which provides project-global object identifiers, into an asset file.
 
