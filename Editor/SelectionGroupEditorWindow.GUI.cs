@@ -223,6 +223,11 @@ namespace Unity.SelectionGroupsEditor
                 rect.x            += FOLDOUT_WIDTH;
                 rect.width        =  labelWidth;
             }
+            
+            //Draw tools first before handling mouse events
+            float toolRightAlignedX = rect.x + rect.width;
+            DrawTools(toolRightAlignedX, rect.y, group);
+            
             if(isAvailableInEditMode)
                 HandleHeaderMouseEvents(rect, groupIndex);
             if (isPaint) 
@@ -230,13 +235,9 @@ namespace Unity.SelectionGroupsEditor
                 Label.normal.textColor = EditorGUIUtility.isProSkin ? ProTextColor: Color.black;
                 GUI.Label(rect, content, Label);
             }
-
-            rect.x += rect.width;
             
-            DrawTools(rect.x, rect.y, group);
-            
-            rect.x     += SEPARATOR_WIDTH;
-            rect.width =  COLOR_WIDTH;
+            rect.x     = toolRightAlignedX + SEPARATOR_WIDTH;
+            rect.width = COLOR_WIDTH;
 
             if(isPaint) EditorGUI.DrawRect(rect, new Color(group.Color.r, group.Color.g, group.Color.b));
 
