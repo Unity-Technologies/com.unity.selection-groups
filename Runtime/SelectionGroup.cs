@@ -111,7 +111,7 @@ namespace Unity.SelectionGroups.Runtime
             
             executor.Code = this.query;
             GameObject[] objects = executor.Execute();
-            SetMembers(objects);
+            SetMembersInternal(objects);
         }
         
 
@@ -160,7 +160,16 @@ namespace Unity.SelectionGroups.Runtime
         }
         
         /// <inheritdoc/>
-        public void SetMembers(IList<Object> objects) 
+        public void SetMembers(IEnumerable<Object> objects) {
+            if (IsAutoFilled()) {
+                Debug.LogWarning($"[SG] Group {Name} is auto-filled. Can't manually set members");
+                return;
+            }
+                
+            SetMembersInternal(objects);
+        }
+
+        private void SetMembersInternal(IEnumerable<Object> objects) 
         {
             members.Clear();
             foreach (var i in objects) 

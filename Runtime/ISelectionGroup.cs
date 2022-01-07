@@ -60,7 +60,7 @@ namespace Unity.SelectionGroups.Runtime
         /// <summary>
         /// Clears and set the members of the SelectionGroup 
         /// </summary>
-        /// <param name="objects">A list of objects to be added</param>
-        void SetMembers(IList<Object> objects);
+        /// <param name="objects">A enumerable collection of objects to be added</param>
+        void SetMembers(IEnumerable<Object> objects);
     }
 }
