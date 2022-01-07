@@ -143,8 +143,13 @@ namespace Unity.SelectionGroupsEditor
             GUIContent content = EditorGUIUtility.ObjectContent(g, g.GetType());
             bool isMouseOver = rect.Contains(e.mousePosition);
 
-            if (isMouseOver)
+            if (isMouseOver) {
                 EditorGUI.DrawRect(rect, HOVER_COLOR);
+                if (m_hoveredGroupMember != g) {
+                    m_hoveredGroupMember = g;
+                    Repaint();
+                }
+            }
 
             bool isGroupMemberSelected = m_selectedGroupMembers.Contains(group, g);
 
@@ -646,6 +651,8 @@ namespace Unity.SelectionGroupsEditor
         readonly GroupMembersSelection m_selectedGroupMembers = new GroupMembersSelection();
 
         private IList<SelectionGroup> m_groupsToDraw = null;
+        private Object m_hoveredGroupMember = null;
+        
         
         private const string DRAG_ITEM_TYPE   = "SelectionGroupsDragItemType";
         private const string DRAG_DROP_POS    = "SelectionGroupsDragDropPos";
