@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
 
-namespace Unity.SelectionGroupsEditor
+namespace Unity.SelectionGroups.Editor
 {
 
     internal partial class SelectionGroupEditorWindow : EditorWindow

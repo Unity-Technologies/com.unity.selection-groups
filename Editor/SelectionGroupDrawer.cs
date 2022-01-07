@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 
 
-namespace Unity.SelectionGroupsEditor
+namespace Unity.SelectionGroups.Editor
 {
     /// <summary>
     /// The editor draw used in the inspector for SelectionGroup properties.

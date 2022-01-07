@@ -3,7 +3,7 @@ using System.Reflection;
 using Unity.SelectionGroups;
 using UnityEditor;
 
-namespace Unity.SelectionGroupsEditor
+namespace Unity.SelectionGroups.Editor
 {
 internal static class SelectionGroupToolAttributeCache {
 

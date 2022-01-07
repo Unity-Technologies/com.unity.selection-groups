@@ -7,7 +7,7 @@ using UnityEditorInternal;
 using UnityEngine;
 
 
-namespace Unity.SelectionGroupsEditor
+namespace Unity.SelectionGroups.Editor
 {
     /// <summary>
     /// The main editor window for working with selection groups.

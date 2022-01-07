@@ -7,10 +7,10 @@ using UnityEditor;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
     
-namespace Unity.SelectionGroupsEditor {
+namespace Unity.SelectionGroups.Editor {
 
 [CustomEditor(typeof(Unity.SelectionGroups.Runtime.SelectionGroup))]
-internal class SelectionGroupInspector : Editor {
+internal class SelectionGroupInspector : UnityEditor.Editor {
     public override void OnInspectorGUI() {
         serializedObject.Update();
 

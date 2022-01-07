@@ -1,5 +1,5 @@
 ﻿
-namespace Unity.SelectionGroupsEditor {
+namespace Unity.SelectionGroups.Editor {
 
 internal enum DragItemType {
     GROUP = 0,
