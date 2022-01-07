@@ -44,19 +44,19 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<ISelectionGroup,
     }
 
     internal void AddGroupMembers(ISelectionGroup group) {
-        AddObjectsToSelection(group, group.Members);
+        AddObjects(group, group.Members);
     }
     
     
     internal void Add(GroupMembersSelection otherSelection) {
         foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in otherSelection) {
             ISelectionGroup group = kv.Key;
-            AddObjectsToSelection(group, kv.Value);
+            AddObjects(group, kv.Value);
         }
     }
     
 
-    private void AddObjectsToSelection(ISelectionGroup group, IEnumerable<Object> objects) {
+    private void AddObjects(ISelectionGroup group, IEnumerable<Object> objects) {
         
         OrderedSet<Object> collection = null;
         if (!m_selectedGroupMembers.ContainsKey(group)) {
