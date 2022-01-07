@@ -315,7 +315,7 @@ namespace Unity.SelectionGroupsEditor
                 menu.AddDisabledItem(new GUIContent("Clear Group"), false);
             } else {
                 menu.AddItem(new GUIContent("Clear Group"), false, () => {
-                    m_selectedGroupMembers.RemoveGroupFromSelection(group);
+                    m_selectedGroupMembers.RemoveGroup(group);
                     group.Clear();
                     UpdateUnityEditorSelectionWithMembers();
                 });
@@ -607,7 +607,7 @@ namespace Unity.SelectionGroupsEditor
 //----------------------------------------------------------------------------------------------------------------------        
 
         private void DeleteGroup(ISelectionGroup group) {
-            m_selectedGroupMembers.RemoveGroupFromSelection(group);
+            m_selectedGroupMembers.RemoveGroup(group);
             SelectionGroupManager.GetOrCreateInstance().DeleteSceneSelectionGroup(group);
             UpdateUnityEditorSelectionWithMembers();
             
