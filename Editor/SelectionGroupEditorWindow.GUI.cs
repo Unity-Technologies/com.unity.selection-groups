@@ -387,6 +387,8 @@ namespace Unity.SelectionGroupsEditor
                                 m_selectedGroupMembers.Clear();
                             }
                             else {
+                                SelectAllGroupMembers(group);
+                                
                                 //[TODO-sin:2022-01-06] Remove in version 0.7.0 
                                 //SelectionGroupConfigurationDialog.Open(@group, this);
                             }
