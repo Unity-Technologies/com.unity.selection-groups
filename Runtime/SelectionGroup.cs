@@ -38,15 +38,8 @@ namespace Unity.SelectionGroups.Runtime
         [HideInInspector][SerializeField] private int sgVersion = CUR_SG_VERSION; 
 #pragma warning restore 414
                 
-
-        List<object> code;
-        GoQL.GoQLExecutor executor;
-                
         void OnEnable()
         {
-            executor = new GoQL.GoQLExecutor();
-            executor.Code = query;
-
             //SelectionGroup won't be selectable in the select popup window if HideInHierarchy is set 
             this.gameObject.hideFlags = HideFlags.None;
             this.transform.hideFlags  = HideFlags.HideInInspector;
@@ -104,7 +97,7 @@ namespace Unity.SelectionGroups.Runtime
         }
 
         internal void UpdateQueryResults() {
-            executor = new GoQL.GoQLExecutor();
+            GoQL.GoQLExecutor executor = new GoQL.GoQLExecutor();
             GoQL.Parser.Parse(this.query, out m_queryParseResult);
             if (m_queryParseResult != GoQL.ParseResult.OK) 
                 return;
