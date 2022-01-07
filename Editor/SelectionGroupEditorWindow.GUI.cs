@@ -316,7 +316,7 @@ namespace Unity.SelectionGroupsEditor
                 menu.AddDisabledItem(new GUIContent("Clear Group"), false);
             } else {
                 menu.AddItem(new GUIContent("Clear Group"), false, () => {
-                    m_selectedGroupMembers.RemoveGroupFromSelection(group);
+                    m_selectedGroupMembers.RemoveGroup(group);
                     group.Clear();
                     UpdateUnityEditorSelectionWithMembers();
                 });
@@ -512,13 +512,13 @@ namespace Unity.SelectionGroupsEditor
                         if (!isShift) {
                             if (!isControl) {
                                 m_selectedGroupMembers.Clear();
-                                m_selectedGroupMembers.AddObjectToSelection(group, groupMember);
+                                m_selectedGroupMembers.AddObject(group, groupMember);
                             }
                             else {
                                 if (!isGroupMemberSelected) {
-                                    m_selectedGroupMembers.AddObjectToSelection(group, groupMember);
+                                    m_selectedGroupMembers.AddObject(group, groupMember);
                                 } else {
-                                    m_selectedGroupMembers.Remove(group, groupMember);
+                                    m_selectedGroupMembers.RemoveObject(group, groupMember);
                                 }
                             }
                         
@@ -587,7 +587,7 @@ namespace Unity.SelectionGroupsEditor
                     
                     if (startAdd) {
                         
-                        ret.AddObjectToSelection(group,m);
+                        ret.AddObject(group,m);
                         if (shouldToggleState)
                             return ret;
                     } else {
@@ -595,7 +595,7 @@ namespace Unity.SelectionGroupsEditor
                             continue;
                         
                         startAdd = true;
-                        ret.AddObjectToSelection(@group,m);
+                        ret.AddObject(@group,m);
 
                     }
                 }
@@ -608,7 +608,7 @@ namespace Unity.SelectionGroupsEditor
 //----------------------------------------------------------------------------------------------------------------------        
 
         private void DeleteGroup(ISelectionGroup group) {
-            m_selectedGroupMembers.RemoveGroupFromSelection(group);
+            m_selectedGroupMembers.RemoveGroup(group);
             SelectionGroupManager.GetOrCreateInstance().DeleteSceneSelectionGroup(group);
             UpdateUnityEditorSelectionWithMembers();
             
@@ -628,7 +628,7 @@ namespace Unity.SelectionGroupsEditor
         }
 
         private void SelectAllGroupMembers(ISelectionGroup group) {
-            m_selectedGroupMembers.AddGroupMembersToSelection(group);
+            m_selectedGroupMembers.AddGroupMembers(group);
             UpdateUnityEditorSelectionWithMembers();
         }
         

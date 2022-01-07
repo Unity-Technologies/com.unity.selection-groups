@@ -34,7 +34,7 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<ISelectionGroup,
     
 //----------------------------------------------------------------------------------------------------------------------
     
-    internal void AddObjectToSelection(ISelectionGroup group, Object member) {
+    internal void AddObject(ISelectionGroup group, Object member) {
         if (!m_selectedGroupMembers.ContainsKey(group)) {
             m_selectedGroupMembers.Add(group, new OrderedSet<Object>(){member});
             return;
@@ -43,20 +43,20 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<ISelectionGroup,
         m_selectedGroupMembers[group].Add(member);
     }
 
-    internal void AddGroupMembersToSelection(ISelectionGroup group) {
-        AddObjectsToSelection(group, group.Members);
+    internal void AddGroupMembers(ISelectionGroup group) {
+        AddObjects(group, group.Members);
     }
     
     
     internal void Add(GroupMembersSelection otherSelection) {
         foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in otherSelection) {
             ISelectionGroup group = kv.Key;
-            AddObjectsToSelection(group, kv.Value);
+            AddObjects(group, kv.Value);
         }
     }
     
 
-    private void AddObjectsToSelection(ISelectionGroup group, IEnumerable<Object> objects) {
+    private void AddObjects(ISelectionGroup group, IEnumerable<Object> objects) {
         
         OrderedSet<Object> collection = null;
         if (!m_selectedGroupMembers.ContainsKey(group)) {
@@ -73,7 +73,7 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<ISelectionGroup,
     }
     
 
-    internal void Remove(ISelectionGroup group, Object member) {
+    internal void RemoveObject(ISelectionGroup group, Object member) {
         if (!m_selectedGroupMembers.ContainsKey(group)) {
             return;
         }
@@ -81,7 +81,7 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<ISelectionGroup,
         m_selectedGroupMembers[group].Remove(member);
     }
 
-    internal void RemoveGroupFromSelection(ISelectionGroup group) {
+    internal void RemoveGroup(ISelectionGroup group) {
         if (!m_selectedGroupMembers.ContainsKey(group)) {
             return;
         }
