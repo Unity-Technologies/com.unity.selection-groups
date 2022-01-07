@@ -455,16 +455,26 @@ namespace Unity.SelectionGroupsEditor
                                     break;
                                 }
 
+                                int srcIndex = dragGroupIndex.Value;
+
                                 if (dragGroupIndex == groupIndex
-                                    || DragDropPos.ABOVE == dropPos && dragGroupIndex == groupIndex - 1
-                                    || DragDropPos.BELOW == dropPos && dragGroupIndex == groupIndex + 1
+                                    || DragDropPos.ABOVE == dropPos && srcIndex == groupIndex - 1
+                                    || DragDropPos.BELOW == dropPos && srcIndex == groupIndex + 1
                                    ) {
                                     break;
                                 }
 
-                                int targetIndex = (DragDropPos.BELOW == dropPos) ? groupIndex +1 : groupIndex;
+                                //Calculate the target new index for the group correctly
+                                int targetIndex = groupIndex;
+                                if (DragDropPos.BELOW == dropPos && targetIndex < srcIndex) {
+                                    ++targetIndex;
+                                }
 
-                                SelectionGroupManager.GetOrCreateInstance().MoveGroup(dragGroupIndex.Value, targetIndex);
+                                if (DragDropPos.ABOVE == dropPos && targetIndex > srcIndex) {
+                                    --targetIndex;
+                                }
+
+                                SelectionGroupManager.GetOrCreateInstance().MoveGroup(srcIndex, targetIndex);
                                 Repaint();
                                 break;
                             }
