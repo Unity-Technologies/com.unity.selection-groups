@@ -51,9 +51,10 @@ namespace Unity.SelectionGroups.Runtime
             executor = new GoQL.GoQLExecutor();
             executor.Code = query;
 
-            this.gameObject.hideFlags = HideFlags.HideInHierarchy;
-            this.transform.hideFlags  = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
-
+            //SelectionGroup won't be selectable in the select popup window if HideInHierarchy is set 
+            this.gameObject.hideFlags = HideFlags.None;
+            this.transform.hideFlags  = HideFlags.HideInInspector;
+            
             if (!m_registerOnEnable) 
                 return;
             SelectionGroupManager.GetOrCreateInstance().Register(this);
