@@ -308,7 +308,7 @@ namespace Unity.SelectionGroupsEditor
         void ShowGroupContextMenu(Rect rect, string groupName, ISelectionGroup group)
         {
             var menu = new GenericMenu();
-            menu.AddItem(new GUIContent("Select All"), false, () => {
+            menu.AddItem(new GUIContent("Select All Group Members"), false, () => {
                 m_selectedGroupMembers.AddGroupMembersToSelection(group);
                 UpdateUnityEditorSelectionWithMembers();
             });
