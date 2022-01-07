@@ -237,7 +237,7 @@ namespace Unity.SelectionGroupsEditor
             rect.x     = toolRightAlignedX + SEPARATOR_WIDTH;
             rect.width = COLOR_WIDTH;
 
-            if(isPaint) EditorGUI.DrawRect(rect, group.Color);
+            EditorGUI.DrawRect(rect, group.Color);
 
             showChildren =  isAvailableInEditMode ? group.ShowMembers : false;
             rect.x = cursor.x;
