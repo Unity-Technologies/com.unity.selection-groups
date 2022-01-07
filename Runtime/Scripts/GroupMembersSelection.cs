@@ -73,7 +73,7 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<ISelectionGroup,
     }
     
 
-    internal void Remove(ISelectionGroup group, Object member) {
+    internal void RemoveObject(ISelectionGroup group, Object member) {
         if (!m_selectedGroupMembers.ContainsKey(group)) {
             return;
         }

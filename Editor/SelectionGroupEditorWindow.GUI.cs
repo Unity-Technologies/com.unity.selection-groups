@@ -517,7 +517,7 @@ namespace Unity.SelectionGroupsEditor
                                 if (!isGroupMemberSelected) {
                                     m_selectedGroupMembers.AddObject(group, groupMember);
                                 } else {
-                                    m_selectedGroupMembers.Remove(group, groupMember);
+                                    m_selectedGroupMembers.RemoveObject(group, groupMember);
                                 }
                             }
                         
