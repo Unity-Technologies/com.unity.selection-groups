@@ -38,9 +38,6 @@ namespace Unity.SelectionGroups.Runtime
         [HideInInspector][SerializeField] private int sgVersion = CUR_SG_VERSION; 
 #pragma warning restore 414
                 
-
-        List<object> code;
-                
         void OnEnable()
         {
             //SelectionGroup won't be selectable in the select popup window if HideInHierarchy is set 
