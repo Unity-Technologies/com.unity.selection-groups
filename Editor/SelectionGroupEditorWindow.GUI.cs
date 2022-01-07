@@ -433,8 +433,7 @@ namespace Unity.SelectionGroupsEditor
 
                     DragItemType? dragItemType = DragAndDrop.GetGenericData(DRAG_ITEM_TYPE) as DragItemType?;
                     if (!dragItemType.HasValue) {
-                        evt.Use();
-                        break;
+                        dragItemType = DragItemType.GROUP_MEMBERS; //receive gameObjects from outside the window
                     }
 
                     try {
