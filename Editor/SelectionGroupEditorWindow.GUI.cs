@@ -308,8 +308,7 @@ namespace Unity.SelectionGroupsEditor
         {
             var menu = new GenericMenu();
             menu.AddItem(new GUIContent("Select All Group Members"), false, () => {
-                m_selectedGroupMembers.AddGroupMembersToSelection(group);
-                UpdateUnityEditorSelectionWithMembers();
+                SelectAllGroupMembers(group);
             });
             menu.AddSeparator(string.Empty);
             if (group.IsAutoFilled()) {
@@ -388,6 +387,8 @@ namespace Unity.SelectionGroupsEditor
                                 m_selectedGroupMembers.Clear();
                             }
                             else {
+                                SelectAllGroupMembers(group);
+                                
                                 //[TODO-sin:2022-01-06] Remove in version 0.7.0 
                                 //SelectionGroupConfigurationDialog.Open(@group, this);
                             }
@@ -622,6 +623,11 @@ namespace Unity.SelectionGroupsEditor
 
         private void ClearSelectedMembers() {
             m_selectedGroupMembers.Clear();
+            UpdateUnityEditorSelectionWithMembers();
+        }
+
+        private void SelectAllGroupMembers(ISelectionGroup group) {
+            m_selectedGroupMembers.AddGroupMembersToSelection(group);
             UpdateUnityEditorSelectionWithMembers();
         }
         
