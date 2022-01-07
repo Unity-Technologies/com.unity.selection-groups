@@ -142,31 +142,32 @@ namespace Unity.SelectionGroupsEditor
             Event e = Event.current;
             GUIContent content = EditorGUIUtility.ObjectContent(g, g.GetType());
             bool isMouseOver = rect.Contains(e.mousePosition);
-            bool isPaint = e.type == EventType.Repaint;
-
-            if (isMouseOver && isPaint)
-                EditorGUI.DrawRect(rect, HOVER_COLOR);
 
             bool isGroupMemberSelected = m_selectedGroupMembers.Contains(group, g);
-
-            if (isPaint) {
-                if (isGroupMemberSelected)
-                    EditorGUI.DrawRect(rect, SELECTION_COLOR);
-
-                if (g.hideFlags.HasFlag(HideFlags.NotEditable)) {
-                    GUIContent icon  = InspectorLock;
-                    Rect irect = rect;
-                    irect.width  = 16;
-                    irect.height = 14;
-                    GUI.DrawTexture(irect, icon.image);
+            if (isGroupMemberSelected)
+                EditorGUI.DrawRect(rect, SELECTION_COLOR);
+            
+            if (isMouseOver) {
+                EditorGUI.DrawRect(rect, HOVER_COLOR);
+                if (m_hoveredGroupMember != g) {
+                    m_hoveredGroupMember = g;
+                    Repaint();
                 }
-
-                rect.x           += 24;
-                bool allowRemove = !group.IsAutoFilled();
-                GUI.contentColor =  allowRemove ? Color.white : Color.Lerp(Color.white, Color.yellow, 0.25f);
-                GUI.Label(rect, content);
-                GUI.contentColor = Color.white;
             }
+
+            if (g.hideFlags.HasFlag(HideFlags.NotEditable)) {
+                GUIContent icon  = InspectorLock;
+                Rect irect = rect;
+                irect.width  = 16;
+                irect.height = 14;
+                GUI.DrawTexture(irect, icon.image);
+            }
+
+            rect.x           += 24;
+            bool allowRemove = !group.IsAutoFilled();
+            GUI.contentColor =  allowRemove ? Color.white : Color.Lerp(Color.white, Color.yellow, 0.25f);
+            GUI.Label(rect, content);
+            GUI.contentColor = Color.white;
             
             HandleGroupMemberMouseEvents(rect, group, g, isGroupMemberSelected);            
         }
@@ -649,12 +650,15 @@ namespace Unity.SelectionGroupsEditor
         readonly GroupMembersSelection m_selectedGroupMembers = new GroupMembersSelection();
 
         private IList<SelectionGroup> m_groupsToDraw = null;
+        private Object m_hoveredGroupMember = null;
+        
         
         private const string DRAG_ITEM_TYPE   = "SelectionGroupsDragItemType";
         private const string DRAG_DROP_POS    = "SelectionGroupsDragDropPos";
         private const string DRAG_GROUP_INDEX = "SelectionGroupsDragGroup";
         
-        private const int    GROUP_HEADER_PADDING = 3;
+        private const   int   GROUP_HEADER_PADDING = 3;
+        static readonly Color HOVER_COLOR          = new Color32(112, 112, 112, 128);
 
         private ISelectionGroup m_shiftPivotGroup       = null;
         private Object         m_shiftPivotGroupMember = null;
