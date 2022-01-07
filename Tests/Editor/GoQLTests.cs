@@ -2,7 +2,7 @@ using NUnit.Framework;
 using Unity.GoQL;
 using UnityEngine;
 
-namespace Tests
+namespace Unity.SelectionGroups.EditorTests
 {
     internal class GoQLTests
     {
