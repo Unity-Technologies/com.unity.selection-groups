@@ -142,31 +142,28 @@ namespace Unity.SelectionGroupsEditor
             Event e = Event.current;
             GUIContent content = EditorGUIUtility.ObjectContent(g, g.GetType());
             bool isMouseOver = rect.Contains(e.mousePosition);
-            bool isPaint = e.type == EventType.Repaint;
 
-            if (isMouseOver && isPaint)
+            if (isMouseOver)
                 EditorGUI.DrawRect(rect, HOVER_COLOR);
 
             bool isGroupMemberSelected = m_selectedGroupMembers.Contains(group, g);
 
-            if (isPaint) {
-                if (isGroupMemberSelected)
-                    EditorGUI.DrawRect(rect, SELECTION_COLOR);
+            if (isGroupMemberSelected)
+                EditorGUI.DrawRect(rect, SELECTION_COLOR);
 
-                if (g.hideFlags.HasFlag(HideFlags.NotEditable)) {
-                    GUIContent icon  = InspectorLock;
-                    Rect irect = rect;
-                    irect.width  = 16;
-                    irect.height = 14;
-                    GUI.DrawTexture(irect, icon.image);
-                }
-
-                rect.x           += 24;
-                bool allowRemove = !group.IsAutoFilled();
-                GUI.contentColor =  allowRemove ? Color.white : Color.Lerp(Color.white, Color.yellow, 0.25f);
-                GUI.Label(rect, content);
-                GUI.contentColor = Color.white;
+            if (g.hideFlags.HasFlag(HideFlags.NotEditable)) {
+                GUIContent icon  = InspectorLock;
+                Rect irect = rect;
+                irect.width  = 16;
+                irect.height = 14;
+                GUI.DrawTexture(irect, icon.image);
             }
+
+            rect.x           += 24;
+            bool allowRemove = !group.IsAutoFilled();
+            GUI.contentColor =  allowRemove ? Color.white : Color.Lerp(Color.white, Color.yellow, 0.25f);
+            GUI.Label(rect, content);
+            GUI.contentColor = Color.white;
             
             HandleGroupMemberMouseEvents(rect, group, g, isGroupMemberSelected);            
         }
