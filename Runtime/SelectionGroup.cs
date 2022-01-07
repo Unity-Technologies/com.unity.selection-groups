@@ -41,11 +41,7 @@ namespace Unity.SelectionGroups.Runtime
         List<object> code;
         GoQL.GoQLExecutor executor;
         HashSet<string> enabledTools = new HashSet<string>();
-        
-        
-        string _name;
-        
-        
+                
         void OnEnable()
         {
             executor = new GoQL.GoQLExecutor();
@@ -79,18 +75,10 @@ namespace Unity.SelectionGroups.Runtime
         /// <inheritdoc/>
         public string Name
         {
-            get
-            {
-                if (string.IsNullOrEmpty(_name))
-                    _name = this.name;
-                return _name;
-            }
-            set
-            {
-                this.name = value;
-                _name = value;
-            }
+            get { return gameObject.name; }
+            set { gameObject.name = value; }
         }
+
 
         /// <inheritdoc/>
         public string Query
