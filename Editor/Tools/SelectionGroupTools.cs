@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using Unity.SelectionGroups.Runtime;
-using Unity.SelectionGroupsEditor;
 
-namespace Unity.SelectionGroups
+namespace Unity.SelectionGroupsEditor
 {
     /// <summary>
     /// This class containes methods which implement the default tools available for selection groups.
