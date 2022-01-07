@@ -99,10 +99,8 @@ namespace Unity.SelectionGroupsEditor
                 group.SetOnDestroyedInEditorCallback(TryRepaint);
             }
             //Handle clicks on blank areas of window.
-            if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
-            {
-                m_selectedGroupMembers.Clear();
-                UpdateUnityEditorSelectionWithMembers();
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 0) {
+                ClearSelectedMembers();
                 Event.current.Use();
             }
             GUI.EndScrollView();
@@ -620,6 +618,12 @@ namespace Unity.SelectionGroupsEditor
                 group.Remove(kv.Value);
             }
         }
+
+        private void ClearSelectedMembers() {
+            m_selectedGroupMembers.Clear();
+            UpdateUnityEditorSelectionWithMembers();
+        }
+        
         
 //----------------------------------------------------------------------------------------------------------------------        
         
