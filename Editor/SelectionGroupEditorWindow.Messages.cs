@@ -85,7 +85,7 @@ namespace Unity.SelectionGroupsEditor
                         foreach (Object m in group.Members) {
                             if (prevSelectedMembers.Contains(group, m))
                                 continue;
-                            m_selectedGroupMembers.AddObjectToSelection(group,m);
+                            m_selectedGroupMembers.AddObject(group,m);
                         }
                     }
                     current.Use();

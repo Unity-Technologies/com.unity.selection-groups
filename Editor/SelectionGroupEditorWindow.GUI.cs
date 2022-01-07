@@ -511,11 +511,11 @@ namespace Unity.SelectionGroupsEditor
                         if (!isShift) {
                             if (!isControl) {
                                 m_selectedGroupMembers.Clear();
-                                m_selectedGroupMembers.AddObjectToSelection(group, groupMember);
+                                m_selectedGroupMembers.AddObject(group, groupMember);
                             }
                             else {
                                 if (!isGroupMemberSelected) {
-                                    m_selectedGroupMembers.AddObjectToSelection(group, groupMember);
+                                    m_selectedGroupMembers.AddObject(group, groupMember);
                                 } else {
                                     m_selectedGroupMembers.Remove(group, groupMember);
                                 }
@@ -586,7 +586,7 @@ namespace Unity.SelectionGroupsEditor
                     
                     if (startAdd) {
                         
-                        ret.AddObjectToSelection(group,m);
+                        ret.AddObject(group,m);
                         if (shouldToggleState)
                             return ret;
                     } else {
@@ -594,7 +594,7 @@ namespace Unity.SelectionGroupsEditor
                             continue;
                         
                         startAdd = true;
-                        ret.AddObjectToSelection(@group,m);
+                        ret.AddObject(@group,m);
 
                     }
                 }
