@@ -2,15 +2,14 @@ using System;
 using System.Reflection;
 using Unity.FilmInternalUtilities.Editor;
 using Unity.SelectionGroups;
-using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
     
-namespace Unity.SelectionGroupsEditor {
+namespace Unity.SelectionGroups.Editor {
 
-[CustomEditor(typeof(Unity.SelectionGroups.Runtime.SelectionGroup))]
-internal class SelectionGroupInspector : Editor {
+[CustomEditor(typeof(SelectionGroups.SelectionGroup))]
+internal class SelectionGroupInspector : UnityEditor.Editor {
     public override void OnInspectorGUI() {
         serializedObject.Update();
 

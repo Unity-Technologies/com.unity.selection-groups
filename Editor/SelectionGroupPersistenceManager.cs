@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using Unity.SelectionGroups;
-using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Unity.SelectionGroupsEditor
+namespace Unity.SelectionGroups.Editor
 {
     /// <summary>
     /// The Editor-only manager for selection groups.

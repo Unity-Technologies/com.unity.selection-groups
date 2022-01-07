@@ -4,13 +4,12 @@ using System.Reflection;
 using JetBrains.Annotations;
 using NUnit.Framework;
 using Unity.SelectionGroups;
-using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
     
 
-namespace Unity.SelectionGroupsEditor
+namespace Unity.SelectionGroups.Editor
 {
 
     internal partial class SelectionGroupEditorWindow : EditorWindow

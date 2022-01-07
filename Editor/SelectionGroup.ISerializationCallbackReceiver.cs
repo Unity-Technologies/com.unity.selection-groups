@@ -1,8 +1,8 @@
 using System.Linq;
-using Unity.SelectionGroups.Runtime;
+using Unity.SelectionGroups;
 using UnityEngine;
 
-namespace Unity.SelectionGroupsEditor
+namespace Unity.SelectionGroups.Editor
 {
 
     //[TODO-sin:2021-12-20] Remove in version 0.7.0 

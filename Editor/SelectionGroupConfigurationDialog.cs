@@ -2,13 +2,12 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Unity.SelectionGroups;
-using Unity.SelectionGroups.Runtime;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Unity.SelectionGroupsEditor
+namespace Unity.SelectionGroups.Editor
 {
     /// <summary>
     /// Implements the configuration dialog in the editor for a selection group. 

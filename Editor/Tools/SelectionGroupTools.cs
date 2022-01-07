@@ -1,9 +1,8 @@
 ﻿using Unity.SelectionGroups;
 using UnityEditor;
 using UnityEngine;
-using Unity.SelectionGroups.Runtime;
 
-namespace Unity.SelectionGroupsEditor
+namespace Unity.SelectionGroups.Editor
 {
     /// <summary>
     /// This class containes methods which implement the default tools available for selection groups.

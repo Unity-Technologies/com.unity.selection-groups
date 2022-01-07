@@ -1,7 +1,7 @@
-﻿using Unity.SelectionGroups.Runtime;
+﻿using Unity.SelectionGroups;
 using UnityEditor;
 
-namespace Unity.SelectionGroupsEditor
+namespace Unity.SelectionGroups.Editor
 {
     class SelectionGroupDebugInformation
     {

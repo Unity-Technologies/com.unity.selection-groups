@@ -1,10 +1,10 @@
 using System.Linq;
-using Unity.SelectionGroups.Runtime;
+using Unity.SelectionGroups;
 using UnityEditor;
 using UnityEngine;
 
 
-namespace Unity.SelectionGroupsEditor
+namespace Unity.SelectionGroups.Editor
 {
     /// <summary>
     /// The editor draw used in the inspector for SelectionGroup properties.
