@@ -626,9 +626,9 @@ namespace Unity.SelectionGroupsEditor
             UpdateUnityEditorSelectionWithMembers();
         }
 
-        private void SelectAllGroupMembers(ISelectionGroup group) {            
+        private void SelectAllGroupMembers(ISelectionGroup group) {
             m_selectedGroupMembers.AddGroupMembers(group);
-            UpdateUnityEditorSelectionWithMembers();            
+            UpdateUnityEditorSelectionWithMembers();
         }
         
         
