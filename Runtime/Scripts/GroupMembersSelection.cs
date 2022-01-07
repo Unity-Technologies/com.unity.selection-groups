@@ -5,6 +5,7 @@ using Object = UnityEngine.Object;
 namespace Unity.SelectionGroups.Runtime
 {
 
+//A class to hold selected members from selected groups
 internal class GroupMembersSelection : IEnumerable<KeyValuePair<ISelectionGroup, OrderedSet<Object>>>
 {
 
@@ -81,6 +82,16 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<ISelectionGroup,
         
     internal void Clear() {
         m_selectedGroupMembers.Clear();
+    }
+
+    internal Object[] ConvertMembersToArray() {
+        HashSet<Object> set = new HashSet<Object>();
+        foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in m_selectedGroupMembers) {
+            set.UnionWith(kv.Value);
+        }
+        Object[] arr = new Object[set.Count];
+        set.CopyTo(arr);
+        return arr;
     }
 
 //----------------------------------------------------------------------------------------------------------------------    
