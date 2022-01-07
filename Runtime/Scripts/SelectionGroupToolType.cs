@@ -1,4 +1,4 @@
-namespace Unity.SelectionGroupsEditor {
+namespace Unity.SelectionGroups {
 
 enum SelectionGroupToolType {
     VISIBILITY = 0,
