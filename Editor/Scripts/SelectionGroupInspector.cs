@@ -19,12 +19,12 @@ internal class SelectionGroupInspector : Editor {
             (string groupName) => { m_group.Name = groupName; }
         );
         
-        repaintWindow = repaintWindow || EditorGUIDrawerUtility.DrawUndoableGUI(m_group, "Group Color",
+        repaintWindow |= EditorGUIDrawerUtility.DrawUndoableGUI(m_group, "Group Color",
             () => EditorGUILayout.ColorField("Color", m_group.Color),
             (Color groupColor) => { m_group.Color = groupColor; }
         );
 
-        repaintWindow = repaintWindow || EditorGUIDrawerUtility.DrawUndoableGUI(m_group, "Group Query",
+        repaintWindow |= EditorGUIDrawerUtility.DrawUndoableGUI(m_group, "Group Query",
             () => EditorGUILayout.TextField("Group Query", m_group.Query),
             (string query) => {
                 {
@@ -68,7 +68,7 @@ internal class SelectionGroupInspector : Editor {
         GUILayout.Label("Enabled Toolbar Buttons", EditorStyles.largeLabel);
         foreach (MethodInfo i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>()) {
             SelectionGroupToolAttribute attr = i.GetCustomAttribute<SelectionGroupToolAttribute>();            
-            repaintWindow = repaintWindow || EditorGUIDrawerUtility.DrawUndoableGUI(m_group, "Group Toolbar",
+            repaintWindow |= EditorGUIDrawerUtility.DrawUndoableGUI(m_group, "Group Toolbar",
                 guiFunc: () => {
                     bool       isEnabledPrev = m_group.GetEditorToolStatus(attr.toolId);
                     GUIContent content       = EditorGUIUtility.IconContent(attr.icon);
