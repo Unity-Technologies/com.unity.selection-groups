@@ -1,17 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Unity.SelectionGroups;
 using UnityEditor;
 using UnityEngine;
 using Unity.SelectionGroups.Runtime;
 
-namespace Unity.SelectionGroups
+namespace Unity.SelectionGroupsEditor
 {
     /// <summary>
     /// This class containes methods which implement the default tools available for selection groups.
     /// </summary>
     public static class SelectionGroupTools
     {
-        [SelectionGroupTool("d_VisibilityOn", "Toggle Visibility", "Show and hide objects in the scene.")]
+        [SelectionGroupTool("d_VisibilityOn", "Show and hide objects in the scene.",(int) SelectionGroupToolType.VISIBILITY)]
         static void ToggleVisibility(ISelectionGroup group)
         {
             foreach (var g in group.Members)
@@ -22,7 +21,7 @@ namespace Unity.SelectionGroups
             }
         }
 
-        [SelectionGroupTool("LockIcon-On", "Toggle Lock", "Enable and disable editing of objects.")]
+        [SelectionGroupTool("LockIcon-On", "Enable and disable editing of objects.",(int) SelectionGroupToolType.LOCK)]
         static void DisableEditing(ISelectionGroup group)
         {
             var isLocked = false;

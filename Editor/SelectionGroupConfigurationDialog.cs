@@ -130,18 +130,19 @@ namespace Unity.SelectionGroupsEditor
                 GUILayout.Label("Enabled Toolbar Buttons", EditorStyles.largeLabel);
                 foreach (var i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>())
                 {
-                    var attr = i.GetCustomAttribute<SelectionGroupToolAttribute>();
-                    var enabled = group.EnabledTools.Contains(attr.toolId);
-                    var content = EditorGUIUtility.IconContent(attr.icon);
-                    var _enabled = EditorGUILayout.ToggleLeft(content, enabled, "button");
-                    if (enabled && !_enabled)
-                    {
-                        group.EnabledTools.Remove(attr.toolId);
-                    }
-                    if (!enabled && _enabled)
-                    {
-                        group.EnabledTools.Add(attr.toolId);
-                    }
+                    //[TODO-sin:2022-01-07] Remove in version 0.7.0                     
+                    // var attr = i.GetCustomAttribute<SelectionGroupToolAttribute>();
+                    // var enabled = group.EnabledTools.Contains(attr.toolId);
+                    // var content = EditorGUIUtility.IconContent(attr.icon);
+                    // var _enabled = EditorGUILayout.ToggleLeft(content, enabled, "button");
+                    // if (enabled && !_enabled)
+                    // {
+                    //     group.EnabledTools.Remove(attr.toolId);
+                    // }
+                    // if (!enabled && _enabled)
+                    // {
+                    //     group.EnabledTools.Add(attr.toolId);
+                    // }
                 }
                 GUILayout.EndVertical();
                 

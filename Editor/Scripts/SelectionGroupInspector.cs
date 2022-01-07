@@ -67,18 +67,17 @@ internal class SelectionGroupInspector : Editor {
         GUILayout.BeginVertical("box");
         GUILayout.Label("Enabled Toolbar Buttons", EditorStyles.largeLabel);
         foreach (MethodInfo i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>()) {
-            SelectionGroupToolAttribute attr = i.GetCustomAttribute<SelectionGroupToolAttribute>();
-            bool isEnabledPrev = m_group.EnabledTools.Contains(attr.toolId);
-            GUIContent content = EditorGUIUtility.IconContent(attr.icon);
-            var isEnabledNow = EditorGUILayout.ToggleLeft(content, isEnabledPrev, "button");
-            if (isEnabledPrev && !isEnabledNow) {
-                m_group.EnabledTools.Remove(attr.toolId);
-                repaintWindow = true;
-            }
-            if (!isEnabledPrev && isEnabledNow) {
-                m_group.EnabledTools.Add(attr.toolId);
-                repaintWindow = true;
-            }
+            SelectionGroupToolAttribute attr = i.GetCustomAttribute<SelectionGroupToolAttribute>();            
+            repaintWindow = repaintWindow || EditorGUIDrawerUtility.DrawUndoableGUI(m_group, "Group Toolbar",
+                guiFunc: () => {
+                    bool       isEnabledPrev = m_group.GetEditorToolStatus(attr.toolId);
+                    GUIContent content       = EditorGUIUtility.IconContent(attr.icon);
+                    return EditorGUILayout.ToggleLeft(content, isEnabledPrev, "button");
+                },
+                updateFunc: (bool toolEnabled) => {
+                    m_group.EnableEditorTool(attr.toolId, toolEnabled);
+                }
+            );
         }
         GUILayout.EndVertical();
         

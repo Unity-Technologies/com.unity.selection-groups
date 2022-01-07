@@ -233,8 +233,7 @@ namespace Unity.SelectionGroupsEditor
 
             rect.x += rect.width;
             
-            if (group.EnabledTools.Count > 0)
-                DrawTools(rect.x, rect.y, group);
+            DrawTools(rect.x, rect.y, group);
             
             rect.x     += SEPARATOR_WIDTH;
             rect.width =  COLOR_WIDTH;
@@ -249,17 +248,20 @@ namespace Unity.SelectionGroupsEditor
         }
 
         
-        void DrawTools(float rightAlignedX, float y, ISelectionGroup group)
+        void DrawTools(float rightAlignedX, float y, SelectionGroup group)
         {
-            Assert.Greater(group.EnabledTools.Count,0);
             const int TOOL_X_DIFF     = 18;
             const int TOOL_HEIGHT     = 18;
-            int numEnabledTools = group.EnabledTools.Count;
 
             Rect rect = new Rect(0, y, TOOL_X_DIFF, TOOL_HEIGHT); 
-            int i    = 0;
+            int enabledToolCounter = 0;
             
-            foreach (string toolId in group.EnabledTools) {
+            for (int toolId = (int)SelectionGroupToolType.MAX-1; toolId >=0; --toolId) {
+                bool toolStatus = group.GetEditorToolStatus(toolId);
+                if (false == toolStatus)
+                    continue;
+            
+                
                 SelectionGroupToolAttribute attr = null;
                 MethodInfo methodInfo  = null;
                 
@@ -271,7 +273,7 @@ namespace Unity.SelectionGroupsEditor
                 GUIContent content = EditorGUIUtility.IconContent(attr.icon);
                 content.tooltip = attr.description;
                 
-                rect.x = rightAlignedX - ((numEnabledTools - i) * TOOL_X_DIFF);
+                rect.x = rightAlignedX - ((enabledToolCounter+1) * TOOL_X_DIFF);
                 if (GUI.Button(rect, content, miniButtonStyle))
                 {
                     try
@@ -284,7 +286,7 @@ namespace Unity.SelectionGroupsEditor
                     }
                 }                
                 
-                ++i;
+                ++enabledToolCounter;
             }
         }
 

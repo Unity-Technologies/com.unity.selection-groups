@@ -21,11 +21,11 @@ internal static class SelectionGroupToolAttributeCache {
     
 //----------------------------------------------------------------------------------------------------------------------
 
-    internal static bool TryGetAttribute(string id, out SelectionGroupToolAttribute attribute) {
+    internal static bool TryGetAttribute(int id, out SelectionGroupToolAttribute attribute) {
         return m_toolAttributeMap.TryGetValue(id, out attribute);            
     }
 
-    internal static bool TryGetMethodInfo(string id, out MethodInfo methodInfo) {
+    internal static bool TryGetMethodInfo(int id, out MethodInfo methodInfo) {
         return m_toolMethodInfoMap.TryGetValue(id, out methodInfo);            
     }
     
@@ -34,8 +34,8 @@ internal static class SelectionGroupToolAttributeCache {
     
     private static readonly TypeCache.MethodCollection m_toolMethods = TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>();        
 
-    private static readonly Dictionary<string, SelectionGroupToolAttribute> m_toolAttributeMap = new Dictionary<string, SelectionGroupToolAttribute>();
-    private static readonly Dictionary<string, MethodInfo> m_toolMethodInfoMap = new Dictionary<string, MethodInfo>();
+    private static readonly Dictionary<int, SelectionGroupToolAttribute> m_toolAttributeMap = new Dictionary<int, SelectionGroupToolAttribute>();
+    private static readonly Dictionary<int, MethodInfo> m_toolMethodInfoMap = new Dictionary<int, MethodInfo>();
     
 
 }

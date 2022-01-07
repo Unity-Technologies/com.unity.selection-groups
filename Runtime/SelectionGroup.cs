@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.GoQL;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
+using UnityEngine.Assertions;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
@@ -41,7 +41,6 @@ namespace Unity.SelectionGroups.Runtime
 
         List<object> code;
         GoQL.GoQLExecutor executor;
-        HashSet<string> enabledTools = new HashSet<string>();
                 
         void OnEnable()
         {
@@ -131,13 +130,13 @@ namespace Unity.SelectionGroups.Runtime
             set => this.color = value;
         }
 
-        /// <inheritdoc/>
-        public HashSet<string> EnabledTools
-        {
-            get => enabledTools;
-            set => enabledTools = value;
-        }
+        internal bool GetEditorToolStatus(int toolID) => m_editorToolsStatus[toolID];
 
+        public void EnableEditorTool(int toolID, bool toolEnabled) {
+            Assert.IsTrue(toolID < (int)SelectionGroupToolType.MAX);
+            m_editorToolsStatus[toolID] = toolEnabled;
+        }
+        
         /// <inheritdoc/>
         public int Count => members.Count;
         /// <inheritdoc/>
@@ -236,8 +235,13 @@ namespace Unity.SelectionGroups.Runtime
             if (sgVersion < (int) SGVersion.ORDERED_0_6_0) {
                 m_registerOnEnable = true;
             }
+
+            //Ensure that we always have the required status elements
+            while (m_editorToolsStatus.Count < (int)SelectionGroupToolType.MAX) {
+                m_editorToolsStatus.Add(false);
+            }
             
-            sgVersion = CUR_SG_VERSION;            
+            sgVersion = CUR_SG_VERSION;
         }
 
 #if UNITY_EDITOR        
@@ -247,6 +251,8 @@ namespace Unity.SelectionGroups.Runtime
 #endif        
 
 //----------------------------------------------------------------------------------------------------------------------
+
+        [SerializeField] List<bool> m_editorToolsStatus = new List<bool>(new bool[(int) SelectionGroupToolType.MAX]);
 
         private GoQL.ParseResult m_queryParseResult = ParseResult.Empty;       
         
