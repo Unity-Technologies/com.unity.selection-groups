@@ -160,7 +160,7 @@ namespace Unity.SelectionGroups.Runtime
         }
         
         /// <inheritdoc/>
-        public void SetMembers(IList<Object> objects) 
+        public void SetMembers(IEnumerable<Object> objects) 
         {
             members.Clear();
             foreach (var i in objects) 
