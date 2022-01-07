@@ -20,7 +20,7 @@ namespace Unity.SelectionGroupsEditor
         void OnEnable()
         {
             titleContent.text = "Selection Groups";
-            wantsMouseMove = false;
+            wantsMouseMove = true;
             
             //[TODO-sin:2021-12-20] Remove in version 0.7.0             
             //editorHeaderContent = EditorGUIUtility.IconContent("d_Project");
