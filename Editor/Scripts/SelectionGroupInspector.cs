@@ -100,18 +100,7 @@ internal class SelectionGroupInspector : Editor {
 //----------------------------------------------------------------------------------------------------------------------    
     private void OnEnable() {
         m_group = target as SelectionGroup;
-        Undo.undoRedoPerformed -= OnUndoRedo;
-        Undo.undoRedoPerformed += OnUndoRedo;
     }
-
-    private void OnUndoRedo() {
-        Repaint();
-    }
-
-    private void OnDisable() {
-        Undo.undoRedoPerformed -= OnUndoRedo;
-    }
-
    
 //----------------------------------------------------------------------------------------------------------------------    
     
