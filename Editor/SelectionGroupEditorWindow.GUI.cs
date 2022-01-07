@@ -456,8 +456,8 @@ namespace Unity.SelectionGroupsEditor
                                 }
 
                                 if (dragGroupIndex == groupIndex
-                                    || dropPos == DragDropPos.ABOVE && dragGroupIndex == groupIndex - 1
-                                    || dropPos == DragDropPos.BELOW && dragGroupIndex == groupIndex + 1
+                                    || DragDropPos.ABOVE == dropPos && dragGroupIndex == groupIndex - 1
+                                    || DragDropPos.BELOW == dropPos && dragGroupIndex == groupIndex + 1
                                    ) {
                                     break;
                                 }
