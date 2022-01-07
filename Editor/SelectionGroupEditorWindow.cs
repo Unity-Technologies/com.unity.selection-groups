@@ -45,7 +45,7 @@ namespace Unity.SelectionGroupsEditor
             //hierarchy change events into a single query update and repaint operation.
             if (performQueryRefresh.HasValue && EditorApplication.timeSinceStartup > performQueryRefresh.Value)
             {
-                SelectionGroupManager.ExecuteSelectionGroupQueries();
+                SelectionGroupManager.UpdateQueryResults();
                 performQueryRefresh = null;
                 Repaint();
             }
