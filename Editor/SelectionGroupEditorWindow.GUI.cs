@@ -298,11 +298,7 @@ namespace Unity.SelectionGroupsEditor
                 menu.AddDisabledItem(content,false);
             } else {
                 menu.AddItem(content, false, () => {
-                    foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in m_selectedGroupMembers) {
-                        ISelectionGroup group = kv.Key;
-                        RegisterUndo(group, "Remove Member");
-                        group.Remove(kv.Value);
-                    }
+                    RemoveSelectedMembersFromGroup();
                 });
             }
             
@@ -615,6 +611,14 @@ namespace Unity.SelectionGroupsEditor
             SelectionGroupManager.GetOrCreateInstance().DeleteSceneSelectionGroup(group);
             UpdateUnityEditorSelectionWithMembers();
             
+        }
+
+        private void RemoveSelectedMembersFromGroup() {
+            foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in m_selectedGroupMembers) {
+                ISelectionGroup group = kv.Key;
+                RegisterUndo(group, "Remove Member");
+                group.Remove(kv.Value);
+            }
         }
         
 //----------------------------------------------------------------------------------------------------------------------        
