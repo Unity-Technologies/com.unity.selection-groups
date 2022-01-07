@@ -143,6 +143,10 @@ namespace Unity.SelectionGroupsEditor
             GUIContent content = EditorGUIUtility.ObjectContent(g, g.GetType());
             bool isMouseOver = rect.Contains(e.mousePosition);
 
+            bool isGroupMemberSelected = m_selectedGroupMembers.Contains(group, g);
+            if (isGroupMemberSelected)
+                EditorGUI.DrawRect(rect, SELECTION_COLOR);
+            
             if (isMouseOver) {
                 EditorGUI.DrawRect(rect, HOVER_COLOR);
                 if (m_hoveredGroupMember != g) {
@@ -150,11 +154,6 @@ namespace Unity.SelectionGroupsEditor
                     Repaint();
                 }
             }
-
-            bool isGroupMemberSelected = m_selectedGroupMembers.Contains(group, g);
-
-            if (isGroupMemberSelected)
-                EditorGUI.DrawRect(rect, SELECTION_COLOR);
 
             if (g.hideFlags.HasFlag(HideFlags.NotEditable)) {
                 GUIContent icon  = InspectorLock;
