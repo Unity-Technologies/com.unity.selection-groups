@@ -41,7 +41,7 @@ namespace Unity.SelectionGroups.Runtime
 
         List<object> code;
         GoQL.GoQLExecutor executor;
-        HashSet<string> enabledTools = new HashSet<string>();
+        HashSet<int> enabledTools = new HashSet<int>();
                 
         void OnEnable()
         {
@@ -132,7 +132,7 @@ namespace Unity.SelectionGroups.Runtime
         }
 
         /// <inheritdoc/>
-        public HashSet<string> EnabledTools
+        public HashSet<int> EnabledTools
         {
             get => enabledTools;
             set => enabledTools = value;

@@ -33,7 +33,7 @@ namespace Unity.SelectionGroups.Runtime
         /// <summary>
         /// Sets/gets the tools enabled in the SelectionGroups window
         /// </summary>
-        HashSet<string> EnabledTools { get; set; }
+        HashSet<int> EnabledTools { get; set; }
         
         /// <summary>
         /// Gets the number of members in this SelectionGroup

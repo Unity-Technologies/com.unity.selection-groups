@@ -259,7 +259,7 @@ namespace Unity.SelectionGroupsEditor
             Rect rect = new Rect(0, y, TOOL_X_DIFF, TOOL_HEIGHT); 
             int i    = 0;
             
-            foreach (string toolId in group.EnabledTools) {
+            foreach (int toolId in group.EnabledTools) {
                 SelectionGroupToolAttribute attr = null;
                 MethodInfo methodInfo  = null;
                 

@@ -21,10 +21,8 @@ namespace Unity.SelectionGroups
         /// The longer description of the tool.
         /// </summary>
         public string description;
-        /// <summary>
-        /// An automatically generated unique ID for the tool
-        /// </summary>
-        public readonly string toolId;
+        
+        public readonly int toolId;
 
         /// <summary>
         /// Create the attribute with icon and text and descrption.
@@ -32,12 +30,12 @@ namespace Unity.SelectionGroups
         /// <param name="icon"></param>
         /// <param name="text"></param>
         /// <param name="description"></param>
-        public SelectionGroupToolAttribute(string icon, string text, string description)
+        public SelectionGroupToolAttribute(string icon, string text, string description, int toolId)
         {
             this.icon = icon;
             this.text = text;
             this.description = description;
-            this.toolId = $"{icon}.{text}.{description}";
+            this.toolId = toolId;
         }
     }
 }
