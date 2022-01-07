@@ -74,7 +74,7 @@ namespace Unity.SelectionGroupsEditor
                     current.Use();
                     break;
                 case "DeselectAll":
-                    Selection.objects = null;
+                    ClearSelectedMembers();
                     current.Use();
                     break;
                 case "InvertSelection":
