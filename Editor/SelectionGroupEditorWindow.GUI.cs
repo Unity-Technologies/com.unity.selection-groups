@@ -345,11 +345,8 @@ namespace Unity.SelectionGroupsEditor
             //     });
             // }
 
-            menu.AddItem(new GUIContent("Delete Group"), false, () =>
-            {
-                m_selectedGroupMembers.RemoveGroupFromSelection(group);
-                SelectionGroupManager.GetOrCreateInstance().DeleteSceneSelectionGroup(group);
-                UpdateUnityEditorSelectionWithMembers();
+            menu.AddItem(new GUIContent("Delete Group"), false, () => {
+                DeleteGroup(group);
             });
             menu.DropDown(rect);
         }
@@ -611,6 +608,15 @@ namespace Unity.SelectionGroupsEditor
             return ret;
         }
 
+//----------------------------------------------------------------------------------------------------------------------        
+
+        private void DeleteGroup(ISelectionGroup group) {
+            m_selectedGroupMembers.RemoveGroupFromSelection(group);
+            SelectionGroupManager.GetOrCreateInstance().DeleteSceneSelectionGroup(group);
+            UpdateUnityEditorSelectionWithMembers();
+            
+        }
+        
 //----------------------------------------------------------------------------------------------------------------------        
         
         private void SetUnityEditorSelection(SelectionGroup group) {
