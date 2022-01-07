@@ -78,8 +78,16 @@ namespace Unity.SelectionGroupsEditor
                     current.Use();
                     break;
                 case "InvertSelection":
-                    Selection.objects = new HashSet<Object>(m_activeSelectionGroup.Members).Except(Selection.objects)
-                        .ToArray();
+                    GroupMembersSelection prevSelectedMembers = new GroupMembersSelection(m_selectedGroupMembers);
+                    m_selectedGroupMembers.Clear();
+                    
+                    foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().Groups) {
+                        foreach (Object m in group.Members) {
+                            if (prevSelectedMembers.Contains(group, m))
+                                continue;
+                            m_selectedGroupMembers.AddObjectToSelection(group,m);
+                        }
+                    }
                     current.Use();
                     break;
                 case "SoftDelete": //When "Delete button is pressed"
