@@ -51,17 +51,7 @@ namespace Unity.SelectionGroups
         }
 
         private void OnDestroy() {
-            
-            
-#if UNITY_EDITOR
-            GameObject curGameObject = this.gameObject;
-            EditorApplication.delayCall += ()=> {
-                SelectionGroupManager.GetOrCreateInstance().DeleteGroup(this);
-                m_onDestroyedInEditorCB?.Invoke();
-            };
-#else            
-            SelectionGroupManager.GetOrCreateInstance().DeleteGroup(this);
-#endif
+            SelectionGroupManager.GetOrCreateInstance().Unregister(this);
         }
 
 
