@@ -12,7 +12,7 @@ internal class SelectionGroupEditorTests {
     
     [UnityTest]
     public IEnumerator CreateEmptyGroupAndUndo() {
-        SelectionGroupManager groupManager = SelectionGroupTestsUtility.GetAndInitGroupManager();
+        SelectionGroupManager groupManager = TestUtility.GetAndInitGroupManager();
         SelectionGroup        group        = groupManager.CreateSceneSelectionGroup("TestGroup", Color.green);
         Assert.IsNotNull(group);
         Assert.AreEqual(1, groupManager.Groups.Count);

@@ -37,6 +37,11 @@ internal static class TestUtility
     }
     
     
+    internal static SelectionGroupManager GetAndInitGroupManager() {
+        SelectionGroupManager groupManager = SelectionGroupManager.GetOrCreateInstance();
+        groupManager.ClearGroups();
+        return groupManager;
+    }    
 
 
 }
