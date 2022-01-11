@@ -6,7 +6,33 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [0.6.0-preview] - 2021-12-29
 
-TBD
+### Added
+* feat: allow manual reordering of groups in SelectionGroupEditor window
+* feat: additional mouse handling for members in the SelectionGroupEditorWindow (Ctrl, Ctrl+Shift)
+* feat: double click on the group to select all its members 
+* feat: serialize editor tools settings for SelectionGroups 
+
+### Changed
+* change: show SelectionGroup configuration in the inspector window
+* change the handling of "SelectAll", "SelectAll", "InvertSelection", "SoftDelete" commands]
+* change: reduce the width of group color in SelectionGroupEditor window
+* change: try to assign a different name when adding a new group 
+* rename namespaces
+* deps: update dependency to com.unity.film-internal-utilities@0.12.4-preview
+
+### Fixed
+* fix: keep the order of SelectionGroups
+* fix: display group color using its alpha as well
+* fix: smoothen mouse hovering in the SelectionGroup window
+* fix: disable "Remove From Group" context when clicking on auto-filled groups
+* fix: destroy GameObject when its SelectionGroup component is destroyed 
+* fix: hide transform properties of SelectionGroup in the inspector 
+* fix: prevent adding SelectionGroup and SelectionGroupManager components manually
+
+### Removed
+* remove: EditorSelectionGroup (editor mode)
+* remove "update query results" context menu
+* remove SelectionGroupConfigurationDialog
 
 ## [0.5.5-preview] - 2021-11-19
 
