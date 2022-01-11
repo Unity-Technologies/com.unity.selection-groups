@@ -382,11 +382,7 @@ namespace Unity.SelectionGroups.Editor
                             ShowGroupContextMenu(rect, @group.Name, @group);
                             break;
                         case LEFT_MOUSE_BUTTON:
-                            if (evt.clickCount == 1) {                                
-                                SetUnityEditorSelection(group);
-                                m_selectedGroupMembers.Clear();
-                            }
-                            else {
+                            if (evt.clickCount >1) {
                                 SelectAllGroupMembers(group);
                                 
                                 //[TODO-sin:2022-01-06] Remove in version 0.7.0 
@@ -396,6 +392,18 @@ namespace Unity.SelectionGroups.Editor
                     }
                     evt.Use();
                     break;
+                case EventType.MouseUp:
+                    switch (evt.button) {
+                        case LEFT_MOUSE_BUTTON:
+                            if (evt.clickCount == 1) {
+                                SetUnityEditorSelection(group);
+                                m_selectedGroupMembers.Clear();
+                            }
+                            break;
+                    }
+                    evt.Use();
+                    break;
+                
                 case EventType.MouseDrag:
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.objectReferences = new[] { @group.gameObject };
