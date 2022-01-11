@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unity.FilmInternalUtilities;
-using Unity.GoQL;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Object = UnityEngine.Object;
@@ -118,7 +117,9 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
     
 
     internal void MoveGroup(int prevIndex, int newIndex) {
+#if UNITY_EDITOR
         Undo.RegisterCompleteObjectUndo(this, "Move Group");
+#endif
         m_sceneSelectionGroups.Move(prevIndex, newIndex);
     }
 
