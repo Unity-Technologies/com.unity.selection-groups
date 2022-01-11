@@ -4,7 +4,13 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [0.6.0-preview] - 2021-12-29
+## [0.6.1-preview] - 2022-01-11
+
+### Fixed
+* fix: show the group in the inspector during mouse up event
+* fix: deleting a group gameObject didn't clean up the bookkeeping
+
+## [0.6.0-preview] - 2022-01-07
 
 ### Added
 * feat: allow manual reordering of groups in SelectionGroupEditor window
