@@ -88,7 +88,6 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
             return;
 
         FilmInternalUtilities.ObjectUtility.Destroy(sceneSelectionGroup.gameObject, forceImmediate: true);
-
         m_sceneSelectionGroups.Remove(sceneSelectionGroup);
     }
 
@@ -97,6 +96,10 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         m_sceneSelectionGroups.Add(group);
     }
 
+    internal void Unregister(SelectionGroup group) {
+        m_sceneSelectionGroups.Remove(group);
+    }
+    
 
     internal void MoveGroup(int prevIndex, int newIndex) {
         Undo.RegisterCompleteObjectUndo(this, "Move Group");
