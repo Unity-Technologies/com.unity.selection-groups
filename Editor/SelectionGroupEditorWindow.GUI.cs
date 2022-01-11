@@ -382,7 +382,8 @@ namespace Unity.SelectionGroups.Editor
                             ShowGroupContextMenu(rect, @group.Name, @group);
                             break;
                         case LEFT_MOUSE_BUTTON:
-                            if (evt.clickCount >1) {
+                            m_leftMouseWasDoubleClicked = evt.clickCount > 1;
+                            if (m_leftMouseWasDoubleClicked) {
                                 SelectAllGroupMembers(group);
                                 
                                 //[TODO-sin:2022-01-06] Remove in version 0.7.0 
@@ -395,7 +396,7 @@ namespace Unity.SelectionGroups.Editor
                 case EventType.MouseUp:
                     switch (evt.button) {
                         case LEFT_MOUSE_BUTTON:
-                            if (evt.clickCount == 1) {
+                            if (!m_leftMouseWasDoubleClicked) {
                                 SetUnityEditorSelection(group);
                                 m_selectedGroupMembers.Clear();
                             }
@@ -679,7 +680,9 @@ namespace Unity.SelectionGroups.Editor
         static readonly Color HOVER_COLOR          = new Color32(112, 112, 112, 128);
 
         private ISelectionGroup m_shiftPivotGroup       = null;
-        private Object         m_shiftPivotGroupMember = null;
+        private Object          m_shiftPivotGroupMember = null;
+        
+        private bool m_leftMouseWasDoubleClicked = false;
 
     }
 } //end namespace
