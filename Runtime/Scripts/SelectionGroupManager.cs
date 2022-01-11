@@ -78,25 +78,44 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         group.ShowMembers = true; //[TODO-sin: 2022-1-6] This is always true. Maybe we can move it in the constructor?
         return group;
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+    
+    internal void ClearGroups() {
+        int numGroups = m_sceneSelectionGroups.Count;
+        for (int i = numGroups - 1; i >= 0; --i) {
+            SelectionGroup g = m_sceneSelectionGroups[i];
+            if (null == g)
+                continue;
+            
+            FilmInternalUtilities.ObjectUtility.Destroy(g.gameObject, forceImmediate: true);
+        }
+        m_sceneSelectionGroups.Clear();
+    }
         
     
     
-    internal void DeleteSceneSelectionGroup(ISelectionGroup group) {
+    internal void DeleteGroup(ISelectionGroup group) {
         //[TODO-sin: 2021-12-24] Simplify this by removing ISelectionGroup interface
         SelectionGroup sceneSelectionGroup = group as SelectionGroup;
         if (null == sceneSelectionGroup)
             return;
 
         FilmInternalUtilities.ObjectUtility.Destroy(sceneSelectionGroup.gameObject, forceImmediate: true);
-
         m_sceneSelectionGroups.Remove(sceneSelectionGroup);
     }
+    
+//----------------------------------------------------------------------------------------------------------------------
 
     internal void Register(SelectionGroup group) {
         Assert.IsNotNull(group);
         m_sceneSelectionGroups.Add(group);
     }
 
+    internal void Unregister(SelectionGroup group) {
+        m_sceneSelectionGroups.Remove(group);
+    }
+    
 
     internal void MoveGroup(int prevIndex, int newIndex) {
         Undo.RegisterCompleteObjectUndo(this, "Move Group");

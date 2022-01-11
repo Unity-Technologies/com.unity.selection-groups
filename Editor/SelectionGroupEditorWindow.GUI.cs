@@ -619,7 +619,7 @@ namespace Unity.SelectionGroups.Editor
 
         private void DeleteGroup(ISelectionGroup group) {
             m_selectedGroupMembers.RemoveGroup(group);
-            SelectionGroupManager.GetOrCreateInstance().DeleteSceneSelectionGroup(group);
+            SelectionGroupManager.GetOrCreateInstance().DeleteGroup(group);
             UpdateUnityEditorSelectionWithMembers();
             
         }
