@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unity.FilmInternalUtilities;
-using Unity.GoQL;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Object = UnityEngine.Object;
@@ -100,8 +99,13 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         SelectionGroup sceneSelectionGroup = group as SelectionGroup;
         if (null == sceneSelectionGroup)
             return;
-
-        FilmInternalUtilities.ObjectUtility.Destroy(sceneSelectionGroup.gameObject, forceImmediate: true);
+        
+#if UNITY_EDITOR
+        Undo.RegisterCompleteObjectUndo(this, "Delete Group");
+        Undo.DestroyObjectImmediate(sceneSelectionGroup.gameObject);
+#else
+        DestroyImmediate(sceneSelectionGroup,gameObject);
+#endif
         m_sceneSelectionGroups.Remove(sceneSelectionGroup);
     }
     
@@ -118,7 +122,9 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
     
 
     internal void MoveGroup(int prevIndex, int newIndex) {
+#if UNITY_EDITOR
         Undo.RegisterCompleteObjectUndo(this, "Move Group");
+#endif
         m_sceneSelectionGroups.Move(prevIndex, newIndex);
     }
 
