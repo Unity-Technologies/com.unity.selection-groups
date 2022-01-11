@@ -100,6 +100,7 @@ namespace Unity.SelectionGroups.Editor
             //Handle clicks on blank areas of window.
             if (Event.current.type == EventType.MouseDown && Event.current.button == 0) {
                 ClearSelectedMembers();
+                SetUnityEditorSelection(null);
                 Event.current.Use();
             }
             GUI.EndScrollView();
