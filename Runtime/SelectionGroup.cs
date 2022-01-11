@@ -56,11 +56,11 @@ namespace Unity.SelectionGroups
 #if UNITY_EDITOR
             GameObject curGameObject = this.gameObject;
             EditorApplication.delayCall += ()=> {
-                SelectionGroupManager.GetOrCreateInstance().DeleteSceneSelectionGroup(this);
+                SelectionGroupManager.GetOrCreateInstance().DeleteGroup(this);
                 m_onDestroyedInEditorCB?.Invoke();
             };
 #else            
-            SelectionGroupManager.GetOrCreateInstance().DeleteSceneSelectionGroup(this);
+            SelectionGroupManager.GetOrCreateInstance().DeleteGroup(this);
 #endif
         }
 
