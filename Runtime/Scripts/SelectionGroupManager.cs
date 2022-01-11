@@ -99,8 +99,13 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         SelectionGroup sceneSelectionGroup = group as SelectionGroup;
         if (null == sceneSelectionGroup)
             return;
-
-        FilmInternalUtilities.ObjectUtility.Destroy(sceneSelectionGroup.gameObject, forceImmediate: true);
+        
+#if UNITY_EDITOR
+        Undo.RegisterCompleteObjectUndo(this, "Delete Group");
+        Undo.DestroyObjectImmediate(sceneSelectionGroup.gameObject);
+#else
+        DestroyImmediate(sceneSelectionGroup,gameObject);
+#endif
         m_sceneSelectionGroups.Remove(sceneSelectionGroup);
     }
     
