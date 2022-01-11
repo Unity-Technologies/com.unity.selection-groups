@@ -1,7 +1,7 @@
 ﻿using Unity.SelectionGroups;
 using UnityEngine;
 
-public class GroupWrapper : MonoBehaviour {
+public class GroupReference : MonoBehaviour {
     
     [SerializeField] SelectionGroup m_targetGroup;
 }
