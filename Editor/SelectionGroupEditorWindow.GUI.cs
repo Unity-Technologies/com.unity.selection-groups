@@ -100,6 +100,7 @@ namespace Unity.SelectionGroups.Editor
             //Handle clicks on blank areas of window.
             if (Event.current.type == EventType.MouseDown && Event.current.button == 0) {
                 ClearSelectedMembers();
+                SetUnityEditorSelection(null);
                 Event.current.Use();
             }
             GUI.EndScrollView();
@@ -406,6 +407,9 @@ namespace Unity.SelectionGroups.Editor
                     break;
                 
                 case EventType.MouseDrag:
+                    if ((SelectionGroup) m_activeSelectionGroup != group)
+                        break;
+                    
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.objectReferences = new[] { @group.gameObject };
                     DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP);
