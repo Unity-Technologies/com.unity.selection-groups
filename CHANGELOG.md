@@ -4,6 +4,14 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.6.2-preview] - 2022-01-11
+
+### Fixed
+* fix: undo deleting a group didn't work 
+* fix: make sure that dragging groups is preceded by selecting the group to drag
+* fix: closing a scene should not unregister groups
+* fix: double clicking to select all members was broken 
+
 ## [0.6.1-preview] - 2022-01-11
 
 ### Fixed
