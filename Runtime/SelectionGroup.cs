@@ -51,6 +51,9 @@ namespace Unity.SelectionGroups
         }
 
         private void OnDestroy() {
+            //Check if the gameObject/component was deleted, instead of scene closure
+            if (!gameObject.scene.isLoaded) 
+                return;
             SelectionGroupManager.GetOrCreateInstance().Unregister(this);
         }
 
