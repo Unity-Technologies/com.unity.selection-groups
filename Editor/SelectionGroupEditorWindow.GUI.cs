@@ -406,7 +406,7 @@ namespace Unity.SelectionGroups.Editor
                     break;
                 
                 case EventType.MouseDrag:
-                    if (null == m_activeSelectionGroup)
+                    if ((SelectionGroup) m_activeSelectionGroup != group)
                         break;
                     
                     DragAndDrop.PrepareStartDrag();
