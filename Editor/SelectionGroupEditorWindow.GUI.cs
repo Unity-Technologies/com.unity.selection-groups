@@ -406,6 +406,9 @@ namespace Unity.SelectionGroups.Editor
                     break;
                 
                 case EventType.MouseDrag:
+                    if (null == m_activeSelectionGroup)
+                        break;
+                    
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.objectReferences = new[] { @group.gameObject };
                     DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP);
