@@ -497,7 +497,7 @@ namespace Unity.SelectionGroups.Editor
 
                     evt.Use();
                     break;
-                }                
+                }
             }
         }
 
@@ -581,7 +581,7 @@ namespace Unity.SelectionGroups.Editor
                     string dragText = numDraggedObjects > 1 ? objects[0].name + " ..." : objects[0].name;                        
                     DragAndDrop.StartDrag(dragText);
                     evt.Use();
-                    break;                
+                    break;
             }
         }
         
