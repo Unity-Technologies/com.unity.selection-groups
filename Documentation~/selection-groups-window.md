@@ -1,12 +1,6 @@
 # The Selection Groups Window
 
-- [Group members](#group-members)  
-  - [Adding Group Members](#adding-group-members)
-  - [Removing Group Members](#removing-group-members)
-  - [Selecting Group Members](#selecting-group-members)
-
----
-![](images/window/Overview.png)
+![](images/SelectionGroupsWindow.png)
 
 The Selection Groups window shows all groups and their group members in the scene.    
 We can do the following operations in the window.
