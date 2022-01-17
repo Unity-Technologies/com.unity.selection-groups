@@ -38,8 +38,8 @@ namespace Unity.SelectionGroups.Editor
             {
                 Profiler.BeginSample("Selection Groups Editor Window");
                 
-                var e = Event.current;
-                if (e.type == EventType.Layout) return;
+                Event evt = Event.current;
+                if (evt.type == EventType.Layout) return;
                 
                 SetupStyles();
                 DrawGUI();
@@ -52,6 +52,17 @@ namespace Unity.SelectionGroups.Editor
                     case EventType.ExecuteCommand:
                         OnExecuteCommand(Event.current);
                         break;
+                    case EventType.KeyDown: {
+                        if (Event.current.keyCode == (KeyCode.Delete)) {
+                            if (null != m_activeSelectionGroup) {
+                                DeleteGroup(m_activeSelectionGroup);
+                            } else {
+                                RemoveSelectedMembersFromGroup();  
+                            }
+                            evt.Use();
+                        }
+                        break;
+                    }                
                 }
             }
             finally
