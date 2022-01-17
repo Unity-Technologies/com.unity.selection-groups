@@ -12,12 +12,12 @@ Please refer to the [installation](installation.md) page to install Selection Gr
 
 ## Getting Started
 
-1. Open the Selection Groups window via Window > General > Selection Groups.  
+1. Open the [Selection Groups window](selection-groups-window.md) via Window > General > Selection Groups.  
    We recommend to dock this window next to the Hierarchy window for easier member assignment.   
 
    ![](images/SelectionGroupsWindowNextToHierarchy.png)
 
-1. Click “Add Group” in the Selection Groups window, and a new item will appear inside the window.   
+1. Click “Add Group” in the [Selection Groups window](selection-groups-window.md), and a new item will appear inside the window.   
 1. Drag some **GameObjects** from the hierarchy, or assets from the Project window. 
    
    ![](images/SelectionGroupMembers.png)
