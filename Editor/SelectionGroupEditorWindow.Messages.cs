@@ -89,13 +89,6 @@ namespace Unity.SelectionGroups.Editor
                     }
                     current.Use();
                     break;
-                case "SoftDelete": //When "Delete button is pressed"
-                    if (null != m_activeSelectionGroup) {
-                        DeleteGroup(m_activeSelectionGroup);
-                    } else {
-                        RemoveSelectedMembersFromGroup();  
-                    }
-                    return;
             }
         }
 
@@ -110,9 +103,6 @@ namespace Unity.SelectionGroups.Editor
                     current.Use();
                     return;
                 case "InvertSelection":
-                    current.Use();
-                    return;
-                case "SoftDelete":
                     current.Use();
                     return;
             }
