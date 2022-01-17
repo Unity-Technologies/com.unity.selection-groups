@@ -8,6 +8,8 @@ allowing to group a number of **GameObjects** under a common name.
 This way, we can do operations on these groups, 
 instead of individual **GameObjects**.
 
+Please refer to the [installation](installation.md) page to install Selection Groups package.
+
 ## Getting Started
 
 1. Open the Selection Groups window via Window > General > Selection Groups.  
