@@ -19,6 +19,6 @@ when clicking on a group member.
 
 |**Key**  |**Use** |
 |:---                    |:---|
-| Ctrl | Add the group member to the current selection. |
-| Ctrl+Shift | add group members from the last selected member to the clicked member into the current selection.|
+| Ctrl | Add the group member into the current selection. |
+| Ctrl+Shift | Add group members from the last selected member to the clicked member into the current selection.|
 
