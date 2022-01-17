@@ -11,9 +11,9 @@ instead of individual **GameObjects**.
 ## Getting Started
 
 1. Open the Selection Groups window via Window > General > Selection Groups.  
-   We recommend to dock this window next to the Hierarchy window.   
+   We recommend to dock this window next to the Hierarchy window for easier member assignment.   
 
-   ![](images/SelectionGroupsWindow.png)
+   ![](images/SelectionGroupsWindowNextToHierarchy.png)
 
 1. Click “Add Group” in the Selection Groups window, and a new item will appear inside the window.   
 1. Drag some **GameObjects** from the hierarchy, or assets from the Project window. 
