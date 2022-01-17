@@ -24,5 +24,7 @@ when clicking on a group member.
 
 
 > **Groups with Query:**  
-> The members of a group which has its **GameObject Query** property set will be shown in yellow, 
+> The members of a group which has its **GameObject Query** 
+> ([GoQL](https://github.com/Unity-Technologies/com.unity.selection-groups/blob/doc_window/Documentation~/goql.md)) 
+> property set will be shown in yellow, 
 > and both adding and removing members from this group are not allowed.  
