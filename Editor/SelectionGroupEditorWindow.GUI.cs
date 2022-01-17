@@ -498,6 +498,14 @@ namespace Unity.SelectionGroups.Editor
                     evt.Use();
                     break;
                 }
+                case EventType.KeyDown: {
+                    if (Event.current.keyCode == (KeyCode.Delete)) {
+                        DeleteGroup(m_activeSelectionGroup);
+                        evt.Use();
+                    }
+                    break;
+                }                
+                
             }
         }
 
@@ -582,6 +590,14 @@ namespace Unity.SelectionGroups.Editor
                     DragAndDrop.StartDrag(dragText);
                     evt.Use();
                     break;
+                case EventType.KeyDown: {
+                    if (Event.current.keyCode == (KeyCode.Delete)) {
+                        RemoveSelectedMembersFromGroup();
+                        evt.Use();
+                    }
+                    break;
+                }                
+                
             }
         }
         
