@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Unity.QuickSearch;
 using UnityEditor;
@@ -69,13 +68,15 @@ public static class GoQLSearchProvider {
         if (parseResult != ParseResult.OK)
             yield break;
         m_goqlMachine.Code = context.searchQuery;
-        yield return m_goqlMachine.Execute().Select(go => {
+
+        GameObject[] objects = m_goqlMachine.Execute();
+        foreach (GameObject go in objects) {
             SearchItem item = provider.CreateItem(go.GetInstanceID().ToString());
             item.options = SearchItemOptions.Ellipsis |
                 SearchItemOptions.RightToLeft |
                 SearchItemOptions.Highlight;
-            return item;
-        });
+            yield return item;
+        }
     }
 
     private static GameObject PingItem(SearchItem item) {
