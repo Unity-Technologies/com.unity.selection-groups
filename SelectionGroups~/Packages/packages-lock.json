@@ -60,6 +60,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.quicksearch": {
+      "version": "2.0.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.selection-groups": {
       "version": "file:com.unity.selection-groups",
       "depth": 0,
