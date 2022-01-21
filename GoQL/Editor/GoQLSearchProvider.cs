@@ -19,7 +19,7 @@ using UnityEditor.Search;
 
 namespace Unity.GoQL.Editor {
 
-public static class GoQLSearchProvider {
+internal static class GoQLSearchProvider {
 
     [SearchItemProvider]
     internal static SearchProvider CreateProvider() {
