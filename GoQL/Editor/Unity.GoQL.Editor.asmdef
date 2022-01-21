@@ -1,7 +1,8 @@
 {
     "name": "Unity.GoQL.Editor",
     "references": [
-        "GUID:f05b2c431bca79e4fa618c6f7b09e6c4"
+        "GUID:f05b2c431bca79e4fa618c6f7b09e6c4",
+        "GUID:388060bf34f9a6a40bafbac77240e259"
     ],
     "includePlatforms": [
         "Editor"
