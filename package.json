@@ -10,6 +10,6 @@
   ],
   "dependencies": {
     "com.unity.film-internal-utilities": "0.12.4-preview",
-    "com.unity.quicksearch": "1.5.2-preview.1"
+    "com.unity.quicksearch": "2.0.2"
   }  
 }

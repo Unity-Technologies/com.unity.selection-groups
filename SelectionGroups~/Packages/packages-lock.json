@@ -61,7 +61,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.quicksearch": {
-      "version": "1.5.2-preview.1",
+      "version": "2.0.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -73,7 +73,7 @@
       "source": "embedded",
       "dependencies": {
         "com.unity.film-internal-utilities": "0.12.4-preview",
-        "com.unity.quicksearch": "1.5.2-preview.1"
+        "com.unity.quicksearch": "2.0.2"
       }
     },
     "com.unity.test-framework": {
