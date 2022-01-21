@@ -70,7 +70,7 @@ public static class GoQLSearchProvider {
             yield break;
         m_goqlMachine.Code = context.searchQuery;
         yield return m_goqlMachine.Execute().Select(go => {
-            var item = provider.CreateItem(go.GetInstanceID().ToString());
+            SearchItem item = provider.CreateItem(go.GetInstanceID().ToString());
             item.options = SearchItemOptions.Ellipsis |
                 SearchItemOptions.RightToLeft |
                 SearchItemOptions.Highlight;
