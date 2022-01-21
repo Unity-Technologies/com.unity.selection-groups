@@ -37,5 +37,7 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
-# Log files
+# Local Project files
 SelectionGroups~/Logs/**
+SelectionGroups~/UserSettings/**
+
