@@ -12,6 +12,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.quicksearch",
+            "expression": "",
+            "define": "AT_USE_QUICKSEARCH"
+        }
+    ],
     "noEngineReferences": false
 }
