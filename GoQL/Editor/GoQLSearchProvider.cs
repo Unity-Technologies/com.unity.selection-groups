@@ -1,15 +1,21 @@
 
-#if AT_USE_QUICKSEARCH
+#if AT_USE_QUICKSEARCH || UNITY_2021_2_OR_NEWER
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using Unity.QuickSearch;
 using UnityEditor;
 using UnityEditor.Experimental.SceneManagement;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using Object = UnityEngine.Object;
+
+#if AT_USE_QUICKSEARCH 
+using Unity.QuickSearch;
+#else //newer than 2021.2
+using UnityEditor.Search;
+#endif
 
 namespace Unity.GoQL.Editor {
 
