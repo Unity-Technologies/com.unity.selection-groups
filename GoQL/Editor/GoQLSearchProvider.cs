@@ -119,7 +119,7 @@ public static class GoQLSearchProvider {
 
 //----------------------------------------------------------------------------------------------------------------------
     
-    const string PROVIDER_ID = "GoQL";
+    const string PROVIDER_ID = "com.unity.goql";
 
     static readonly GoQLExecutor m_goqlMachine = new GoQLExecutor();
     
