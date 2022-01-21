@@ -60,12 +60,20 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.quicksearch": {
+      "version": "1.5.2-preview.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.selection-groups": {
       "version": "file:com.unity.selection-groups",
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.unity.film-internal-utilities": "0.12.4-preview"
+        "com.unity.film-internal-utilities": "0.12.4-preview",
+        "com.unity.quicksearch": "1.5.2-preview.1"
       }
     },
     "com.unity.test-framework": {
