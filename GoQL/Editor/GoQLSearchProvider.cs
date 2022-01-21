@@ -1,3 +1,6 @@
+
+#if AT_USE_QUICKSEARCH
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +11,7 @@ using UnityEditor.Experimental.SceneManagement;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Unity.GoQL {
+namespace Unity.GoQL.Editor {
 
 public static class GoQLSearchProvider {
 
@@ -127,3 +130,5 @@ public static class GoQLSearchProvider {
 }
 
 } //end namespace
+
+#endif //AT_USE_QUICKSEARCH
