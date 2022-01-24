@@ -25,18 +25,6 @@ namespace Unity.SelectionGroups.Editor
         bool showDebug = false;
         SelectionGroupDebugInformation debugInformation;
 
-        //[TODO-sin:2022-01-06] Remove in version 0.7.0 
-        // internal static void Open(ISelectionGroup group, SelectionGroupEditorWindow parentWindow)
-        // {
-        //     var dialog = EditorWindow.GetWindow<SelectionGroupConfigurationDialog>();
-        //     dialog.group = group;
-        //     dialog.parentWindow = parentWindow;
-        //     dialog.refreshQuery = true;
-        //     dialog.titleContent.text = $"Configure {group.Name}";
-        //     dialog.ShowPopup();
-        //     dialog.debugInformation = null;
-        // }
-
         private void OnEnable()
         {
             Undo.undoRedoPerformed -= OnUndoRedo;
@@ -83,31 +71,10 @@ namespace Unity.SelectionGroups.Editor
                 {
                     {
                         var obj = group as Object;
-                        //[TODO-sin:2021-12-20] Remove in version 0.7.0 
-                        // if(obj == null)
-                        //     Undo.RegisterCompleteObjectUndo(SelectionGroupPersistenceManager.Instance, "Query change");
-                        // else
-                        //    Undo.RegisterCompleteObjectUndo(obj, "Query change");
                         
                         Undo.RegisterCompleteObjectUndo(obj, "Query change");
                         
                     }
-                    //[TODO-sin:2021-12-20] Remove in version 0.7.0 
-                    // group.Query = newQuery;
-                    // var code = GoQL.Parser.Parse(group.Query, out GoQL.ParseResult parseResult);
-                    // if (parseResult == GoQL.ParseResult.OK)
-                    // {
-                    //     executor.Code = group.Query;
-                    //     var objects = executor.Execute();
-                    //     message = $"{objects.Length} results.";
-                    //     @group.SetMembers(objects);
-                    //     parentWindow.Repaint();
-                    // }
-                    // else
-                    // {
-                    //     message = parseResult.ToString();
-                    // }
-                    // refreshQuery = false;
                 }
                 if (message != string.Empty)
                 {

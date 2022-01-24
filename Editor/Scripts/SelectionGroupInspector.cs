@@ -44,17 +44,7 @@ internal class SelectionGroupInspector : UnityEditor.Editor {
             GUILayout.Space(5);
             EditorGUILayout.HelpBox(message, MessageType.Info);
         }
-        
-        //[TODO-sin:2021-12-20] Remove in version 0.7.0 
-        // SelectionGroupDataLocation scope = @group.Scope;
-        // scope = (SelectionGroupDataLocation) EditorGUILayout.EnumPopup(@group.Scope);
-        // if (scope != @group.Scope)
-        // {
-        //     SelectionGroupManager.ChangeGroupScope(group, scope);
-        //     Close();
-        // }
-
-        
+                
         GUILayout.BeginVertical("box");
         GUILayout.Label("Enabled Toolbar Buttons", EditorStyles.largeLabel);
         foreach (MethodInfo i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>()) {
