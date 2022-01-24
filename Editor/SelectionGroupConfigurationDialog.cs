@@ -83,35 +83,6 @@ namespace Unity.SelectionGroups.Editor
                 }
                 GUILayout.Space(5);
                 
-                //[TODO-sin:2021-12-20] Remove in version 0.7.0 
-                // SelectionGroupDataLocation scope = @group.Scope;
-                // scope = (SelectionGroupDataLocation) EditorGUILayout.EnumPopup(@group.Scope);
-                // if (scope != @group.Scope)
-                // {
-                //     SelectionGroupManager.ChangeGroupScope(group, scope);
-                //     Close();
-                // }
-                
-                GUILayout.BeginVertical("box");
-                GUILayout.Label("Enabled Toolbar Buttons", EditorStyles.largeLabel);
-                foreach (var i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>())
-                {
-                    //[TODO-sin:2022-01-07] Remove in version 0.7.0                     
-                    // var attr = i.GetCustomAttribute<SelectionGroupToolAttribute>();
-                    // var enabled = group.EnabledTools.Contains(attr.toolId);
-                    // var content = EditorGUIUtility.IconContent(attr.icon);
-                    // var _enabled = EditorGUILayout.ToggleLeft(content, enabled, "button");
-                    // if (enabled && !_enabled)
-                    // {
-                    //     group.EnabledTools.Remove(attr.toolId);
-                    // }
-                    // if (!enabled && _enabled)
-                    // {
-                    //     group.EnabledTools.Add(attr.toolId);
-                    // }
-                }
-                GUILayout.EndVertical();
-                
                 showDebug = GUILayout.Toggle(showDebug, "Show Debug Info", "button");
                 if (showDebug)
                 {
