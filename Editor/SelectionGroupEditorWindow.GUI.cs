@@ -18,7 +18,6 @@ namespace Unity.SelectionGroups.Editor
         private const int    RightMargin = 16;
         
         private GUIStyle   Label;
-        //private GUIContent editorHeaderContent;         //[TODO-sin:2021-12-20] Remove in version 0.7.0 
         private GUIContent sceneHeaderContent;
         private GUIContent InspectorLock;       
 
