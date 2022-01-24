@@ -178,24 +178,6 @@ namespace Unity.SelectionGroups.Editor
             bool           isAvailableInEditMode = true;
             GUIContent     content               = sceneHeaderContent;
             
-            //[TODO-sin:2021-12-20] Remove in version 0.7.0             
-            // if (group.Scope == SelectionGroupDataLocation.Editor)
-            //     content = editorHeaderContent;
-            // else
-            //     content = sceneHeaderContent;
-                    
-            //Editor groups don't work in play mode, as GetGloBALoBJECTiD does not work in play mode.
-            //[TODO-sin:2021-12-20] Remove in version 0.7.0             
-            // if (group.Scope == SelectionGroupDataLocation.Editor && EditorApplication.isPlayingOrWillChangePlaymode)
-            // {
-            //     content.text = $"{group.Name} (Not available in play mode)";
-            //     isAvailableInEditMode = false;
-            // }
-            // else
-            // {
-            //     content.text = $"{group.Name}";    
-            // }
-            
             content.text = $"{group.Name}";
 
             //
@@ -320,24 +302,6 @@ namespace Unity.SelectionGroups.Editor
                     UpdateUnityEditorSelectionWithMembers();
                 });
             }
-            
-            
-            //[TODO-sin:2022-01-06] Remove in version 0.7.0 
-            //menu.AddItem(new GUIContent("Configure Group"), false, () => SelectionGroupConfigurationDialog.Open(group, this));
-            // if (group.Scope == SelectionGroupDataLocation.Editor)
-            // {
-            //     menu.AddItem(new GUIContent("Move to Scene"), false, () =>
-            //     {
-            //         SelectionGroupManager.ChangeGroupScope(group, SelectionGroupDataLocation.Scene);
-            //     });
-            // }
-            // else
-            // {
-            //     menu.AddItem(new GUIContent("Move to Editor"), false, () =>
-            //     {
-            //         SelectionGroupManager.ChangeGroupScope(group, SelectionGroupDataLocation.Editor);
-            //     });
-            // }
 
             menu.AddItem(new GUIContent("Delete Group"), false, () => {
                 DeleteGroup(group);
@@ -385,9 +349,6 @@ namespace Unity.SelectionGroups.Editor
                             m_leftMouseWasDoubleClicked = evt.clickCount > 1;
                             if (m_leftMouseWasDoubleClicked) {
                                 SelectAllGroupMembers(group);
-                                
-                                //[TODO-sin:2022-01-06] Remove in version 0.7.0 
-                                //SelectionGroupConfigurationDialog.Open(@group, this);
                             }
                             break;
                     }
