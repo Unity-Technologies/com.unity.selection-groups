@@ -21,8 +21,6 @@ namespace Unity.SelectionGroups.Editor
             titleContent.text = "Selection Groups";
             wantsMouseMove = true;
             
-            //[TODO-sin:2021-12-20] Remove in version 0.7.0             
-            //editorHeaderContent = EditorGUIUtility.IconContent("d_Project");
             sceneHeaderContent     =  EditorGUIUtility.IconContent("SceneAsset Icon");
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
         }

@@ -25,18 +25,6 @@ namespace Unity.SelectionGroups.Editor
         bool showDebug = false;
         SelectionGroupDebugInformation debugInformation;
 
-        //[TODO-sin:2022-01-06] Remove in version 0.7.0 
-        // internal static void Open(ISelectionGroup group, SelectionGroupEditorWindow parentWindow)
-        // {
-        //     var dialog = EditorWindow.GetWindow<SelectionGroupConfigurationDialog>();
-        //     dialog.group = group;
-        //     dialog.parentWindow = parentWindow;
-        //     dialog.refreshQuery = true;
-        //     dialog.titleContent.text = $"Configure {group.Name}";
-        //     dialog.ShowPopup();
-        //     dialog.debugInformation = null;
-        // }
-
         private void OnEnable()
         {
             Undo.undoRedoPerformed -= OnUndoRedo;
@@ -83,31 +71,10 @@ namespace Unity.SelectionGroups.Editor
                 {
                     {
                         var obj = group as Object;
-                        //[TODO-sin:2021-12-20] Remove in version 0.7.0 
-                        // if(obj == null)
-                        //     Undo.RegisterCompleteObjectUndo(SelectionGroupPersistenceManager.Instance, "Query change");
-                        // else
-                        //    Undo.RegisterCompleteObjectUndo(obj, "Query change");
                         
                         Undo.RegisterCompleteObjectUndo(obj, "Query change");
                         
                     }
-                    //[TODO-sin:2021-12-20] Remove in version 0.7.0 
-                    // group.Query = newQuery;
-                    // var code = GoQL.Parser.Parse(group.Query, out GoQL.ParseResult parseResult);
-                    // if (parseResult == GoQL.ParseResult.OK)
-                    // {
-                    //     executor.Code = group.Query;
-                    //     var objects = executor.Execute();
-                    //     message = $"{objects.Length} results.";
-                    //     @group.SetMembers(objects);
-                    //     parentWindow.Repaint();
-                    // }
-                    // else
-                    // {
-                    //     message = parseResult.ToString();
-                    // }
-                    // refreshQuery = false;
                 }
                 if (message != string.Empty)
                 {
@@ -115,35 +82,6 @@ namespace Unity.SelectionGroups.Editor
                     EditorGUILayout.HelpBox(message, MessageType.Info);
                 }
                 GUILayout.Space(5);
-                
-                //[TODO-sin:2021-12-20] Remove in version 0.7.0 
-                // SelectionGroupDataLocation scope = @group.Scope;
-                // scope = (SelectionGroupDataLocation) EditorGUILayout.EnumPopup(@group.Scope);
-                // if (scope != @group.Scope)
-                // {
-                //     SelectionGroupManager.ChangeGroupScope(group, scope);
-                //     Close();
-                // }
-                
-                GUILayout.BeginVertical("box");
-                GUILayout.Label("Enabled Toolbar Buttons", EditorStyles.largeLabel);
-                foreach (var i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>())
-                {
-                    //[TODO-sin:2022-01-07] Remove in version 0.7.0                     
-                    // var attr = i.GetCustomAttribute<SelectionGroupToolAttribute>();
-                    // var enabled = group.EnabledTools.Contains(attr.toolId);
-                    // var content = EditorGUIUtility.IconContent(attr.icon);
-                    // var _enabled = EditorGUILayout.ToggleLeft(content, enabled, "button");
-                    // if (enabled && !_enabled)
-                    // {
-                    //     group.EnabledTools.Remove(attr.toolId);
-                    // }
-                    // if (!enabled && _enabled)
-                    // {
-                    //     group.EnabledTools.Add(attr.toolId);
-                    // }
-                }
-                GUILayout.EndVertical();
                 
                 showDebug = GUILayout.Toggle(showDebug, "Show Debug Info", "button");
                 if (showDebug)

@@ -128,20 +128,6 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         m_sceneSelectionGroups.Move(prevIndex, newIndex);
     }
 
-    //[TODO-sin:2021-12-20] Remove in version 0.7.0 
-    // public static void ClearEditorGroups()
-    // {
-    //     foreach(var i in groups.ToArray())
-    //         if(i.Scope == SelectionGroupDataLocation.Editor) Unregister(i);
-    // }
-
-    //[TODO-sin:2021-12-20] Remove in version 0.7.0 
-    // public static void ChangeGroupScope(ISelectionGroup @group, SelectionGroupDataLocation scope)
-    // {
-    //     Create(scope, @group.Name, @group.Query, @group.Color, @group.Members);
-    //     Delete(@group);
-    // }
-
 //----------------------------------------------------------------------------------------------------------------------
 
     ///<inheritdoc/>

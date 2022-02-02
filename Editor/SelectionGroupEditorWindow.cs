@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
-using Unity.SelectionGroups;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -69,12 +66,6 @@ namespace Unity.SelectionGroups.Editor
                 Undo.RegisterCompleteObjectUndo(runtimeGroup, msg);
                 EditorUtility.SetDirty(runtimeGroup);
             }
-
-            //[TODO-sin:2021-12-20] Remove in version 0.7.0
-            // if (group is EditorSelectionGroup editorGroup)
-            // {
-            //     SelectionGroupPersistenceManager.RegisterUndo(msg);
-            // }
         }
     }
 }
