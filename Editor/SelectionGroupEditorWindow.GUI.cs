@@ -393,7 +393,7 @@ namespace Unity.SelectionGroups.Editor
                         DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
                     } else {
                         //moving window members to group.  
-                        bool isMovingWindowMembers = (dragItemType == DragItemType.GROUP_MEMBERS && evt.alt);
+                        bool isMovingWindowMembers = (dragItemType == DragItemType.WINDOW_GROUP_MEMBERS && evt.alt);
                         DragAndDrop.visualMode = isMovingWindowMembers
                             ? DragAndDropVisualMode.Move
                             : DragAndDropVisualMode.Copy; 
@@ -414,7 +414,7 @@ namespace Unity.SelectionGroups.Editor
                     
                     try {
                         switch (dragItemType.Value) {
-                            case DragItemType.GROUP_MEMBERS: {
+                            case DragItemType.WINDOW_GROUP_MEMBERS: {
                                 if (evt.alt) {
                                     m_selectedGroupMembers = SelectionGroupUtility.MoveMembersSelectionToGroup(
                                         m_selectedGroupMembers, group
@@ -551,7 +551,7 @@ namespace Unity.SelectionGroups.Editor
                     
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.objectReferences = objects;                    
-                    DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP_MEMBERS);
+                    DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.WINDOW_GROUP_MEMBERS);
                     string dragText = numDraggedObjects > 1 ? objects[0].name + " ..." : objects[0].name;
                     DragAndDrop.StartDrag(dragText);
                     evt.Use();
