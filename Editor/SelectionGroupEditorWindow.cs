@@ -59,7 +59,7 @@ namespace Unity.SelectionGroups.Editor
                 Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f)));
         }
 
-        void RegisterUndo(ISelectionGroup @group, string msg)
+        static void RegisterUndo(ISelectionGroup @group, string msg)
         {
             if (group is SelectionGroups.SelectionGroup runtimeGroup)
             {

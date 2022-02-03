@@ -415,10 +415,10 @@ namespace Unity.SelectionGroups.Editor
                     try {
                         switch (dragItemType.Value) {
                             case DragItemType.GROUP_MEMBERS: {
-                                RegisterUndo(@group, "Add Members");
                                 if (evt.alt) {
                                     m_selectedGroupMembers = MoveMembersSelectionToGroup(m_selectedGroupMembers, group);
                                 } else {
+                                    RegisterUndo(@group, "Add Members");
                                     HashSet<Object> members = m_selectedGroupMembers.ConvertMembersToSet();
                                     @group.Add(members);
                                 }
@@ -633,14 +633,17 @@ namespace Unity.SelectionGroups.Editor
             SelectionGroup targetGroup) 
         {
             GroupMembersSelection newMembersSelection = new GroupMembersSelection(prevMembersSelection);
-                                    
+            RegisterUndo(targetGroup, "Move Members");
+            
             foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in prevMembersSelection) {
                 SelectionGroup prevGroup = kv.Key as SelectionGroup;
                 if (null == prevGroup)
                     continue;
-
+                
                 if (targetGroup == prevGroup)
                     continue;
+
+                RegisterUndo(prevGroup, "Move Members");
                                             
                 foreach (Object obj in kv.Value) {
                     newMembersSelection.AddObject(targetGroup, obj);
