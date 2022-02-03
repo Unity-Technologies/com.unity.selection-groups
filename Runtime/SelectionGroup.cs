@@ -131,19 +131,25 @@ namespace Unity.SelectionGroups
         /// <inheritdoc/>
         public IList<Object> Members => members;
 
+//----------------------------------------------------------------------------------------------------------------------
+        
         /// <inheritdoc/>
-        public void Add(IEnumerable<Object> objects) 
-        {
-            foreach (var i in objects) 
-            {
-                if (i == null)
-                    continue;
-                
-                if(!members.Contains(i))
-                    members.Add(i);
+        public void Add(IEnumerable<Object> objects) {
+            foreach (Object i in objects) {
+                Add(i);
             }
             RemoveNullMembers();
         }
+        
+        public void Add(Object obj) {
+            if (null == obj)
+                return;
+            
+            if(!members.Contains(obj))
+                members.Add(obj);
+        }
+        
+//----------------------------------------------------------------------------------------------------------------------        
         
         /// <inheritdoc/>
         public void SetMembers(IEnumerable<Object> objects) {
