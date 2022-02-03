@@ -419,8 +419,7 @@ namespace Unity.SelectionGroups.Editor
                                     uniqueDraggedObjects.UnionWith(members.Value);
                                 }
                                     
-                                Object[] objects = uniqueDraggedObjects.ToArray();
-                                @group.Add(objects);
+                                @group.Add(uniqueDraggedObjects);
                                 break;
                             } 
                             case DragItemType.GAMEOBJECTS: {
