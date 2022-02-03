@@ -410,10 +410,21 @@ namespace Unity.SelectionGroups.Editor
                     
                     try {
                         switch (dragItemType.Value) {
-                            case DragItemType.GROUP_MEMBERS: 
+                            case DragItemType.GROUP_MEMBERS: {
+                                RegisterUndo(@group, "Add Members");
+                                
+                                //convert to objects
+                                HashSet<Object> uniqueDraggedObjects = new HashSet<Object>();
+                                foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> members in m_selectedGroupMembers) {
+                                    uniqueDraggedObjects.UnionWith(members.Value);
+                                }
+                                    
+                                Object[] objects = uniqueDraggedObjects.ToArray();
+                                @group.Add(objects);
+                                break;
+                            } 
                             case DragItemType.GAMEOBJECTS: {
                                 RegisterUndo(@group, "Add Members");
-                                DragAndDrop.GetGenericData(DRAG_ITEM_TYPE);
                                 @group.Add(DragAndDrop.objectReferences);
                                 break;
                             }
@@ -527,20 +538,17 @@ namespace Unity.SelectionGroups.Editor
                 }
 
                 case EventType.MouseDrag:
-                    //Prepare the selected objects to be dragged: Convert to array
-                    HashSet<Object> uniqueDraggedObjects = new HashSet<Object>();
-                    foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> members in m_selectedGroupMembers) {
-                        uniqueDraggedObjects.UnionWith(members.Value);
-                    }
-                    int numDraggedObjects  = uniqueDraggedObjects.Count;
+                    //Prepare the selected objects to be dragged:
+                    int numDraggedObjects = m_selectedGroupMembers.FindNumUniqueObjects();                    
                     if (numDraggedObjects <= 0)
                         break;
 
-                    Object[] objects = uniqueDraggedObjects.ToArray();                    
+                    Object firstObj     = m_selectedGroupMembers.GetFirstObject();
+                    string firstObjName = (null == firstObj) ? "" : firstObj.name; 
+                    
                     DragAndDrop.PrepareStartDrag();
-                    DragAndDrop.objectReferences = objects;
                     DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP_MEMBERS);
-                    string dragText = numDraggedObjects > 1 ? objects[0].name + " ..." : objects[0].name;                        
+                    string dragText = numDraggedObjects > 1 ? firstObjName + " ..." : firstObjName;
                     DragAndDrop.StartDrag(dragText);
                     evt.Use();
                     break;
