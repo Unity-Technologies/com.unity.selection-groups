@@ -132,7 +132,7 @@ namespace Unity.SelectionGroups
         public IList<Object> Members => members;
 
         /// <inheritdoc/>
-        public void Add(IList<Object> objects) 
+        public void Add(IEnumerable<Object> objects) 
         {
             foreach (var i in objects) 
             {

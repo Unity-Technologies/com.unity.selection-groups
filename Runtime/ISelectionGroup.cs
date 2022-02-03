@@ -44,7 +44,7 @@ namespace Unity.SelectionGroups
         /// Adds a list of objects to the SelectionGroup 
         /// </summary>
         /// <param name="objects">A list of objects to be added</param>
-        void Add(IList<Object> objects);
+        void Add(IEnumerable<Object> objects);
 
         /// <summary>
         /// Removes a list of objects from the SelectionGroup 
