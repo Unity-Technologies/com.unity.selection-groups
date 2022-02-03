@@ -416,7 +416,9 @@ namespace Unity.SelectionGroups.Editor
                         switch (dragItemType.Value) {
                             case DragItemType.GROUP_MEMBERS: {
                                 if (evt.alt) {
-                                    m_selectedGroupMembers = MoveMembersSelectionToGroup(m_selectedGroupMembers, group);
+                                    m_selectedGroupMembers = SelectionGroupUtility.MoveMembersSelectionToGroup(
+                                        m_selectedGroupMembers, group
+                                    );
                                 } else {
                                     RegisterUndo(@group, "Add Members");
                                     HashSet<Object> members = m_selectedGroupMembers.ConvertMembersToSet();
@@ -626,37 +628,6 @@ namespace Unity.SelectionGroups.Editor
             m_selectedGroupMembers.AddGroupMembers(group);
             UpdateUnityEditorSelectionWithMembers();
         }
-
-
-        //move prevMembersSelection to targetGroup, and return the new members selection
-        private static GroupMembersSelection MoveMembersSelectionToGroup(GroupMembersSelection prevMembersSelection, 
-            SelectionGroup targetGroup) 
-        {
-            GroupMembersSelection newMembersSelection = new GroupMembersSelection(prevMembersSelection);
-            RegisterUndo(targetGroup, "Move Members");
-            
-            foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in prevMembersSelection) {
-                SelectionGroup prevGroup = kv.Key as SelectionGroup;
-                if (null == prevGroup)
-                    continue;
-                
-                if (targetGroup == prevGroup)
-                    continue;
-
-                RegisterUndo(prevGroup, "Move Members");
-                                            
-                foreach (Object obj in kv.Value) {
-                    newMembersSelection.AddObject(targetGroup, obj);
-                    targetGroup.Add(obj);
-                    prevGroup.Remove(obj);
-                    newMembersSelection.RemoveObject(prevGroup, obj);
-                }
-            }
-
-            return newMembersSelection;
-            
-        }
-        
         
 //----------------------------------------------------------------------------------------------------------------------        
         
