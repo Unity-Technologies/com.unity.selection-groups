@@ -405,13 +405,15 @@ namespace Unity.SelectionGroups.Editor
 
                     DragItemType? dragItemType = DragAndDrop.GetGenericData(DRAG_ITEM_TYPE) as DragItemType?;
                     if (!dragItemType.HasValue) {
-                        dragItemType = DragItemType.GROUP_MEMBERS; //receive gameObjects from outside the window
-                    }
-
+                        dragItemType = DragItemType.GAMEOBJECTS; //receive gameObjects from outside the window
+                    } 
+                    
                     try {
                         switch (dragItemType.Value) {
-                            case DragItemType.GROUP_MEMBERS: {
+                            case DragItemType.GROUP_MEMBERS: 
+                            case DragItemType.GAMEOBJECTS: {
                                 RegisterUndo(@group, "Add Members");
+                                DragAndDrop.GetGenericData(DRAG_ITEM_TYPE);
                                 @group.Add(DragAndDrop.objectReferences);
                                 break;
                             }
