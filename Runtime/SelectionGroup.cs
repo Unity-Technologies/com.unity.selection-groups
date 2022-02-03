@@ -181,6 +181,13 @@ namespace Unity.SelectionGroups
             RemoveNullMembers();
         }
         
+        public void Remove(Object obj) {
+            if (IsAutoFilled())
+                return;
+            
+            members.Remove(obj);
+        }
+
         /// <inheritdoc/>
         public void Clear()
         {
