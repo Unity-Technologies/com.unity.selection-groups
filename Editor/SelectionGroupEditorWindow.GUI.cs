@@ -416,8 +416,32 @@ namespace Unity.SelectionGroups.Editor
                         switch (dragItemType.Value) {
                             case DragItemType.GROUP_MEMBERS: {
                                 RegisterUndo(@group, "Add Members");
-                                HashSet<Object> uniqueDraggedObjects = m_selectedGroupMembers.ConvertMembersToSet();                                   
-                                @group.Add(uniqueDraggedObjects);
+                                if (evt.alt) {
+                                    //move one by one
+                                    GroupMembersSelection selectedMembers = new GroupMembersSelection(m_selectedGroupMembers);
+                                    
+                                    foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in m_selectedGroupMembers) {
+                                        SelectionGroup prevGroup = kv.Key as SelectionGroup;
+                                        if (null == prevGroup)
+                                            continue;
+
+                                        if (group == prevGroup)
+                                            continue;
+                                            
+                                        foreach (Object obj in kv.Value) {
+                                            selectedMembers.AddObject(group, obj);
+                                            @group.Add(obj);
+                                            prevGroup.Remove(obj);
+                                            selectedMembers.RemoveObject(prevGroup, obj);
+                                        }
+                                    }
+
+                                    m_selectedGroupMembers = selectedMembers;
+                                } else {
+                                    HashSet<Object> members = m_selectedGroupMembers.ConvertMembersToSet();
+                                    @group.Add(members);
+                                }
+                                
                                 break;
                             } 
                             case DragItemType.GAMEOBJECTS: {
@@ -638,7 +662,7 @@ namespace Unity.SelectionGroups.Editor
 
 //----------------------------------------------------------------------------------------------------------------------        
 
-        readonly GroupMembersSelection m_selectedGroupMembers = new GroupMembersSelection();
+        GroupMembersSelection m_selectedGroupMembers = new GroupMembersSelection();
 
         private IList<SelectionGroup> m_groupsToDraw = null;
         private Object m_hoveredGroupMember = null;
