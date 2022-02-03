@@ -417,26 +417,7 @@ namespace Unity.SelectionGroups.Editor
                             case DragItemType.GROUP_MEMBERS: {
                                 RegisterUndo(@group, "Add Members");
                                 if (evt.alt) {
-                                    //move one by one
-                                    GroupMembersSelection selectedMembers = new GroupMembersSelection(m_selectedGroupMembers);
-                                    
-                                    foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in m_selectedGroupMembers) {
-                                        SelectionGroup prevGroup = kv.Key as SelectionGroup;
-                                        if (null == prevGroup)
-                                            continue;
-
-                                        if (group == prevGroup)
-                                            continue;
-                                            
-                                        foreach (Object obj in kv.Value) {
-                                            selectedMembers.AddObject(group, obj);
-                                            @group.Add(obj);
-                                            prevGroup.Remove(obj);
-                                            selectedMembers.RemoveObject(prevGroup, obj);
-                                        }
-                                    }
-
-                                    m_selectedGroupMembers = selectedMembers;
+                                    m_selectedGroupMembers = MoveMembersSelectionToGroup(m_selectedGroupMembers, group);
                                 } else {
                                     HashSet<Object> members = m_selectedGroupMembers.ConvertMembersToSet();
                                     @group.Add(members);
@@ -644,6 +625,33 @@ namespace Unity.SelectionGroups.Editor
         private void SelectAllGroupMembers(ISelectionGroup group) {
             m_selectedGroupMembers.AddGroupMembers(group);
             UpdateUnityEditorSelectionWithMembers();
+        }
+
+
+        //move prevMembersSelection to targetGroup, and return the new members selection
+        private static GroupMembersSelection MoveMembersSelectionToGroup(GroupMembersSelection prevMembersSelection, 
+            SelectionGroup targetGroup) 
+        {
+            GroupMembersSelection newMembersSelection = new GroupMembersSelection(prevMembersSelection);
+                                    
+            foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in prevMembersSelection) {
+                SelectionGroup prevGroup = kv.Key as SelectionGroup;
+                if (null == prevGroup)
+                    continue;
+
+                if (targetGroup == prevGroup)
+                    continue;
+                                            
+                foreach (Object obj in kv.Value) {
+                    newMembersSelection.AddObject(targetGroup, obj);
+                    targetGroup.Add(obj);
+                    prevGroup.Remove(obj);
+                    newMembersSelection.RemoveObject(prevGroup, obj);
+                }
+            }
+
+            return newMembersSelection;
+            
         }
         
         
