@@ -3,7 +3,9 @@ namespace Unity.SelectionGroups.Editor {
 
 internal enum DragItemType {
     GROUP = 0,
-    GROUP_MEMBERS = 1,    
+    GROUP_MEMBERS = 1,
+    GAMEOBJECTS,
+    
 }    
 
 } //end namespace
