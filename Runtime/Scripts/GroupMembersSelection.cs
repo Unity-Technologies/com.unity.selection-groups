@@ -100,15 +100,21 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<ISelectionGroup,
     }
 
     internal Object[] ConvertMembersToArray() {
-        HashSet<Object> set = new HashSet<Object>();
-        foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in m_selectedGroupMembers) {
-            set.UnionWith(kv.Value);
-        }
+        HashSet<Object> set = ConvertMembersToSet();
         Object[] arr = new Object[set.Count];
         set.CopyTo(arr);
         return arr;
     }
 
+    internal HashSet<Object> ConvertMembersToSet() {
+        HashSet<Object> set = new HashSet<Object>();
+        foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in m_selectedGroupMembers) {
+            set.UnionWith(kv.Value);
+        }
+
+        return set;
+    }
+    
 //----------------------------------------------------------------------------------------------------------------------    
     readonly Dictionary<ISelectionGroup, OrderedSet<Object>> m_selectedGroupMembers 
         = new Dictionary<ISelectionGroup, OrderedSet<Object>>();
