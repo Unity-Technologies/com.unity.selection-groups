@@ -412,13 +412,7 @@ namespace Unity.SelectionGroups.Editor
                         switch (dragItemType.Value) {
                             case DragItemType.GROUP_MEMBERS: {
                                 RegisterUndo(@group, "Add Members");
-                                
-                                //convert to objects
-                                HashSet<Object> uniqueDraggedObjects = new HashSet<Object>();
-                                foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> members in m_selectedGroupMembers) {
-                                    uniqueDraggedObjects.UnionWith(members.Value);
-                                }
-                                    
+                                HashSet<Object> uniqueDraggedObjects = m_selectedGroupMembers.ConvertMembersToSet();                                   
                                 @group.Add(uniqueDraggedObjects);
                                 break;
                             } 
@@ -537,18 +531,12 @@ namespace Unity.SelectionGroups.Editor
                 }
 
                 case EventType.MouseDrag:
+                    Object[] objects = m_selectedGroupMembers.ConvertMembersToArray();
                     
-                    //Prepare the selected objects to be dragged: Convert to array
-                    HashSet<Object> uniqueDraggedObjects = new HashSet<Object>();
-                    foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> members in m_selectedGroupMembers) {
-                        uniqueDraggedObjects.UnionWith(members.Value);
-                    }
                     //Prepare the selected objects to be dragged:
-                    int numDraggedObjects = uniqueDraggedObjects.Count;
+                    int numDraggedObjects = objects.Length;
                     if (numDraggedObjects <= 0)
                         break;
-
-                    Object[] objects = uniqueDraggedObjects.ToArray();
                     
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.objectReferences = objects;                    
