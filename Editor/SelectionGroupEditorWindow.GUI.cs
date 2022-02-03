@@ -392,8 +392,12 @@ namespace Unity.SelectionGroups.Editor
                         //copying/moving members to auto group. Invalid 
                         DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
                     } else {
-                        //copying/moving members to normal  group. Valid 
-                        DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+                        //moving window members to group.  
+                        bool isMovingWindowMembers = (dragItemType == DragItemType.GROUP_MEMBERS && evt.alt);
+                        DragAndDrop.visualMode = isMovingWindowMembers
+                            ? DragAndDropVisualMode.Move
+                            : DragAndDropVisualMode.Copy; 
+                        
                     }
                     
                     evt.Use();
