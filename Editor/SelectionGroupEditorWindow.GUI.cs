@@ -623,7 +623,6 @@ namespace Unity.SelectionGroups.Editor
             Selection.objects       = new Object[] { null == group ? null : group.gameObject };
         }
 
-        //Update Editor Selection to show the properties of group members in the inspector
         private void UpdateUnityEditorSelectionWithMembers() {
             Selection.objects = m_selectedGroupMembers.ConvertMembersToArray();
         }
