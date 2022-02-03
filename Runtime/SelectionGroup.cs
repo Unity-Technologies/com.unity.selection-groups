@@ -141,6 +141,11 @@ namespace Unity.SelectionGroups
             RemoveNullMembers();
         }
         
+        /// <summary>
+        /// Adds an object to the SelectionGroup 
+        /// Does nothing if the group is automatically filled. 
+        /// </summary>
+        /// <param name="obj">the object to be added</param>
         public void Add(Object obj) {
             if (null == obj)
                 return;
@@ -181,6 +186,11 @@ namespace Unity.SelectionGroups
             RemoveNullMembers();
         }
         
+        /// <summary>
+        /// Removes an object from the SelectionGroup.
+        /// Does nothing if the group is automatically filled. 
+        /// </summary>
+        /// <param name="obj">The object to be removed</param>
         public void Remove(Object obj) {
             if (IsAutoFilled())
                 return;
