@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Object = UnityEngine.Object;
 
 namespace Unity.SelectionGroups
@@ -33,6 +34,24 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<ISelectionGroup,
     }
     
 //----------------------------------------------------------------------------------------------------------------------
+
+    [CanBeNull]
+    internal Object GetFirstObject() {
+        foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in m_selectedGroupMembers) {
+            foreach (Object member in kv.Value) {
+                return member;
+            }
+        }
+        return null;
+    }
+
+    internal int FindNumUniqueObjects() {
+        HashSet<Object> uniqueDraggedObjects = new HashSet<Object>();
+        foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> members in m_selectedGroupMembers) {
+            uniqueDraggedObjects.UnionWith(members.Value);
+        }
+        return uniqueDraggedObjects.Count;
+    }
     
     internal void AddObject(ISelectionGroup group, Object member) {
         if (!m_selectedGroupMembers.ContainsKey(group)) {
