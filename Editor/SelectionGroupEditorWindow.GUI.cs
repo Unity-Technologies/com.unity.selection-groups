@@ -538,17 +538,23 @@ namespace Unity.SelectionGroups.Editor
                 }
 
                 case EventType.MouseDrag:
+                    
+                    //Prepare the selected objects to be dragged: Convert to array
+                    HashSet<Object> uniqueDraggedObjects = new HashSet<Object>();
+                    foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> members in m_selectedGroupMembers) {
+                        uniqueDraggedObjects.UnionWith(members.Value);
+                    }
                     //Prepare the selected objects to be dragged:
-                    int numDraggedObjects = m_selectedGroupMembers.FindNumUniqueObjects();                    
+                    int numDraggedObjects = uniqueDraggedObjects.Count;
                     if (numDraggedObjects <= 0)
                         break;
 
-                    Object firstObj     = m_selectedGroupMembers.GetFirstObject();
-                    string firstObjName = (null == firstObj) ? "" : firstObj.name; 
+                    Object[] objects = uniqueDraggedObjects.ToArray();
                     
                     DragAndDrop.PrepareStartDrag();
+                    DragAndDrop.objectReferences = objects;                    
                     DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP_MEMBERS);
-                    string dragText = numDraggedObjects > 1 ? firstObjName + " ..." : firstObjName;
+                    string dragText = numDraggedObjects > 1 ? objects[0].name + " ..." : objects[0].name;
                     DragAndDrop.StartDrag(dragText);
                     evt.Use();
                     break;
