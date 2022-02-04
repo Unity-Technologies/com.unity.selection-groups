@@ -11,11 +11,12 @@ internal class SelectionGroupEditorConstants {
     // XML
     internal static readonly string MAIN_PROJECT_SETTINGS_PATH = ProjSettingsUIPath("ProjectSettings_Main");
 
-    private static readonly string PROJECT_SETTINGS_UIELEMENTS_PATH = Path.Combine(SelectionGroupConstants.PACKAGES_PATH,"Editor/UIElements/ProjectSettings");
     
 //----------------------------------------------------------------------------------------------------------------------
     private static string ProjSettingsUIPath(string uiElementRelativePath) {
-        return Path.Combine(PROJECT_SETTINGS_UIELEMENTS_PATH, uiElementRelativePath);
+        const string UIELEMENTS_PATH = "Editor/UIElements/ProjectSettings";
+        return Path.Combine(SelectionGroupConstants.PACKAGES_PATH,UIELEMENTS_PATH,uiElementRelativePath);
+        
     }
 
 }
