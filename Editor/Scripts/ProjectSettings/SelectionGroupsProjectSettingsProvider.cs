@@ -49,9 +49,9 @@ class SelectionGroupsProjectSettingsProvider : SettingsProvider {
 		
 		
 		//keywords
-		HashSet<string> vcKeywords = new HashSet<string>(new[] { "Visual Compositor",});
-		vcKeywords.UnionWith(GetSearchKeywordsFromGUIContentProperties<Contents>());		
-		keywords = vcKeywords;
+		HashSet<string> sgKeywords = new HashSet<string>(new[] { "Selection Groups","Selection Group"});
+		sgKeywords.UnionWith(GetSearchKeywordsFromGUIContentProperties<Contents>());
+		keywords = sgKeywords;
 		
 	}
 	
