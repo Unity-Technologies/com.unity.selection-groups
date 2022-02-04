@@ -542,15 +542,15 @@ namespace Unity.SelectionGroups.Editor
                 }
 
                 case EventType.MouseDrag:
+                    //Prepare the selected objects to be dragged:
                     Object[] objects = m_selectedGroupMembers.ConvertMembersToArray();
                     
-                    //Prepare the selected objects to be dragged:
                     int numDraggedObjects = objects.Length;
                     if (numDraggedObjects <= 0)
                         break;
                     
                     DragAndDrop.PrepareStartDrag();
-                    DragAndDrop.objectReferences = objects;                    
+                    DragAndDrop.objectReferences = objects;
                     DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.WINDOW_GROUP_MEMBERS);
                     string dragText = numDraggedObjects > 1 ? objects[0].name + " ..." : objects[0].name;
                     DragAndDrop.StartDrag(dragText);
