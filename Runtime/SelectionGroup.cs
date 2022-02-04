@@ -131,19 +131,30 @@ namespace Unity.SelectionGroups
         /// <inheritdoc/>
         public IList<Object> Members => members;
 
+//----------------------------------------------------------------------------------------------------------------------
+        
         /// <inheritdoc/>
-        public void Add(IList<Object> objects) 
-        {
-            foreach (var i in objects) 
-            {
-                if (i == null)
-                    continue;
-                
-                if(!members.Contains(i))
-                    members.Add(i);
+        public void Add(IEnumerable<Object> objects) {
+            foreach (Object i in objects) {
+                Add(i);
             }
             RemoveNullMembers();
         }
+        
+        /// <summary>
+        /// Adds an object to the SelectionGroup 
+        /// Does nothing if the group is automatically filled. 
+        /// </summary>
+        /// <param name="obj">the object to be added</param>
+        public void Add(Object obj) {
+            if (null == obj)
+                return;
+            
+            if(!members.Contains(obj))
+                members.Add(obj);
+        }
+        
+//----------------------------------------------------------------------------------------------------------------------        
         
         /// <inheritdoc/>
         public void SetMembers(IEnumerable<Object> objects) {
@@ -175,6 +186,18 @@ namespace Unity.SelectionGroups
             RemoveNullMembers();
         }
         
+        /// <summary>
+        /// Removes an object from the SelectionGroup.
+        /// Does nothing if the group is automatically filled. 
+        /// </summary>
+        /// <param name="obj">The object to be removed</param>
+        public void Remove(Object obj) {
+            if (IsAutoFilled())
+                return;
+            
+            members.Remove(obj);
+        }
+
         /// <inheritdoc/>
         public void Clear()
         {
