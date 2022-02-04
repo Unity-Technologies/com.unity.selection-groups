@@ -2,7 +2,7 @@ using System.IO;
 
 namespace Unity.SelectionGroups.Editor {
 
-internal class SelectionGroupsEditorConstants {
+internal class SelectionGroupEditorConstants {
 
     //USS
     private static readonly  string USS_FOLDER = Path.Combine(SelectionGroupConstants.PACKAGES_PATH,"Editor/StyleSheets");
