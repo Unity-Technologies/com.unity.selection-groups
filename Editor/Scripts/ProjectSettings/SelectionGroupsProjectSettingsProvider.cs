@@ -69,7 +69,7 @@ class SelectionGroupsProjectSettingsProvider : SettingsProvider {
 
 	private static SelectionGroupsProjectSettingsProvider m_projectSettingsProvider = null;
 
-	private const string PROJECT_SETTINGS_MENU_PATH = "Project/Visual Compositor";
+	private const string PROJECT_SETTINGS_MENU_PATH = "Project/Selection Groups";
 
 	
 //----------------------------------------------------------------------------------------------------------------------
