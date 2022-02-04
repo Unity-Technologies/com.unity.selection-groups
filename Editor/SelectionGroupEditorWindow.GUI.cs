@@ -393,7 +393,7 @@ namespace Unity.SelectionGroups.Editor
                         DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
                     } else {
                         //moving window members to group.  
-                        bool isMovingWindowMembers = (dragItemType == DragItemType.WINDOW_GROUP_MEMBERS && evt.alt);
+                        bool isMovingWindowMembers = (dragItemType == DragItemType.WINDOW_GROUP_MEMBERS && evt.control);
                         DragAndDrop.visualMode = isMovingWindowMembers
                             ? DragAndDropVisualMode.Move
                             : DragAndDropVisualMode.Copy; 
@@ -415,7 +415,7 @@ namespace Unity.SelectionGroups.Editor
                     try {
                         switch (dragItemType.Value) {
                             case DragItemType.WINDOW_GROUP_MEMBERS: {
-                                if (evt.alt) {
+                                if (evt.control) {
                                     m_selectedGroupMembers = SelectionGroupUtility.MoveMembersSelectionToGroup(
                                         m_selectedGroupMembers, group
                                     );
