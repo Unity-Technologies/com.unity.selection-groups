@@ -1,0 +1,7 @@
+<UXML xmlns="UnityEngine.UIElements">
+
+    <Label text="Selection Groups" class="header"/>
+
+    <VisualElement name="DefaultSectionContainer" class="section-container">
+    </VisualElement>    
+</UXML>
