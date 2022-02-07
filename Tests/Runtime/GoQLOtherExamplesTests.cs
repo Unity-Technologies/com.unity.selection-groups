@@ -19,12 +19,14 @@ namespace Unity.SelectionGroups.Tests
                 new LoadSceneParameters(LoadSceneMode.Single));
         }
          
+        
         [Test]
         public void RootGameObjects() {
             TestUtility.ExecuteGoQLAndVerify("/", 13,(Transform t) => null == t.parent);
         }
         
-        [Test]
+        // This test is disabled for now, as the example may not be correct.
+        //[Test]
         public void FromQuadWildcardGetSecondChildWithAudioSource()
         {
             TestUtility.ExecuteGoQLAndVerify("Quad*/<t:AudioSource>[1]", 2,(Transform t) => {

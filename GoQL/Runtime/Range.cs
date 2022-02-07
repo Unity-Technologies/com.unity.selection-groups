@@ -10,5 +10,4 @@ namespace Unity.GoQL
             this.end = end;
         }
     }
-
 }
