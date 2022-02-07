@@ -17,6 +17,7 @@ namespace Unity.SelectionGroups {
 internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupManager>, ISerializationCallbackReceiver {
     private void OnEnable() {
         this.gameObject.hideFlags = HideFlags.HideInHierarchy;
+        RefreshGroupHideFlagsInEditor();
     }
 
 
@@ -123,6 +124,16 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
 #endif
         m_sceneSelectionGroups.Move(prevIndex, newIndex);
     }
+
+#if UNITY_EDITOR
+    internal void RefreshGroupHideFlagsInEditor() {
+        foreach (SelectionGroup group in m_sceneSelectionGroups) {
+            group.RefreshHideFlagsInEditor();
+        }
+        EditorApplication.RepaintHierarchyWindow();
+        EditorApplication.DirtyHierarchyWindowSorting();
+    }
+#endif
 
 //----------------------------------------------------------------------------------------------------------------------
 

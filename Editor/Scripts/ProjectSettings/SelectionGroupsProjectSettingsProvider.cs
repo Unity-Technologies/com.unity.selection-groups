@@ -38,6 +38,8 @@ class SelectionGroupsProjectSettingsProvider : SettingsProvider {
                 projSettings.AreGroupsVisibleInHierarchy(),
                 (e) => {
                     projSettings.ShowGroupsInHierarchy(e.newValue);
+                    projSettings.SaveInEditor();
+                    SelectionGroupManager.GetOrCreateInstance().RefreshGroupHideFlagsInEditor();
                 }
             );
             
