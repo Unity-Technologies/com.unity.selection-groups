@@ -269,10 +269,12 @@ namespace Unity.GoQL
 
                 indexInstructions.Reverse();
 
-                foreach(var arg in indexInstructions)
+                for (var i = 0; i < argCount; i++)
                 {
+                    var arg = indexInstructions[i];
                     if (arg is int siblingIndex)
                     {
+                        siblingIndex = siblingIndex < 0 ? mod(siblingIndex, lengths[i]):siblingIndex;
                         for (var j = 0; j < selection.Count; j++)
                         {
                             if (siblingIndex == indices[j])
