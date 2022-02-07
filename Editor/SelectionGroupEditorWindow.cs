@@ -19,7 +19,7 @@ namespace Unity.SelectionGroups.Editor
 
         ReorderableList list;
         Vector2 scroll;
-        ISelectionGroup m_activeSelectionGroup;
+        SelectionGroup m_activeSelectionGroup;
         float width;
         GUIStyle miniButtonStyle;
         Object hotMember;
@@ -59,7 +59,7 @@ namespace Unity.SelectionGroups.Editor
                 Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f)));
         }
 
-        void RegisterUndo(ISelectionGroup @group, string msg)
+        void RegisterUndo(SelectionGroup @group, string msg)
         {
             if (group is SelectionGroups.SelectionGroup runtimeGroup)
             {

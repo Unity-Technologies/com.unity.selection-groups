@@ -73,7 +73,7 @@ internal class SelectionGroupUtilityTests {
         SelectionGroup group, HashSet<string> names) 
     {
         bool firstGroupPassed = false;
-        foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in selection) {
+        foreach (KeyValuePair<SelectionGroup, OrderedSet<Object>> kv in selection) {
             //must contain only one group
             if (firstGroupPassed)
                 return false;

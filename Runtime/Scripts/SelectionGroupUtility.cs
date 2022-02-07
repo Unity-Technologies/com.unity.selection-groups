@@ -17,7 +17,7 @@ internal static class SelectionGroupUtility
         GroupMembersSelection newMembersSelection = new GroupMembersSelection(prevMembersSelection);
         RegisterUndo(targetGroup, "Move Members");
             
-        foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in prevMembersSelection) {
+        foreach (KeyValuePair<SelectionGroup, OrderedSet<Object>> kv in prevMembersSelection) {
             SelectionGroup prevGroup = kv.Key as SelectionGroup;
             if (null == prevGroup)
                 continue;

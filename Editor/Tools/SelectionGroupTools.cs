@@ -10,7 +10,7 @@ namespace Unity.SelectionGroups.Editor
     public static class SelectionGroupTools
     {
         [SelectionGroupTool("d_VisibilityOn", "Show and hide objects in the scene.",(int) SelectionGroupToolType.VISIBILITY)]
-        static void ToggleVisibility(ISelectionGroup group)
+        static void ToggleVisibility(SelectionGroup group)
         {
             foreach (var g in group.Members)
             {
@@ -21,7 +21,7 @@ namespace Unity.SelectionGroups.Editor
         }
 
         [SelectionGroupTool("LockIcon-On", "Enable and disable editing of objects.",(int) SelectionGroupToolType.LOCK)]
-        static void DisableEditing(ISelectionGroup group)
+        static void DisableEditing(SelectionGroup group)
         {
             var isLocked = false;
             foreach (var g in group.Members)

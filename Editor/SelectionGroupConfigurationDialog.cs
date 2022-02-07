@@ -17,7 +17,7 @@ namespace Unity.SelectionGroups.Editor
         [SerializeField] int groupId;
         ReorderableList exclusionList;
 
-        ISelectionGroup group;
+        SelectionGroup group;
         GoQL.GoQLExecutor executor = new GoQL.GoQLExecutor();
         SelectionGroupEditorWindow parentWindow;
         string message = string.Empty;

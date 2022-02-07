@@ -117,7 +117,7 @@ namespace Unity.SelectionGroups.Editor
             }
         }
 
-        Rect DrawAllGroupMembers(Rect rect, ISelectionGroup group)
+        Rect DrawAllGroupMembers(Rect rect, SelectionGroup group)
         {
             rect.height = EditorGUIUtility.singleLineHeight;
             foreach (Object i in group.Members) 
@@ -135,7 +135,7 @@ namespace Unity.SelectionGroups.Editor
             return rect;
         }
 
-        void DrawGroupMember(Rect rect, ISelectionGroup group, UnityEngine.Object g) 
+        void DrawGroupMember(Rect rect, SelectionGroup group, UnityEngine.Object g) 
         {
             Assert.IsNotNull(g);
             Event e = Event.current;
@@ -187,7 +187,7 @@ namespace Unity.SelectionGroups.Editor
             float       currentViewWidth = EditorGUIUtility.currentViewWidth;
             
             //background
-            Color backgroundColor = ((ISelectionGroup) group == m_activeSelectionGroup) ? Color.white * 0.6f : Color.white * 0.3f;
+            Color backgroundColor = ((SelectionGroup) group == m_activeSelectionGroup) ? Color.white * 0.6f : Color.white * 0.3f;
             if (isPaint) 
             {
                 rect.width = currentViewWidth - RightMargin - COLOR_WIDTH;                
@@ -271,7 +271,7 @@ namespace Unity.SelectionGroups.Editor
             }
         }
 
-        void ShowGroupMemberContextMenu(Rect rect, ISelectionGroup clickedGroup)
+        void ShowGroupMemberContextMenu(Rect rect, SelectionGroup clickedGroup)
         {
             var menu = new GenericMenu();
             var content = new GUIContent("Remove From Group");
@@ -286,7 +286,7 @@ namespace Unity.SelectionGroups.Editor
             menu.DropDown(rect);
         }
 
-        void ShowGroupContextMenu(Rect rect, string groupName, ISelectionGroup group)
+        void ShowGroupContextMenu(Rect rect, string groupName, SelectionGroup group)
         {
             var menu = new GenericMenu();
             menu.AddItem(new GUIContent("Select All Group Members"), false, () => {
@@ -479,7 +479,7 @@ namespace Unity.SelectionGroups.Editor
         }
 
         
-        void HandleGroupMemberMouseEvents(Rect rect, ISelectionGroup group, Object groupMember, bool isGroupMemberSelected)
+        void HandleGroupMemberMouseEvents(Rect rect, SelectionGroup group, Object groupMember, bool isGroupMemberSelected)
         {
             Event evt = Event.current;
             if (!rect.Contains(evt.mousePosition)) 
@@ -563,8 +563,8 @@ namespace Unity.SelectionGroups.Editor
         //The order between them is not guaranteed.
         [CanBeNull]
         static GroupMembersSelection SelectMembersInBetween(
-            ISelectionGroup pivotGroup, Object pivotMember, 
-            ISelectionGroup endGroup, Object endMember, IList<SelectionGroup> allGroups) 
+            SelectionGroup pivotGroup, Object pivotMember, 
+            SelectionGroup endGroup, Object endMember, IList<SelectionGroup> allGroups) 
         {
             if (allGroups.Count == 0)
                 return null;
@@ -604,7 +604,7 @@ namespace Unity.SelectionGroups.Editor
 
 //----------------------------------------------------------------------------------------------------------------------        
 
-        private void DeleteGroup(ISelectionGroup group) {
+        private void DeleteGroup(SelectionGroup group) {
             m_selectedGroupMembers.RemoveGroup(group);
             SelectionGroupManager.GetOrCreateInstance().DeleteGroup(group);
             UpdateUnityEditorSelectionWithMembers();
@@ -612,8 +612,8 @@ namespace Unity.SelectionGroups.Editor
         }
 
         private void RemoveSelectedMembersFromGroup() {
-            foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> kv in m_selectedGroupMembers) {
-                ISelectionGroup group = kv.Key;
+            foreach (KeyValuePair<SelectionGroup, OrderedSet<Object>> kv in m_selectedGroupMembers) {
+                SelectionGroup group = kv.Key;
                 RegisterUndo(group, "Remove Member");
                 group.Remove(kv.Value);
             }
@@ -624,7 +624,7 @@ namespace Unity.SelectionGroups.Editor
             UpdateUnityEditorSelectionWithMembers();
         }
 
-        private void SelectAllGroupMembers(ISelectionGroup group) {
+        private void SelectAllGroupMembers(SelectionGroup group) {
             m_selectedGroupMembers.AddGroupMembers(group);
             UpdateUnityEditorSelectionWithMembers();
         }
@@ -657,7 +657,7 @@ namespace Unity.SelectionGroups.Editor
         private const   int   GROUP_HEADER_PADDING = 3;
         static readonly Color HOVER_COLOR          = new Color32(112, 112, 112, 128);
 
-        private ISelectionGroup m_shiftPivotGroup       = null;
+        private SelectionGroup m_shiftPivotGroup       = null;
         private Object          m_shiftPivotGroupMember = null;
         
         private bool m_leftMouseWasDoubleClicked = false;

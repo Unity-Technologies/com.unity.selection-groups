@@ -8,7 +8,7 @@ namespace Unity.SelectionGroups.Editor
 
         public string text;
 
-        internal SelectionGroupDebugInformation(ISelectionGroup group)
+        internal SelectionGroupDebugInformation(SelectionGroup group)
         {
             text = EditorJsonUtility.ToJson(group, prettyPrint: true);
         }

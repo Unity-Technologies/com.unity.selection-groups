@@ -94,8 +94,8 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         
     
     
-    internal void DeleteGroup(ISelectionGroup group) {
-        //[TODO-sin: 2021-12-24] Simplify this by removing ISelectionGroup interface
+    internal void DeleteGroup(SelectionGroup group) {
+        //[TODO-sin: 2021-12-24] Simplify this by removing SelectionGroup interface
         SelectionGroup sceneSelectionGroup = group as SelectionGroup;
         if (null == sceneSelectionGroup)
             return;
