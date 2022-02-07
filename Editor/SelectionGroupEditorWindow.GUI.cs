@@ -161,17 +161,17 @@ namespace Unity.SelectionGroups.Editor
 
             if (g is GameObject gameObject) {
                 if (SceneVisibilityManager.instance.IsHidden(gameObject)) {
-                    DrawIconTexture(10, rect.y, m_hiddenInSceneTex);
+                    DrawIconTexture(0, rect.y, m_hiddenInSceneTex);
                 }
             }
             
             if (g.hideFlags.HasFlag(HideFlags.NotEditable)) {
-                DrawIconTexture(0, rect.y, m_inspectorLockTex);
+                DrawIconTexture(16, rect.y, m_inspectorLockTex);
             }
             
             
 
-            rect.x           += 24;
+            rect.x           += 32;
             bool allowRemove = !group.IsAutoFilled();
             GUI.contentColor =  allowRemove ? Color.white : Color.Lerp(Color.white, Color.yellow, 0.25f);
             GUI.Label(rect, content);
