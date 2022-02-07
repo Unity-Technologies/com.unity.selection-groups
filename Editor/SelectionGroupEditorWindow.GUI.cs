@@ -76,7 +76,6 @@ namespace Unity.SelectionGroups.Editor
                 
                 //early out if this group yMin is below window rect (not visible).
                 if ((cursor.yMin - scroll.y) > position.height) break;
-                var dropRect = cursor;
                 
                 cursor = DrawHeader(cursor, i);
                 if (m_groupsToDraw[i].AreMembersShownInWindow())
@@ -165,8 +164,6 @@ namespace Unity.SelectionGroups.Editor
             if (g.hideFlags.HasFlag(HideFlags.NotEditable)) {
                 DrawIconTexture(16, rect.y, m_inspectorLockTex);
             }
-            
-            
 
             rect.x           += 32;
             bool allowRemove = !group.IsAutoFilled();
