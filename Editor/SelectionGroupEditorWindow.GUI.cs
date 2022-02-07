@@ -206,10 +206,11 @@ namespace Unity.SelectionGroups.Editor
                              - (COLOR_WIDTH + FOLDOUT_WIDTH + RightMargin + SEPARATOR_WIDTH);
             {
                 rect.width =  FOLDOUT_WIDTH;
+                group.ShowMembersInWindow(EditorGUI.Toggle(rect, group.AreMembersShownInWindow(), EditorStyles.foldout));
+                
                 rect.x     += FOLDOUT_WIDTH;
                 rect.width =  labelWidth;
                 
-                group.ShowMembersInWindow(EditorGUI.Toggle(rect, group.AreMembersShownInWindow(), EditorStyles.foldout));
             }
             
             //Draw tools first before handling mouse events
