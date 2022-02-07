@@ -1,5 +1,6 @@
 ﻿using System;
 using Unity.FilmInternalUtilities;
+using UnityEngine;
 
 
 namespace Unity.SelectionGroups {
@@ -14,6 +15,18 @@ internal class SelectionGroupsEditorProjectSettings : BaseJsonSingleton<Selectio
         
     }
     
+//----------------------------------------------------------------------------------------------------------------------
+
+    internal bool AreGroupsVisibleInHierarchy() => m_groupsVisibleInHierarchy; 
+    
+    internal void ShowGroupsInHierarchy(bool visible) {
+        m_groupsVisibleInHierarchy = visible; 
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+    
+    [SerializeField] private bool m_groupsVisibleInHierarchy = true;
+
 //----------------------------------------------------------------------------------------------------------------------
     private const int LATEST_VERSION = (int) Version.INITIAL; 
     enum Version {

@@ -40,9 +40,7 @@ namespace Unity.SelectionGroups
                 
         void OnEnable()
         {
-            //SelectionGroup won't be selectable in the select popup window if HideInHierarchy is set 
-            this.gameObject.hideFlags = HideFlags.None;
-            this.transform.hideFlags  = HideFlags.HideInInspector;
+            RefreshHideFlagsInEditor();
             
             if (!m_registerOnEnable) 
                 return;
@@ -290,8 +288,24 @@ namespace Unity.SelectionGroups
         internal void SetOnDestroyedInEditorCallback(Action cb) {
             m_onDestroyedInEditorCB = cb;
         }
-#endif        
+#endif
+        
+        internal void RefreshHideFlagsInEditor() {
+#if UNITY_EDITOR
+            SelectionGroupsEditorProjectSettings settings = SelectionGroupsEditorProjectSettings.GetOrCreateInstance();
+            
+            HideFlags goHideFlags = HideFlags.None;
+            if (!settings.AreGroupsVisibleInHierarchy()) {
+                goHideFlags |= HideFlags.HideInHierarchy;
+            }
+            //Note: SelectionGroup won't be selectable in the select popup window if HideInHierarchy is set 
+            this.gameObject.hideFlags = goHideFlags;
+            this.transform.hideFlags  = goHideFlags | HideFlags.HideInInspector;
+#endif
+        }
+        
 
+        
 //----------------------------------------------------------------------------------------------------------------------
 
         [SerializeField] List<bool> m_editorToolsStatus = new List<bool>(new bool[(int) SelectionGroupToolType.MAX]);
