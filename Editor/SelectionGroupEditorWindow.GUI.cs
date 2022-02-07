@@ -155,10 +155,7 @@ namespace Unity.SelectionGroups.Editor
             }
 
             if (g.hideFlags.HasFlag(HideFlags.NotEditable)) {
-                Rect irect = rect;
-                irect.width  = 16;
-                irect.height = 14;
-                GUI.DrawTexture(irect,m_inspectorLockTex);
+                DrawIconTexture(0, rect.y, m_inspectorLockTex);
             }
 
             rect.x           += 24;
@@ -269,6 +266,17 @@ namespace Unity.SelectionGroups.Editor
                 ++enabledToolCounter;
             }
         }
+
+        static void DrawIconTexture(float iconX, float iconY, Texture2D tex) {
+            Rect rect = new Rect() {
+                x = iconX,
+                y = iconY,
+                width  = 16,
+                height = 14,
+            };
+            GUI.DrawTexture(rect,tex);
+        }
+        
 
         void ShowGroupMemberContextMenu(Rect rect, SelectionGroup clickedGroup)
         {
