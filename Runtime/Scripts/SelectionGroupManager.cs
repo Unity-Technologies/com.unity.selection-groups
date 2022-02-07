@@ -95,18 +95,14 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
     
     
     internal void DeleteGroup(SelectionGroup group) {
-        //[TODO-sin: 2021-12-24] Simplify this by removing SelectionGroup interface
-        SelectionGroup sceneSelectionGroup = group as SelectionGroup;
-        if (null == sceneSelectionGroup)
-            return;
         
 #if UNITY_EDITOR
         Undo.RegisterCompleteObjectUndo(this, "Delete Group");
-        Undo.DestroyObjectImmediate(sceneSelectionGroup.gameObject);
+        Undo.DestroyObjectImmediate(group.gameObject);
 #else
-        DestroyImmediate(sceneSelectionGroup,gameObject);
+        DestroyImmediate(group,gameObject);
 #endif
-        m_sceneSelectionGroups.Remove(sceneSelectionGroup);
+        m_sceneSelectionGroups.Remove(group);
     }
     
 //----------------------------------------------------------------------------------------------------------------------
