@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using Unity.GoQL;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -146,6 +147,17 @@ namespace Unity.SelectionGroups
          /// Get the members of the SelectionGroup
          /// </summary>
         public IList<Object> Members => members;
+
+        [NotNull]
+        internal List<GameObject> FindGameObjectMembers() {
+            List<GameObject> ret = new List<GameObject>();
+            foreach (Object m in members) {
+                if (m is GameObject go) {
+                    ret.Add(go);
+                }
+            }
+            return ret;
+        }
 
 //----------------------------------------------------------------------------------------------------------------------
         
