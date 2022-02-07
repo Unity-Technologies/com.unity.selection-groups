@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 namespace Unity.SelectionGroups.Editor {
 class SelectionGroupsProjectSettingsProvider : SettingsProvider {
     private class Contents {
-		public static readonly GUIContent VisibleInHierarchy = EditorGUIUtility.TrTextContent("Visible In Hierarchy");
+		public static readonly GUIContent SHOW_GROUPS_IN_HIERARCHY = EditorGUIUtility.TrTextContent("Show Groups in Hierarchy");
     }
 
 
@@ -34,7 +34,7 @@ class SelectionGroupsProjectSettingsProvider : SettingsProvider {
                 SelectionGroupsEditorProjectSettings.GetOrCreateInstance();
             
             
-            UIElementsEditorUtility.AddField<Toggle, bool>(defaultSectionContainer, Contents.VisibleInHierarchy, 
+            UIElementsEditorUtility.AddField<Toggle, bool>(defaultSectionContainer, Contents.SHOW_GROUPS_IN_HIERARCHY, 
                 projSettings.AreGroupsVisibleInHierarchy(),
                 (e) => {
                     projSettings.ShowGroupsInHierarchy(e.newValue);
