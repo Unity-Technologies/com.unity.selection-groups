@@ -18,7 +18,7 @@ namespace Unity.SelectionGroups
     /// </summary>
     [ExecuteAlways]
     [AddComponentMenu("")]
-    public class SelectionGroup : MonoBehaviour, ISelectionGroup, ISerializationCallbackReceiver    
+    public class SelectionGroup : MonoBehaviour, ISerializationCallbackReceiver    
     {
         /// <summary>
         /// A color assigned to this group.
