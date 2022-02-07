@@ -17,7 +17,6 @@ namespace Unity.SelectionGroups {
 internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupManager>, ISerializationCallbackReceiver {
     private void OnEnable() {
         this.gameObject.hideFlags = HideFlags.HideInHierarchy;
-        RefreshGroupHideFlagsInEditor();
     }
 
 
