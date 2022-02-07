@@ -18,7 +18,7 @@ namespace Unity.SelectionGroups
     /// </summary>
     [ExecuteAlways]
     [AddComponentMenu("")]
-    public class SelectionGroup : MonoBehaviour, ISelectionGroup, ISerializationCallbackReceiver    
+    public class SelectionGroup : MonoBehaviour, ISerializationCallbackReceiver    
     {
         /// <summary>
         /// A color assigned to this group.
@@ -58,7 +58,9 @@ namespace Unity.SelectionGroups
         }
 
 
-        /// <inheritdoc/>
+         /// <summary>
+         /// Sets/gets the name of the SelectionGroup
+         /// </summary>
         public string Name
         {
             get { return gameObject.name; }
@@ -66,7 +68,9 @@ namespace Unity.SelectionGroups
         }
 
 
-        /// <inheritdoc/>
+         /// <summary>
+         /// Sets/gets the query which will automatically include GameObjects from the hierarchy that match the query into the group.
+         /// </summary>
         public string Query
         {
             get => this.query; 
@@ -104,12 +108,16 @@ namespace Unity.SelectionGroups
         public GoQL.ParseResult GetLastQueryParseResult() => m_queryParseResult;
         
         
-        /// <inheritdoc/>
+         /// <summary>
+         /// Gets whether the group is automatically filled
+         /// </summary>
         public bool IsAutoFilled() {
             return !string.IsNullOrEmpty(Query);
         }
         
-        /// <inheritdoc/>
+         /// <summary>
+         /// Sets/gets the color of the SelectionGroup 
+         /// </summary>
         public Color Color
         {
             get => this.color; 
@@ -123,17 +131,25 @@ namespace Unity.SelectionGroups
             m_editorToolsStatus[toolID] = toolEnabled;
         }
         
-        /// <inheritdoc/>
+         /// <summary>
+         /// Gets the number of members in this SelectionGroup
+         /// </summary>
         public int Count => members.Count;
-        /// <inheritdoc/>
-        public bool ShowMembers { get; set; }
+        
+        //TODO-sin: 2022-2-7: Should serialize this
+        internal bool ShowMembers { get; set; }
 
-        /// <inheritdoc/>
+         /// <summary>
+         /// Get the members of the SelectionGroup
+         /// </summary>
         public IList<Object> Members => members;
 
 //----------------------------------------------------------------------------------------------------------------------
         
-        /// <inheritdoc/>
+         /// <summary>
+         /// Adds a list of objects to the SelectionGroup 
+         /// </summary>
+         /// <param name="objects">A list of objects to be added</param>
         public void Add(IEnumerable<Object> objects) {
             foreach (Object i in objects) {
                 Add(i);
@@ -156,7 +172,10 @@ namespace Unity.SelectionGroups
         
 //----------------------------------------------------------------------------------------------------------------------        
         
-        /// <inheritdoc/>
+         /// <summary>
+         /// Clears and set the members of the SelectionGroup 
+         /// </summary>
+         /// <param name="objects">A enumerable collection of objects to be added</param>
         public void SetMembers(IEnumerable<Object> objects) {
             if (IsAutoFilled()) {
                 Debug.LogWarning($"[SG] Group {Name} is auto-filled. Can't manually set members");
@@ -177,7 +196,10 @@ namespace Unity.SelectionGroups
             }
         }
 
-        /// <inheritdoc/>
+         /// <summary>
+         /// Removes a list of objects from the SelectionGroup 
+         /// </summary>
+         /// <param name="objectReferences">A list of objects to be removed</param>
         public void Remove(IEnumerable<Object> objectReferences) {
             if (IsAutoFilled())
                 return;
@@ -198,7 +220,9 @@ namespace Unity.SelectionGroups
             members.Remove(obj);
         }
 
-        /// <inheritdoc/>
+         /// <summary>
+         /// Clears the members of the SelectionGroup
+         /// </summary>
         public void Clear()
         {
             members.Clear();
