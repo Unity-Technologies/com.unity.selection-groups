@@ -59,7 +59,7 @@ class SelectionGroupsProjectSettingsProvider : SettingsProvider {
 //----------------------------------------------------------------------------------------------------------------------
 
     [SettingsProvider]
-    internal static SettingsProvider CreateVisualCompositorSettingsProvider() {
+    internal static SettingsProvider CreateSelectionGroupsSettingsProvider() {
 	    m_projectSettingsProvider = new SelectionGroupsProjectSettingsProvider();
 	    return m_projectSettingsProvider;
     }
