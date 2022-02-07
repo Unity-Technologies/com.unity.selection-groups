@@ -115,6 +115,11 @@ namespace Unity.SelectionGroups.Editor
             if (null == m_inspectorLockTex) {
                 m_inspectorLockTex = (Texture2D)EditorGUIUtility.Load("IN LockButton on act@2x");
             }
+
+            if (null == m_hiddenInSceneTex) {
+                m_hiddenInSceneTex = (Texture2D)EditorGUIUtility.Load("d_scenevis_hidden_hover@2x");
+            }
+            
         }
 
         Rect DrawAllGroupMembers(Rect rect, SelectionGroup group)
@@ -154,9 +159,17 @@ namespace Unity.SelectionGroups.Editor
                 }
             }
 
+            if (g is GameObject gameObject) {
+                if (SceneVisibilityManager.instance.IsHidden(gameObject)) {
+                    DrawIconTexture(10, rect.y, m_hiddenInSceneTex);
+                }
+            }
+            
             if (g.hideFlags.HasFlag(HideFlags.NotEditable)) {
                 DrawIconTexture(0, rect.y, m_inspectorLockTex);
             }
+            
+            
 
             rect.x           += 24;
             bool allowRemove = !group.IsAutoFilled();
@@ -668,6 +681,7 @@ namespace Unity.SelectionGroups.Editor
 
         
         private Texture2D m_inspectorLockTex;
+        private Texture2D m_hiddenInSceneTex;
         
         
 
