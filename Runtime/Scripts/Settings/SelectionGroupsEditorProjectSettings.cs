@@ -17,9 +17,9 @@ internal class SelectionGroupsEditorProjectSettings : BaseJsonSingleton<Selectio
     
 //----------------------------------------------------------------------------------------------------------------------
 
-    bool AreGroupsVisibleInEditor() => m_groupsVisibleInHierarchy; 
+    internal bool AreGroupsVisibleInHierarchy() => m_groupsVisibleInHierarchy; 
     
-    void ShowGroupsInHierarchy(bool visible) {
+    internal void ShowGroupsInHierarchy(bool visible) {
         m_groupsVisibleInHierarchy = visible; 
     }
 

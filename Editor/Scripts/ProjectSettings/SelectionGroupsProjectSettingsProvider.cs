@@ -32,7 +32,6 @@ class SelectionGroupsProjectSettingsProvider : SettingsProvider {
 
             SelectionGroupsEditorProjectSettings projSettings =
                 SelectionGroupsEditorProjectSettings.GetOrCreateInstance();
-
             
             
             UIElementsEditorUtility.AddField<Toggle, bool>(defaultSectionContainer, Contents.VisibleInHierarchy, 
