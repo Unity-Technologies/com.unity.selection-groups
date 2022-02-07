@@ -136,6 +136,7 @@ namespace Unity.SelectionGroups
          /// </summary>
         public int Count => members.Count;
         
+        //TODO-sin: 2022-2-7: Should serialize this
         internal bool ShowMembers { get; set; }
 
          /// <summary>
