@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
 using NUnit.Framework;
-using Unity.SelectionGroups;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
