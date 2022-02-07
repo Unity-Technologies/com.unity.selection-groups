@@ -182,7 +182,6 @@ namespace Unity.SelectionGroups.Editor
             SelectionGroup group                 = m_groupsToDraw[groupIndex];
             bool           isPaint               = Event.current.type == EventType.Repaint;
             Rect           rect                  = new Rect(cursor) {x = 0, };
-            bool           isAvailableInEditMode = true;
             GUIContent     content               = sceneHeaderContent;
             
             content.text = $"{group.Name}";
@@ -217,8 +216,8 @@ namespace Unity.SelectionGroups.Editor
             float toolRightAlignedX = rect.x + rect.width;
             DrawTools(toolRightAlignedX, rect.y, group);
             
-            if(isAvailableInEditMode)
-                HandleHeaderMouseEvents(rect, groupIndex);
+            HandleHeaderMouseEvents(rect, groupIndex);
+            
             if (isPaint) 
             {
                 Label.normal.textColor = EditorGUIUtility.isProSkin ? ProTextColor: Color.black;
@@ -230,7 +229,7 @@ namespace Unity.SelectionGroups.Editor
 
             EditorGUI.DrawRect(rect, group.Color);
 
-            showChildren =  isAvailableInEditMode ? group.AreMembersShownInWindow() : false;
+            showChildren = group.AreMembersShownInWindow();
             rect.x = cursor.x;
             rect.y += rect.height;
             rect.width = cursor.width;
