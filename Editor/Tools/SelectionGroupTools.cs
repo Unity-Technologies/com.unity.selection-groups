@@ -36,13 +36,13 @@ namespace Unity.SelectionGroups.Editor
             bool isLocked = members[0].hideFlags.HasFlag(HideFlags.NotEditable);
             if (isLocked)
             {
-                foreach (Object g in group.Members)
-                    g.hideFlags &= ~HideFlags.NotEditable;
+                foreach (Object obj in group.Members)
+                    obj.hideFlags &= ~HideFlags.NotEditable;
             }
             else
             {
-                foreach (Object g in group.Members)
-                    g.hideFlags |= HideFlags.NotEditable;
+                foreach (Object obj in group.Members)
+                    obj.hideFlags |= HideFlags.NotEditable;
             }
         }
 
