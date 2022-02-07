@@ -59,13 +59,10 @@ namespace Unity.SelectionGroups.Editor
                 Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f)));
         }
 
-        void RegisterUndo(SelectionGroup @group, string msg)
+        static void RegisterUndo(SelectionGroup group, string msg)
         {
-            if (group is SelectionGroups.SelectionGroup runtimeGroup)
-            {
-                Undo.RegisterCompleteObjectUndo(runtimeGroup, msg);
-                EditorUtility.SetDirty(runtimeGroup);
-            }
+            Undo.RegisterCompleteObjectUndo(group, msg);
+            EditorUtility.SetDirty(group);
         }
     }
 }
