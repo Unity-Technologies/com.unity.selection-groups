@@ -17,7 +17,6 @@ namespace Unity.SelectionGroups.Editor
         
         private GUIStyle   Label;
         private GUIContent sceneHeaderContent;
-        private GUIContent InspectorLock;       
 
         private static readonly Color ProTextColor = new Color(0.824f, 0.824f, 0.824f, 1f);
         
@@ -656,6 +655,10 @@ namespace Unity.SelectionGroups.Editor
         private Object          m_shiftPivotGroupMember = null;
         
         private bool m_leftMouseWasDoubleClicked = false;
+
+        
+        private GUIContent InspectorLock;
+        
 
     }
 } //end namespace
