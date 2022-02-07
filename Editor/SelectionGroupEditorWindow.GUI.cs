@@ -392,8 +392,12 @@ namespace Unity.SelectionGroups.Editor
                         //copying/moving members to auto group. Invalid 
                         DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
                     } else {
-                        //copying/moving members to normal  group. Valid 
-                        DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+                        //moving window members to group.  
+                        bool isMovingWindowMembers = (dragItemType == DragItemType.WINDOW_GROUP_MEMBERS && evt.control);
+                        DragAndDrop.visualMode = isMovingWindowMembers
+                            ? DragAndDropVisualMode.Move
+                            : DragAndDropVisualMode.Copy; 
+                        
                     }
                     
                     evt.Use();
@@ -405,12 +409,25 @@ namespace Unity.SelectionGroups.Editor
 
                     DragItemType? dragItemType = DragAndDrop.GetGenericData(DRAG_ITEM_TYPE) as DragItemType?;
                     if (!dragItemType.HasValue) {
-                        dragItemType = DragItemType.GROUP_MEMBERS; //receive gameObjects from outside the window
-                    }
-
+                        dragItemType = DragItemType.GAMEOBJECTS; //receive gameObjects from outside the window
+                    } 
+                    
                     try {
                         switch (dragItemType.Value) {
-                            case DragItemType.GROUP_MEMBERS: {
+                            case DragItemType.WINDOW_GROUP_MEMBERS: {
+                                if (evt.control) {
+                                    m_selectedGroupMembers = SelectionGroupUtility.MoveMembersSelectionToGroup(
+                                        m_selectedGroupMembers, group
+                                    );
+                                } else {
+                                    RegisterUndo(@group, "Add Members");
+                                    HashSet<Object> members = m_selectedGroupMembers.ConvertMembersToSet();
+                                    @group.Add(members);
+                                }
+                                
+                                break;
+                            } 
+                            case DragItemType.GAMEOBJECTS: {
                                 RegisterUndo(@group, "Add Members");
                                 @group.Add(DragAndDrop.objectReferences);
                                 break;
@@ -525,20 +542,17 @@ namespace Unity.SelectionGroups.Editor
                 }
 
                 case EventType.MouseDrag:
-                    //Prepare the selected objects to be dragged: Convert to array
-                    HashSet<Object> uniqueDraggedObjects = new HashSet<Object>();
-                    foreach (KeyValuePair<ISelectionGroup, OrderedSet<Object>> members in m_selectedGroupMembers) {
-                        uniqueDraggedObjects.UnionWith(members.Value);
-                    }
-                    int numDraggedObjects  = uniqueDraggedObjects.Count;
+                    //Prepare the selected objects to be dragged:
+                    Object[] objects = m_selectedGroupMembers.ConvertMembersToArray();
+                    
+                    int numDraggedObjects = objects.Length;
                     if (numDraggedObjects <= 0)
                         break;
-
-                    Object[] objects = uniqueDraggedObjects.ToArray();                    
+                    
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.objectReferences = objects;
-                    DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP_MEMBERS);
-                    string dragText = numDraggedObjects > 1 ? objects[0].name + " ..." : objects[0].name;                        
+                    DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.WINDOW_GROUP_MEMBERS);
+                    string dragText = numDraggedObjects > 1 ? objects[0].name + " ..." : objects[0].name;
                     DragAndDrop.StartDrag(dragText);
                     evt.Use();
                     break;
@@ -615,7 +629,6 @@ namespace Unity.SelectionGroups.Editor
             UpdateUnityEditorSelectionWithMembers();
         }
         
-        
 //----------------------------------------------------------------------------------------------------------------------        
         
         private void SetUnityEditorSelection(SelectionGroup group) {
@@ -631,7 +644,7 @@ namespace Unity.SelectionGroups.Editor
 
 //----------------------------------------------------------------------------------------------------------------------        
 
-        readonly GroupMembersSelection m_selectedGroupMembers = new GroupMembersSelection();
+        GroupMembersSelection m_selectedGroupMembers = new GroupMembersSelection();
 
         private IList<SelectionGroup> m_groupsToDraw = null;
         private Object m_hoveredGroupMember = null;
