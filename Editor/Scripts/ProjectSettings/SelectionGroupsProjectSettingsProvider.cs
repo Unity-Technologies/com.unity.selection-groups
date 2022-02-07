@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using Unity.FilmInternalUtilities.Editor;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UIElements;
 
 namespace Unity.SelectionGroups.Editor {
 class SelectionGroupsProjectSettingsProvider : SettingsProvider {
     private class Contents {
-//		public static readonly GUIContent MaskChannel = EditorGUIUtility.TrTextContent("Default Mask Channel");
+		public static readonly GUIContent VisibleInHierarchy = EditorGUIUtility.TrTextContent("Visible In Hierarchy");
     }
 
 
@@ -29,17 +30,18 @@ class SelectionGroupsProjectSettingsProvider : SettingsProvider {
             VisualElement defaultSectionContainer = root.Query<VisualElement>("DefaultSectionContainer");
             Assert.IsNotNull(defaultSectionContainer);
 
-
             SelectionGroupsEditorProjectSettings projSettings =
                 SelectionGroupsEditorProjectSettings.GetOrCreateInstance();
 
-            // UIElementsEditorUtility.AddPopupField<ColorChannel>(defaultSectionContainer, Contents.MaskChannel,
-            // 	m_colorChannelEnums, projSettings.GetDefaultMaskChannel(),
-            // 	(e) => {
-            // 		projSettings.SetDefaultMaskChannel(e.newValue);
-            // 		projSettings.Save();
-            // 	});
-            //
+            
+            
+            UIElementsEditorUtility.AddField<Toggle, bool>(defaultSectionContainer, Contents.VisibleInHierarchy, 
+                projSettings.AreGroupsVisibleInHierarchy(),
+                (e) => {
+                    projSettings.ShowGroupsInHierarchy(e.newValue);
+                }
+            );
+            
         };
 
         deactivateHandler = () => { };
