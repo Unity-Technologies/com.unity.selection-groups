@@ -261,33 +261,42 @@ namespace Unity.GoQL
                     lengths[i] = selection[i].transform.parent == null ? 1 : selection[i].transform.parent.childCount;
                 }
 
+                var indexInstructions = new List<object>();
                 for (var i = 0; i < argCount; i++)
                 {
-                    var arg = stack.Pop();
-                    if (arg is int)
+                    indexInstructions.Add(stack.Pop());
+                }
+
+                indexInstructions.Reverse();
+
+                foreach(var arg in indexInstructions)
+                {
+                    if (arg is int siblingIndex)
                     {
                         for (var j = 0; j < selection.Count; j++)
                         {
-                            var index = mod(((int) arg), lengths[i]);
-                            if (index == indices[j])
+                            if (siblingIndex == indices[j])
                             {
                                 selection.Add(selection[j]);
                             }
                         }
                     }
-                    else if (arg is Range)
+                    else if (arg is Range range)
                     {
-                        var range = (Range) arg;
                         for (var index = range.start; index < range.end && index < selection.Count; index++)
                         {
                             for (var j = 0; j < selection.Count; j++)
                             {
-                                if (mod(index, lengths[j]) == indices[j])
+                                if (index == indices[j])
                                 {
                                     selection.Add(selection[j]);
                                 }
                             }
                         }
+                    } 
+                    else if (arg is ExcludeIndex excludeIndex)
+                    {
+                        selection.Remove(selection[excludeIndex.index]);                        
                     }
                 }
 

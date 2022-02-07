@@ -34,6 +34,11 @@ namespace Unity.GoQL
             {
                 writeBuffer.Add(item);
             }
+            
+            public void Remove(T item)
+            {
+                writeBuffer.Remove(item);
+            }
 
             public void AddRange(IEnumerable<T> items)
             {
