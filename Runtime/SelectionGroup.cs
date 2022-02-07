@@ -135,8 +135,8 @@ namespace Unity.SelectionGroups
          /// Gets the number of members in this SelectionGroup
          /// </summary>
         public int Count => members.Count;
-        /// <inheritdoc/>
-        public bool ShowMembers { get; set; }
+        
+        internal bool ShowMembers { get; set; }
 
          /// <summary>
          /// Get the members of the SelectionGroup
