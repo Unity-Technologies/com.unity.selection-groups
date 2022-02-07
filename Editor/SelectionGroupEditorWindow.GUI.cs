@@ -78,9 +78,8 @@ namespace Unity.SelectionGroups.Editor
                 if ((cursor.yMin - scroll.y) > position.height) break;
                 var dropRect = cursor;
                 
-                cursor = DrawHeader(cursor, i, out bool showChildren);
-
-                if (showChildren)
+                cursor = DrawHeader(cursor, i);
+                if (m_groupsToDraw[i].AreMembersShownInWindow())
                 {
                     // dropRect.yMax = rect.yMax;
                     //early out if this group yMax is above window rect (not visible).
@@ -178,11 +177,11 @@ namespace Unity.SelectionGroups.Editor
             HandleGroupMemberMouseEvents(rect, group, g, isGroupMemberSelected);            
         }
         
-        Rect DrawHeader(Rect cursor, int groupIndex, out bool showChildren) {
-            SelectionGroup group                 = m_groupsToDraw[groupIndex];
-            bool           isPaint               = Event.current.type == EventType.Repaint;
-            Rect           rect                  = new Rect(cursor) {x = 0, };
-            GUIContent     content               = sceneHeaderContent;
+        Rect DrawHeader(Rect cursor, int groupIndex) {
+            SelectionGroup group   = m_groupsToDraw[groupIndex];
+            bool           isPaint = Event.current.type == EventType.Repaint;
+            Rect           rect    = new Rect(cursor) {x = 0, };
+            GUIContent     content = sceneHeaderContent;
             
             content.text = $"{group.Name}";
 
@@ -228,8 +227,6 @@ namespace Unity.SelectionGroups.Editor
             rect.width = COLOR_WIDTH;
 
             EditorGUI.DrawRect(rect, group.Color);
-
-            showChildren = group.AreMembersShownInWindow();
             rect.x = cursor.x;
             rect.y += rect.height;
             rect.width = cursor.width;
