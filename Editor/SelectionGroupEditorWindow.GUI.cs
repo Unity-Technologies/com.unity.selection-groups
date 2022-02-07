@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
 using NUnit.Framework;
-using Unity.SelectionGroups;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -19,7 +17,6 @@ namespace Unity.SelectionGroups.Editor
         
         private GUIStyle   Label;
         private GUIContent sceneHeaderContent;
-        private GUIContent InspectorLock;       
 
         private static readonly Color ProTextColor = new Color(0.824f, 0.824f, 0.824f, 1f);
         
@@ -113,8 +110,16 @@ namespace Unity.SelectionGroups.Editor
                 miniButtonStyle = EditorStyles.miniButton;
                 miniButtonStyle.padding = new RectOffset(0, 0, 0, 0); 
                 Label = "label";
-                InspectorLock = EditorGUIUtility.IconContent("InspectorLock");
             }
+
+            if (null == m_inspectorLockTex) {
+                m_inspectorLockTex = (Texture2D)EditorGUIUtility.Load("IN LockButton on act@2x");
+            }
+
+            if (null == m_hiddenInSceneTex) {
+                m_hiddenInSceneTex = (Texture2D)EditorGUIUtility.Load("d_scenevis_hidden_hover@2x");
+            }
+            
         }
 
         Rect DrawAllGroupMembers(Rect rect, SelectionGroup group)
@@ -154,15 +159,19 @@ namespace Unity.SelectionGroups.Editor
                 }
             }
 
-            if (g.hideFlags.HasFlag(HideFlags.NotEditable)) {
-                GUIContent icon  = InspectorLock;
-                Rect irect = rect;
-                irect.width  = 16;
-                irect.height = 14;
-                GUI.DrawTexture(irect, icon.image);
+            if (g is GameObject gameObject) {
+                if (SceneVisibilityManager.instance.IsHidden(gameObject)) {
+                    DrawIconTexture(0, rect.y, m_hiddenInSceneTex);
+                }
             }
+            
+            if (g.hideFlags.HasFlag(HideFlags.NotEditable)) {
+                DrawIconTexture(16, rect.y, m_inspectorLockTex);
+            }
+            
+            
 
-            rect.x           += 24;
+            rect.x           += 32;
             bool allowRemove = !group.IsAutoFilled();
             GUI.contentColor =  allowRemove ? Color.white : Color.Lerp(Color.white, Color.yellow, 0.25f);
             GUI.Label(rect, content);
@@ -270,6 +279,17 @@ namespace Unity.SelectionGroups.Editor
                 ++enabledToolCounter;
             }
         }
+
+        static void DrawIconTexture(float iconX, float iconY, Texture2D tex) {
+            Rect rect = new Rect() {
+                x = iconX,
+                y = iconY,
+                width  = 16,
+                height = 14,
+            };
+            GUI.DrawTexture(rect,tex);
+        }
+        
 
         void ShowGroupMemberContextMenu(Rect rect, SelectionGroup clickedGroup)
         {
@@ -658,6 +678,12 @@ namespace Unity.SelectionGroups.Editor
         private Object          m_shiftPivotGroupMember = null;
         
         private bool m_leftMouseWasDoubleClicked = false;
+
+        
+        private Texture2D m_inspectorLockTex;
+        private Texture2D m_hiddenInSceneTex;
+        
+        
 
     }
 } //end namespace
