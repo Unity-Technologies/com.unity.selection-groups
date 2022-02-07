@@ -32,8 +32,9 @@ class SelectionGroupsProjectSettingsProvider : SettingsProvider {
 			VisualElement defaultSectionContainer = root.Query<VisualElement>("DefaultSectionContainer");
 			Assert.IsNotNull(defaultSectionContainer);
 
-			//
-			// SelectionGroupsEditorProjectSettings projSettings = SelectionGroupsEditorProjectSettings.GetOrCreateSettings();			
+			
+			SelectionGroupsEditorProjectSettings projSettings = SelectionGroupsEditorProjectSettings.GetOrCreateInstance();
+			
 			// UIElementsEditorUtility.AddPopupField<ColorChannel>(defaultSectionContainer, Contents.MaskChannel,
 			// 	m_colorChannelEnums, projSettings.GetDefaultMaskChannel(),
 			// 	(e) => {
