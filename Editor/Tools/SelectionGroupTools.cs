@@ -27,23 +27,21 @@ namespace Unity.SelectionGroups.Editor
         }
 
         [SelectionGroupTool("LockIcon-On", "Enable and disable editing of objects.",(int) SelectionGroupToolType.LOCK)]
-        static void DisableEditing(SelectionGroup group)
+        static void DisableEditing(SelectionGroup group) 
         {
-            var isLocked = false;
-            foreach (var g in group.Members) {
-                if (!g.hideFlags.HasFlag(HideFlags.NotEditable)) 
-                    continue;
-                isLocked = true;
-                break;
-            }
+            IList<Object> members  = group.Members;
+            if (null == members || members.Count <= 0)
+                return;
+            
+            bool isLocked = members[0].hideFlags.HasFlag(HideFlags.NotEditable);
             if (isLocked)
             {
-                foreach (var g in group.Members)
+                foreach (Object g in group.Members)
                     g.hideFlags &= ~HideFlags.NotEditable;
             }
             else
             {
-                foreach (var g in group.Members)
+                foreach (Object g in group.Members)
                     g.hideFlags |= HideFlags.NotEditable;
             }
         }
