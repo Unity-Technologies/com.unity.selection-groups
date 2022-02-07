@@ -25,7 +25,7 @@ internal class SelectionGroupsEditorProjectSettings : BaseJsonSingleton<Selectio
 
 //----------------------------------------------------------------------------------------------------------------------
     
-    [SerializeField] private bool m_groupsVisibleInHierarchy = false;
+    [SerializeField] private bool m_groupsVisibleInHierarchy = true;
 
 //----------------------------------------------------------------------------------------------------------------------
     private const int LATEST_VERSION = (int) Version.INITIAL; 
