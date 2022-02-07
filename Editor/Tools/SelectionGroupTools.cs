@@ -30,10 +30,11 @@ namespace Unity.SelectionGroups.Editor
         static void DisableEditing(SelectionGroup group)
         {
             var isLocked = false;
-            foreach (var g in group.Members)
-            {
-                if (g.hideFlags.HasFlag(HideFlags.NotEditable))
-                    isLocked = true;
+            foreach (var g in group.Members) {
+                if (!g.hideFlags.HasFlag(HideFlags.NotEditable)) 
+                    continue;
+                isLocked = true;
+                break;
             }
             if (isLocked)
             {
