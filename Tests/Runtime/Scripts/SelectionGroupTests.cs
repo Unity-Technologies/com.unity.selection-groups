@@ -1,6 +1,8 @@
+using System.Collections;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Unity.SelectionGroups.Tests 
 {
@@ -40,14 +42,16 @@ internal class SelectionGroupTests {
         Assert.AreEqual(0, groupManager.Groups.Count);
     }
     
-    [Test]
-    public void UndoGoQLQuery() {
+    [UnityTest]
+    public IEnumerator UndoGoQLQuery() {
         SelectionGroupManager groupManager = GetAndInitGroupManager();
         SelectionGroup        group        = groupManager.CreateSceneSelectionGroup("TestGroup", Color.green);
         Undo.RegisterCompleteObjectUndo(group, "Query change");
         group.SetQuery("/");
         Assert.AreEqual("/", group.Query);
+        yield return null;
         Undo.PerformUndo();
+        yield return null;
         Assert.AreEqual("", group.Query);
         Object.DestroyImmediate(group);
         Assert.AreEqual(0, groupManager.Groups.Count);
