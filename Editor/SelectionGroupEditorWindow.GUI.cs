@@ -110,7 +110,10 @@ namespace Unity.SelectionGroups.Editor
                 miniButtonStyle = EditorStyles.miniButton;
                 miniButtonStyle.padding = new RectOffset(0, 0, 0, 0); 
                 Label = "label";
-                InspectorLock = EditorGUIUtility.IconContent("InspectorLock");
+            }
+
+            if (null == m_inspectorLockTex) {
+                m_inspectorLockTex = (Texture2D)EditorGUIUtility.Load("IN LockButton on act@2x");
             }
         }
 
@@ -152,11 +155,10 @@ namespace Unity.SelectionGroups.Editor
             }
 
             if (g.hideFlags.HasFlag(HideFlags.NotEditable)) {
-                GUIContent icon  = InspectorLock;
                 Rect irect = rect;
                 irect.width  = 16;
                 irect.height = 14;
-                GUI.DrawTexture(irect, icon.image);
+                GUI.DrawTexture(irect,m_inspectorLockTex);
             }
 
             rect.x           += 24;
@@ -657,7 +659,8 @@ namespace Unity.SelectionGroups.Editor
         private bool m_leftMouseWasDoubleClicked = false;
 
         
-        private GUIContent InspectorLock;
+        private Texture2D m_inspectorLockTex;
+        
         
 
     }
