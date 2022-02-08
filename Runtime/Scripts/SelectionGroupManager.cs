@@ -46,20 +46,37 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         return group;
     }
 
+    [Obsolete]
     internal SelectionGroup CreateSceneSelectionGroup(string groupName, Color color) {
+        return CreateSelectionGroup(groupName, color);
+    }
+    
+    [Obsolete]
+    internal SelectionGroup CreateSceneSelectionGroup(string groupName, Color color, string query) {
+        return CreateSelectionGroup(groupName, color, query);
+    }
+
+    [Obsolete]
+    internal SelectionGroup CreateSceneSelectionGroup(string groupName, Color color, IList<Object> members) {
+        return CreateSelectionGroup(groupName, color, members);
+    }
+    
+
+    //
+    internal SelectionGroup CreateSelectionGroup(string groupName, Color color) {
         SelectionGroup group = CreateSelectionGroupInternal(groupName, color);
         m_sceneSelectionGroups.Add(group);
         return group;
     }
     
-    internal SelectionGroup CreateSceneSelectionGroup(string groupName, Color color, string query) {
+    internal SelectionGroup CreateSelectionGroup(string groupName, Color color, string query) {
         SelectionGroup group = CreateSelectionGroupInternal(groupName, color);        
         group.SetQuery(query);
         m_sceneSelectionGroups.Add(group);
         return group;
     }
 
-    internal SelectionGroup CreateSceneSelectionGroup(string groupName, Color color, IList<Object> members) {
+    internal SelectionGroup CreateSelectionGroup(string groupName, Color color, IList<Object> members) {
         SelectionGroup group = CreateSelectionGroupInternal(groupName, color);
         group.Add(members);
         m_sceneSelectionGroups.Add(group);
