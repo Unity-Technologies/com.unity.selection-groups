@@ -35,7 +35,7 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
 
     [Obsolete]
     internal SelectionGroup CreateSceneSelectionGroup(string groupName, string query, Color color, IList<Object> members) {
-        SelectionGroup group = CreateSceneSelectionGroupInternal(groupName, color);        
+        SelectionGroup group = CreateSelectionGroupInternal(groupName, color);        
         group.SetQuery(query);
 
         if (!group.IsAutoFilled()) {
@@ -47,26 +47,26 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
     }
 
     internal SelectionGroup CreateSceneSelectionGroup(string groupName, Color color) {
-        SelectionGroup group = CreateSceneSelectionGroupInternal(groupName, color);
+        SelectionGroup group = CreateSelectionGroupInternal(groupName, color);
         m_sceneSelectionGroups.Add(group);
         return group;
     }
     
     internal SelectionGroup CreateSceneSelectionGroup(string groupName, Color color, string query) {
-        SelectionGroup group = CreateSceneSelectionGroupInternal(groupName, color);        
+        SelectionGroup group = CreateSelectionGroupInternal(groupName, color);        
         group.SetQuery(query);
         m_sceneSelectionGroups.Add(group);
         return group;
     }
 
     internal SelectionGroup CreateSceneSelectionGroup(string groupName, Color color, IList<Object> members) {
-        SelectionGroup group = CreateSceneSelectionGroupInternal(groupName, color);
+        SelectionGroup group = CreateSelectionGroupInternal(groupName, color);
         group.Add(members);
         m_sceneSelectionGroups.Add(group);
         return group;
     }
 
-    private static SelectionGroup CreateSceneSelectionGroupInternal(string groupName, Color color) {
+    private static SelectionGroup CreateSelectionGroupInternal(string groupName, Color color) {
         GameObject g = new GameObject(groupName);
 #if UNITY_EDITOR
         Undo.RegisterCreatedObjectUndo(g, "New Scene Selection Group");
