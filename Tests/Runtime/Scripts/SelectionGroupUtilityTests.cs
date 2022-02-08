@@ -10,10 +10,10 @@ internal class SelectionGroupUtilityTests {
     public void CheckMovingMembersSelectionToGroup() {
         //Initialize source groups
         SelectionGroupManager groupManager = SelectionGroupManager.GetOrCreateInstance();
-        SelectionGroup        firstGroup     = groupManager.CreateSceneSelectionGroup("First", Color.red);
+        SelectionGroup        firstGroup   = groupManager.CreateSelectionGroup("First", Color.red);
         firstGroup.Add(CreateGameObjects("1","2","3","4","5"));
 
-        SelectionGroup secondGroup = groupManager.CreateSceneSelectionGroup("Second", Color.green);
+        SelectionGroup secondGroup = groupManager.CreateSelectionGroup("Second", Color.green);
         secondGroup.Add(CreateGameObjects("6","7","8"));
 
         //Configure selection
@@ -22,7 +22,7 @@ internal class SelectionGroupUtilityTests {
         AddGroupMembersToSelection(secondGroup, new []{ 1}, selection);
                 
         //Move to dest
-        SelectionGroup destGroup = groupManager.CreateSceneSelectionGroup("Dest", Color.blue);
+        SelectionGroup destGroup = groupManager.CreateSelectionGroup("Dest", Color.blue);
         selection = SelectionGroupUtility.MoveMembersSelectionToGroup(selection,destGroup);
 
         Assert.IsTrue(GroupContainsMembers(firstGroup, new HashSet<string>() {"1", "5"}));
