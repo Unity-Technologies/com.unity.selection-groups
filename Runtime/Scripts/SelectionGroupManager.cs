@@ -74,6 +74,12 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         SelectionGroup group = g.AddComponent<SelectionGroup>();
         group.Name        = groupName;
         group.Color       = color;
+        
+        SelectionGroupsEditorProjectSettings projSettings = SelectionGroupsEditorProjectSettings.GetOrCreateInstance();
+        for (int i = 0; i < (int)SelectionGroupToolType.MAX; ++i) {
+            group.EnableEditorTool(i, projSettings.GetDefaultGroupEditorToolStatus(i));
+        }
+        
         return group;
     }
 
