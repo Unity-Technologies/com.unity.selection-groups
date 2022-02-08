@@ -74,7 +74,6 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         SelectionGroup group = g.AddComponent<SelectionGroup>();
         group.Name        = groupName;
         group.Color       = color;
-        group.ShowMembers = true; //[TODO-sin: 2022-1-6] This is always true. Maybe we can move it in the constructor?
         return group;
     }
 

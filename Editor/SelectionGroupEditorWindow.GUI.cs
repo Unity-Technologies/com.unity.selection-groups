@@ -40,17 +40,15 @@ namespace Unity.SelectionGroups.Editor
 
         static float CalculateHeight(IList<SelectionGroup> groups)
         {
-            var height = EditorGUIUtility.singleLineHeight;
-            for (var i=0; i<groups.Count; i++)
-            {
-                var group = groups[i];
-                if (null == group)
+            float height = EditorGUIUtility.singleLineHeight;
+            foreach (SelectionGroup @group in groups) {
+                if (null == @group)
                     continue;
                 
                 height += EditorGUIUtility.singleLineHeight + 3;
-                if (group.ShowMembers)
+                if (@group.AreMembersShownInWindow())
                 {
-                    height += group.Count * EditorGUIUtility.singleLineHeight;
+                    height += @group.Count * EditorGUIUtility.singleLineHeight;
                 }
             }
             return height;
@@ -207,10 +205,12 @@ namespace Unity.SelectionGroups.Editor
             float labelWidth = currentViewWidth
                              - (COLOR_WIDTH + FOLDOUT_WIDTH + RightMargin + SEPARATOR_WIDTH);
             {
-                rect.width        =  FOLDOUT_WIDTH;
-                group.ShowMembers =  EditorGUI.Toggle(rect, group.ShowMembers, EditorStyles.foldout);
-                rect.x            += FOLDOUT_WIDTH;
-                rect.width        =  labelWidth;
+                rect.width =  FOLDOUT_WIDTH;
+                group.ShowMembersInWindow(EditorGUI.Toggle(rect, group.AreMembersShownInWindow(), EditorStyles.foldout));
+                
+                rect.x     += FOLDOUT_WIDTH;
+                rect.width =  labelWidth;
+                
             }
             
             //Draw tools first before handling mouse events
@@ -230,7 +230,7 @@ namespace Unity.SelectionGroups.Editor
 
             EditorGUI.DrawRect(rect, group.Color);
 
-            showChildren =  isAvailableInEditMode ? group.ShowMembers : false;
+            showChildren =  isAvailableInEditMode ? group.AreMembersShownInWindow() : false;
             rect.x = cursor.x;
             rect.y += rect.height;
             rect.width = cursor.width;

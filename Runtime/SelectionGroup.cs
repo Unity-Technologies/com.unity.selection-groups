@@ -134,10 +134,15 @@ namespace Unity.SelectionGroups
          /// </summary>
         public int Count => members.Count;
         
-        //TODO-sin: 2022-2-7: Should serialize this
-        internal bool ShowMembers { get; set; }
+#if UNITY_EDITOR
+        internal bool AreMembersShownInWindow() => m_showMembersInWindow;
 
-         /// <summary>
+        internal void ShowMembersInWindow(bool show) {
+            m_showMembersInWindow = show;
+        }
+#endif
+
+        /// <summary>
          /// Get the members of the SelectionGroup
          /// </summary>
         public IList<Object> Members => members;
@@ -309,6 +314,9 @@ namespace Unity.SelectionGroups
 //----------------------------------------------------------------------------------------------------------------------
 
         [SerializeField] List<bool> m_editorToolsStatus = new List<bool>(new bool[(int) SelectionGroupToolType.MAX]);
+
+        [SerializeField] private bool m_showMembersInWindow = true;
+        
 
         private GoQL.ParseResult m_queryParseResult = ParseResult.Empty;       
         
