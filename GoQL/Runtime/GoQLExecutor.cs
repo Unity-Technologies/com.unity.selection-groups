@@ -440,5 +440,11 @@ namespace Unity.GoQL
         }
 
         int mod(int a, int b) => a - b * Mathf.FloorToInt(1f * a / b);
+
+        static bool IsHideFlagSet(GameObject go, HideFlags hideFlags) 
+        {
+            return ((go.hideFlags & hideFlags) == hideFlags);
+        }
+        
     }
 }
