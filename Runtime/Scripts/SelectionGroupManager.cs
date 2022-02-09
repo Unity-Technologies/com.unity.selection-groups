@@ -146,16 +146,6 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         m_sceneSelectionGroups.Move(prevIndex, newIndex);
     }
 
-#if UNITY_EDITOR
-    internal void RefreshGroupHideFlagsInEditor() {
-        foreach (SelectionGroup group in m_sceneSelectionGroups) {
-            group.RefreshHideFlagsInEditor();
-        }
-        EditorApplication.RepaintHierarchyWindow();
-        EditorApplication.DirtyHierarchyWindowSorting();
-    }
-#endif
-
 //----------------------------------------------------------------------------------------------------------------------
 
     ///<inheritdoc/>

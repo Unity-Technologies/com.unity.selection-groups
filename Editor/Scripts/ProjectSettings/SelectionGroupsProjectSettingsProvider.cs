@@ -45,7 +45,7 @@ class SelectionGroupsProjectSettingsProvider : SettingsProvider {
                 (e) => {
                     projSettings.ShowGroupsInHierarchy(e.newValue);
                     projSettings.SaveInEditor();
-                    SelectionGroupManager.GetOrCreateInstance().RefreshGroupHideFlagsInEditor();
+                    RefreshGroupHideFlagsInEditor();
                 }
             );
 
@@ -84,6 +84,19 @@ class SelectionGroupsProjectSettingsProvider : SettingsProvider {
 
 
 //----------------------------------------------------------------------------------------------------------------------
+    
+    internal void RefreshGroupHideFlagsInEditor() {
+        SelectionGroupManager sgManager = SelectionGroupManager.GetOrCreateInstance();
+        foreach (SelectionGroup group in sgManager.Groups) {
+            group.RefreshHideFlagsInEditor();
+        }
+        SelectionGroupManager.UpdateQueryResults();
+        EditorApplication.RepaintHierarchyWindow();
+        EditorApplication.DirtyHierarchyWindowSorting();
+        
+        SelectionGroupEditorWindow.TryRepaint();
+    }
+    
 
     private static SelectionGroupsProjectSettingsProvider m_projectSettingsProvider = null;
 
