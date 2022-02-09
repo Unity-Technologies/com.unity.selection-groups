@@ -441,10 +441,16 @@ namespace Unity.GoQL
 
         void EnterChildren()
         {
-            foreach (var i in selection)
+            foreach (GameObject i in selection) 
             {
-                for (var j = 0; j < i.transform.childCount; j++)
-                    selection.Add(i.transform.GetChild(j).gameObject);
+                Transform t = i.transform;
+                for (var j = 0; j < t.childCount; j++) 
+                {
+                    GameObject childGO = t.GetChild(j).gameObject;
+                    if (IsHideFlagSet(childGO, HideFlags.HideInHierarchy))
+                        continue;
+                    selection.Add(childGO);
+                }
             }
 
             selection.Swap();
