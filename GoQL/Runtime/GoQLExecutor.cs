@@ -191,8 +191,13 @@ namespace Unity.GoQL
                 if(!scene.isLoaded) continue;
                 foreach (var j in scene.GetRootGameObjects())
                 {
-                    foreach(var k in j.GetComponentsInChildren<Transform>(true))
+                    foreach (var k in j.GetComponentsInChildren<Transform>(true)) 
+                    {
+                        if (IsHideFlagSet(k.gameObject, HideFlags.HideInHierarchy))
+                            continue;
+                            
                         selection.Add(k.gameObject);
+                    }
                 }
             }
             selection.Swap();
