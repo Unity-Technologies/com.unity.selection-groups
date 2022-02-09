@@ -422,9 +422,15 @@ namespace Unity.GoQL
         {
             for (var i = 0; i < SceneManager.sceneCount; i++)
             {
-                var scene = SceneManager.GetSceneAt(i);
-                if(scene.isLoaded)
-                    selection.AddRange(scene.GetRootGameObjects());
+                Scene scene = SceneManager.GetSceneAt(i);
+                if (!scene.isLoaded) continue;
+                
+                foreach (var j in scene.GetRootGameObjects()) 
+                {
+                    if (IsHideFlagSet(j, HideFlags.HideInHierarchy))
+                        continue;
+                    selection.Add(j);
+                }
             }
         }
 
