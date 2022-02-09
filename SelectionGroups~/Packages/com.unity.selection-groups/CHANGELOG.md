@@ -4,6 +4,12 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.7.1-preview] - 2022-02-10
+
+### Fixed
+* fix: exclude hidden GameObjects from GoQL results 
+* fix: refresh query results after changing visibility settings in the Hierarchy
+
 ## [0.7.0-preview] - 2022-02-08
 
 ### Added
