@@ -146,9 +146,6 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         m_sceneSelectionGroups.Move(prevIndex, newIndex);
     }
 
-#if UNITY_EDITOR
-#endif
-
 //----------------------------------------------------------------------------------------------------------------------
 
     ///<inheritdoc/>
