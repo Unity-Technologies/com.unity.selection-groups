@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using NUnit.Framework;
+using Unity.GoQL;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -37,6 +38,12 @@ internal class GoQLDiscriminatorTests
             MeshRenderer mr = t.GetComponent<MeshRenderer>();
             return t.name == "Head" && null!=mr && mr.sharedMaterial.shader.name == "Standard";
         });
+    }
+    
+    [Test]
+    public void BadDiscriminator() {
+        GoQLExecutor e = new GoQLExecutor("/<Collider/*");
+        Assert.AreEqual(ParseResult.UnexpectedEndOfInput, e.parseResult);
     }
     
 //----------------------------------------------------------------------------------------------------------------------
