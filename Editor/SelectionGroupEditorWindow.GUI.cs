@@ -58,16 +58,22 @@ namespace Unity.SelectionGroups.Editor
         void DrawGUI()
         {
             m_groupsToDraw = SelectionGroupManager.GetOrCreateInstance().Groups;
+
+            Rect toolbarRect = new Rect()
+            {
+                width = position.width,
+                height = EditorGUIUtility.singleLineHeight
+            };
+            DrawToolbar(toolbarRect);
             
             var viewRect = Rect.zero;
+            viewRect.y = toolbarRect.yMax + 2;
             viewRect.width = position.width-16;
             viewRect.height = CalculateHeight(m_groupsToDraw);
-            var windowRect = new Rect(0, 0, position.width, position.height);
+            var windowRect = new Rect(0, toolbarRect.yMax + 2, position.width, position.height - toolbarRect.height - 2);
             scroll = GUI.BeginScrollView(windowRect, scroll, viewRect);
             
-            Rect cursor = new Rect(0, 0, position.width-RightMargin, EditorGUIUtility.singleLineHeight);
-            DrawToolbar(cursor);
-            cursor.y += cursor.height;
+            Rect cursor = new Rect(0, toolbarRect.yMax + 2, position.width-RightMargin, EditorGUIUtility.singleLineHeight);
 
             for (var i=0; i<m_groupsToDraw.Count; i++)
             {
