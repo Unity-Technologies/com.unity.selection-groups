@@ -17,6 +17,7 @@ namespace Unity.SelectionGroups.Editor
         
         private GUIStyle   Label;
         private GUIContent sceneHeaderContent;
+        private GUIContent m_CreateDropdownConten;
 
         private static readonly Color ProTextColor = new Color(0.824f, 0.824f, 0.824f, 1f);
         
@@ -65,7 +66,7 @@ namespace Unity.SelectionGroups.Editor
             scroll = GUI.BeginScrollView(windowRect, scroll, viewRect);
             
             Rect cursor = new Rect(0, 0, position.width-RightMargin, EditorGUIUtility.singleLineHeight);
-            if (GUI.Button(cursor, AddGroup)) CreateNewGroup();
+            DrawToolbar(cursor);
             cursor.y += cursor.height;
 
             for (var i=0; i<m_groupsToDraw.Count; i++)
@@ -97,6 +98,28 @@ namespace Unity.SelectionGroups.Editor
             }
             GUI.EndScrollView();
 
+        }
+
+        void DrawToolbar(Rect rect)
+        {
+            if (Event.current.type == EventType.Repaint)
+                EditorStyles.toolbar.Draw(rect, false, false, false, false);
+
+            rect.width = 35;
+            if (EditorGUI.DropdownButton(rect, m_CreateDropdownConten, FocusType.Passive, EditorStyles.toolbarDropDown))
+            {
+                GenericMenu menu = new GenericMenu();
+                menu.AddItem(new GUIContent("Create Empty Group"), false, CreateNewGroup);
+                if (Selection.gameObjects.Length > 0)
+                {
+                    menu.AddItem(new GUIContent("Create Group from Selection"), false, CreateNewGroupFromSelection);
+                }
+                else
+                {
+                    menu.AddDisabledItem(new GUIContent("Create Group from Selection"));
+                }
+                menu.DropDown(rect);
+            }
         }
 
         void SetupStyles()
