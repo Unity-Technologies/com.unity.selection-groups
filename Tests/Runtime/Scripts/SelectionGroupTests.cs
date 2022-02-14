@@ -53,7 +53,7 @@ internal class SelectionGroupTests {
         Undo.PerformUndo();
         yield return null;
         Assert.AreEqual("", group.Query);
-        Object.DestroyImmediate(group);
+        Object.Destroy(group);
         yield return null;
         Assert.AreEqual(0, groupManager.Groups.Count);
     }
