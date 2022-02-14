@@ -25,6 +25,12 @@ internal class GoQLDiscriminatorTests
     }
     
     [Test]
+    public void ExclusionOperator() {
+        TestUtility.ExecuteGoQLAndVerify("Head<t:Collider><!t:MeshFilter>", 2,
+            (Transform t) => t.name == "Head" && t.GetComponent<Collider>() != null && t.GetComponent<MeshFilter>() == null);
+    }
+    
+    [Test]
     public void GlowMaterial() {
         TestUtility.ExecuteGoQLAndVerify("Head<m:Glow>", 1, (Transform t) => {
             MeshRenderer mr = t.GetComponent<MeshRenderer>();
