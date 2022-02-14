@@ -427,7 +427,7 @@ namespace Unity.GoQL
         {
             for (var i = 0; i < SceneManager.sceneCount; i++)
             {
-                Scene scene = SceneManager.GetSceneAt(i);
+                var scene = SceneManager.GetSceneAt(i);
                 if (!scene.isLoaded) continue;
                 
                 foreach (var j in scene.GetRootGameObjects()) 
