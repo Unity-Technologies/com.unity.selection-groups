@@ -45,6 +45,12 @@ internal class GoQLIndexerTests
         } 
     }
     
+    [Test]
+    public void NoDuplicateIndexedChildren()
+    {
+        TestUtility.ExecuteGoQLAndVerify("/[0,1,0]", 2);
+    }
+    
     
     [Ignore("LastChild")]
     [Test]
