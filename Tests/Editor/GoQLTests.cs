@@ -1,6 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Unity.GoQL;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Unity.SelectionGroups.EditorTests
 {
@@ -41,5 +45,7 @@ namespace Unity.SelectionGroups.EditorTests
             Assert.AreEqual(TokenType.Operator, tokens[13].type);
             
         }
+        
+        
     }
 }

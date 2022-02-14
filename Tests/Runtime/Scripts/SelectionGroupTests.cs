@@ -42,21 +42,7 @@ internal class SelectionGroupTests {
         Assert.AreEqual(0, groupManager.Groups.Count);
     }
     
-    [UnityTest]
-    public IEnumerator UndoGoQLQuery() {
-        SelectionGroupManager groupManager = GetAndInitGroupManager();
-        SelectionGroup        group        = groupManager.CreateSceneSelectionGroup("TestGroup", Color.green);
-        Undo.RegisterCompleteObjectUndo(group, "Query change");
-        group.SetQuery("/");
-        Assert.AreEqual("/", group.Query);
-        yield return null;
-        Undo.PerformUndo();
-        yield return null;
-        Assert.AreEqual("", group.Query);
-        Object.Destroy(group);
-        yield return null;
-        Assert.AreEqual(0, groupManager.Groups.Count);
-    }
+  
     
     
 //----------------------------------------------------------------------------------------------------------------------
