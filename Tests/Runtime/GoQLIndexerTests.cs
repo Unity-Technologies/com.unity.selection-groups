@@ -51,6 +51,13 @@ internal class GoQLIndexerTests
         TestUtility.ExecuteGoQLAndVerify("/[0,1,0]", 2);
     }
     
+    [Test]
+    public void ExclusionOperator()
+    {
+        TestUtility.ExecuteGoQLAndVerify("/[0:3]", 3);
+        TestUtility.ExecuteGoQLAndVerify("/[0:3,!1,!0]", 1,(t) => t.name == "Head");
+    }
+    
     
     [Test]
     public void LastChild()
