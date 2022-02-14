@@ -52,11 +52,10 @@ internal class GoQLIndexerTests
     }
     
     
-    [Ignore("LastChild")]
     [Test]
     public void LastChild()
     {
-        TestUtility.ExecuteGoQLAndVerify("Head/[-1]", 2, (Transform t) => null!=t.parent && t.parent.name == "Head");
+        TestUtility.ExecuteGoQLAndVerify("Head/[-1]", 1, (Transform t) => null!=t.parent && t.parent.name == "Head");
     }
     
     [Test]
