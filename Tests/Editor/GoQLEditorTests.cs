@@ -23,9 +23,6 @@ namespace Tests
             Undo.PerformUndo();
             yield return null;
             Assert.AreEqual("", group.Query);
-            Object.DestroyImmediate(group);
-            yield return null;
-            Assert.AreEqual(0, groupManager.Groups.Count);
         }
     }
 }
