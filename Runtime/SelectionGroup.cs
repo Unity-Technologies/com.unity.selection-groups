@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using Unity.GoQL;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -18,7 +19,7 @@ namespace Unity.SelectionGroups
     /// </summary>
     [ExecuteAlways]
     [AddComponentMenu("")]
-    public class SelectionGroup : MonoBehaviour, ISelectionGroup, ISerializationCallbackReceiver    
+    public class SelectionGroup : MonoBehaviour, ISerializationCallbackReceiver    
     {
         /// <summary>
         /// A color assigned to this group.
@@ -40,9 +41,7 @@ namespace Unity.SelectionGroups
                 
         void OnEnable()
         {
-            //SelectionGroup won't be selectable in the select popup window if HideInHierarchy is set 
-            this.gameObject.hideFlags = HideFlags.None;
-            this.transform.hideFlags  = HideFlags.HideInInspector;
+            RefreshHideFlagsInEditor();
             
             if (!m_registerOnEnable) 
                 return;
@@ -58,7 +57,9 @@ namespace Unity.SelectionGroups
         }
 
 
-        /// <inheritdoc/>
+         /// <summary>
+         /// Sets/gets the name of the SelectionGroup
+         /// </summary>
         public string Name
         {
             get { return gameObject.name; }
@@ -66,7 +67,9 @@ namespace Unity.SelectionGroups
         }
 
 
-        /// <inheritdoc/>
+         /// <summary>
+         /// Sets/gets the query which will automatically include GameObjects from the hierarchy that match the query into the group.
+         /// </summary>
         public string Query
         {
             get => this.query; 
@@ -104,12 +107,16 @@ namespace Unity.SelectionGroups
         public GoQL.ParseResult GetLastQueryParseResult() => m_queryParseResult;
         
         
-        /// <inheritdoc/>
+         /// <summary>
+         /// Gets whether the group is automatically filled
+         /// </summary>
         public bool IsAutoFilled() {
             return !string.IsNullOrEmpty(Query);
         }
         
-        /// <inheritdoc/>
+         /// <summary>
+         /// Sets/gets the color of the SelectionGroup 
+         /// </summary>
         public Color Color
         {
             get => this.color; 
@@ -123,29 +130,67 @@ namespace Unity.SelectionGroups
             m_editorToolsStatus[toolID] = toolEnabled;
         }
         
-        /// <inheritdoc/>
+         /// <summary>
+         /// Gets the number of members in this SelectionGroup
+         /// </summary>
         public int Count => members.Count;
-        /// <inheritdoc/>
-        public bool ShowMembers { get; set; }
+        
+#if UNITY_EDITOR
+        internal bool AreMembersShownInWindow() => m_showMembersInWindow;
 
-        /// <inheritdoc/>
+        internal void ShowMembersInWindow(bool show) {
+            m_showMembersInWindow = show;
+        }
+#endif
+
+        /// <summary>
+         /// Get the members of the SelectionGroup
+         /// </summary>
         public IList<Object> Members => members;
 
-        /// <inheritdoc/>
-        public void Add(IList<Object> objects) 
-        {
-            foreach (var i in objects) 
-            {
-                if (i == null)
-                    continue;
-                
-                if(!members.Contains(i))
-                    members.Add(i);
+        [NotNull]
+        internal List<GameObject> FindGameObjectMembers() {
+            List<GameObject> ret = new List<GameObject>();
+            foreach (Object m in members) {
+                if (m is GameObject go) {
+                    ret.Add(go);
+                }
+            }
+            return ret;
+        }
+
+//----------------------------------------------------------------------------------------------------------------------
+        
+         /// <summary>
+         /// Adds a list of objects to the SelectionGroup 
+         /// </summary>
+         /// <param name="objects">A list of objects to be added</param>
+        public void Add(IEnumerable<Object> objects) {
+            foreach (Object i in objects) {
+                Add(i);
             }
             RemoveNullMembers();
         }
         
-        /// <inheritdoc/>
+        /// <summary>
+        /// Adds an object to the SelectionGroup 
+        /// Does nothing if the group is automatically filled. 
+        /// </summary>
+        /// <param name="obj">the object to be added</param>
+        public void Add(Object obj) {
+            if (null == obj)
+                return;
+            
+            if(!members.Contains(obj))
+                members.Add(obj);
+        }
+        
+//----------------------------------------------------------------------------------------------------------------------        
+        
+         /// <summary>
+         /// Clears and set the members of the SelectionGroup 
+         /// </summary>
+         /// <param name="objects">A enumerable collection of objects to be added</param>
         public void SetMembers(IEnumerable<Object> objects) {
             if (IsAutoFilled()) {
                 Debug.LogWarning($"[SG] Group {Name} is auto-filled. Can't manually set members");
@@ -166,7 +211,10 @@ namespace Unity.SelectionGroups
             }
         }
 
-        /// <inheritdoc/>
+         /// <summary>
+         /// Removes a list of objects from the SelectionGroup 
+         /// </summary>
+         /// <param name="objectReferences">A list of objects to be removed</param>
         public void Remove(IEnumerable<Object> objectReferences) {
             if (IsAutoFilled())
                 return;
@@ -175,7 +223,21 @@ namespace Unity.SelectionGroups
             RemoveNullMembers();
         }
         
-        /// <inheritdoc/>
+        /// <summary>
+        /// Removes an object from the SelectionGroup.
+        /// Does nothing if the group is automatically filled. 
+        /// </summary>
+        /// <param name="obj">The object to be removed</param>
+        public void Remove(Object obj) {
+            if (IsAutoFilled())
+                return;
+            
+            members.Remove(obj);
+        }
+
+         /// <summary>
+         /// Clears the members of the SelectionGroup
+         /// </summary>
         public void Clear()
         {
             members.Clear();
@@ -243,11 +305,30 @@ namespace Unity.SelectionGroups
         internal void SetOnDestroyedInEditorCallback(Action cb) {
             m_onDestroyedInEditorCB = cb;
         }
-#endif        
+#endif
+        
+        internal void RefreshHideFlagsInEditor() {
+#if UNITY_EDITOR
+            SelectionGroupsEditorProjectSettings settings = SelectionGroupsEditorProjectSettings.GetOrCreateInstance();
+            
+            HideFlags goHideFlags = HideFlags.None;
+            if (!settings.AreGroupsVisibleInHierarchy()) {
+                goHideFlags |= HideFlags.HideInHierarchy;
+            }
+            //Note: SelectionGroup won't be selectable in the select popup window if HideInHierarchy is set 
+            this.gameObject.hideFlags = goHideFlags;
+            this.transform.hideFlags  = goHideFlags | HideFlags.HideInInspector;
+#endif
+        }
+        
 
+        
 //----------------------------------------------------------------------------------------------------------------------
 
         [SerializeField] List<bool> m_editorToolsStatus = new List<bool>(new bool[(int) SelectionGroupToolType.MAX]);
+
+        [SerializeField] private bool m_showMembersInWindow = true;
+        
 
         private GoQL.ParseResult m_queryParseResult = ParseResult.Empty;       
         

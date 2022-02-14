@@ -1,4 +1,5 @@
-﻿using Unity.SelectionGroups;
+﻿using System.Collections.Generic;
+using Unity.SelectionGroups;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,35 +10,39 @@ namespace Unity.SelectionGroups.Editor
     /// </summary>
     public static class SelectionGroupTools
     {
-        [SelectionGroupTool("d_VisibilityOn", "Show and hide objects in the scene.",(int) SelectionGroupToolType.VISIBILITY)]
-        static void ToggleVisibility(ISelectionGroup group)
+        [SelectionGroupTool("d_VisibilityOn", "Show or hide objects in the scene.",(int) SelectionGroupToolType.VISIBILITY)]
+        static void ToggleVisibility(SelectionGroup group) 
         {
-            foreach (var g in group.Members)
-            {
-                var go = g as GameObject;
-                if (go == null) continue;
-                SceneVisibilityManager.instance.ToggleVisibility(go, false);
+            List<GameObject> goMembers = group.FindGameObjectMembers();
+            if (goMembers.Count <= 0)
+                return;
+
+            SceneVisibilityManager sceneVisibilityManager = SceneVisibilityManager.instance;
+            bool show = (sceneVisibilityManager.IsHidden(goMembers[0]));
+            if (show) {
+                sceneVisibilityManager.Show(goMembers.ToArray(), false);
+            } else {
+                sceneVisibilityManager.Hide(goMembers.ToArray(), false);
             }
         }
 
-        [SelectionGroupTool("LockIcon-On", "Enable and disable editing of objects.",(int) SelectionGroupToolType.LOCK)]
-        static void DisableEditing(ISelectionGroup group)
+        [SelectionGroupTool("LockIcon-On", "Enable or disable editing of objects.",(int) SelectionGroupToolType.LOCK)]
+        static void ToggleLock(SelectionGroup group) 
         {
-            var isLocked = false;
-            foreach (var g in group.Members)
-            {
-                if (g.hideFlags.HasFlag(HideFlags.NotEditable))
-                    isLocked = true;
-            }
+            IList<Object> members  = group.Members;
+            if (null == members || members.Count <= 0)
+                return;
+            
+            bool isLocked = members[0].hideFlags.HasFlag(HideFlags.NotEditable);
             if (isLocked)
             {
-                foreach (var g in group.Members)
-                    g.hideFlags &= ~HideFlags.NotEditable;
+                foreach (Object obj in group.Members)
+                    obj.hideFlags &= ~HideFlags.NotEditable;
             }
             else
             {
-                foreach (var g in group.Members)
-                    g.hideFlags |= HideFlags.NotEditable;
+                foreach (Object obj in group.Members)
+                    obj.hideFlags |= HideFlags.NotEditable;
             }
         }
 

@@ -75,7 +75,7 @@ namespace Unity.GoQL
                     instructions.Add(GoQLCode.FilterName);
                     return ParseResult.OK;
                 case TokenType.OpenSquare:
-                    return _ParseIndexes(tokens, instructions);
+                    return _ParseIndexers(tokens, instructions);
                 case TokenType.OpenAngle:
                     return _ParseDiscriminators(tokens, instructions);
                 case TokenType.Slash:
@@ -153,12 +153,13 @@ namespace Unity.GoQL
 
                     default:
                         // ignore everything else, it is a syntax error.
+                        tokens.RemoveAt(0);
                         break;
                 }
             }
         }
 
-        static ParseResult _ParseIndexes(List<Token> tokens, List<object> instructions)
+        static ParseResult _ParseIndexers(List<Token> tokens, List<object> instructions)
         {
             var elements = new List<object>();
             while (true)
@@ -212,6 +213,18 @@ namespace Unity.GoQL
                             end = -1;
                         }
                         elements.Add(new Range(start, end));
+                        break;
+                    case TokenType.Bang:
+                        tokens.RemoveAt(0);
+                        //if next token exists and is a number, it is an exclusion index
+                        if (tokens.Count > 0 && tokens[0].type == TokenType.Number)
+                        {
+                            if (int.TryParse(tokens[0].value, out var excludeIndex))
+                            {
+                                tokens.RemoveAt(0);
+                                elements.Add(new ExcludeIndex(excludeIndex));
+                            }
+                        }
                         break;
                     case TokenType.Number:
                         if (int.TryParse(tokens[0].value, out int n))

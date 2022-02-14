@@ -191,8 +191,13 @@ namespace Unity.GoQL
                 if(!scene.isLoaded) continue;
                 foreach (var j in scene.GetRootGameObjects())
                 {
-                    foreach(var k in j.GetComponentsInChildren<Transform>(true))
+                    foreach (var k in j.GetComponentsInChildren<Transform>(true)) 
+                    {
+                        if (IsHideFlagSet(k.gameObject, HideFlags.HideInHierarchy))
+                            continue;
+                            
                         selection.Add(k.gameObject);
+                    }
                 }
             }
             selection.Swap();
@@ -261,33 +266,44 @@ namespace Unity.GoQL
                     lengths[i] = selection[i].transform.parent == null ? 1 : selection[i].transform.parent.childCount;
                 }
 
+                var indexInstructions = new List<object>();
                 for (var i = 0; i < argCount; i++)
                 {
-                    var arg = stack.Pop();
-                    if (arg is int)
+                    indexInstructions.Add(stack.Pop());
+                }
+
+                indexInstructions.Reverse();
+
+                for (var i = 0; i < argCount; i++)
+                {
+                    var arg = indexInstructions[i];
+                    if (arg is int siblingIndex)
                     {
+                        siblingIndex = siblingIndex < 0 ? mod(siblingIndex, lengths[i]):siblingIndex;
                         for (var j = 0; j < selection.Count; j++)
                         {
-                            var index = mod(((int) arg), lengths[i]);
-                            if (index == indices[j])
+                            if (siblingIndex == indices[j])
                             {
                                 selection.Add(selection[j]);
                             }
                         }
                     }
-                    else if (arg is Range)
+                    else if (arg is Range range)
                     {
-                        var range = (Range) arg;
                         for (var index = range.start; index < range.end && index < selection.Count; index++)
                         {
                             for (var j = 0; j < selection.Count; j++)
                             {
-                                if (mod(index, lengths[j]) == indices[j])
+                                if (index == indices[j])
                                 {
                                     selection.Add(selection[j]);
                                 }
                             }
                         }
+                    } 
+                    else if (arg is ExcludeIndex excludeIndex)
+                    {
+                        selection.Remove(selection[excludeIndex.index]);                        
                     }
                 }
 
@@ -412,22 +428,40 @@ namespace Unity.GoQL
             for (var i = 0; i < SceneManager.sceneCount; i++)
             {
                 var scene = SceneManager.GetSceneAt(i);
-                if(scene.isLoaded)
-                    selection.AddRange(scene.GetRootGameObjects());
+                if (!scene.isLoaded) continue;
+                
+                foreach (var j in scene.GetRootGameObjects()) 
+                {
+                    if (IsHideFlagSet(j, HideFlags.HideInHierarchy))
+                        continue;
+                    selection.Add(j);
+                }
             }
         }
 
         void EnterChildren()
         {
-            foreach (var i in selection)
+            foreach (GameObject i in selection) 
             {
-                for (var j = 0; j < i.transform.childCount; j++)
-                    selection.Add(i.transform.GetChild(j).gameObject);
+                Transform t = i.transform;
+                for (var j = 0; j < t.childCount; j++) 
+                {
+                    GameObject childGO = t.GetChild(j).gameObject;
+                    if (IsHideFlagSet(childGO, HideFlags.HideInHierarchy))
+                        continue;
+                    selection.Add(childGO);
+                }
             }
 
             selection.Swap();
         }
 
         int mod(int a, int b) => a - b * Mathf.FloorToInt(1f * a / b);
+
+        static bool IsHideFlagSet(GameObject go, HideFlags hideFlags) 
+        {
+            return ((go.hideFlags & hideFlags) == hideFlags);
+        }
+        
     }
 }

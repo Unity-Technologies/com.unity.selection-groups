@@ -27,15 +27,7 @@ internal class SelectionGroupInspector : UnityEditor.Editor {
             () => EditorGUILayout.TextField("Group Query", m_group.Query),
             (string query) => {
                 {
-                    //[TODO-sin:2021-12-20] Remove in version 0.7.0 
-                    //var obj = m_group as Object;
-                    // if(obj == null)
-                    //     Undo.RegisterCompleteObjectUndo(SelectionGroupPersistenceManager.Instance, "Query change");
-                    // else
-                    //    Undo.RegisterCompleteObjectUndo(obj, "Query change");
-                
                     Undo.RegisterCompleteObjectUndo(m_group, "Query change");
-                
                 }
                 m_group.SetQuery(query);
             }
@@ -52,17 +44,7 @@ internal class SelectionGroupInspector : UnityEditor.Editor {
             GUILayout.Space(5);
             EditorGUILayout.HelpBox(message, MessageType.Info);
         }
-        
-        //[TODO-sin:2021-12-20] Remove in version 0.7.0 
-        // SelectionGroupDataLocation scope = @group.Scope;
-        // scope = (SelectionGroupDataLocation) EditorGUILayout.EnumPopup(@group.Scope);
-        // if (scope != @group.Scope)
-        // {
-        //     SelectionGroupManager.ChangeGroupScope(group, scope);
-        //     Close();
-        // }
-
-        
+                
         GUILayout.BeginVertical("box");
         GUILayout.Label("Enabled Toolbar Buttons", EditorStyles.largeLabel);
         foreach (MethodInfo i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>()) {

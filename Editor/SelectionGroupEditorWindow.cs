@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
-using Unity.SelectionGroups;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -22,7 +19,7 @@ namespace Unity.SelectionGroups.Editor
 
         ReorderableList list;
         Vector2 scroll;
-        ISelectionGroup m_activeSelectionGroup;
+        SelectionGroup m_activeSelectionGroup;
         float width;
         GUIStyle miniButtonStyle;
         Object hotMember;
@@ -58,23 +55,14 @@ namespace Unity.SelectionGroups.Editor
             SelectionGroupManager sgManager = SelectionGroupManager.GetOrCreateInstance();
             
             int numGroups = sgManager.Groups.Count;
-            sgManager.CreateSceneSelectionGroup($"SG_New Group {numGroups}",
+            sgManager.CreateSelectionGroup($"SG_New Group {numGroups}",
                 Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f)));
         }
 
-        void RegisterUndo(ISelectionGroup @group, string msg)
+        static void RegisterUndo(SelectionGroup group, string msg)
         {
-            if (group is SelectionGroups.SelectionGroup runtimeGroup)
-            {
-                Undo.RegisterCompleteObjectUndo(runtimeGroup, msg);
-                EditorUtility.SetDirty(runtimeGroup);
-            }
-
-            //[TODO-sin:2021-12-20] Remove in version 0.7.0
-            // if (group is EditorSelectionGroup editorGroup)
-            // {
-            //     SelectionGroupPersistenceManager.RegisterUndo(msg);
-            // }
+            Undo.RegisterCompleteObjectUndo(group, msg);
+            EditorUtility.SetDirty(group);
         }
     }
 }
