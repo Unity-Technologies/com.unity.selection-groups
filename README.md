@@ -19,6 +19,11 @@ allowing to group a number of **GameObjects** under a common name.
 This way, we can do operations on these groups, 
 instead of individual **GameObjects**.
 
+# Features
+1. [GoQL](Documentation~/goql.md)
+2. [Selection Groups Window](Documentation~/selection-groups-window.md)
+
+
 ## Supported Unity Versions 
 
 Unity 2019.4 or higher.
