@@ -22,6 +22,7 @@ namespace Unity.SelectionGroups.Editor
             wantsMouseMove = true;
             
             sceneHeaderContent     =  EditorGUIUtility.IconContent("SceneAsset Icon");
+            m_CreateDropdownConten = EditorGUIUtility.IconContent("CreateAddNew");
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
         }
 
