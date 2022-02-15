@@ -1,7 +1,7 @@
-# Selection Groups User Documentation
+Selection Groups Overview
+=============================
 
-
-## Overview
+# Introduction
 
 Selection Groups provides a more convenient workflow in Unity by 
 allowing users to group a number of **GameObjects** under a common name.  
@@ -41,3 +41,6 @@ Please refer to the [installation](installation.md) page to install Selection Gr
 
       ![](images/SelectionGroupTools.png)
 
+# Features
+  1. [GoQL](goql.md)
+  2. [Selection Groups Window](selection-groups-window.md)
