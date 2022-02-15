@@ -28,8 +28,8 @@ internal static class TestUtility
         foreach (GameObject go in results) {
             Transform t = go.transform;
             Assert.IsTrue(validFunc(t));
+            Assert.AreNotEqual(HideFlags.HideInHierarchy,go.hideFlags & HideFlags.HideInHierarchy);
             ret.Add(t);
-
         }
 
         return ret;

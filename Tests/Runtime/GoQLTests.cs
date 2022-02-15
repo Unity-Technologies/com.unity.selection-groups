@@ -1,5 +1,7 @@
+using System;
 using NUnit.Framework;
 using Unity.GoQL;
+using UnityEngine;
 
 namespace Unity.SelectionGroups.Tests 
 {
@@ -39,5 +41,33 @@ namespace Unity.SelectionGroups.Tests
             Assert.AreEqual(TokenType.CloseAngle, tokens[12].type);
             Assert.AreEqual(TokenType.Operator, tokens[13].type);
         }
+        
+        [Test]
+        public void ExcludeHiddenObjects() {        
+            Transform bar = CreateGameObject("Bar");
+            CreateGameObject("Foo");
+            CreateGameObject("FooVisible");
+            CreateGameObject("FooInvisible", null, HideFlags.HideInHierarchy);
+
+            CreateGameObject("FooChildOfBar", bar);
+            CreateGameObject("FooInvisibleChildOfBar", bar,HideFlags.HideInHierarchy);
+            
+            TestUtility.ExecuteGoQLAndVerify("Foo*", 3, 
+                (Transform t) => t.gameObject.name.IndexOf("Invisible", StringComparison.Ordinal) == -1
+            );
+        }
+
+        private static Transform CreateGameObject(string goName, Transform parent = null, 
+            HideFlags goHideFlags = HideFlags.None) 
+        {
+            GameObject go = new GameObject(goName) 
+            {
+                hideFlags = goHideFlags 
+            };
+            Transform t = go.transform;
+            t.parent = parent;
+            return t;
+        }
+        
     }
 }
