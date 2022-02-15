@@ -42,5 +42,6 @@ Please refer to the [installation](installation.md) page to install Selection Gr
       ![](images/SelectionGroupTools.png)
 
 # Features
-  1. [GoQL](goql.md)
-  2. [Selection Groups Window](selection-groups-window.md)
+1. [GoQL](Documentation~/goql.md)
+2. [Project Settings](Documentation~/project-settings.md)
+3. [Selection Groups Window](Documentation~/selection-groups-window.md)
