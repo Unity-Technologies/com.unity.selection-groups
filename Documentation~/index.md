@@ -1,6 +1,10 @@
 Selection Groups Overview
 =============================
 
+- [Introduction](#introduction)
+  - [Getting Started](#getting-started)
+- [Features](#features)
+
 # Introduction
 
 Selection Groups provides a more convenient workflow in Unity by 
