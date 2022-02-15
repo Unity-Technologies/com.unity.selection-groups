@@ -30,21 +30,14 @@ Please refer to the [installation](installation.md) page to install Selection Gr
 
    ![](images/SelectionGroupInspector.png)
 
-   1. Group name   
-      This is identical to the name of the group **GameObject**.
-   1. Color
-   1. Group Query  
-      Specifies a query which will automatically assign **GameObjects** from the hierarchy
-      that match the query to the group.  
-      For example, `/Enemy*` will select all GameObjects that are in the root of the hierarchy 
-      that have names starting with `Enemy`.  
-      See the [GoQL](goql.md) documentation for more information.     
-   1. Toolbar Buttons  
-      Enables/disables the following toolbar items for the group in the [Selection Groups Window](selection-groups-window.md).   
-      1. Eye: to show or hide all the **GameObjects** in the group. 
-      1. Lock: to enable or disable the editing of all the **GameObjects** in the group.  
+   |**Properties**       |**Description** |
+   |:---                 |:---|
+   | **Group name**      | identical to the name of the group **GameObject**.|
+   | **Color**           | The color of the group shown in the [Selection Groups Window](selection-groups-window.md).|
+   | **Group Query**     | Specifies a query which will automatically assign **GameObjects** from the hierarchy that match the query to the group. <br/> See the [GoQL](goql.md) documentation for more information.|
+   | **Toolbar Buttons** | Enables/disables the following toolbar items for the group in the [Selection Groups Window](selection-groups-window.md). <br/> 1. Eye: to show or hide all the **GameObjects** in the group. <br/> 2. Lock: to enable or disable the editing of all the **GameObjects** in the group. |
 
-      ![](images/SelectionGroupTools.png)
+   ![](images/SelectionGroupTools.png)
 
 # Features
 1. [GoQL](goql.md)
