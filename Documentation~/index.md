@@ -39,7 +39,7 @@ Please refer to the [installation](installation.md) page to install Selection Gr
       that have names starting with `Enemy`.  
       See the [GoQL](goql.md) documentation for more information.     
    1. Toolbar Buttons  
-      Enables/disables the following toolbar items in the main Selection Groups window for the group.   
+      Enables/disables the following toolbar items for the group in the [Selection Groups Window](selection-groups-window.md).   
       1. Eye: to show or hide all the **GameObjects** in the group. 
       1. Lock: to enable or disable the editing of all the **GameObjects** in the group.  
 
