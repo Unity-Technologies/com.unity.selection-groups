@@ -154,8 +154,12 @@ MonoBehaviour:
   query: 
   _legacyMembers: []
   members: []
-  sgVersion: 2
-  m_editorToolsStatus: 0000
+  sgVersion: 3
+  m_editorToolsStatus: 
+  m_editorToolsStates:
+    m_keys: 0000000001000000
+    m_values: 0100
+  m_showMembersInWindow: 1
 --- !u!4 &846563385
 Transform:
   m_ObjectHideFlags: 2
