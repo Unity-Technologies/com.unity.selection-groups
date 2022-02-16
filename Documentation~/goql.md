@@ -144,6 +144,16 @@ Examples:
 |`/Head*!*Unit`                 |All root **GameObjects** which names start with "Head", but do not end with "Unit".|
 
     
+## Quick Search Integration 
 
+When a project uses [Quick Search](https://docs.unity3d.com/Packages/com.unity.quicksearch@latest) package, 
+or is using Unity 2021.2 or newer, then GoQL can also be used in the Quick Search window to 
+look for **GameObjects** in the scene hierarchy.
+
+![](images/QuickSearchIntegration.png)
+
+
+
+ 
 
 
