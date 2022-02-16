@@ -355,7 +355,7 @@ namespace Unity.SelectionGroups
 #endif        
         
         enum SGVersion {
-            INITIAL       = 1,  //initial
+            INITIAL = 1,        //initial
             ORDERED_0_6_0,      //The order of selection groups is maintained by SelectionGroupManager
             EDITOR_STATE_0_7_2, //The data structure of m_editorToolsStates was changed
         }        
