@@ -38,11 +38,11 @@ This applicable set can be changed by using [a descender](#descenders).
 
 
 > Currently, middle wildcards have the following limitations:
-> 1. Only one middle wildcard is allowed in each applicable set, e.g: 
+> 1. Only one middle wildcard is allowed in each applicable set, e.g.: 
 >   * `/H*d/C*d` is supported, but
 >   * `/H*d*Tail` is not supported
 > 2. A middle wildcard can't be used together with either a beginning or ending wildcard 
->   in the same applicable set, e.g: 
+>   in the same applicable set, e.g.: 
 >   * `/*d/C*d/T*` is supported, but
 >   * `/*d*T*` is not supported
 
@@ -100,9 +100,9 @@ returned by the query. The syntax differs based on which GoQL element it applies
 
 |**Element**            |**Syntax** |
 |:-------------------|:---|
-|[Name filters](#name-filters)      |Put `!` before a name filter to exclude **GameObjects** that match the name filter. Ex: `!Foo`.|
-|[Indexers](#indexers)              |Put `!` inside the indexer. Ex: `/[0:10,!5]`.|
-|[Discriminators](#discriminators). |Put `!` inside the discriminator. Example: `<!t:MeshFilter>`.|
+|[Name filters](#name-filters)      |Put `!` before a name filter to exclude **GameObjects** that match the name filter, e.g.: `!Foo`.|
+|[Indexers](#indexers)              |Put `!` inside the indexer, e.g..: `/[0:10,!5]`.|
+|[Discriminators](#discriminators). |Put `!` inside the discriminator, e.g.: `<!t:MeshFilter>`.|
 
 Examples:
 
