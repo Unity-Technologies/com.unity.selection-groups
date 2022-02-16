@@ -15,6 +15,18 @@ internal class SelectionGroupsEditorProjectSettings : BaseJsonSingleton<Selectio
 
     protected override void UpgradeToLatestVersionV(int prevVersion, int curVersion) {
         
+        if (prevVersion < (int) SGProjectSettingsVersion.EDITOR_STATE_0_7_2) {
+#pragma warning disable 612 //obsolete
+            if (null != m_defaultGroupEditorToolStatus) {
+                int numStates = m_defaultGroupEditorToolStatus.Count;
+                for (int i = 0; i < numStates; ++i) {
+                    m_defaultGroupEditorToolStates[i] = m_defaultGroupEditorToolStatus[i];
+                }
+                m_defaultGroupEditorToolStatus = null;
+#pragma warning restore 612
+            }
+        }
+        
     }
     
 //----------------------------------------------------------------------------------------------------------------------
@@ -25,11 +37,14 @@ internal class SelectionGroupsEditorProjectSettings : BaseJsonSingleton<Selectio
         m_groupsVisibleInHierarchy = visible; 
     }
 
-    internal bool GetDefaultGroupEditorToolStatus(int toolID) => m_defaultGroupEditorToolStatus[toolID];
+    internal bool GetDefaultGroupEditorToolState(int toolID) {
+        if (m_defaultGroupEditorToolStates.TryGetValue(toolID, out bool status))
+            return status;
+        return false;
+    }
 
     public void EnableDefaultGroupEditorTool(int toolID, bool toolEnabled) {
-        Assert.IsTrue(toolID < (int)SelectionGroupToolType.MAX);
-        m_defaultGroupEditorToolStatus[toolID] = toolEnabled;
+        m_defaultGroupEditorToolStates[toolID] = toolEnabled;
     }
     
     
@@ -37,12 +52,17 @@ internal class SelectionGroupsEditorProjectSettings : BaseJsonSingleton<Selectio
     
     [SerializeField] private bool m_groupsVisibleInHierarchy       = true;
     
-    [SerializeField] List<bool> m_defaultGroupEditorToolStatus = new List<bool>(new bool[(int) SelectionGroupToolType.MAX]);
+    [Obsolete]
+    [SerializeField] List<bool> m_defaultGroupEditorToolStatus = null;
+    
+    [SerializeField] EditorToolStates m_defaultGroupEditorToolStates = new EditorToolStates(); 
     
 //----------------------------------------------------------------------------------------------------------------------
-    private const int LATEST_VERSION = (int) Version.INITIAL; 
-    enum Version {
+    private const int LATEST_VERSION = (int) SGProjectSettingsVersion.EDITOR_STATE_0_7_2; 
+    enum SGProjectSettingsVersion {
         INITIAL = 1,
+        EDITOR_STATE_0_7_2, //The data structure of m_defaultGroupEditorToolStates was changed
+        
     };
 
 
