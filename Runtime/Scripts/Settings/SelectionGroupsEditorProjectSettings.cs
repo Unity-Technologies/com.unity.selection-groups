@@ -36,7 +36,7 @@ internal class SelectionGroupsEditorProjectSettings : BaseJsonSingleton<Selectio
     
     [SerializeField] private bool m_groupsVisibleInHierarchy       = true;
     
-    [SerializeField] List<bool> m_defaultGroupEditorToolStatus = new List<bool>(new bool[(int) SelectionGroupToolType.MAX]);
+    [SerializeField] SerializedDictionary<int, bool> m_defaultGroupEditorToolStatus = new SerializedDictionary<int,bool>(); 
     
 //----------------------------------------------------------------------------------------------------------------------
     private const int LATEST_VERSION = (int) Version.INITIAL; 
