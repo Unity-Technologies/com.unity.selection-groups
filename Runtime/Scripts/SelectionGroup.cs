@@ -297,6 +297,17 @@ namespace Unity.SelectionGroups
             if (sgVersion < (int) SGVersion.ORDERED_0_6_0) {
                 m_registerOnEnable = true;
             }
+
+            if (sgVersion < (int) SGVersion.EDITOR_STATE_0_7_2) {
+#pragma warning disable 612 //obsolete
+                if (null != m_editorToolsStatus) {
+                    for (int i = 0; i < m_editorToolsStatus.Count; ++i) {
+                        m_editorToolsStates[i] = m_editorToolsStatus[i];
+                    }
+                    m_editorToolsStatus = null;
+#pragma warning restore 612
+                }
+            }
             
             sgVersion = CUR_SG_VERSION;
         }
@@ -325,6 +336,9 @@ namespace Unity.SelectionGroups
         
 //----------------------------------------------------------------------------------------------------------------------
 
+        [Obsolete]
+        [SerializeField] List<bool> m_editorToolsStatus = null;
+        
         [SerializeField] EditorToolStates m_editorToolsStates = new EditorToolStates(); 
 
         [SerializeField] private bool m_showMembersInWindow = true;
@@ -332,7 +346,7 @@ namespace Unity.SelectionGroups
 
         private GoQL.ParseResult m_queryParseResult = ParseResult.Empty;       
         
-        private const int  CUR_SG_VERSION     = (int) SGVersion.ORDERED_0_6_0;
+        private const int  CUR_SG_VERSION     = (int) SGVersion.EDITOR_STATE_0_7_2;
         private       bool m_registerOnEnable = false;
 
 #if UNITY_EDITOR        
@@ -340,8 +354,9 @@ namespace Unity.SelectionGroups
 #endif        
         
         enum SGVersion {
-            INITIAL = 1,    //initial
-            ORDERED_0_6_0 = 2, //The order of selection groups is maintained by SelectionGroupManager
+            INITIAL       = 1,  //initial
+            ORDERED_0_6_0,      //The order of selection groups is maintained by SelectionGroupManager
+            EDITOR_STATE_0_7_2, //The data structure of EditorToolStates was changed
 
         }        
     }
