@@ -239,7 +239,7 @@ namespace Unity.SelectionGroups.Editor
             Rect rect = new Rect(0, y, TOOL_X_DIFF, TOOL_HEIGHT); 
             int enabledToolCounter = 0;
             
-            for (int toolId = (int)SelectionGroupToolType.MAX-1; toolId >=0; --toolId) {
+            for (int toolId = (int)SelectionGroupToolType.BUILT_IN_MAX-1; toolId >=0; --toolId) {
                 bool toolStatus = group.GetEditorToolStatus(toolId);
                 if (false == toolStatus)
                     continue;

@@ -3,7 +3,7 @@ namespace Unity.SelectionGroups {
 enum SelectionGroupToolType {
     VISIBILITY = 0,
     LOCK,
-    MAX
+    BUILT_IN_MAX,
 }
 
 } //end namespace

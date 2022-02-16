@@ -49,7 +49,7 @@ class SelectionGroupsProjectSettingsProvider : SettingsProvider {
                 }
             );
 
-            for (int i = 0; i < (int)SelectionGroupToolType.MAX; ++i) {
+            for (int i = 0; i < (int)SelectionGroupToolType.BUILT_IN_MAX; ++i) {
                 int toolID = i;
                 UIElementsEditorUtility.AddField<Toggle, bool>(defaultSectionContainer, 
                     Contents.DEFAULT_GROUP_EDITOR_TOOL[i], 
