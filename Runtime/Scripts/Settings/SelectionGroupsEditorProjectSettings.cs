@@ -25,7 +25,11 @@ internal class SelectionGroupsEditorProjectSettings : BaseJsonSingleton<Selectio
         m_groupsVisibleInHierarchy = visible; 
     }
 
-    internal bool GetDefaultGroupEditorToolStatus(int toolID) => m_defaultGroupEditorToolStatus[toolID];
+    internal bool GetDefaultGroupEditorToolState(int toolID) {
+        if (m_defaultGroupEditorToolStatus.TryGetValue(toolID, out bool status))
+            return status;
+        return false;
+    }
 
     public void EnableDefaultGroupEditorTool(int toolID, bool toolEnabled) {
         m_defaultGroupEditorToolStatus[toolID] = toolEnabled;
@@ -36,7 +40,7 @@ internal class SelectionGroupsEditorProjectSettings : BaseJsonSingleton<Selectio
     
     [SerializeField] private bool m_groupsVisibleInHierarchy       = true;
     
-    [SerializeField] SerializedDictionary<int, bool> m_defaultGroupEditorToolStatus = new SerializedDictionary<int,bool>(); 
+    [SerializeField] EditorToolStates m_defaultGroupEditorToolStatus = new EditorToolStates(); 
     
 //----------------------------------------------------------------------------------------------------------------------
     private const int LATEST_VERSION = (int) Version.INITIAL; 

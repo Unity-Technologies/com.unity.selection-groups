@@ -94,7 +94,7 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         
         SelectionGroupsEditorProjectSettings projSettings = SelectionGroupsEditorProjectSettings.GetOrCreateInstance();
         for (int i = 0; i < (int)SelectionGroupToolType.BUILT_IN_MAX; ++i) {
-            group.EnableEditorTool(i, projSettings.GetDefaultGroupEditorToolStatus(i));
+            group.EnableEditorTool(i, projSettings.GetDefaultGroupEditorToolState(i));
         }
         
         return group;

@@ -124,15 +124,15 @@ namespace Unity.SelectionGroups
             set => this.color = value;
         }
 
-        internal bool GetEditorToolStatus(int toolID) {
-            if (m_editorToolsStatus.TryGetValue(toolID, out bool status))
+        internal bool GetEditorToolState(int toolID) {
+            if (m_editorToolsStates.TryGetValue(toolID, out bool status))
                 return status;
 
             return false;
         }
 
         public void EnableEditorTool(int toolID, bool toolEnabled) {
-            m_editorToolsStatus[toolID] = toolEnabled;
+            m_editorToolsStates[toolID] = toolEnabled;
         }
         
          /// <summary>
@@ -325,7 +325,7 @@ namespace Unity.SelectionGroups
         
 //----------------------------------------------------------------------------------------------------------------------
 
-        [SerializeField] SerializedDictionary<int, bool> m_editorToolsStatus = new SerializedDictionary<int,bool>(); 
+        [SerializeField] EditorToolStates m_editorToolsStates = new EditorToolStates(); 
 
         [SerializeField] private bool m_showMembersInWindow = true;
         

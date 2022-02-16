@@ -53,7 +53,7 @@ class SelectionGroupsProjectSettingsProvider : SettingsProvider {
                 int toolID = i;
                 UIElementsEditorUtility.AddField<Toggle, bool>(defaultSectionContainer, 
                     Contents.DEFAULT_GROUP_EDITOR_TOOL[i], 
-                    projSettings.GetDefaultGroupEditorToolStatus(toolID),
+                    projSettings.GetDefaultGroupEditorToolState(toolID),
                     (e) => {
                         projSettings.EnableDefaultGroupEditorTool(toolID, e.newValue);
                         projSettings.SaveInEditor();

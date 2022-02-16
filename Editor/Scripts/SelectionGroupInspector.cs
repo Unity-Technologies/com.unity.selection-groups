@@ -51,7 +51,7 @@ internal class SelectionGroupInspector : UnityEditor.Editor {
             SelectionGroupToolAttribute attr = i.GetCustomAttribute<SelectionGroupToolAttribute>();            
             repaintWindow |= EditorGUIDrawerUtility.DrawUndoableGUI(m_group, "Group Toolbar",
                 guiFunc: () => {
-                    bool       isEnabledPrev = m_group.GetEditorToolStatus(attr.toolId);
+                    bool       isEnabledPrev = m_group.GetEditorToolState(attr.toolId);
                     GUIContent content       = EditorGUIUtility.IconContent(attr.icon);
                     return EditorGUILayout.ToggleLeft(content, isEnabledPrev, "button");
                 },

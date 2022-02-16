@@ -240,7 +240,7 @@ namespace Unity.SelectionGroups.Editor
             int enabledToolCounter = 0;
             
             for (int toolId = (int)SelectionGroupToolType.BUILT_IN_MAX-1; toolId >=0; --toolId) {
-                bool toolStatus = group.GetEditorToolStatus(toolId);
+                bool toolStatus = group.GetEditorToolState(toolId);
                 if (false == toolStatus)
                     continue;
             
