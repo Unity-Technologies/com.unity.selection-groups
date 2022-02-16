@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Unity.FilmInternalUtilities;
 using Unity.GoQL;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -123,7 +124,12 @@ namespace Unity.SelectionGroups
             set => this.color = value;
         }
 
-        internal bool GetEditorToolStatus(int toolID) => m_editorToolsStatus[toolID];
+        internal bool GetEditorToolStatus(int toolID) {
+            if (m_editorToolsStatus.TryGetValue(toolID, out bool status))
+                return status;
+
+            return false;
+        }
 
         public void EnableEditorTool(int toolID, bool toolEnabled) {
             Assert.IsTrue(toolID < (int)SelectionGroupToolType.MAX);
@@ -292,11 +298,6 @@ namespace Unity.SelectionGroups
             if (sgVersion < (int) SGVersion.ORDERED_0_6_0) {
                 m_registerOnEnable = true;
             }
-
-            //Ensure that we always have the required status elements
-            while (m_editorToolsStatus.Count < (int)SelectionGroupToolType.MAX) {
-                m_editorToolsStatus.Add(false);
-            }
             
             sgVersion = CUR_SG_VERSION;
         }
@@ -325,7 +326,7 @@ namespace Unity.SelectionGroups
         
 //----------------------------------------------------------------------------------------------------------------------
 
-        [SerializeField] List<bool> m_editorToolsStatus = new List<bool>(new bool[(int) SelectionGroupToolType.MAX]);
+        [SerializeField] SerializedDictionary<int, bool> m_editorToolsStatus = new SerializedDictionary<int,bool>(); 
 
         [SerializeField] private bool m_showMembersInWindow = true;
         
