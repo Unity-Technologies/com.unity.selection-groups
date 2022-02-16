@@ -28,7 +28,6 @@ internal class SelectionGroupsEditorProjectSettings : BaseJsonSingleton<Selectio
     internal bool GetDefaultGroupEditorToolStatus(int toolID) => m_defaultGroupEditorToolStatus[toolID];
 
     public void EnableDefaultGroupEditorTool(int toolID, bool toolEnabled) {
-        Assert.IsTrue(toolID < (int)SelectionGroupToolType.MAX);
         m_defaultGroupEditorToolStatus[toolID] = toolEnabled;
     }
     

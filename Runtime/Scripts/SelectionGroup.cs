@@ -132,7 +132,6 @@ namespace Unity.SelectionGroups
         }
 
         public void EnableEditorTool(int toolID, bool toolEnabled) {
-            Assert.IsTrue(toolID < (int)SelectionGroupToolType.MAX);
             m_editorToolsStatus[toolID] = toolEnabled;
         }
         
