@@ -101,9 +101,9 @@ The syntax differs slightly based on which GoQL element it is applied to as foll
 
 |**Element**            |**Syntax** |
 |:-------------------|:---|
-|[Name filters](#name-filters)      |Put `!` before a name filter to exclude **GameObjects** that match the name filter, e.g.: `!Foo`.|
-|[Indexers](#indexers)              |Put `!` inside the indexer, e.g..: `/[0:10,!5]`.|
-|[Discriminators](#discriminators). |Put `!` inside the discriminator, e.g.: `<!t:MeshFilter>`.|
+|[Name filters](#name-filters)     |Put `!` before a name filter to exclude **GameObjects** that match the name filter, e.g.: `!Foo`.|
+|[Indexers](#indexers)             |Put `!` inside the indexer, e.g..: `/[0:10,!5]`.|
+|[Discriminators](#discriminators) |Put `!` inside the discriminator, e.g.: `<!t:MeshFilter>`.|
 
 Examples:
 
