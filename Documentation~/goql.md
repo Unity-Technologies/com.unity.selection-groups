@@ -1,20 +1,29 @@
-# GoQL User Documentation
+GoQL Overview
+=============================
 
+- [Introduction](#introduction)
+- [Structure](#structure)
+  - [Name Filters](#name-filters)
+  - [Indexers](#indexers)
+  - [Discriminators](#discriminators)
+  - [Exclusions](#exclusions)
+- [Other Examples](#other-examples)
+- [Quick Search Integration](#quick-search-integration)
 
-## Introduction 
+# Introduction 
 
 GoQL is an abbreviation for "GameObject Query Language". 
 It is used to construct sets of **GameObjects** from the scene hierarchy.   
 The API takes a single query string as a parameter, 
 and returns a set of **GameObjects** that match that query.
 
-## Structure
+# Structure
 
 A GoQL query is composed using [name filters](#name-filters), [indexers](#indexers), 
 [discriminators](#discriminators), [descenders](#descenders), and [exclusions](#exclusions).   
 This sounds complicated, but the syntax is similar to directory paths and filenames.
 
-### Name Filters
+## Name Filters
 
 The name of a **GameObject** can be specified directly. E.g.:
     
@@ -46,7 +55,7 @@ This applicable set can be changed by using [a descender](#descenders).
 >   * `/*d/C*d/T*` is supported, but
 >   * `/*d*T*` is not supported
 
-### Descenders
+## Descenders
 
 A descender is defined by a slash character (`/`).
 
@@ -63,7 +72,7 @@ Examples:
 |`/Head`     |Any **GameObjects** named "Head" that are in the root of the hierarchy. |
 |`Head/`     |All immediate children of any **GameObjects** named "Head".|
 
-### Indexers
+## Indexers
 
 An indexer will filter the current set using a numerical index which can be an individual index or a range of indexes.   
 E.g.:
@@ -76,7 +85,7 @@ E.g.:
 |`Head/[3:5]`  |The children of **GameObjects** named "Head" that have indexes betweeen 3 and 5 (exclusive).|
    
 
-### Discriminators
+## Discriminators
 
 A discriminator is used to filter the current set by checking for the existence of a particular component, 
 material or shader.   
@@ -93,7 +102,7 @@ Examples:
 |`Head<m:Glow>`      |All **GameObjects** that are named "Head" and use materials named "Glow" |
 |`Head<s:Standard>`  |All **GameObjects** that are named "Head" and are using "Standard" shader. |
 
-### Exclusions
+## Exclusions
 
 An exclusion is defined by an exclamation point (`!`), and allows us to exclude certain **GameObjects** 
 returned by the query.   
@@ -116,7 +125,8 @@ Examples:
 |`!H*d`             |All **GameObjects** which names neither begin with "H" nor end with "d" |
 |`[0:3,!0,!1]`      |All **GameObjects**, in which each is the 3rd child of another **GameObject**. |
 |`<t:Collider><!t:MeshFilter>` |All **GameObjects** which have Collider components, but don't have any MeshFilter component. |
-## Other Examples
+
+# Other Examples
 
 |**GoQL**            |**Description** |
 |:----------------------------------|:---|
