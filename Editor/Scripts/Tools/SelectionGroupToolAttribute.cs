@@ -1,5 +1,4 @@
 using System;
-using UnityEditor;
 
 namespace Unity.SelectionGroups.Editor
 {
