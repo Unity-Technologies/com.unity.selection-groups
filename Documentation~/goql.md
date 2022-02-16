@@ -114,7 +114,7 @@ Examples:
 |`Hea*!Heat`        |All **GameObjects** which names begin with  "Hea", but are not "Heat" |
 |`Hea*!Heat!Head`   |All **GameObjects** which names begin with  "Hea", but are neither "Heat" nor "Head" |
 |`!H*d`             |All **GameObjects** which names neither begin with "H" nor end with "d" |
-|`[0:3,!0,!1]`      |All **GameObjects** which are the 3rd child of other **GameObjects**. |
+|`[0:3,!0,!1]`      |All **GameObjects**, in which each is the 3rd child of another **GameObject**. |
 |`<t:Collider><!t:MeshFilter>` |All **GameObjects** named have Collider components, but don't have MeshFilter components. |
 
 ## Other Examples
