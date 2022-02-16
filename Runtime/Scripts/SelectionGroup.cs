@@ -301,7 +301,8 @@ namespace Unity.SelectionGroups
             if (sgVersion < (int) SGVersion.EDITOR_STATE_0_7_2) {
 #pragma warning disable 612 //obsolete
                 if (null != m_editorToolsStatus) {
-                    for (int i = 0; i < m_editorToolsStatus.Count; ++i) {
+                    int numStates = m_editorToolsStatus.Count;
+                    for (int i = 0; i < numStates; ++i) {
                         m_editorToolsStates[i] = m_editorToolsStatus[i];
                     }
                     m_editorToolsStatus = null;
@@ -356,8 +357,7 @@ namespace Unity.SelectionGroups
         enum SGVersion {
             INITIAL       = 1,  //initial
             ORDERED_0_6_0,      //The order of selection groups is maintained by SelectionGroupManager
-            EDITOR_STATE_0_7_2, //The data structure of EditorToolStates was changed
-
+            EDITOR_STATE_0_7_2, //The data structure of m_editorToolsStates was changed
         }        
     }
 } //end namespace
