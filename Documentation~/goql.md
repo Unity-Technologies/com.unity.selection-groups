@@ -96,7 +96,8 @@ Examples:
 ### Exclusions
 
 An exclusion is defined by an exclamation point (`!`), and allows us to exclude certain **GameObjects** 
-returned by the query. The syntax differs based on which GoQL element it applies to as follows:
+returned by the query.   
+The syntax differs slightly based on which GoQL element it is applied to as follows:
 
 |**Element**            |**Syntax** |
 |:-------------------|:---|
