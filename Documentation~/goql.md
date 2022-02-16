@@ -11,7 +11,7 @@ and returns a set of **GameObjects** that match that query.
 ## Structure
 
 A GoQL query is composed using [name filters](#name-filters), [indexers](#indexers), 
-[discriminators](#discriminators) and [descenders](#descenders).   
+[discriminators](#discriminators), [descenders](#descenders), and [exclusions](#exclusions).   
 This sounds complicated, but the syntax is similar to directory paths and filenames.
 
 ### Name Filters
@@ -38,28 +38,13 @@ This applicable set can be changed by using [a descender](#descenders).
 
 
 > Currently, middle wildcards have the following limitations:
-> 1. Only one middle wildcard is allowed in each applicable set, e.g: 
+> 1. Only one middle wildcard is allowed in each applicable set, e.g.: 
 >   * `/H*d/C*d` is supported, but
 >   * `/H*d*Tail` is not supported
 > 2. A middle wildcard can't be used together with either a beginning or ending wildcard 
->   in the same applicable set, e.g: 
+>   in the same applicable set, e.g.: 
 >   * `/*d/C*d/T*` is supported, but
 >   * `/*d*T*` is not supported
-
-#### Exclusions
-
-An exclusion is defined by an exclamation point (`!`).  
-Writing a name filter after `!` will exclude **GameObjects** that match the name filter 
-in the current applicable set, e.g.:
-
-|**GoQL**           |**Description** |
-|:------------------|:---|
-|`!Head*`           |All **GameObjects** that do not have names beginning with  "Head" |
-|`Hea*!*d`          |All **GameObjects** which names begin with  "Hea", but don't end with "d" |
-|`Hea*!Heat`        |All **GameObjects** which names begin with  "Hea", but are not "Heat" |
-|`Hea*!Heat!Head`   |All **GameObjects** which names begin with  "Hea", but are neither "Heat" nor "Head" |
-|`!H*d`             |All **GameObjects** which names neither begin with "H" nor end with "d" |
-
 
 ### Descenders
 
@@ -108,6 +93,29 @@ Examples:
 |`Head<m:Glow>`      |All **GameObjects** that are named "Head" and use materials named "Glow" |
 |`Head<s:Standard>`  |All **GameObjects** that are named "Head" and are using "Standard" shader. |
 
+### Exclusions
+
+An exclusion is defined by an exclamation point (`!`), and allows us to exclude certain **GameObjects** 
+returned by the query.   
+The syntax differs slightly based on which GoQL element it is applied to as follows:
+
+|**Element**            |**Syntax** |
+|:-------------------|:---|
+|[Name filters](#name-filters)     |Put `!` before a name filter to exclude **GameObjects** that match the name filter, e.g.: `!Foo`.|
+|[Indexers](#indexers)             |Put `!` inside the indexer, e.g..: `/[0:10,!5]`.|
+|[Discriminators](#discriminators) |Put `!` inside the discriminator, e.g.: `<!t:MeshFilter>`.|
+
+Examples:
+
+|**GoQL**           |**Description** |
+|:------------------|:---|
+|`!Head*`           |All **GameObjects** that do not have names beginning with  "Head" |
+|`Hea*!*d`          |All **GameObjects** which names begin with  "Hea", but don't end with "d" |
+|`Hea*!Heat`        |All **GameObjects** which names begin with  "Hea", but are not "Heat" |
+|`Hea*!Heat!Head`   |All **GameObjects** which names begin with  "Hea", but are neither "Heat" nor "Head" |
+|`!H*d`             |All **GameObjects** which names neither begin with "H" nor end with "d" |
+|`[0:3,!0,!1]`      |All **GameObjects**, in which each is the 3rd child of another **GameObject**. |
+|`<t:Collider><!t:MeshFilter>` |All **GameObjects** which have Collider components, but don't have any MeshFilter component. |
 ## Other Examples
 
 |**GoQL**            |**Description** |
