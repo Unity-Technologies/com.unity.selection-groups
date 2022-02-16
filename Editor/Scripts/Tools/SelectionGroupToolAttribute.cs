@@ -19,6 +19,9 @@ namespace Unity.SelectionGroups.Editor
         /// </summary>
         public string description;
         
+        /// <summary>
+        /// Unique ID for the tool.
+        /// </summary>
         public readonly int toolId;
 
         /// <summary>
