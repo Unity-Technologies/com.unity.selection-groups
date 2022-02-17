@@ -426,7 +426,7 @@ namespace Unity.SelectionGroups.Editor
                     
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.objectReferences = new[] { @group.gameObject };
-                    DragAndDrop.SetGenericData(kDragItemType,Editor.DragItemType.GROUP);
+                    DragAndDrop.SetGenericData(kDragItemType,Editor.DragItemType.Group);
                     DragAndDrop.SetGenericData(kDragGroupIndex,groupIndex);
                     DragAndDrop.StartDrag(@group.groupName);
                     evt.Use();
@@ -438,7 +438,7 @@ namespace Unity.SelectionGroups.Editor
                     DragItemType? dragItemType = DragAndDrop.GetGenericData(kDragItemType) as DragItemType?;
 
                     bool targetGroupIsAuto  = @group.IsAutoFilled();
-                    bool draggedItemIsGroup = (dragItemType == Editor.DragItemType.GROUP);
+                    bool draggedItemIsGroup = (dragItemType == Editor.DragItemType.Group);
 
                     if (draggedItemIsGroup) 
                     {
@@ -452,7 +452,7 @@ namespace Unity.SelectionGroups.Editor
                     else 
                     {
                         //moving window members to group.  
-                        bool isMovingWindowMembers = (dragItemType == Editor.DragItemType.WINDOW_GROUP_MEMBERS && evt.control);
+                        bool isMovingWindowMembers = (dragItemType == Editor.DragItemType.WindowGroupMembers && evt.control);
                         DragAndDrop.visualMode = isMovingWindowMembers
                             ? DragAndDropVisualMode.Move
                             : DragAndDropVisualMode.Copy; 
@@ -469,13 +469,13 @@ namespace Unity.SelectionGroups.Editor
 
                     DragItemType? dragItemType = DragAndDrop.GetGenericData(kDragItemType) as DragItemType?;
                     if (!dragItemType.HasValue) {
-                        dragItemType = Editor.DragItemType.GAMEOBJECTS; //receive gameObjects from outside the window
+                        dragItemType = Editor.DragItemType.GameObjects; //receive gameObjects from outside the window
                     } 
                     
                     try {
                         switch (dragItemType.Value) 
                         {
-                            case Editor.DragItemType.WINDOW_GROUP_MEMBERS: 
+                            case Editor.DragItemType.WindowGroupMembers: 
                             {
                                 if (evt.control) 
                                 {
@@ -492,13 +492,13 @@ namespace Unity.SelectionGroups.Editor
                                 
                                 break;
                             } 
-                            case Editor.DragItemType.GAMEOBJECTS: 
+                            case Editor.DragItemType.GameObjects: 
                             {
                                 RegisterUndo(@group, "Add Members");
                                 @group.Add(DragAndDrop.objectReferences);
                                 break;
                             }
-                            case Editor.DragItemType.GROUP: 
+                            case Editor.DragItemType.Group: 
                             {
                                 Object[] draggedObjects = DragAndDrop.objectReferences;
                                 if (null == draggedObjects || draggedObjects.Length <= 0 || null == draggedObjects[0])
@@ -637,7 +637,7 @@ namespace Unity.SelectionGroups.Editor
                     
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.objectReferences = objects;
-                    DragAndDrop.SetGenericData(kDragItemType,Editor.DragItemType.WINDOW_GROUP_MEMBERS);
+                    DragAndDrop.SetGenericData(kDragItemType,Editor.DragItemType.WindowGroupMembers);
                     string dragText = numDraggedObjects > 1 ? objects[0].name + " ..." : objects[0].name;
                     DragAndDrop.StartDrag(dragText);
                     evt.Use();
