@@ -19,7 +19,7 @@ namespace Unity.SelectionGroups.Editor
             titleContent.text = "Selection Groups";
             wantsMouseMove = true;
             
-            sceneHeaderContent     =  EditorGUIUtility.IconContent("SceneAsset Icon");
+            m_SceneHeaderContent     =  EditorGUIUtility.IconContent("SceneAsset Icon");
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
         }
 
@@ -78,7 +78,7 @@ namespace Unity.SelectionGroups.Editor
                 case "SelectAll":
                     foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().groups) 
                     {
-                        m_selectedGroupMembers.AddGroupMembers(group);
+                        m_SelectedGroupMembers.AddGroupMembers(group);
                     }
                     UpdateUnityEditorSelectionWithMembers();
                     current.Use();
@@ -88,8 +88,8 @@ namespace Unity.SelectionGroups.Editor
                     current.Use();
                     break;
                 case "InvertSelection":
-                    GroupMembersSelection prevSelectedMembers = new GroupMembersSelection(m_selectedGroupMembers);
-                    m_selectedGroupMembers.Clear();
+                    GroupMembersSelection prevSelectedMembers = new GroupMembersSelection(m_SelectedGroupMembers);
+                    m_SelectedGroupMembers.Clear();
                     
                     foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().groups) 
                     {
@@ -97,7 +97,7 @@ namespace Unity.SelectionGroups.Editor
                         {
                             if (prevSelectedMembers.Contains(group, m))
                                 continue;
-                            m_selectedGroupMembers.AddObject(group,m);
+                            m_SelectedGroupMembers.AddObject(group,m);
                         }
                     }
                     current.Use();
