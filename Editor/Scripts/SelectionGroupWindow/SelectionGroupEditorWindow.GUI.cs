@@ -79,7 +79,7 @@ namespace Unity.SelectionGroups.Editor
             viewRect.width = position.width-16;
             viewRect.height = CalculateHeight(m_GroupsToDraw);
             var windowRect = new Rect(0, 0, position.width, position.height);
-            scroll = GUI.BeginScrollView(windowRect, scroll, viewRect);
+            m_Scroll = GUI.BeginScrollView(windowRect, m_Scroll, viewRect);
             
             Rect cursor = new Rect(0, 0, position.width-kRightMargin, EditorGUIUtility.singleLineHeight);
             if (GUI.Button(cursor, kAddGroup)) CreateNewGroup();
@@ -92,7 +92,7 @@ namespace Unity.SelectionGroups.Editor
                 cursor.y += kGroupHeaderPadding; 
                 
                 //early out if this group yMin is below window rect (not visible).
-                if ((cursor.yMin - scroll.y) > position.height) break;
+                if ((cursor.yMin - m_Scroll.y) > position.height) break;
                 
                 cursor = DrawHeader(cursor, i);
                 if (m_GroupsToDraw[i].AreMembersShownInWindow())
@@ -119,10 +119,10 @@ namespace Unity.SelectionGroups.Editor
 
         private void SetupStyles()
         {
-            if (miniButtonStyle == null)
+            if (m_MiniButtonStyle == null)
             {
-                miniButtonStyle = EditorStyles.miniButton;
-                miniButtonStyle.padding = new RectOffset(0, 0, 0, 0); 
+                m_MiniButtonStyle = EditorStyles.miniButton;
+                m_MiniButtonStyle.padding = new RectOffset(0, 0, 0, 0); 
                 m_Label = "label";
             }
 
@@ -147,9 +147,9 @@ namespace Unity.SelectionGroups.Editor
                     continue;
                 
                 //if rect is below window, early out.
-                if (rect.yMin - scroll.y > position.height) return rect;
+                if (rect.yMin - m_Scroll.y > position.height) return rect;
                 //if rect is in window, draw.
-                if (rect.yMax - scroll.y > 0)
+                if (rect.yMax - m_Scroll.y > 0)
                     DrawGroupMember(rect, group, i);
                 rect.y += rect.height;
             }
@@ -165,7 +165,7 @@ namespace Unity.SelectionGroups.Editor
 
             bool isGroupMemberSelected = m_SelectedGroupMembers.Contains(group, g);
             if (isGroupMemberSelected)
-                EditorGUI.DrawRect(rect, SELECTION_COLOR);
+                EditorGUI.DrawRect(rect, s_SelectionColor);
             
             if (isMouseOver) 
             {
@@ -214,7 +214,7 @@ namespace Unity.SelectionGroups.Editor
             float currentViewWidth = EditorGUIUtility.currentViewWidth;
             
             //background
-            Color backgroundColor = ((SelectionGroup) group == m_activeSelectionGroup) ? Color.white * 0.6f : Color.white * 0.3f;
+            Color backgroundColor = ((SelectionGroup) group == m_ActiveSelectionGroup) ? Color.white * 0.6f : Color.white * 0.3f;
             if (isPaint) 
             {
                 rect.width = currentViewWidth - kRightMargin - kColorWidth;                
@@ -283,7 +283,7 @@ namespace Unity.SelectionGroups.Editor
                 content.tooltip = attr.description;
                 
                 rect.x = rightAlignedX - ((enabledToolCounter+1) * kToolXDiff);
-                if (GUI.Button(rect, content, miniButtonStyle))
+                if (GUI.Button(rect, content, m_MiniButtonStyle))
                 {
                     try
                     {
@@ -394,10 +394,10 @@ namespace Unity.SelectionGroups.Editor
                 case EventType.MouseDown:
                     switch (evt.button)
                     {
-                        case RIGHT_MOUSE_BUTTON:
+                        case kRightMouseButton:
                             ShowGroupContextMenu(rect, @group.groupName, @group);
                             break;
-                        case LEFT_MOUSE_BUTTON:
+                        case kLeftMouseButton:
                             m_LeftMouseWasDoubleClicked = evt.clickCount > 1;
                             if (m_LeftMouseWasDoubleClicked) 
                             {
@@ -409,7 +409,7 @@ namespace Unity.SelectionGroups.Editor
                     break;
                 case EventType.MouseUp:
                     switch (evt.button) {
-                        case LEFT_MOUSE_BUTTON:
+                        case kLeftMouseButton:
                             if (!m_LeftMouseWasDoubleClicked) 
                             {
                                 SetUnityEditorSelection(group);
@@ -421,7 +421,7 @@ namespace Unity.SelectionGroups.Editor
                     break;
                 
                 case EventType.MouseDrag:
-                    if ((SelectionGroup) m_activeSelectionGroup != group)
+                    if ((SelectionGroup) m_ActiveSelectionGroup != group)
                         break;
                     
                     DragAndDrop.PrepareStartDrag();
@@ -558,8 +558,8 @@ namespace Unity.SelectionGroups.Editor
 
             bool isControl = evt.control;
             bool isShift = evt.shift;
-            bool isRightMouseClick = evt.button == RIGHT_MOUSE_BUTTON;
-            bool isLeftMouseClick = evt.button == LEFT_MOUSE_BUTTON;
+            bool isRightMouseClick = evt.button == kRightMouseButton;
+            bool isLeftMouseClick = evt.button == kLeftMouseButton;
 
             switch (evt.type) 
             {
@@ -724,7 +724,7 @@ namespace Unity.SelectionGroups.Editor
         
         private void SetUnityEditorSelection(SelectionGroup group) 
         {
-            m_activeSelectionGroup = @group;
+            m_ActiveSelectionGroup = @group;
             Selection.objects = new Object[] { null == group ? null : group.gameObject };
         }
 

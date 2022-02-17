@@ -51,9 +51,9 @@ namespace Unity.SelectionGroups.Editor
                     case EventType.KeyDown: {
                         if (Event.current.keyCode == (KeyCode.Delete)) 
                         {
-                            if (null != m_activeSelectionGroup) 
+                            if (null != m_ActiveSelectionGroup) 
                             {
-                                DeleteGroup(m_activeSelectionGroup);
+                                DeleteGroup(m_ActiveSelectionGroup);
                             } 
                             else 
                             {
