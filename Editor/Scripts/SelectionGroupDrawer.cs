@@ -12,7 +12,7 @@ namespace Unity.SelectionGroups.Editor
     [CustomPropertyDrawer(typeof(SelectionGroupDropDownAttribute))]
     public class SelectionGroupDrawer : PropertyDrawer
     {
-        string[] names;
+        private string[] m_Names;
 
         /// <summary>
         /// Implements UI for SelectionGroup drawers.
@@ -22,14 +22,14 @@ namespace Unity.SelectionGroups.Editor
         /// <param name="label"></param>
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (names == null) names = SelectionGroupManager.GetOrCreateInstance().groupNames.ToArray();
+            if (m_Names == null) m_Names = SelectionGroupManager.GetOrCreateInstance().groupNames.ToArray();
             var name = property.stringValue;
             position = EditorGUI.PrefixLabel(position, label);
-            var index = System.Array.IndexOf(names, name);
-            var newIndex = EditorGUI.Popup(position, index, names);
+            var index = System.Array.IndexOf(m_Names, name);
+            var newIndex = EditorGUI.Popup(position, index, m_Names);
             if (newIndex != index)
             {
-                property.stringValue = names[newIndex];
+                property.stringValue = m_Names[newIndex];
             }
         }
     }
