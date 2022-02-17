@@ -22,7 +22,7 @@ namespace Unity.SelectionGroups.Editor
         /// <param name="label"></param>
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (names == null) names = SelectionGroupManager.GetOrCreateInstance().GroupNames.ToArray();
+            if (names == null) names = SelectionGroupManager.GetOrCreateInstance().groupNames.ToArray();
             var name = property.stringValue;
             position = EditorGUI.PrefixLabel(position, label);
             var index = System.Array.IndexOf(names, name);

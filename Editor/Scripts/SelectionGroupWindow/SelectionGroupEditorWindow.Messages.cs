@@ -75,7 +75,7 @@ namespace Unity.SelectionGroups.Editor
         {
             switch (current.commandName) {
                 case "SelectAll":
-                    foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().Groups) {
+                    foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().groups) {
                         m_selectedGroupMembers.AddGroupMembers(group);
                     }
                     UpdateUnityEditorSelectionWithMembers();
@@ -89,7 +89,7 @@ namespace Unity.SelectionGroups.Editor
                     GroupMembersSelection prevSelectedMembers = new GroupMembersSelection(m_selectedGroupMembers);
                     m_selectedGroupMembers.Clear();
                     
-                    foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().Groups) {
+                    foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().groups) {
                         foreach (Object m in group.Members) {
                             if (prevSelectedMembers.Contains(group, m))
                                 continue;

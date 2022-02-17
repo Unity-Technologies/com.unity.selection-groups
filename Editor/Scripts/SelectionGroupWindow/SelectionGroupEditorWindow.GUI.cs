@@ -56,7 +56,7 @@ namespace Unity.SelectionGroups.Editor
 
         void DrawGUI()
         {
-            m_groupsToDraw = SelectionGroupManager.GetOrCreateInstance().Groups;
+            m_groupsToDraw = SelectionGroupManager.GetOrCreateInstance().groups;
             
             var viewRect = Rect.zero;
             viewRect.width = position.width-16;

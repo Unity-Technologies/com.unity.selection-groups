@@ -87,7 +87,7 @@ class SelectionGroupsProjectSettingsProvider : SettingsProvider {
     
     internal void RefreshGroupHideFlagsInEditor() {
         SelectionGroupManager sgManager = SelectionGroupManager.GetOrCreateInstance();
-        foreach (SelectionGroup group in sgManager.Groups) {
+        foreach (SelectionGroup group in sgManager.groups) {
             group.RefreshHideFlagsInEditor();
         }
         SelectionGroupManager.UpdateQueryResults();
