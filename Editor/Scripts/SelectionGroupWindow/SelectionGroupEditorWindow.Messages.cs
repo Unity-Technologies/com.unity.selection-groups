@@ -12,11 +12,9 @@ using Object = UnityEngine.Object;
 
 namespace Unity.SelectionGroups.Editor
 {
-
     internal partial class SelectionGroupEditorWindow : EditorWindow
     {
-
-        void OnEnable()
+        private void OnEnable()
         {
             titleContent.text = "Selection Groups";
             wantsMouseMove = true;
@@ -25,12 +23,12 @@ namespace Unity.SelectionGroups.Editor
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
         }
 
-        private void OnDisable() {
+        private void OnDisable() 
+        {
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
         }
 
-
-        void OnGUI()
+        private void OnGUI()
         {
             try
             {
@@ -51,10 +49,14 @@ namespace Unity.SelectionGroups.Editor
                         OnExecuteCommand(Event.current);
                         break;
                     case EventType.KeyDown: {
-                        if (Event.current.keyCode == (KeyCode.Delete)) {
-                            if (null != m_activeSelectionGroup) {
+                        if (Event.current.keyCode == (KeyCode.Delete)) 
+                        {
+                            if (null != m_activeSelectionGroup) 
+                            {
                                 DeleteGroup(m_activeSelectionGroup);
-                            } else {
+                            } 
+                            else 
+                            {
                                 RemoveSelectedMembersFromGroup();  
                             }
                             evt.Use();
@@ -67,15 +69,15 @@ namespace Unity.SelectionGroups.Editor
             {
                 Profiler.EndSample();
             }
-
-            
         }
 
-        void OnExecuteCommand(Event current)
+        private void OnExecuteCommand(Event current)
         {
-            switch (current.commandName) {
+            switch (current.commandName) 
+            {
                 case "SelectAll":
-                    foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().groups) {
+                    foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().groups) 
+                    {
                         m_selectedGroupMembers.AddGroupMembers(group);
                     }
                     UpdateUnityEditorSelectionWithMembers();
@@ -89,8 +91,10 @@ namespace Unity.SelectionGroups.Editor
                     GroupMembersSelection prevSelectedMembers = new GroupMembersSelection(m_selectedGroupMembers);
                     m_selectedGroupMembers.Clear();
                     
-                    foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().groups) {
-                        foreach (Object m in group.Members) {
+                    foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().groups) 
+                    {
+                        foreach (Object m in group.Members) 
+                        {
                             if (prevSelectedMembers.Contains(group, m))
                                 continue;
                             m_selectedGroupMembers.AddObject(group,m);
@@ -101,7 +105,7 @@ namespace Unity.SelectionGroups.Editor
             }
         }
 
-        void OnValidateCommand(Event current)
+        private void OnValidateCommand(Event current)
         {
             switch (current.commandName)
             {
@@ -117,9 +121,9 @@ namespace Unity.SelectionGroups.Editor
             }
         }
         
-        private void OnUndoRedoPerformed() {
+        private void OnUndoRedoPerformed() 
+        {
             Repaint();
         }
-        
     }
 }
