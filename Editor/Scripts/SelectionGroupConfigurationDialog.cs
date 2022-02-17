@@ -14,16 +14,16 @@ namespace Unity.SelectionGroups.Editor
     /// </summary>
     public class SelectionGroupConfigurationDialog : EditorWindow
     {
-        [SerializeField] int groupId;
-        ReorderableList exclusionList;
-
-        SelectionGroup group;
-        GoQL.GoQLExecutor executor = new GoQL.GoQLExecutor();
-        SelectionGroupEditorWindow parentWindow;
-        string message = string.Empty;
-        bool refreshQuery = true;
-        bool showDebug = false;
-        SelectionGroupDebugInformation debugInformation;
+        [SerializeField] private int m_GroupId;
+        
+        private ReorderableList m_ExclusionList;
+        private SelectionGroup m_Group;
+        private GoQL.GoQLExecutor m_Executor = new GoQL.GoQLExecutor();
+        private SelectionGroupEditorWindow m_ParentWindow;
+        private string m_Message = string.Empty;
+        private bool m_RefreshQuery = true;
+        private bool m_ShowDebug = false;
+        private SelectionGroupDebugInformation m_DebugInformation;
 
         private void OnEnable()
         {
@@ -33,7 +33,7 @@ namespace Unity.SelectionGroups.Editor
 
         private void OnUndoRedo()
         {
-            refreshQuery = true;
+            m_RefreshQuery = true;
             Repaint();
         }
 
@@ -42,16 +42,16 @@ namespace Unity.SelectionGroups.Editor
             Undo.undoRedoPerformed -= OnUndoRedo;
         }
 
-        void OnGUI()
+        private void OnGUI()
         {
-            if (group == null)
+            if (m_Group == null)
             {
                 Close();
                 return;
             }
 
             //Null for SelectionGroup (scene), which is a MonoBehaviour, must be checked against null using its type
-            if (group is Component component && component == null){
+            if (m_Group is Component component && component == null){
                 Close();
                 return;                
             }
@@ -60,43 +60,41 @@ namespace Unity.SelectionGroups.Editor
             using (var cc = new EditorGUI.ChangeCheckScope())
             {
                 GUILayout.Label("Selection Group Properties", EditorStyles.largeLabel);
-                group.groupName = EditorGUILayout.TextField("Group Name", group.groupName);
-                group.color = EditorGUILayout.ColorField("Color", group.color);
+                m_Group.groupName = EditorGUILayout.TextField("Group Name", m_Group.groupName);
+                m_Group.color = EditorGUILayout.ColorField("Color", m_Group.color);
                 EditorGUILayout.LabelField("GameObject Query");
-                var q = group.query;
-                var newQuery = EditorGUILayout.TextField(group.query);
-                refreshQuery = refreshQuery || (q != newQuery);
+                var q = m_Group.query;
+                var newQuery = EditorGUILayout.TextField(m_Group.query);
+                m_RefreshQuery = m_RefreshQuery || (q != newQuery);
                 
-                if (refreshQuery)
+                if (m_RefreshQuery)
                 {
                     {
-                        var obj = group as Object;
+                        var obj = m_Group as Object;
                         
                         Undo.RegisterCompleteObjectUndo(obj, "Query change");
                         
                     }
                 }
-                if (message != string.Empty)
+                if (m_Message != string.Empty)
                 {
                     GUILayout.Space(5);
-                    EditorGUILayout.HelpBox(message, MessageType.Info);
+                    EditorGUILayout.HelpBox(m_Message, MessageType.Info);
                 }
                 GUILayout.Space(5);
                 
-                showDebug = GUILayout.Toggle(showDebug, "Show Debug Info", "button");
-                if (showDebug)
+                m_ShowDebug = GUILayout.Toggle(m_ShowDebug, "Show Debug Info", "button");
+                if (m_ShowDebug)
                 {
-                    if (debugInformation == null) debugInformation = new SelectionGroupDebugInformation(group);
-                    EditorGUILayout.TextArea(debugInformation.text);
+                    if (m_DebugInformation == null) m_DebugInformation = new SelectionGroupDebugInformation(m_Group);
+                    EditorGUILayout.TextArea(m_DebugInformation.text);
                 }
                 else
                 {
-                    debugInformation = null;
+                    m_DebugInformation = null;
                 }
             }
         }
-
-        
     }
 }
 
