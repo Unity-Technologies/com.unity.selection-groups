@@ -3,9 +3,8 @@ using UnityEditor;
 
 namespace Unity.SelectionGroups.Editor
 {
-    class SelectionGroupDebugInformation
+    internal class SelectionGroupDebugInformation
     {
-
         public string text;
 
         internal SelectionGroupDebugInformation(SelectionGroup group)
