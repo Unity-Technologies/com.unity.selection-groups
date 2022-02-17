@@ -22,7 +22,7 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
 
     public static void UpdateQueryResults() {
         foreach (var i in SelectionGroupManager.GetOrCreateInstance().m_sceneSelectionGroups) {
-            if (!string.IsNullOrEmpty(i.Query)) {
+            if (!string.IsNullOrEmpty(i.query)) {
                 i.UpdateQueryResults();
             }
         }
@@ -30,7 +30,7 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
 
     internal IList<SelectionGroup> Groups => m_sceneSelectionGroups;
 
-    internal IEnumerable<string> GroupNames => m_sceneSelectionGroups.Select(g => g.Name);
+    internal IEnumerable<string> GroupNames => m_sceneSelectionGroups.Select(g => g.groupName);
 
 
     [Obsolete]
@@ -89,8 +89,8 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         Undo.RegisterCreatedObjectUndo(g, "New Scene Selection Group");
 #endif
         SelectionGroup group = g.AddComponent<SelectionGroup>();
-        group.Name        = groupName;
-        group.Color       = color;
+        group.groupName        = groupName;
+        group.color       = color;
         
         SelectionGroupsEditorProjectSettings projSettings = SelectionGroupsEditorProjectSettings.GetOrCreateInstance();
         for (int i = 0; i < (int)SelectionGroupToolType.BUILT_IN_MAX; ++i) {

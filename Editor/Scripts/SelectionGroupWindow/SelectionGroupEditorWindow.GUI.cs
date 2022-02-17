@@ -48,7 +48,7 @@ namespace Unity.SelectionGroups.Editor
                 height += EditorGUIUtility.singleLineHeight + 3;
                 if (@group.AreMembersShownInWindow())
                 {
-                    height += @group.Count * EditorGUIUtility.singleLineHeight;
+                    height += @group.count * EditorGUIUtility.singleLineHeight;
                 }
             }
             return height;
@@ -180,7 +180,7 @@ namespace Unity.SelectionGroups.Editor
             Rect           rect    = new Rect(cursor) {x = 0, };
             GUIContent     content = sceneHeaderContent;
             
-            content.text = $"{group.Name}";
+            content.text = $"{group.groupName}";
 
             //
             const float FOLDOUT_WIDTH    = 16;
@@ -223,7 +223,7 @@ namespace Unity.SelectionGroups.Editor
             rect.x     = toolRightAlignedX + SEPARATOR_WIDTH;
             rect.width = COLOR_WIDTH;
 
-            EditorGUI.DrawRect(rect, group.Color);
+            EditorGUI.DrawRect(rect, group.color);
             rect.x = cursor.x;
             rect.y += rect.height;
             rect.width = cursor.width;
@@ -356,7 +356,7 @@ namespace Unity.SelectionGroups.Editor
                     switch (evt.button)
                     {
                         case RIGHT_MOUSE_BUTTON:
-                            ShowGroupContextMenu(rect, @group.Name, @group);
+                            ShowGroupContextMenu(rect, @group.groupName, @group);
                             break;
                         case LEFT_MOUSE_BUTTON:
                             m_leftMouseWasDoubleClicked = evt.clickCount > 1;
@@ -387,7 +387,7 @@ namespace Unity.SelectionGroups.Editor
                     DragAndDrop.objectReferences = new[] { @group.gameObject };
                     DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP);
                     DragAndDrop.SetGenericData(DRAG_GROUP_INDEX,groupIndex);
-                    DragAndDrop.StartDrag(@group.Name);
+                    DragAndDrop.StartDrag(@group.groupName);
                     evt.Use();
                     break;
                 case EventType.DragUpdated: {

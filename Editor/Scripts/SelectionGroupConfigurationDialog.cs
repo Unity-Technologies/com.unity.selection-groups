@@ -60,11 +60,11 @@ namespace Unity.SelectionGroups.Editor
             using (var cc = new EditorGUI.ChangeCheckScope())
             {
                 GUILayout.Label("Selection Group Properties", EditorStyles.largeLabel);
-                group.Name = EditorGUILayout.TextField("Group Name", group.Name);
-                group.Color = EditorGUILayout.ColorField("Color", group.Color);
+                group.groupName = EditorGUILayout.TextField("Group Name", group.groupName);
+                group.color = EditorGUILayout.ColorField("Color", group.color);
                 EditorGUILayout.LabelField("GameObject Query");
-                var q = group.Query;
-                var newQuery = EditorGUILayout.TextField(group.Query);
+                var q = group.query;
+                var newQuery = EditorGUILayout.TextField(group.query);
                 refreshQuery = refreshQuery || (q != newQuery);
                 
                 if (refreshQuery)

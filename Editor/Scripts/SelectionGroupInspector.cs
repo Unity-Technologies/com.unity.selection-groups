@@ -14,17 +14,17 @@ internal class SelectionGroupInspector : UnityEditor.Editor {
         serializedObject.Update();
 
         bool repaintWindow = EditorGUIDrawerUtility.DrawUndoableGUI(m_group.gameObject, "Group Name",
-            () => EditorGUILayout.TextField("Group Name", m_group.Name),
-            (string groupName) => { m_group.Name = groupName; }
+            () => EditorGUILayout.TextField("Group Name", m_group.groupName),
+            (string groupName) => { m_group.groupName = groupName; }
         );
         
         repaintWindow |= EditorGUIDrawerUtility.DrawUndoableGUI(m_group, "Group Color",
-            () => EditorGUILayout.ColorField("Color", m_group.Color),
-            (Color groupColor) => { m_group.Color = groupColor; }
+            () => EditorGUILayout.ColorField("Color", m_group.color),
+            (Color groupColor) => { m_group.color = groupColor; }
         );
 
         repaintWindow |= EditorGUIDrawerUtility.DrawUndoableGUI(m_group, "Group Query",
-            () => EditorGUILayout.TextField("Group Query", m_group.Query),
+            () => EditorGUILayout.TextField("Group Query", m_group.query),
             (string query) => {
                 {
                     Undo.RegisterCompleteObjectUndo(m_group, "Query change");
