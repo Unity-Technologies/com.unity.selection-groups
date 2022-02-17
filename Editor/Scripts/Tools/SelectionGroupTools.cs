@@ -11,7 +11,7 @@ namespace Unity.SelectionGroups.Editor
     public static class SelectionGroupTools
     {
         [SelectionGroupTool("d_VisibilityOn", "Show or hide objects in the scene.",(int) SelectionGroupToolType.Visibility)]
-        static void ToggleVisibility(SelectionGroup group) 
+        private static void ToggleVisibility(SelectionGroup group) 
         {
             List<GameObject> goMembers = group.FindGameObjectMembers();
             if (goMembers.Count <= 0)
@@ -19,15 +19,18 @@ namespace Unity.SelectionGroups.Editor
 
             SceneVisibilityManager sceneVisibilityManager = SceneVisibilityManager.instance;
             bool show = (sceneVisibilityManager.IsHidden(goMembers[0]));
-            if (show) {
+            if (show) 
+            {
                 sceneVisibilityManager.Show(goMembers.ToArray(), false);
-            } else {
+            } 
+            else
+            {
                 sceneVisibilityManager.Hide(goMembers.ToArray(), false);
             }
         }
 
         [SelectionGroupTool("LockIcon-On", "Enable or disable editing of objects.",(int) SelectionGroupToolType.Lock)]
-        static void ToggleLock(SelectionGroup group) 
+        private static void ToggleLock(SelectionGroup group) 
         {
             IList<Object> members  = group.Members;
             if (null == members || members.Count <= 0)
@@ -45,6 +48,5 @@ namespace Unity.SelectionGroups.Editor
                     obj.hideFlags |= HideFlags.NotEditable;
             }
         }
-
     }
 }
