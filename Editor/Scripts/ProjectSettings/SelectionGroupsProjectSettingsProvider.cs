@@ -8,7 +8,13 @@ using UnityEngine.UIElements;
 namespace Unity.SelectionGroups.Editor {
 class SelectionGroupsProjectSettingsProvider : SettingsProvider {
     private class Contents {
-		public static readonly GUIContent SHOW_GROUPS_IN_HIERARCHY = EditorGUIUtility.TrTextContent("Show Groups in Hierarchy");
+		public static readonly GUIContent SHOW_GROUPS_IN_HIERARCHY = EditorGUIUtility.TrTextContent("Show groups in Hierarchy");
+
+        public static readonly GUIContent[] DEFAULT_GROUP_EDITOR_TOOL = new GUIContent[] {
+            EditorGUIUtility.TrTextContent("Enable eye toolbar button by default"),
+            EditorGUIUtility.TrTextContent("Enable lock toolbar button by default"),
+        };
+
     }
 
 
@@ -39,9 +45,22 @@ class SelectionGroupsProjectSettingsProvider : SettingsProvider {
                 (e) => {
                     projSettings.ShowGroupsInHierarchy(e.newValue);
                     projSettings.SaveInEditor();
-                    SelectionGroupManager.GetOrCreateInstance().RefreshGroupHideFlagsInEditor();
+                    RefreshGroupHideFlagsInEditor();
                 }
             );
+
+            for (int i = 0; i < (int)SelectionGroupToolType.BUILT_IN_MAX; ++i) {
+                int toolID = i;
+                UIElementsEditorUtility.AddField<Toggle, bool>(defaultSectionContainer, 
+                    Contents.DEFAULT_GROUP_EDITOR_TOOL[i], 
+                    projSettings.GetDefaultGroupEditorToolState(toolID),
+                    (e) => {
+                        projSettings.EnableDefaultGroupEditorTool(toolID, e.newValue);
+                        projSettings.SaveInEditor();
+                    }
+                );
+                
+            }
             
         };
 
@@ -65,6 +84,19 @@ class SelectionGroupsProjectSettingsProvider : SettingsProvider {
 
 
 //----------------------------------------------------------------------------------------------------------------------
+    
+    internal void RefreshGroupHideFlagsInEditor() {
+        SelectionGroupManager sgManager = SelectionGroupManager.GetOrCreateInstance();
+        foreach (SelectionGroup group in sgManager.Groups) {
+            group.RefreshHideFlagsInEditor();
+        }
+        SelectionGroupManager.UpdateQueryResults();
+        EditorApplication.RepaintHierarchyWindow();
+        EditorApplication.DirtyHierarchyWindowSorting();
+        
+        SelectionGroupEditorWindow.TryRepaint();
+    }
+    
 
     private static SelectionGroupsProjectSettingsProvider m_projectSettingsProvider = null;
 

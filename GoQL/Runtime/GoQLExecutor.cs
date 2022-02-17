@@ -191,8 +191,13 @@ namespace Unity.GoQL
                 if(!scene.isLoaded) continue;
                 foreach (var j in scene.GetRootGameObjects())
                 {
-                    foreach(var k in j.GetComponentsInChildren<Transform>(true))
+                    foreach (var k in j.GetComponentsInChildren<Transform>(true)) 
+                    {
+                        if (IsHideFlagSet(k.gameObject, HideFlags.HideInHierarchy))
+                            continue;
+                            
                         selection.Add(k.gameObject);
+                    }
                 }
             }
             selection.Swap();
@@ -423,22 +428,40 @@ namespace Unity.GoQL
             for (var i = 0; i < SceneManager.sceneCount; i++)
             {
                 var scene = SceneManager.GetSceneAt(i);
-                if(scene.isLoaded)
-                    selection.AddRange(scene.GetRootGameObjects());
+                if (!scene.isLoaded) continue;
+                
+                foreach (var j in scene.GetRootGameObjects()) 
+                {
+                    if (IsHideFlagSet(j, HideFlags.HideInHierarchy))
+                        continue;
+                    selection.Add(j);
+                }
             }
         }
 
         void EnterChildren()
         {
-            foreach (var i in selection)
+            foreach (GameObject i in selection) 
             {
-                for (var j = 0; j < i.transform.childCount; j++)
-                    selection.Add(i.transform.GetChild(j).gameObject);
+                Transform t = i.transform;
+                for (var j = 0; j < t.childCount; j++) 
+                {
+                    GameObject childGO = t.GetChild(j).gameObject;
+                    if (IsHideFlagSet(childGO, HideFlags.HideInHierarchy))
+                        continue;
+                    selection.Add(childGO);
+                }
             }
 
             selection.Swap();
         }
 
         int mod(int a, int b) => a - b * Mathf.FloorToInt(1f * a / b);
+
+        static bool IsHideFlagSet(GameObject go, HideFlags hideFlags) 
+        {
+            return ((go.hideFlags & hideFlags) == hideFlags);
+        }
+        
     }
 }

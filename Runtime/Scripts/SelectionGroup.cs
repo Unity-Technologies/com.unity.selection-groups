@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
+using Unity.FilmInternalUtilities;
 using Unity.GoQL;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -122,11 +124,15 @@ namespace Unity.SelectionGroups
             set => this.color = value;
         }
 
-        internal bool GetEditorToolStatus(int toolID) => m_editorToolsStatus[toolID];
+        internal bool GetEditorToolState(int toolID) {
+            if (m_editorToolsStates.TryGetValue(toolID, out bool status))
+                return status;
+
+            return false;
+        }
 
         public void EnableEditorTool(int toolID, bool toolEnabled) {
-            Assert.IsTrue(toolID < (int)SelectionGroupToolType.MAX);
-            m_editorToolsStatus[toolID] = toolEnabled;
+            m_editorToolsStates[toolID] = toolEnabled;
         }
         
          /// <summary>
@@ -146,6 +152,17 @@ namespace Unity.SelectionGroups
          /// Get the members of the SelectionGroup
          /// </summary>
         public IList<Object> Members => members;
+
+        [NotNull]
+        internal List<GameObject> FindGameObjectMembers() {
+            List<GameObject> ret = new List<GameObject>();
+            foreach (Object m in members) {
+                if (m is GameObject go) {
+                    ret.Add(go);
+                }
+            }
+            return ret;
+        }
 
 //----------------------------------------------------------------------------------------------------------------------
         
@@ -281,9 +298,16 @@ namespace Unity.SelectionGroups
                 m_registerOnEnable = true;
             }
 
-            //Ensure that we always have the required status elements
-            while (m_editorToolsStatus.Count < (int)SelectionGroupToolType.MAX) {
-                m_editorToolsStatus.Add(false);
+            if (sgVersion < (int) SGVersion.EDITOR_STATE_0_7_2) {
+#pragma warning disable 612 //obsolete
+                if (null != m_editorToolsStatus) {
+                    int numStates = m_editorToolsStatus.Count;
+                    for (int i = 0; i < numStates; ++i) {
+                        m_editorToolsStates[i] = m_editorToolsStatus[i];
+                    }
+                    m_editorToolsStatus = null;
+#pragma warning restore 612
+                }
             }
             
             sgVersion = CUR_SG_VERSION;
@@ -313,14 +337,17 @@ namespace Unity.SelectionGroups
         
 //----------------------------------------------------------------------------------------------------------------------
 
-        [SerializeField] List<bool> m_editorToolsStatus = new List<bool>(new bool[(int) SelectionGroupToolType.MAX]);
+        [Obsolete]
+        [SerializeField] List<bool> m_editorToolsStatus = null;
+        
+        [SerializeField] EditorToolStates m_editorToolsStates = new EditorToolStates(); 
 
         [SerializeField] private bool m_showMembersInWindow = true;
         
 
         private GoQL.ParseResult m_queryParseResult = ParseResult.Empty;       
         
-        private const int  CUR_SG_VERSION     = (int) SGVersion.ORDERED_0_6_0;
+        private const int  CUR_SG_VERSION     = (int) SGVersion.EDITOR_STATE_0_7_2;
         private       bool m_registerOnEnable = false;
 
 #if UNITY_EDITOR        
@@ -328,9 +355,9 @@ namespace Unity.SelectionGroups
 #endif        
         
         enum SGVersion {
-            INITIAL = 1,    //initial
-            ORDERED_0_6_0 = 2, //The order of selection groups is maintained by SelectionGroupManager
-
+            INITIAL = 1,        //initial
+            ORDERED_0_6_0,      //The order of selection groups is maintained by SelectionGroupManager
+            EDITOR_STATE_0_7_2, //The data structure of m_editorToolsStates was changed
         }        
     }
 } //end namespace

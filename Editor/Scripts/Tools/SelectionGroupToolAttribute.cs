@@ -1,5 +1,4 @@
 using System;
-using UnityEditor;
 
 namespace Unity.SelectionGroups.Editor
 {
@@ -7,7 +6,7 @@ namespace Unity.SelectionGroups.Editor
     /// Marks a method to be included as a SelectionGroup tool, which is enabled in the configuration dialog for a selection group.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
-    internal class SelectionGroupToolAttribute : Attribute
+    public class SelectionGroupToolAttribute : Attribute
     {
         /// <summary>
         /// The icon used to represent the tool in the editor window.
@@ -19,6 +18,9 @@ namespace Unity.SelectionGroups.Editor
         /// </summary>
         public string description;
         
+        /// <summary>
+        /// Unique ID for the tool.
+        /// </summary>
         public readonly int toolId;
 
         /// <summary>

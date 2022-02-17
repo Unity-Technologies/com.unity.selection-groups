@@ -35,7 +35,7 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
 
     [Obsolete]
     internal SelectionGroup CreateSceneSelectionGroup(string groupName, string query, Color color, IList<Object> members) {
-        SelectionGroup group = CreateSceneSelectionGroupInternal(groupName, color);        
+        SelectionGroup group = CreateSelectionGroupInternal(groupName, color);        
         group.SetQuery(query);
 
         if (!group.IsAutoFilled()) {
@@ -46,27 +46,44 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         return group;
     }
 
+    [Obsolete]
     internal SelectionGroup CreateSceneSelectionGroup(string groupName, Color color) {
-        SelectionGroup group = CreateSceneSelectionGroupInternal(groupName, color);
+        return CreateSelectionGroup(groupName, color);
+    }
+    
+    [Obsolete]
+    internal SelectionGroup CreateSceneSelectionGroup(string groupName, Color color, string query) {
+        return CreateSelectionGroup(groupName, color, query);
+    }
+
+    [Obsolete]
+    internal SelectionGroup CreateSceneSelectionGroup(string groupName, Color color, IList<Object> members) {
+        return CreateSelectionGroup(groupName, color, members);
+    }
+    
+
+    //
+    internal SelectionGroup CreateSelectionGroup(string groupName, Color color) {
+        SelectionGroup group = CreateSelectionGroupInternal(groupName, color);
         m_sceneSelectionGroups.Add(group);
         return group;
     }
     
-    internal SelectionGroup CreateSceneSelectionGroup(string groupName, Color color, string query) {
-        SelectionGroup group = CreateSceneSelectionGroupInternal(groupName, color);        
+    internal SelectionGroup CreateSelectionGroup(string groupName, Color color, string query) {
+        SelectionGroup group = CreateSelectionGroupInternal(groupName, color);        
         group.SetQuery(query);
         m_sceneSelectionGroups.Add(group);
         return group;
     }
 
-    internal SelectionGroup CreateSceneSelectionGroup(string groupName, Color color, IList<Object> members) {
-        SelectionGroup group = CreateSceneSelectionGroupInternal(groupName, color);
+    internal SelectionGroup CreateSelectionGroup(string groupName, Color color, IList<Object> members) {
+        SelectionGroup group = CreateSelectionGroupInternal(groupName, color);
         group.Add(members);
         m_sceneSelectionGroups.Add(group);
         return group;
     }
 
-    private static SelectionGroup CreateSceneSelectionGroupInternal(string groupName, Color color) {
+    private static SelectionGroup CreateSelectionGroupInternal(string groupName, Color color) {
         GameObject g = new GameObject(groupName);
 #if UNITY_EDITOR
         Undo.RegisterCreatedObjectUndo(g, "New Scene Selection Group");
@@ -74,6 +91,12 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         SelectionGroup group = g.AddComponent<SelectionGroup>();
         group.Name        = groupName;
         group.Color       = color;
+        
+        SelectionGroupsEditorProjectSettings projSettings = SelectionGroupsEditorProjectSettings.GetOrCreateInstance();
+        for (int i = 0; i < (int)SelectionGroupToolType.BUILT_IN_MAX; ++i) {
+            group.EnableEditorTool(i, projSettings.GetDefaultGroupEditorToolState(i));
+        }
+        
         return group;
     }
 
@@ -122,16 +145,6 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
 #endif
         m_sceneSelectionGroups.Move(prevIndex, newIndex);
     }
-
-#if UNITY_EDITOR
-    internal void RefreshGroupHideFlagsInEditor() {
-        foreach (SelectionGroup group in m_sceneSelectionGroups) {
-            group.RefreshHideFlagsInEditor();
-        }
-        EditorApplication.RepaintHierarchyWindow();
-        EditorApplication.DirtyHierarchyWindowSorting();
-    }
-#endif
 
 //----------------------------------------------------------------------------------------------------------------------
 

@@ -45,12 +45,24 @@ internal class GoQLIndexerTests
         } 
     }
     
+    [Test]
+    public void NoDuplicateIndexedChildren()
+    {
+        TestUtility.ExecuteGoQLAndVerify("/[0,1,0]", 2);
+    }
     
-    [Ignore("LastChild")]
+    [Test]
+    public void ExclusionOperator()
+    {
+        TestUtility.ExecuteGoQLAndVerify("/[0:3]", 3);
+        TestUtility.ExecuteGoQLAndVerify("/[0:3,!1,!0]", 1,(t) => t.name == "Head");
+    }
+    
+    
     [Test]
     public void LastChild()
     {
-        TestUtility.ExecuteGoQLAndVerify("Head/[-1]", 2, (Transform t) => null!=t.parent && t.parent.name == "Head");
+        TestUtility.ExecuteGoQLAndVerify("Head/[-1]", 1, (Transform t) => null!=t.parent && t.parent.name == "Head");
     }
     
     [Test]

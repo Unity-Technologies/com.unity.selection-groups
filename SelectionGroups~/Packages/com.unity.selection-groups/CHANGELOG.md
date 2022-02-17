@@ -4,16 +4,48 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [0.7.0-preview] - 2022-02-04
+## [0.7.2-preview] - 2022-02-16
+
 
 ### Added
-* TBD
+* api: make SelectionGroupToolAttribute public
+* doc: add Quick Search Integration section
+* doc: add documentation on Project Settings
+* doc: add "moving group members" operation in the Selection Groups Window documentation
 
 ### Changed
-* TBD
+* change the format of EditorToolStates of groups
+* doc: update the exclusion documentation on GoQL
+* doc: change the inspector documentation to a table
 
 ### Fixed
-* TBD
+
+* fix: prevent duplicate members in groups 
+* fix: freezes when there is an unclosed angle bracket
+
+## [0.7.1-preview] - 2022-02-10
+
+### Fixed
+* fix: exclude hidden GameObjects from GoQL results 
+* fix: refresh query results after changing visibility settings in the Hierarchy
+
+## [0.7.0-preview] - 2022-02-08
+
+### Added
+* feat: add an option to hide SelectionGroups GameObjects in the hierarchy
+* feat: add settings to set the default toolbar buttons for new SelectionGroup 
+* feat: show hidden icon for members which are hidden in scene
+* feat: use ctrl to move group members when dragging them in the window
+* feat: exclusion operator for GoQL indexers
+* feat: integrate GoQL with SearchProvider (QuickSearch)
+* api: add an API to add/remove object to/from SelectionGroup
+
+### Changed
+* internal : rename API to create new SelectionGroup
+* deps: update dependency to com.unity.film-internal-utilities@0.13.0-preview
+
+### Fixed
+* fix: make the visibility toggle button set visibility based on the first member 
 
 
 ## [0.6.3-preview] - 2022-01-18

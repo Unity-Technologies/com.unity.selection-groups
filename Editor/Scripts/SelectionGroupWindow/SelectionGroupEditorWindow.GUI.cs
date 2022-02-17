@@ -76,11 +76,9 @@ namespace Unity.SelectionGroups.Editor
                 
                 //early out if this group yMin is below window rect (not visible).
                 if ((cursor.yMin - scroll.y) > position.height) break;
-                var dropRect = cursor;
                 
-                cursor = DrawHeader(cursor, i, out bool showChildren);
-
-                if (showChildren)
+                cursor = DrawHeader(cursor, i);
+                if (m_groupsToDraw[i].AreMembersShownInWindow())
                 {
                     // dropRect.yMax = rect.yMax;
                     //early out if this group yMax is above window rect (not visible).
@@ -166,8 +164,6 @@ namespace Unity.SelectionGroups.Editor
             if (g.hideFlags.HasFlag(HideFlags.NotEditable)) {
                 DrawIconTexture(16, rect.y, m_inspectorLockTex);
             }
-            
-            
 
             rect.x           += 32;
             bool allowRemove = !group.IsAutoFilled();
@@ -178,12 +174,11 @@ namespace Unity.SelectionGroups.Editor
             HandleGroupMemberMouseEvents(rect, group, g, isGroupMemberSelected);            
         }
         
-        Rect DrawHeader(Rect cursor, int groupIndex, out bool showChildren) {
-            SelectionGroup group                 = m_groupsToDraw[groupIndex];
-            bool           isPaint               = Event.current.type == EventType.Repaint;
-            Rect           rect                  = new Rect(cursor) {x = 0, };
-            bool           isAvailableInEditMode = true;
-            GUIContent     content               = sceneHeaderContent;
+        Rect DrawHeader(Rect cursor, int groupIndex) {
+            SelectionGroup group   = m_groupsToDraw[groupIndex];
+            bool           isPaint = Event.current.type == EventType.Repaint;
+            Rect           rect    = new Rect(cursor) {x = 0, };
+            GUIContent     content = sceneHeaderContent;
             
             content.text = $"{group.Name}";
 
@@ -217,8 +212,8 @@ namespace Unity.SelectionGroups.Editor
             float toolRightAlignedX = rect.x + rect.width;
             DrawTools(toolRightAlignedX, rect.y, group);
             
-            if(isAvailableInEditMode)
-                HandleHeaderMouseEvents(rect, groupIndex);
+            HandleHeaderMouseEvents(rect, groupIndex);
+            
             if (isPaint) 
             {
                 Label.normal.textColor = EditorGUIUtility.isProSkin ? ProTextColor: Color.black;
@@ -229,8 +224,6 @@ namespace Unity.SelectionGroups.Editor
             rect.width = COLOR_WIDTH;
 
             EditorGUI.DrawRect(rect, group.Color);
-
-            showChildren =  isAvailableInEditMode ? group.AreMembersShownInWindow() : false;
             rect.x = cursor.x;
             rect.y += rect.height;
             rect.width = cursor.width;
@@ -246,8 +239,8 @@ namespace Unity.SelectionGroups.Editor
             Rect rect = new Rect(0, y, TOOL_X_DIFF, TOOL_HEIGHT); 
             int enabledToolCounter = 0;
             
-            for (int toolId = (int)SelectionGroupToolType.MAX-1; toolId >=0; --toolId) {
-                bool toolStatus = group.GetEditorToolStatus(toolId);
+            for (int toolId = (int)SelectionGroupToolType.BUILT_IN_MAX-1; toolId >=0; --toolId) {
+                bool toolStatus = group.GetEditorToolState(toolId);
                 if (false == toolStatus)
                     continue;
             
