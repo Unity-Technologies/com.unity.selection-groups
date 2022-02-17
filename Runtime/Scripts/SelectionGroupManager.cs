@@ -108,7 +108,7 @@ namespace Unity.SelectionGroups
             group.color       = color;
             
             SelectionGroupsEditorProjectSettings projSettings = SelectionGroupsEditorProjectSettings.GetOrCreateInstance();
-            for (int i = 0; i < (int)SelectionGroupToolType.BUILT_IN_MAX; ++i) 
+            for (int i = 0; i < (int)SelectionGroupToolType.BuiltInMAX; ++i) 
             {
                 group.EnableEditorTool(i, projSettings.GetDefaultGroupEditorToolState(i));
             }
