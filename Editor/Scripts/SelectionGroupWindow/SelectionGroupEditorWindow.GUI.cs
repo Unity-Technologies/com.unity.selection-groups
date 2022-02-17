@@ -379,11 +379,11 @@ namespace Unity.SelectionGroups.Editor
                         Rect dropRect = rect;
                         dropRect.height = 2;
 
-                        DragDropPos dropPos = Editor.DragDropPos.ABOVE;
+                        DragDropPos dropPos = Editor.DragDropPos.Above;
                         float halfHeight = rect.height * 0.5f;
                         if (evt.mousePosition.y - rect.y > halfHeight) {
                             dropRect.y += rect.height + kGroupHeaderPadding;
-                            dropPos    =  Editor.DragDropPos.BELOW;
+                            dropPos    =  Editor.DragDropPos.Below;
                         }  
                         DragAndDrop.SetGenericData(kDragDropPos,dropPos);
                         
@@ -513,8 +513,8 @@ namespace Unity.SelectionGroups.Editor
                                 int srcIndex = dragGroupIndex.Value;
 
                                 if (dragGroupIndex == groupIndex
-                                    || Editor.DragDropPos.ABOVE == dropPos && srcIndex == groupIndex - 1
-                                    || Editor.DragDropPos.BELOW == dropPos && srcIndex == groupIndex + 1
+                                    || Editor.DragDropPos.Above == dropPos && srcIndex == groupIndex - 1
+                                    || Editor.DragDropPos.Below == dropPos && srcIndex == groupIndex + 1
                                    ) 
                                 {
                                     break;
@@ -522,12 +522,12 @@ namespace Unity.SelectionGroups.Editor
 
                                 //Calculate the target new index for the group correctly
                                 int targetIndex = groupIndex;
-                                if (Editor.DragDropPos.BELOW == dropPos && targetIndex < srcIndex) 
+                                if (Editor.DragDropPos.Below == dropPos && targetIndex < srcIndex) 
                                 {
                                     ++targetIndex;
                                 }
 
-                                if (Editor.DragDropPos.ABOVE == dropPos && targetIndex > srcIndex) 
+                                if (Editor.DragDropPos.Above == dropPos && targetIndex > srcIndex) 
                                 {
                                     --targetIndex;
                                 }
