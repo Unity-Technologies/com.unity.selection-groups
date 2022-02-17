@@ -25,12 +25,12 @@ class SelectionGroupsProjectSettingsProvider : SettingsProvider {
         activateHandler = (string searchContext, VisualElement root) => {
             //Main Tree
             VisualTreeAsset main =
-                UIElementsEditorUtility.LoadVisualTreeAsset(SelectionGroupEditorConstants.MAIN_PROJECT_SETTINGS_PATH);
+                UIElementsEditorUtility.LoadVisualTreeAsset(SelectionGroupEditorConstants.MainProjectSettingsPath);
             main.CloneTree(root);
 
             //Style
             UIElementsEditorUtility.LoadAndAddStyle(root.styleSheets,
-                SelectionGroupEditorConstants.PROJECT_SETTINGS_STYLE_PATH);
+                SelectionGroupEditorConstants.ProjectSettingsStylePath);
 
             //add fields
             VisualElement defaultSectionContainer = root.Query<VisualElement>("DefaultSectionContainer");
