@@ -17,7 +17,7 @@ namespace Unity.SelectionGroups.Editor
         
         private GUIStyle   Label;
         private GUIContent sceneHeaderContent;
-        private GUIContent m_CreateDropdownConten;
+        private GUIContent m_CreateDropdownContent;
 
         private static readonly Color ProTextColor = new Color(0.824f, 0.824f, 0.824f, 1f);
         
@@ -112,7 +112,7 @@ namespace Unity.SelectionGroups.Editor
                 EditorStyles.toolbar.Draw(rect, false, false, false, false);
 
             rect.width = 35;
-            if (EditorGUI.DropdownButton(rect, m_CreateDropdownConten, FocusType.Passive, EditorStyles.toolbarDropDown))
+            if (EditorGUI.DropdownButton(rect, m_CreateDropdownContent, FocusType.Passive, EditorStyles.toolbarDropDown))
             {
                 GenericMenu menu = new GenericMenu();
                 menu.AddItem(new GUIContent("Create Empty Group"), false, CreateNewGroup);
