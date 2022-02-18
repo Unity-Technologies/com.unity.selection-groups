@@ -59,6 +59,17 @@ namespace Unity.SelectionGroups.Editor
                 Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f)));
         }
 
+        static void CreateNewGroupFromSelection()
+        {
+            SelectionGroupManager sgManager = SelectionGroupManager.GetOrCreateInstance();
+            
+            int numGroups = sgManager.Groups.Count;
+            SelectionGroup newGroup =sgManager.CreateSelectionGroup($"SG_New Group {numGroups}",
+                Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f)));
+
+            newGroup.Add(Selection.gameObjects);
+        }
+
         static void RegisterUndo(SelectionGroup group, string msg)
         {
             Undo.RegisterCompleteObjectUndo(group, msg);
