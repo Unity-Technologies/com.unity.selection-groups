@@ -61,10 +61,10 @@ namespace Unity.SelectionGroups.Editor
 
         static void CreateNewGroupFromSelection()
         {
-            var sgManager = SelectionGroupManager.GetOrCreateInstance();
+            SelectionGroupManager sgManager = SelectionGroupManager.GetOrCreateInstance();
             
             int numGroups = sgManager.Groups.Count;
-            var newGroup =sgManager.CreateSceneSelectionGroup($"SG_New Group {numGroups}",
+            SelectionGroup newGroup =sgManager.CreateSelectionGroup($"SG_New Group {numGroups}",
                 Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f)));
 
             newGroup.Add(Selection.gameObjects);
