@@ -277,12 +277,14 @@ namespace Unity.GoQL
                 for (var i = 0; i < argCount; i++)
                 {
                     var arg = indexInstructions[i];
+                    
                     if (arg is int siblingIndex)
                     {
-                        siblingIndex = siblingIndex < 0 ? mod(siblingIndex, lengths[i]):siblingIndex;
                         for (var j = 0; j < selection.Count; j++)
                         {
-                            if (siblingIndex == indices[j])
+                            //if indexer is < 0, it is relative to number of siblings.
+                            var index = siblingIndex < 0 ? mod(siblingIndex, lengths[j]):siblingIndex;
+                            if (index == indices[j])
                             {
                                 selection.Add(selection[j]);
                             }
