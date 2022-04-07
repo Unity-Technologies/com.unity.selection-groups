@@ -21,9 +21,12 @@ Please refer to the [installation](installation.md) page to install Selection Gr
 
    ![](images/SelectionGroupsWindowNextToHierarchy.png)
 
-1. Click the `+` button and select "Create Empty Group". This will create a new item inside the window.
+1. Click the `+` button and select "Create Empty Group".  
+   This will create a new item inside the window, and a new group **GameObject** in the Hierarchy.
 
    ![](images/SelectionGroupsWindowCreateEmptyGroup.png)
+   
+   > Group **GameObjects** can be hidden via [ProjectSettings](project-settings.md)
    
 1. Drag some **GameObjects** from the hierarchy, or assets from the Project window. 
    
