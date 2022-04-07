@@ -369,11 +369,11 @@ namespace Unity.SelectionGroups.Editor
                         Rect dropRect = rect;
                         dropRect.height = 2;
 
-                        DragDropPos dropPos = DragDropPos.ABOVE;
+                        DragDropPos dropPos = DragDropPos.Above;
                         float halfHeight = rect.height * 0.5f;
                         if (evt.mousePosition.y - rect.y > halfHeight) {
                             dropRect.y += rect.height + GROUP_HEADER_PADDING;
-                            dropPos    =  DragDropPos.BELOW;
+                            dropPos    =  DragDropPos.Below;
                         }  
                         DragAndDrop.SetGenericData(DRAG_DROP_POS,dropPos);
                         
@@ -489,19 +489,19 @@ namespace Unity.SelectionGroups.Editor
                                 int srcIndex = dragGroupIndex.Value;
 
                                 if (dragGroupIndex == groupIndex
-                                    || DragDropPos.ABOVE == dropPos && srcIndex == groupIndex - 1
-                                    || DragDropPos.BELOW == dropPos && srcIndex == groupIndex + 1
+                                    || DragDropPos.Above == dropPos && srcIndex == groupIndex - 1
+                                    || DragDropPos.Below == dropPos && srcIndex == groupIndex + 1
                                    ) {
                                     break;
                                 }
 
                                 //Calculate the target new index for the group correctly
                                 int targetIndex = groupIndex;
-                                if (DragDropPos.BELOW == dropPos && targetIndex < srcIndex) {
+                                if (DragDropPos.Below == dropPos && targetIndex < srcIndex) {
                                     ++targetIndex;
                                 }
 
-                                if (DragDropPos.ABOVE == dropPos && targetIndex > srcIndex) {
+                                if (DragDropPos.Above == dropPos && targetIndex > srcIndex) {
                                     --targetIndex;
                                 }
 
