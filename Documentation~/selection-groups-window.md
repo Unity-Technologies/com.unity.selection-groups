@@ -7,7 +7,8 @@ We can do the following operations in the window.
 
 |**Operations**          |**How** |
 |:---                    |:---|
-| **Creating a group**   | Click on the **Add Group** button. |
+| **Creating an empty group**  | Click the `+` button and select "Create Empty Group". |
+| **Creating a group from selected objects.**  | Click the `+` button and select "Create Group from Selection". |
 | **Deleting a group**   | Select a group and press the Delete key, or right click on the group and choose **Delete Group**. |
 | **Changing a group order**   | Select a group and drag it to the desired order in the window. |
 | **Adding group members**    | Drag **GameObjects** from the Hierarchy window, assets from the Project window, or members of other groups, into the applicable group.|
