@@ -1,9 +1,9 @@
 namespace Unity.SelectionGroups {
 
-enum SelectionGroupToolType {
-    VISIBILITY = 0,
-    LOCK,
-    BUILT_IN_MAX,
+internal enum SelectionGroupToolType {
+    Visibility = 0,
+    Lock,
+    BuiltIn_Max,
 }
 
 } //end namespace
