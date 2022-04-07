@@ -27,7 +27,7 @@ Please refer to the [installation](installation.md) page to install Selection Gr
    
 1. Drag some **GameObjects** from the hierarchy, or assets from the Project window. 
    
-   ![](images/SelectionGroupMembers.png)
+   ![](images/SelectionGroupsWindowAssignMembers.png)
 
 1. Click the group name, and the inspector window will display the following properties:
 
