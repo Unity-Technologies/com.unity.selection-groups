@@ -21,7 +21,10 @@ Please refer to the [installation](installation.md) page to install Selection Gr
 
    ![](images/SelectionGroupsWindowNextToHierarchy.png)
 
-1. Click “Add Group” in the [Selection Groups window](selection-groups-window.md), and a new item will appear inside the window.   
+1. Click the `+` button and select "Create Empty Group". This will create a new item inside the window.
+
+   ![](images/SelectionGroupsWindowCreateEmptyGroup.png)
+   
 1. Drag some **GameObjects** from the hierarchy, or assets from the Project window. 
    
    ![](images/SelectionGroupMembers.png)
