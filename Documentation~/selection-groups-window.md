@@ -7,14 +7,14 @@ We can do the following operations in the window.
 
 |**Operations**          |**How** |
 |:---                    |:---|
-| **Creating an empty group**  | Click the `+` button and select "Create Empty Group". |
-| **Creating a group from selected objects.**  | Click the `+` button and select "Create Group from Selection". |
-| **Deleting a group**   | Select a group and press the Delete key, or right click on the group and choose **Delete Group**. |
-| **Changing a group order**   | Select a group and drag it to the desired order in the window. |
-| **Adding group members**    | Drag **GameObjects** from the Hierarchy window, assets from the Project window, or members of other groups, into the applicable group.|
-| **Moving group members**    | Select members of other groups, and drag them while pressing any Control key into the applicable group.|
-| **Removing group members**  | Select the group members and press the Delete key, or right click on the group and choose **Remove From Group**. <br/> To clear all members, right click on the group and choose "Clear Group".|
-| **Selecting all group members**  | Double click on the group, or right click on the group and choose "Select All Group Members". <br/> To select all members of all groups, go to **Edit > Select All**.|
+| **Create an empty group**  | Click the `+` button and select "Create Empty Group". |
+| **Create a group from selected objects.**  | Click the `+` button and select "Create Group from Selection". |
+| **Delete a group**   | Select a group and press the Delete key, or right click on the group and choose **Delete Group**. |
+| **Change a group order**   | Select a group and drag it to the desired order in the window. |
+| **Add group members**    | Drag **GameObjects** from the Hierarchy window, assets from the Project window, or members of other groups, into the applicable group.|
+| **Move group members**    | Select members of other groups, and drag them while pressing any Control key into the applicable group.|
+| **Remove group members**  | Select the group members and press the Delete key, or right click on the group and choose **Remove From Group**. <br/> To clear all members, right click on the group and choose "Clear Group".|
+| **Select all group members**  | Double click on the group, or right click on the group and choose "Select All Group Members". <br/> To select all members of all groups, go to **Edit > Select All**.|
 
 We can also use the following key modifiers to maintain the current selection
 when clicking on a group member.
