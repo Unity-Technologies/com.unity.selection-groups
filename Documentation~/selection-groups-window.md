@@ -19,7 +19,7 @@ We can also use the following key modifiers to maintain the current selection
 when clicking on a group member.
 
 |**Key**  |**Use** |
-|:---                    |:---|
+|:---     |:---|
 | Ctrl | Add the group member into the current selection. |
 | Ctrl+Shift | Add group members from the last selected member to the clicked member into the current selection.|
 
