@@ -268,7 +268,7 @@ namespace Unity.SelectionGroups.Editor
             Rect rect = new Rect(0, y, TOOL_X_DIFF, TOOL_HEIGHT); 
             int enabledToolCounter = 0;
             
-            for (int toolId = (int)SelectionGroupToolType.BUILT_IN_MAX-1; toolId >=0; --toolId) {
+            for (int toolId = (int)SelectionGroupToolType.BuiltIn_Max-1; toolId >=0; --toolId) {
                 bool toolStatus = group.GetEditorToolState(toolId);
                 if (false == toolStatus)
                     continue;
@@ -369,11 +369,11 @@ namespace Unity.SelectionGroups.Editor
                         Rect dropRect = rect;
                         dropRect.height = 2;
 
-                        DragDropPos dropPos = DragDropPos.ABOVE;
+                        DragDropPos dropPos = DragDropPos.Above;
                         float halfHeight = rect.height * 0.5f;
                         if (evt.mousePosition.y - rect.y > halfHeight) {
                             dropRect.y += rect.height + GROUP_HEADER_PADDING;
-                            dropPos    =  DragDropPos.BELOW;
+                            dropPos    =  DragDropPos.Below;
                         }  
                         DragAndDrop.SetGenericData(DRAG_DROP_POS,dropPos);
                         
@@ -414,7 +414,7 @@ namespace Unity.SelectionGroups.Editor
                     
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.objectReferences = new[] { @group.gameObject };
-                    DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.GROUP);
+                    DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.Group);
                     DragAndDrop.SetGenericData(DRAG_GROUP_INDEX,groupIndex);
                     DragAndDrop.StartDrag(@group.Name);
                     evt.Use();
@@ -425,7 +425,7 @@ namespace Unity.SelectionGroups.Editor
                     DragItemType? dragItemType = DragAndDrop.GetGenericData(DRAG_ITEM_TYPE) as DragItemType?;
 
                     bool targetGroupIsAuto  = @group.IsAutoFilled();
-                    bool draggedItemIsGroup = (dragItemType == DragItemType.GROUP);
+                    bool draggedItemIsGroup = (dragItemType == DragItemType.Group);
 
                     if (draggedItemIsGroup) {
                         DragAndDrop.visualMode = DragAndDropVisualMode.Move;
@@ -435,7 +435,7 @@ namespace Unity.SelectionGroups.Editor
                         DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
                     } else {
                         //moving window members to group.  
-                        bool isMovingWindowMembers = (dragItemType == DragItemType.WINDOW_GROUP_MEMBERS && evt.control);
+                        bool isMovingWindowMembers = (dragItemType == DragItemType.WindowGroupMembers && evt.control);
                         DragAndDrop.visualMode = isMovingWindowMembers
                             ? DragAndDropVisualMode.Move
                             : DragAndDropVisualMode.Copy; 
@@ -451,12 +451,12 @@ namespace Unity.SelectionGroups.Editor
 
                     DragItemType? dragItemType = DragAndDrop.GetGenericData(DRAG_ITEM_TYPE) as DragItemType?;
                     if (!dragItemType.HasValue) {
-                        dragItemType = DragItemType.GAMEOBJECTS; //receive gameObjects from outside the window
+                        dragItemType = DragItemType.GameObjects; //receive gameObjects from outside the window
                     } 
                     
                     try {
                         switch (dragItemType.Value) {
-                            case DragItemType.WINDOW_GROUP_MEMBERS: {
+                            case DragItemType.WindowGroupMembers: {
                                 if (evt.control) {
                                     m_selectedGroupMembers = SelectionGroupUtility.MoveMembersSelectionToGroup(
                                         m_selectedGroupMembers, group
@@ -469,12 +469,12 @@ namespace Unity.SelectionGroups.Editor
                                 
                                 break;
                             } 
-                            case DragItemType.GAMEOBJECTS: {
+                            case DragItemType.GameObjects: {
                                 RegisterUndo(@group, "Add Members");
                                 @group.Add(DragAndDrop.objectReferences);
                                 break;
                             }
-                            case DragItemType.GROUP: {
+                            case DragItemType.Group: {
 
                                 Object[] draggedObjects = DragAndDrop.objectReferences;
                                 if (null == draggedObjects || draggedObjects.Length <= 0 || null == draggedObjects[0])
@@ -489,19 +489,19 @@ namespace Unity.SelectionGroups.Editor
                                 int srcIndex = dragGroupIndex.Value;
 
                                 if (dragGroupIndex == groupIndex
-                                    || DragDropPos.ABOVE == dropPos && srcIndex == groupIndex - 1
-                                    || DragDropPos.BELOW == dropPos && srcIndex == groupIndex + 1
+                                    || DragDropPos.Above == dropPos && srcIndex == groupIndex - 1
+                                    || DragDropPos.Below == dropPos && srcIndex == groupIndex + 1
                                    ) {
                                     break;
                                 }
 
                                 //Calculate the target new index for the group correctly
                                 int targetIndex = groupIndex;
-                                if (DragDropPos.BELOW == dropPos && targetIndex < srcIndex) {
+                                if (DragDropPos.Below == dropPos && targetIndex < srcIndex) {
                                     ++targetIndex;
                                 }
 
-                                if (DragDropPos.ABOVE == dropPos && targetIndex > srcIndex) {
+                                if (DragDropPos.Above == dropPos && targetIndex > srcIndex) {
                                     --targetIndex;
                                 }
 
@@ -593,7 +593,7 @@ namespace Unity.SelectionGroups.Editor
                     
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.objectReferences = objects;
-                    DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.WINDOW_GROUP_MEMBERS);
+                    DragAndDrop.SetGenericData(DRAG_ITEM_TYPE,DragItemType.WindowGroupMembers);
                     string dragText = numDraggedObjects > 1 ? objects[0].name + " ..." : objects[0].name;
                     DragAndDrop.StartDrag(dragText);
                     evt.Use();
