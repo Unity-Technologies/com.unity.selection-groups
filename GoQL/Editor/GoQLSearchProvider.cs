@@ -11,10 +11,10 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-#if AT_USE_QUICKSEARCH 
-using Unity.QuickSearch;
-#else //newer than 2021.2
+#if UNITY_2021_2_OR_NEWER || AT_USE_QUICKSEARCH_3_OR_NEWER 
 using UnityEditor.Search;
+#else
+using Unity.QuickSearch;
 #endif
 
 namespace Unity.GoQL.Editor {
