@@ -4,6 +4,14 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.7.4-preview] - 2022-04-15
+
+### Changed
+* deps: use com.unity.film-internal-utilities@0.14.2-preview 
+
+### Fixed
+* fix: support com.unity.quicksearch@3.x.x on Unity 2020.3.x
+
 ## [0.7.3-preview] - 2022-04-11
 
 ### Added
