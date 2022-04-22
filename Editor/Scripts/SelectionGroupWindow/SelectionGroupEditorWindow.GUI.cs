@@ -464,14 +464,14 @@ namespace Unity.SelectionGroups.Editor
                                 } else {
                                     RegisterUndo(@group, "Add Members");
                                     HashSet<Object> members = m_selectedGroupMembers.ConvertMembersToSet();
-                                    @group.Add(members);
+                                    @group.AddRange(members);
                                 }
                                 
                                 break;
                             } 
                             case DragItemType.GameObjects: {
                                 RegisterUndo(@group, "Add Members");
-                                @group.Add(DragAndDrop.objectReferences);
+                                @group.AddRange(DragAndDrop.objectReferences);
                                 break;
                             }
                             case DragItemType.Group: {
@@ -654,7 +654,7 @@ namespace Unity.SelectionGroups.Editor
             foreach (KeyValuePair<SelectionGroup, OrderedSet<Object>> kv in m_selectedGroupMembers) {
                 SelectionGroup group = kv.Key;
                 RegisterUndo(group, "Remove Member");
-                group.Remove(kv.Value);
+                group.Except(kv.Value);
             }
         }
 
