@@ -11,10 +11,10 @@ internal class SelectionGroupUtilityTests {
         //Initialize source groups
         SelectionGroupManager groupManager = SelectionGroupManager.GetOrCreateInstance();
         SelectionGroup        firstGroup   = groupManager.CreateSelectionGroup("First", Color.red);
-        firstGroup.Add(CreateGameObjects("1","2","3","4","5"));
+        firstGroup.AddRange(CreateGameObjects("1","2","3","4","5"));
 
         SelectionGroup secondGroup = groupManager.CreateSelectionGroup("Second", Color.green);
-        secondGroup.Add(CreateGameObjects("6","7","8"));
+        secondGroup.AddRange(CreateGameObjects("6","7","8"));
 
         //Configure selection
         GroupMembersSelection selection = new GroupMembersSelection();
