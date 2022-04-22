@@ -39,7 +39,7 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         group.SetQuery(query);
 
         if (!group.IsAutoFilled()) {
-            group.Add(members);
+            group.AddRange(members);
         }
 
         m_sceneSelectionGroups.Add(group);
@@ -78,7 +78,7 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
 
     internal SelectionGroup CreateSelectionGroup(string groupName, Color color, IList<Object> members) {
         SelectionGroup group = CreateSelectionGroupInternal(groupName, color);
-        group.Add(members);
+        group.AddRange(members);
         m_sceneSelectionGroups.Add(group);
         return group;
     }
