@@ -8,17 +8,17 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.film-internal-utilities": {
-      "version": "0.13.0-preview",
+      "version": "0.14.2-preview",
       "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.modules.uielements": "1.0.0",
-        "com.unity.timeline": "1.2.14"
+        "com.unity.timeline": "1.2.18"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.12",
+      "version": "3.0.13",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -27,7 +27,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.12",
+      "version": "2.0.15",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -36,7 +36,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.vscode": {
-      "version": "1.2.4",
+      "version": "1.2.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -52,7 +52,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.package-validation-suite": {
-      "version": "0.23.5-preview",
+      "version": "0.23.7-preview",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -61,7 +61,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.postprocessing": {
-      "version": "3.1.1",
+      "version": "3.2.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -81,11 +81,11 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.unity.film-internal-utilities": "0.13.0-preview"
+        "com.unity.film-internal-utilities": "0.14.2-preview"
       }
     },
     "com.unity.test-framework": {
-      "version": "1.1.30",
+      "version": "1.1.31",
       "depth": 0,
       "source": "registry",
       "dependencies": {

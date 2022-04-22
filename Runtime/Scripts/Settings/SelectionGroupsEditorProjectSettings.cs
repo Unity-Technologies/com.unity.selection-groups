@@ -15,7 +15,7 @@ internal class SelectionGroupsEditorProjectSettings : BaseJsonSingleton<Selectio
 
     protected override void UpgradeToLatestVersionV(int prevVersion, int curVersion) {
         
-        if (prevVersion < (int) SGProjectSettingsVersion.EDITOR_STATE_0_7_2) {
+        if (prevVersion < (int) SGProjectSettingsVersion.EditorState_0_7_2) {
 #pragma warning disable 612 //obsolete
             if (null != m_defaultGroupEditorToolStatus) {
                 int numStates = m_defaultGroupEditorToolStatus.Count;
@@ -58,10 +58,10 @@ internal class SelectionGroupsEditorProjectSettings : BaseJsonSingleton<Selectio
     [SerializeField] EditorToolStates m_defaultGroupEditorToolStates = new EditorToolStates(); 
     
 //----------------------------------------------------------------------------------------------------------------------
-    private const int LATEST_VERSION = (int) SGProjectSettingsVersion.EDITOR_STATE_0_7_2; 
-    enum SGProjectSettingsVersion {
-        INITIAL = 1,
-        EDITOR_STATE_0_7_2, //The data structure of m_defaultGroupEditorToolStates was changed
+    private const int LATEST_VERSION = (int) SGProjectSettingsVersion.EditorState_0_7_2; 
+    private enum SGProjectSettingsVersion {
+        Initial = 1,
+        EditorState_0_7_2, //The data structure of m_defaultGroupEditorToolStates was changed
         
     };
 

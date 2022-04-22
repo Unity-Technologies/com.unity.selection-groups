@@ -26,6 +26,9 @@ ExportedObj/
 *.pdb
 *.opendb
 
+# Rider User Settings ?
+**/ProjectSettings/RiderScriptEditorPersistedState.asset
+
 # Unity3D generated meta files
 *.pidb.meta
 *.pdb.meta

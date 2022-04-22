@@ -1,5 +1,6 @@
 {
     "name": "Unity.GoQL.Editor",
+    "rootNamespace": "",
     "references": [
         "GUID:f05b2c431bca79e4fa618c6f7b09e6c4",
         "GUID:388060bf34f9a6a40bafbac77240e259"
@@ -18,6 +19,11 @@
             "name": "com.unity.quicksearch",
             "expression": "",
             "define": "AT_USE_QUICKSEARCH"
+        },
+        {
+            "name": "com.unity.quicksearch",
+            "expression": "3.0.0-preview",
+            "define": "AT_USE_QUICKSEARCH_3_OR_NEWER"
         }
     ],
     "noEngineReferences": false
