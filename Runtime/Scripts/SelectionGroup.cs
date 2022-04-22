@@ -265,13 +265,13 @@ namespace Unity.SelectionGroups
          /// Removes all objects from the <see cref="SelectionGroup"/> that are in the specified collection.
          /// Does nothing if the <see cref="SelectionGroup"/> is automatically filled. 
          /// </summary>
-         /// <param name="objectReferences">The collection of objects to be removed.</param>
-         public void Except(IEnumerable<Object> objectReferences) 
+         /// <param name="objects">The collection of objects to be removed.</param>
+         public void Except(IEnumerable<Object> objects) 
          {
              if (IsAutoFilled())
                  return;
             
-             members.RemoveAll(objectReferences.Contains);
+             members.RemoveAll(objects.Contains);
              RemoveNullMembers();
          }
 
