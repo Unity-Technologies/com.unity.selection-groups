@@ -54,6 +54,11 @@ namespace Unity.SelectionGroups
             get { return ((ICollection<Object>) members).IsReadOnly; }
         }
         
+        /// <summary>
+        /// Sets or gets a member at the specified index.
+        /// Setting a member does nothing if the <see cref="SelectionGroup"/> is automatically filled. 
+        /// </summary>
+        /// <param name="index">The zero based index of the object to remove.</param>
         public Object this[int index]
         {
             get { return members[index]; }
