@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
@@ -20,7 +21,7 @@ namespace Unity.SelectionGroups
     /// </summary>
     [ExecuteAlways]
     [AddComponentMenu("")]
-    public class SelectionGroup : MonoBehaviour, ISerializationCallbackReceiver    
+    public class SelectionGroup : MonoBehaviour, IList<Object>, ISerializationCallbackReceiver    
     {
         /// <summary>
         /// A color assigned to this group.
@@ -39,7 +40,37 @@ namespace Unity.SelectionGroups
 #pragma warning disable 414    
         [HideInInspector][SerializeField] private int sgVersion = CUR_SG_VERSION; 
 #pragma warning restore 414
+
+        /// <summary>
+        /// Gets the number of objects in the <see cref="SelectionGroup"/>
+        /// </summary>
+        public int Count
+        {
+            get { return members.Count; }
+        }
+
+        bool ICollection<Object>.IsReadOnly
+        {
+            get { return ((ICollection<Object>) members).IsReadOnly; }
+        }
+        
+        /// <summary>
+        /// Sets or gets a member at the specified index.
+        /// Setting a member does nothing if the <see cref="SelectionGroup"/> is automatically filled. 
+        /// </summary>
+        /// <param name="index">The zero based index of the object to remove.</param>
+        public Object this[int index]
+        {
+            get { return members[index]; }
+            set
+            {
+                if (IsAutoFilled())
+                    return;
                 
+                members[index] = value;
+            }
+        }
+
         void OnEnable()
         {
             RefreshHideFlagsInEditor();
@@ -134,12 +165,8 @@ namespace Unity.SelectionGroups
         public void EnableEditorTool(int toolID, bool toolEnabled) {
             m_editorToolsStates[toolID] = toolEnabled;
         }
-        
-         /// <summary>
-         /// Gets the number of members in this SelectionGroup
-         /// </summary>
-        public int Count => members.Count;
-        
+
+
 #if UNITY_EDITOR
         internal bool AreMembersShownInWindow() => m_showMembersInWindow;
 
@@ -164,91 +191,178 @@ namespace Unity.SelectionGroups
             return ret;
         }
 
-//----------------------------------------------------------------------------------------------------------------------
-        
-         /// <summary>
-         /// Adds a list of objects to the SelectionGroup 
-         /// </summary>
-         /// <param name="objects">A list of objects to be added</param>
-        public void Add(IEnumerable<Object> objects) {
-            foreach (Object i in objects) {
-                Add(i);
-            }
-            RemoveNullMembers();
+        /// <summary>
+        /// Adds the objects in the specified collection to the end
+        /// of the <see cref="SelectionGroup"/> if they are not already present.
+        /// Does nothing if the <see cref="SelectionGroup"/> is automatically filled.
+        /// </summary>
+        /// <param name="objects">The collection of objects to add.</param>
+        public void AddRange(IEnumerable<Object> objects) 
+        {
+             if (IsAutoFilled())
+                 return; 
+             
+             foreach (Object obj in objects) 
+             {
+                 Add(obj);
+             }
+             RemoveNullMembers();
         }
         
         /// <summary>
-        /// Adds an object to the SelectionGroup 
-        /// Does nothing if the group is automatically filled. 
+        /// Adds the specified object to the <see cref="SelectionGroup"/>. 
+        /// Does nothing if the <see cref="SelectionGroup"/> is automatically filled.
         /// </summary>
-        /// <param name="obj">the object to be added</param>
-        public void Add(Object obj) {
+        /// <param name="obj">The object to be added. Cannot be <c>null</c>.</param>
+        public void Add(Object obj) 
+        {
             if (null == obj)
                 return;
             
             if(!members.Contains(obj))
                 members.Add(obj);
         }
-        
-//----------------------------------------------------------------------------------------------------------------------        
-        
+
+        /// <summary>
+        /// Inserts the specified object into the <see cref="SelectionGroup"/> at the specified index.
+        /// Does nothing if the <see cref="SelectionGroup"/> is automatically filled. 
+        /// </summary>
+        /// <param name="index">The zero-based index the object should be inserted at.</param>
+        /// <param name="obj">The object to be inserted.</param>
+        public void Insert(int index, Object obj)
+        {
+            if (IsAutoFilled())
+                return;
+            
+            members.Insert(index, obj);
+        }
+         
+        /// <summary>
+        /// Removes an object at the specified index.
+        /// Does nothing if the <see cref="SelectionGroup"/> is automatically filled. 
+        /// </summary>
+        /// <param name="index">The zero based index of the object to remove.</param>
+        public void RemoveAt(int index)
+        { 
+            if (IsAutoFilled())
+                return;
+            
+            members.RemoveAt(index);
+        }
+
+         /// <summary>
+         /// Removes the specified object from the <see cref="SelectionGroup"/>.
+         /// Does nothing if the <see cref="SelectionGroup"/> is automatically filled. 
+         /// </summary>
+         /// <param name="obj">The object to be removed.</param>
+         /// <returns>
+         /// <c>true</c> if <paramref name="obj"/> is successfully removed; otherwise, <c>false</c>.
+         /// </returns>
+        public bool Remove(Object obj) 
+        {
+            if (IsAutoFilled())
+                return false;
+            
+            return members.Remove(obj);
+        }
+         
+         /// <summary>
+         /// Removes all objects from the <see cref="SelectionGroup"/> that are in the specified collection.
+         /// Does nothing if the <see cref="SelectionGroup"/> is automatically filled. 
+         /// </summary>
+         /// <param name="objects">The collection of objects to be removed.</param>
+         public void Except(IEnumerable<Object> objects) 
+         {
+             if (IsAutoFilled())
+                 return;
+            
+             members.RemoveAll(objects.Contains);
+             RemoveNullMembers();
+         }
+
+         /// <summary>
+         /// Removes all objects from the <see cref="SelectionGroup"/>.
+         /// </summary>
+         public void Clear()
+         {
+             members.Clear();
+         }
+
+         /// <summary>
+         /// Determines whether the specified object is in the <see cref="SelectionGroup"/>.
+         /// </summary>
+         /// <param name="obj">The object to locate in the <see cref="SelectionGroup"/>.</param>
+         /// <returns>
+         /// <c>true</c> if <paramref name="obj"/> was found
+         /// in the <see cref="SelectionGroup"/>; otherwise, <c>false</c>.
+         /// </returns>
+         public bool Contains(Object obj)
+         {
+             return members.Contains(obj);
+         }
+         
+         /// <summary>
+         /// Searches for the specified object and returns the zero-based index of it.
+         /// </summary>
+         /// <param name="obj">The object to locate in the <see cref="SelectionGroup"/>.</param>
+         /// <returns>
+         /// The zero-based index of <paramref name="obj"/> within
+         /// the <see cref="SelectionGroup"/> if found; otherwise, <c>-</c>.
+         /// </returns>
+         public int IndexOf(Object obj)
+         {
+             return members.IndexOf(obj);
+         }
+         
+         /// <summary>
+         /// Copies the entire <see cref="SelectionGroup"/> to a compatible one-dimensional array,
+         /// starting at the specified index of the target array.
+         /// </summary>
+         /// <param name="array">
+         /// The one-dimensional <see cref="Array"/> that is the destination of the objects
+         /// copied from the <see cref="SelectionGroup"/>. The <see cref="Array"/> must have zero-based indexing.</param>
+         /// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
+         public void CopyTo(Object[] array, int arrayIndex)
+         {
+             members.CopyTo(array, arrayIndex);
+         }
+         
+         /// <inheritdoc cref="IList{T}.GetEnumerator"/>
+         public IEnumerator<Object> GetEnumerator()
+         {
+             return members.GetEnumerator();
+         }
+
+         IEnumerator IEnumerable.GetEnumerator()
+         {
+             return GetEnumerator();
+         }
+         
          /// <summary>
          /// Clears and set the members of the SelectionGroup 
          /// </summary>
          /// <param name="objects">A enumerable collection of objects to be added</param>
-        public void SetMembers(IEnumerable<Object> objects) {
-            if (IsAutoFilled()) {
-                Debug.LogWarning($"[SG] Group {Name} is auto-filled. Can't manually set members");
-                return;
-            }
+         public void SetMembers(IEnumerable<Object> objects) {
+             if (IsAutoFilled()) {
+                 Debug.LogWarning($"[SG] Group {Name} is auto-filled. Can't manually set members");
+                 return;
+             }
                 
-            SetMembersInternal(objects);
-        }
+             SetMembersInternal(objects);
+         }
 
-        private void SetMembersInternal(IEnumerable<Object> objects) 
-        {
-            members.Clear();
-            foreach (var i in objects) 
-            {
-                if (i == null)
-                    continue;
-                members.Add(i);
-            }
-        }
-
-         /// <summary>
-         /// Removes a list of objects from the SelectionGroup 
-         /// </summary>
-         /// <param name="objectReferences">A list of objects to be removed</param>
-        public void Remove(IEnumerable<Object> objectReferences) {
-            if (IsAutoFilled())
-                return;
-            
-            members.RemoveAll(a=> objectReferences.Contains(a));
-            RemoveNullMembers();
-        }
-        
-        /// <summary>
-        /// Removes an object from the SelectionGroup.
-        /// Does nothing if the group is automatically filled. 
-        /// </summary>
-        /// <param name="obj">The object to be removed</param>
-        public void Remove(Object obj) {
-            if (IsAutoFilled())
-                return;
-            
-            members.Remove(obj);
-        }
+         private void SetMembersInternal(IEnumerable<Object> objects) 
+         {
+             members.Clear();
+             foreach (var i in objects) 
+             {
+                 if (i == null)
+                     continue;
+                 members.Add(i);
+             }
+         }
 
          /// <summary>
-         /// Clears the members of the SelectionGroup
-         /// </summary>
-        public void Clear()
-        {
-            members.Clear();
-        }
-
-        /// <summary>
         /// Enumerate components from all members of a group that have a certain type T.
         /// </summary>
         /// <typeparam name="T">The type of the component</typeparam>
@@ -358,6 +472,6 @@ namespace Unity.SelectionGroups
             Initial = 1,        //initial
             Ordered_0_6_0,      //The order of selection groups is maintained by SelectionGroupManager
             EditorState_0_7_2, //The data structure of m_editorToolsStates was changed
-        }        
+        }
     }
 } //end namespace
