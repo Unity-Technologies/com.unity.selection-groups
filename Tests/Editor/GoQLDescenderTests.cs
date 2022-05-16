@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using NUnit.Framework;
+using Unity.SelectionGroups.Tests;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
 
-namespace Unity.SelectionGroups.Tests 
+namespace Unity.SelectionGroups.EditorTests 
 {
 internal class GoQLDescenderTests
 {
