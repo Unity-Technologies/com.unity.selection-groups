@@ -16,8 +16,8 @@ internal class GoQLNameFilterTests
     public IEnumerator SetUp()
     {
         Assert.IsTrue(System.IO.File.Exists($"{TestScenePath}.unity"));
-        yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{TestScenePath}.unity", 
-            new LoadSceneParameters(LoadSceneMode.Single));
+        EditorSceneManager.OpenScene($"{TestScenePath}.unity");
+        yield return null;
     }
 
     [Test]

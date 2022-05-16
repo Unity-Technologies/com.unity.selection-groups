@@ -4,7 +4,6 @@ using Unity.GoQL;
 using Unity.SelectionGroups.Tests;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
 
@@ -15,8 +14,8 @@ internal class GoQLDiscriminatorTests
     [UnitySetUp]
     public IEnumerator SetUp() {
         Assert.IsTrue(System.IO.File.Exists($"{TestScenePath}.unity"));
-        yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{TestScenePath}.unity", 
-            new LoadSceneParameters(LoadSceneMode.Single));
+        EditorSceneManager.OpenScene($"{TestScenePath}.unity");
+        yield return null;
     }
     
     [Test]
