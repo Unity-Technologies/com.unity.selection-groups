@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
+#if UNITY_EDITOR
+using UnityEditor.SceneManagement;
+#endif
 
 namespace Unity.SelectionGroups.Tests 
 {
@@ -16,8 +18,12 @@ namespace Unity.SelectionGroups.Tests
         public IEnumerator SetUp()
         {
             Assert.IsTrue(System.IO.File.Exists($"{TestScenePath}.unity"));
+#if UNITY_EDITOR
             yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{TestScenePath}.unity", 
                 new LoadSceneParameters(LoadSceneMode.Single));
+#else
+            yield return null;
+#endif
         }
          
         
