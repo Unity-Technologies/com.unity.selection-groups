@@ -103,4 +103,5 @@ promotion_types:
     job_name: Prerelease and promote SelectionGroups to Production
     test_name_prefix: Prerelease and test SelectionGroups Promotion 
     test_dependencies:
+      - .yamato/SelectionGroups-pack.yml#pack
       - .yamato/SelectionGroups-publish.yml#prerelease
