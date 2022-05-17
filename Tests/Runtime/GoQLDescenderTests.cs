@@ -12,6 +12,7 @@ internal class GoQLDescenderTests
 {
     
     [UnitySetUp]
+    [UnityPlatform(RuntimePlatform.WindowsEditor, RuntimePlatform.OSXEditor, RuntimePlatform.LinuxEditor)]    
     public IEnumerator SetUp()
     {
         Assert.IsTrue(System.IO.File.Exists($"{TestScenePath}.unity"));
@@ -21,11 +22,13 @@ internal class GoQLDescenderTests
 
 
     [Test]
+    [UnityPlatform(RuntimePlatform.WindowsEditor, RuntimePlatform.OSXEditor, RuntimePlatform.LinuxEditor)]    
     public void Root() {
         TestUtility.ExecuteGoQLAndVerify("/Head", 1, (Transform t) => (t.parent == null) && t.name == "Head");
     }
     
     [Test]
+    [UnityPlatform(RuntimePlatform.WindowsEditor, RuntimePlatform.OSXEditor, RuntimePlatform.LinuxEditor)]    
     public void AllChildren() {
         TestUtility.ExecuteGoQLAndVerify("Head/", 11, (Transform t) => t.parent.name == "Head");
     }
