@@ -13,6 +13,7 @@ internal class GoQLIndexerTests
 {
     
     [UnitySetUp]
+    [UnityPlatform(RuntimePlatform.WindowsEditor, RuntimePlatform.OSXEditor, RuntimePlatform.LinuxEditor)]    
     public IEnumerator SetUp() {
         Assert.IsTrue(System.IO.File.Exists($"{TestScenePath}.unity"));
         yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{TestScenePath}.unity", 
@@ -20,6 +21,7 @@ internal class GoQLIndexerTests
     }
     
     [Test]
+    [UnityPlatform(RuntimePlatform.WindowsEditor, RuntimePlatform.OSXEditor, RuntimePlatform.LinuxEditor)]    
     public void FirstChild() {
         TestUtility.ExecuteGoQLAndVerify("Head/[0]", 2, 
             (Transform t) => null!=t.parent && t.parent.name == "Head" && t.name.EndsWith("Child (0)")
@@ -27,6 +29,7 @@ internal class GoQLIndexerTests
     }
     
     [Test]
+    [UnityPlatform(RuntimePlatform.WindowsEditor, RuntimePlatform.OSXEditor, RuntimePlatform.LinuxEditor)]    
     public void IndexedChildren() {
         int[] indexes = new[] { 0, 1, 5 };       
         List<Transform> results = TestUtility.ExecuteGoQLAndVerify($"Head/[{string.Join(",", indexes)}]", 6, 
@@ -46,12 +49,14 @@ internal class GoQLIndexerTests
     }
     
     [Test]
+    [UnityPlatform(RuntimePlatform.WindowsEditor, RuntimePlatform.OSXEditor, RuntimePlatform.LinuxEditor)]    
     public void NoDuplicateIndexedChildren()
     {
         TestUtility.ExecuteGoQLAndVerify("/[0,1,0]", 2);
     }
     
     [Test]
+    [UnityPlatform(RuntimePlatform.WindowsEditor, RuntimePlatform.OSXEditor, RuntimePlatform.LinuxEditor)]    
     public void ExclusionOperator()
     {
         TestUtility.ExecuteGoQLAndVerify("/[0:3]", 3);
@@ -60,12 +65,14 @@ internal class GoQLIndexerTests
     
     
     [Test]
+    [UnityPlatform(RuntimePlatform.WindowsEditor, RuntimePlatform.OSXEditor, RuntimePlatform.LinuxEditor)]    
     public void LastChild()
     {
         TestUtility.ExecuteGoQLAndVerify("Head/[-1]", 2, (Transform t) => null!=t.parent && t.parent.name == "Head");
     }
     
     [Test]
+    [UnityPlatform(RuntimePlatform.WindowsEditor, RuntimePlatform.OSXEditor, RuntimePlatform.LinuxEditor)]    
     public void RangedChildren() {
         int startIndex = 3;
         int endIndex   = 5;
