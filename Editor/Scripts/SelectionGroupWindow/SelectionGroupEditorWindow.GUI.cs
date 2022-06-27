@@ -469,7 +469,7 @@ namespace Unity.SelectionGroups.Editor
                             } 
                             case DragItemType.GameObjects: {
                                 RegisterUndo(@group, "Add Members");
-                                foreach (var obj in DragAndDrop.objectReferences) {
+                                foreach (Object obj in DragAndDrop.objectReferences) {
                                     if (!(obj is GameObject go))
                                         continue;
                                     
