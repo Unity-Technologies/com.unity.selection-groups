@@ -33,7 +33,7 @@ namespace Unity.SelectionGroups
 #pragma warning restore 414
 
         /// <summary>
-        /// Gets the number of objects in the <see cref="SelectionGroup"/>
+        /// Gets the number of GameObjects in the <see cref="SelectionGroup"/>
         /// </summary>
         public int Count
         {
@@ -49,7 +49,7 @@ namespace Unity.SelectionGroups
         /// Sets or gets a member at the specified index.
         /// Setting a member does nothing if the <see cref="SelectionGroup"/> is automatically filled. 
         /// </summary>
-        /// <param name="index">The zero based index of the object to remove.</param>
+        /// <param name="index">The zero based index of the GameObject to remove.</param>
         public GameObject this[int index]
         {
             get { return m_goMembers[index]; }
@@ -172,11 +172,11 @@ namespace Unity.SelectionGroups
         public IList<GameObject> Members => m_goMembers;
 
         /// <summary>
-        /// Adds the objects in the specified collection to the end
+        /// Adds the GameObjects in the specified collection to the end
         /// of the <see cref="SelectionGroup"/> if they are not already present.
         /// Does nothing if the <see cref="SelectionGroup"/> is automatically filled.
         /// </summary>
-        /// <param name="objects">The collection of objects to add.</param>
+        /// <param name="objects">The collection of GameObjects to add.</param>
         public void AddRange(IEnumerable<GameObject> objects) 
         {
              if (IsAutoFilled())
@@ -190,10 +190,10 @@ namespace Unity.SelectionGroups
         }
         
         /// <summary>
-        /// Adds the specified object to the <see cref="SelectionGroup"/>. 
+        /// Adds the specified GameObject to the <see cref="SelectionGroup"/>. 
         /// Does nothing if the <see cref="SelectionGroup"/> is automatically filled.
         /// </summary>
-        /// <param name="obj">The object to be added. Cannot be <c>null</c>.</param>
+        /// <param name="obj">The GameObject to be added. Cannot be <c>null</c>.</param>
         public void Add(GameObject obj) 
         {
             if (null == obj)
@@ -204,11 +204,11 @@ namespace Unity.SelectionGroups
         }
 
         /// <summary>
-        /// Inserts the specified object into the <see cref="SelectionGroup"/> at the specified index.
+        /// Inserts the specified GameObject into the <see cref="SelectionGroup"/> at the specified index.
         /// Does nothing if the <see cref="SelectionGroup"/> is automatically filled. 
         /// </summary>
-        /// <param name="index">The zero-based index the object should be inserted at.</param>
-        /// <param name="obj">The object to be inserted.</param>
+        /// <param name="index">The zero-based index the GameObject should be inserted at.</param>
+        /// <param name="obj">The GameObject to be inserted.</param>
         public void Insert(int index, GameObject obj)
         {
             if (IsAutoFilled())
@@ -218,10 +218,10 @@ namespace Unity.SelectionGroups
         }
          
         /// <summary>
-        /// Removes an object at the specified index.
+        /// Removes an GameObject at the specified index.
         /// Does nothing if the <see cref="SelectionGroup"/> is automatically filled. 
         /// </summary>
-        /// <param name="index">The zero based index of the object to remove.</param>
+        /// <param name="index">The zero based index of the GameObject to remove.</param>
         public void RemoveAt(int index)
         { 
             if (IsAutoFilled())
@@ -231,10 +231,10 @@ namespace Unity.SelectionGroups
         }
 
          /// <summary>
-         /// Removes the specified object from the <see cref="SelectionGroup"/>.
+         /// Removes the specified GameObject from the <see cref="SelectionGroup"/>.
          /// Does nothing if the <see cref="SelectionGroup"/> is automatically filled. 
          /// </summary>
-         /// <param name="obj">The object to be removed.</param>
+         /// <param name="obj">The GameObject to be removed.</param>
          /// <returns>
          /// <c>true</c> if <paramref name="obj"/> is successfully removed; otherwise, <c>false</c>.
          /// </returns>
@@ -247,10 +247,10 @@ namespace Unity.SelectionGroups
         }
          
          /// <summary>
-         /// Removes all objects from the <see cref="SelectionGroup"/> that are in the specified collection.
+         /// Removes all GameObjects from the <see cref="SelectionGroup"/> that are in the specified collection.
          /// Does nothing if the <see cref="SelectionGroup"/> is automatically filled. 
          /// </summary>
-         /// <param name="objects">The collection of objects to be removed.</param>
+         /// <param name="objects">The collection of GameObjects to be removed.</param>
          public void Except(IEnumerable<GameObject> objects) 
          {
              if (IsAutoFilled())
@@ -261,7 +261,7 @@ namespace Unity.SelectionGroups
          }
 
          /// <summary>
-         /// Removes all objects from the <see cref="SelectionGroup"/>.
+         /// Removes all GameObjects from the <see cref="SelectionGroup"/>.
          /// </summary>
          public void Clear()
          {
@@ -269,9 +269,9 @@ namespace Unity.SelectionGroups
          }
 
          /// <summary>
-         /// Determines whether the specified object is in the <see cref="SelectionGroup"/>.
+         /// Determines whether the specified GameObject is in the <see cref="SelectionGroup"/>.
          /// </summary>
-         /// <param name="obj">The object to locate in the <see cref="SelectionGroup"/>.</param>
+         /// <param name="obj">The GameObject to locate in the <see cref="SelectionGroup"/>.</param>
          /// <returns>
          /// <c>true</c> if <paramref name="obj"/> was found
          /// in the <see cref="SelectionGroup"/>; otherwise, <c>false</c>.
@@ -282,9 +282,9 @@ namespace Unity.SelectionGroups
          }
          
          /// <summary>
-         /// Searches for the specified object and returns the zero-based index of it.
+         /// Searches for the specified GameObject and returns the zero-based index of it.
          /// </summary>
-         /// <param name="obj">The object to locate in the <see cref="SelectionGroup"/>.</param>
+         /// <param name="obj">The GameObject to locate in the <see cref="SelectionGroup"/>.</param>
          /// <returns>
          /// The zero-based index of <paramref name="obj"/> within
          /// the <see cref="SelectionGroup"/> if found; otherwise, <c>-</c>.
@@ -299,7 +299,7 @@ namespace Unity.SelectionGroups
          /// starting at the specified index of the target array.
          /// </summary>
          /// <param name="array">
-         /// The one-dimensional <see cref="Array"/> that is the destination of the objects
+         /// The one-dimensional <see cref="Array"/> that is the destination of the GameObjects
          /// copied from the <see cref="SelectionGroup"/>. The <see cref="Array"/> must have zero-based indexing.</param>
          /// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
          public void CopyTo(GameObject[] array, int arrayIndex)
@@ -321,7 +321,7 @@ namespace Unity.SelectionGroups
          /// <summary>
          /// Clears and set the members of the SelectionGroup 
          /// </summary>
-         /// <param name="objects">A enumerable collection of objects to be added</param>
+         /// <param name="objects">A enumerable collection of GameObjects to be added</param>
          public void SetMembers(IEnumerable<GameObject> objects) {
              if (IsAutoFilled()) {
                  Debug.LogWarning($"[SG] Group {Name} is auto-filled. Can't manually set members");
