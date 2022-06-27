@@ -13,7 +13,7 @@ namespace Unity.SelectionGroups.Editor
         [SelectionGroupTool("d_VisibilityOn", "Show or hide objects in the scene.",(int) SelectionGroupToolType.Visibility)]
         static void ToggleVisibility(SelectionGroup group) 
         {
-            List<GameObject> goMembers = group.FindGameObjectMembers();
+            IList<GameObject> goMembers = group.Members;
             if (goMembers.Count <= 0)
                 return;
 
@@ -29,14 +29,14 @@ namespace Unity.SelectionGroups.Editor
         [SelectionGroupTool("LockIcon-On", "Enable or disable editing of objects.",(int) SelectionGroupToolType.Lock)]
         static void ToggleLock(SelectionGroup group) 
         {
-            IList<Object> members  = group.Members;
+            IList<GameObject> members  = group.Members;
             if (null == members || members.Count <= 0)
                 return;
             
             bool isLocked = members[0].hideFlags.HasFlag(HideFlags.NotEditable);
             if (isLocked)
             {
-                foreach (Object obj in group.Members)
+                foreach (GameObject obj in group.Members)
                     obj.hideFlags &= ~HideFlags.NotEditable;
             }
             else
