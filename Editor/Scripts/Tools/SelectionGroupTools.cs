@@ -13,16 +13,20 @@ namespace Unity.SelectionGroups.Editor
         [SelectionGroupTool("d_VisibilityOn", "Show or hide objects in the scene.",(int) SelectionGroupToolType.Visibility)]
         static void ToggleVisibility(SelectionGroup group) 
         {
-            IList<GameObject> goMembers = group.Members;
-            if (goMembers.Count <= 0)
+            IList<GameObject> goMembers  = group.Members;
+            int               numMembers = goMembers.Count;
+            if (numMembers <= 0)
                 return;
 
+            GameObject[] members = new GameObject[numMembers];
+            group.CopyTo(members,0);
+
             SceneVisibilityManager sceneVisibilityManager = SceneVisibilityManager.instance;
-            bool show = (sceneVisibilityManager.IsHidden(goMembers[0]));
+            bool show = (sceneVisibilityManager.IsHidden(members[0]));
             if (show) {
-                sceneVisibilityManager.Show(goMembers.ToArray(), false);
+                sceneVisibilityManager.Show(members, false);
             } else {
-                sceneVisibilityManager.Hide(goMembers.ToArray(), false);
+                sceneVisibilityManager.Hide(members, false);
             }
         }
 
