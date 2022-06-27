@@ -447,7 +447,7 @@ namespace Unity.SelectionGroups
 
         private GoQL.ParseResult m_queryParseResult = ParseResult.Empty;       
         
-        private const int  CUR_SG_VERSION     = (int) SGVersion.EditorState_0_8_0;
+        private const int  CUR_SG_VERSION     = (int) SGVersion.GameObject_0_8_0;
         private       bool m_registerOnEnable = false;
 
 #if UNITY_EDITOR        
