@@ -395,6 +395,17 @@ namespace Unity.SelectionGroups
 #pragma warning restore 612
                 }
             }
+
+            if (sgVersion < (int)SGVersion.GameObject_0_8_0) {
+#pragma warning disable 612 //obsolete
+                foreach (Object obj in members) {
+                    if (!(obj is GameObject go)) {
+                        continue;
+                    }
+                    m_goMembers.Add(go);
+                }
+#pragma warning restore 612
+            }
             
             sgVersion = CUR_SG_VERSION;
         }
