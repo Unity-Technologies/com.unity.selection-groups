@@ -14,7 +14,7 @@ namespace Unity.SelectionGroups
     /// </summary>
     [ExecuteAlways]
     [AddComponentMenu("")]
-    public class SelectionGroup : MonoBehaviour, IList<Object>, ISerializationCallbackReceiver    
+    public class SelectionGroup : MonoBehaviour, IList<GameObject>, ISerializationCallbackReceiver    
     {
         /// <summary>
         /// A color assigned to this group.
@@ -24,8 +24,9 @@ namespace Unity.SelectionGroups
         /// If not empty, this is a GoQL query string used to create the set of matching objects for this group.
         /// </summary>
         [HideInInspector][SerializeField] string query = string.Empty;
-        
-        [HideInInspector][SerializeField] List<Object> members = new List<Object>();
+
+        //[TODO-sin: 2022-06-27] Remove in version 0.10.x        
+        [Obsolete][HideInInspector][SerializeField] List<Object> members = null;
         
 #pragma warning disable 414    
         [HideInInspector][SerializeField] private int sgVersion = CUR_SG_VERSION; 
@@ -36,12 +37,12 @@ namespace Unity.SelectionGroups
         /// </summary>
         public int Count
         {
-            get { return members.Count; }
+            get { return m_goMembers.Count; }
         }
 
-        bool ICollection<Object>.IsReadOnly
+        bool ICollection<GameObject>.IsReadOnly
         {
-            get { return ((ICollection<Object>) members).IsReadOnly; }
+            get { return ((ICollection<GameObject>) m_goMembers).IsReadOnly; }
         }
         
         /// <summary>
@@ -49,15 +50,15 @@ namespace Unity.SelectionGroups
         /// Setting a member does nothing if the <see cref="SelectionGroup"/> is automatically filled. 
         /// </summary>
         /// <param name="index">The zero based index of the object to remove.</param>
-        public Object this[int index]
+        public GameObject this[int index]
         {
-            get { return members[index]; }
+            get { return m_goMembers[index]; }
             set
             {
                 if (IsAutoFilled())
                     return;
                 
-                members[index] = value;
+                m_goMembers[index] = value;
             }
         }
 
@@ -168,18 +169,7 @@ namespace Unity.SelectionGroups
         /// <summary>
          /// Get the members of the SelectionGroup
          /// </summary>
-        public IList<Object> Members => members;
-
-        [NotNull]
-        internal List<GameObject> FindGameObjectMembers() {
-            List<GameObject> ret = new List<GameObject>();
-            foreach (Object m in members) {
-                if (m is GameObject go) {
-                    ret.Add(go);
-                }
-            }
-            return ret;
-        }
+        public IList<GameObject> Members => m_goMembers;
 
         /// <summary>
         /// Adds the objects in the specified collection to the end
@@ -187,12 +177,12 @@ namespace Unity.SelectionGroups
         /// Does nothing if the <see cref="SelectionGroup"/> is automatically filled.
         /// </summary>
         /// <param name="objects">The collection of objects to add.</param>
-        public void AddRange(IEnumerable<Object> objects) 
+        public void AddRange(IEnumerable<GameObject> objects) 
         {
              if (IsAutoFilled())
                  return; 
              
-             foreach (Object obj in objects) 
+             foreach (GameObject obj in objects) 
              {
                  Add(obj);
              }
@@ -204,13 +194,13 @@ namespace Unity.SelectionGroups
         /// Does nothing if the <see cref="SelectionGroup"/> is automatically filled.
         /// </summary>
         /// <param name="obj">The object to be added. Cannot be <c>null</c>.</param>
-        public void Add(Object obj) 
+        public void Add(GameObject obj) 
         {
             if (null == obj)
                 return;
             
-            if(!members.Contains(obj))
-                members.Add(obj);
+            if(!m_goMembers.Contains(obj))
+                m_goMembers.Add(obj);
         }
 
         /// <summary>
@@ -219,12 +209,12 @@ namespace Unity.SelectionGroups
         /// </summary>
         /// <param name="index">The zero-based index the object should be inserted at.</param>
         /// <param name="obj">The object to be inserted.</param>
-        public void Insert(int index, Object obj)
+        public void Insert(int index, GameObject obj)
         {
             if (IsAutoFilled())
                 return;
             
-            members.Insert(index, obj);
+            m_goMembers.Insert(index, obj);
         }
          
         /// <summary>
@@ -237,7 +227,7 @@ namespace Unity.SelectionGroups
             if (IsAutoFilled())
                 return;
             
-            members.RemoveAt(index);
+            m_goMembers.RemoveAt(index);
         }
 
          /// <summary>
@@ -248,12 +238,12 @@ namespace Unity.SelectionGroups
          /// <returns>
          /// <c>true</c> if <paramref name="obj"/> is successfully removed; otherwise, <c>false</c>.
          /// </returns>
-        public bool Remove(Object obj) 
+        public bool Remove(GameObject obj) 
         {
             if (IsAutoFilled())
                 return false;
             
-            return members.Remove(obj);
+            return m_goMembers.Remove(obj);
         }
          
          /// <summary>
@@ -261,12 +251,12 @@ namespace Unity.SelectionGroups
          /// Does nothing if the <see cref="SelectionGroup"/> is automatically filled. 
          /// </summary>
          /// <param name="objects">The collection of objects to be removed.</param>
-         public void Except(IEnumerable<Object> objects) 
+         public void Except(IEnumerable<GameObject> objects) 
          {
              if (IsAutoFilled())
                  return;
             
-             members.RemoveAll(objects.Contains);
+             m_goMembers.RemoveAll(objects.Contains);
              RemoveNullMembers();
          }
 
@@ -275,7 +265,7 @@ namespace Unity.SelectionGroups
          /// </summary>
          public void Clear()
          {
-             members.Clear();
+             m_goMembers.Clear();
          }
 
          /// <summary>
@@ -286,9 +276,9 @@ namespace Unity.SelectionGroups
          /// <c>true</c> if <paramref name="obj"/> was found
          /// in the <see cref="SelectionGroup"/>; otherwise, <c>false</c>.
          /// </returns>
-         public bool Contains(Object obj)
+         public bool Contains(GameObject obj)
          {
-             return members.Contains(obj);
+             return m_goMembers.Contains(obj);
          }
          
          /// <summary>
@@ -299,9 +289,9 @@ namespace Unity.SelectionGroups
          /// The zero-based index of <paramref name="obj"/> within
          /// the <see cref="SelectionGroup"/> if found; otherwise, <c>-</c>.
          /// </returns>
-         public int IndexOf(Object obj)
+         public int IndexOf(GameObject obj)
          {
-             return members.IndexOf(obj);
+             return m_goMembers.IndexOf(obj);
          }
          
          /// <summary>
@@ -312,15 +302,15 @@ namespace Unity.SelectionGroups
          /// The one-dimensional <see cref="Array"/> that is the destination of the objects
          /// copied from the <see cref="SelectionGroup"/>. The <see cref="Array"/> must have zero-based indexing.</param>
          /// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
-         public void CopyTo(Object[] array, int arrayIndex)
+         public void CopyTo(GameObject[] array, int arrayIndex)
          {
-             members.CopyTo(array, arrayIndex);
+             m_goMembers.CopyTo(array, arrayIndex);
          }
          
          /// <inheritdoc cref="IList{T}.GetEnumerator"/>
-         public IEnumerator<Object> GetEnumerator()
+         public IEnumerator<GameObject> GetEnumerator()
          {
-             return members.GetEnumerator();
+             return m_goMembers.GetEnumerator();
          }
 
          IEnumerator IEnumerable.GetEnumerator()
@@ -332,7 +322,7 @@ namespace Unity.SelectionGroups
          /// Clears and set the members of the SelectionGroup 
          /// </summary>
          /// <param name="objects">A enumerable collection of objects to be added</param>
-         public void SetMembers(IEnumerable<Object> objects) {
+         public void SetMembers(IEnumerable<GameObject> objects) {
              if (IsAutoFilled()) {
                  Debug.LogWarning($"[SG] Group {Name} is auto-filled. Can't manually set members");
                  return;
@@ -341,14 +331,14 @@ namespace Unity.SelectionGroups
              SetMembersInternal(objects);
          }
 
-         private void SetMembersInternal(IEnumerable<Object> objects) 
+         private void SetMembersInternal(IEnumerable<GameObject> objects) 
          {
-             members.Clear();
+             m_goMembers.Clear();
              foreach (var i in objects) 
              {
                  if (i == null)
                      continue;
-                 members.Add(i);
+                 m_goMembers.Add(i);
              }
          }
 
@@ -359,7 +349,7 @@ namespace Unity.SelectionGroups
         /// <returns>The enumerated component</returns>
         internal IEnumerable<T> GetMemberComponents<T>() where T : Component
         {
-            foreach (var member in members)
+            foreach (GameObject member in m_goMembers)
             {
                 var go = member as GameObject;
                 if (go != null)
@@ -373,11 +363,11 @@ namespace Unity.SelectionGroups
         }
 
         private void RemoveNullMembers() {
-            for (int i = members.Count-1; i >= 0 ; --i) {
-                if (null != members[i])
+            for (int i = m_goMembers.Count-1; i >= 0 ; --i) {
+                if (null != m_goMembers[i])
                     continue;
                 
-                members.RemoveAt(i);
+                m_goMembers.RemoveAt(i);
             }
         }
 
@@ -433,6 +423,9 @@ namespace Unity.SelectionGroups
         
 //----------------------------------------------------------------------------------------------------------------------
 
+        [HideInInspector][SerializeField] List<GameObject> m_goMembers = new List<GameObject>();
+        
+        //[TODO-sin: 2022-06-27] Remove in version 0.9.x
         [Obsolete]
         [SerializeField] List<bool> m_editorToolsStatus = null;
         
@@ -454,6 +447,7 @@ namespace Unity.SelectionGroups
             Initial = 1,        //initial
             Ordered_0_6_0,      //The order of selection groups is maintained by SelectionGroupManager
             EditorState_0_7_2, //The data structure of m_editorToolsStates was changed
+            GameObject_0_8_0, //SelectionGroup contains GameObjects
         }
     }
 } //end namespace
