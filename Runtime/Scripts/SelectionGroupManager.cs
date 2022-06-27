@@ -46,7 +46,7 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         return group;
     }
 
-    internal SelectionGroup CreateSelectionGroup(string groupName, Color color, IList<Object> members) {
+    internal SelectionGroup CreateSelectionGroup(string groupName, Color color, IList<GameObject> members) {
         SelectionGroup group = CreateSelectionGroupInternal(groupName, color);
         group.AddRange(members);
         m_sceneSelectionGroups.Add(group);
