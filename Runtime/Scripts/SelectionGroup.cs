@@ -31,9 +31,6 @@ namespace Unity.SelectionGroups
         /// If not empty, this is a GoQL query string used to create the set of matching objects for this group.
         /// </summary>
         [HideInInspector][SerializeField] string query = string.Empty;
-
-        //Obsolete
-        [HideInInspector][FormerlySerializedAs("_members")] [SerializeField] Object[] _legacyMembers;
         
         [HideInInspector][SerializeField] List<Object> members = new List<Object>();
         
@@ -400,14 +397,6 @@ namespace Unity.SelectionGroups
         /// <inheritdoc/>
         public void OnAfterDeserialize()
         {
-            //if we have legacyMembers but no current members
-            if (null != _legacyMembers && _legacyMembers.Length > 0 && (null == members || members.Count <= 0)) 
-            {
-                members = new List<Object>();
-                members.AddRange(_legacyMembers);                 
-                _legacyMembers = null; //clear
-            }
-
             if (sgVersion < (int) SGVersion.Ordered_0_6_0) {
                 m_registerOnEnable = true;
             }
