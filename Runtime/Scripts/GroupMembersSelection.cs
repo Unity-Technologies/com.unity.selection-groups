@@ -1,21 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Object = UnityEngine.Object;
+using UnityEngine;
 
 namespace Unity.SelectionGroups
 {
 
 //A class to hold selected members from selected groups
-internal class GroupMembersSelection : IEnumerable<KeyValuePair<SelectionGroup, OrderedSet<Object>>>
+internal class GroupMembersSelection : IEnumerable<KeyValuePair<SelectionGroup, OrderedSet<GameObject>>>
 {
 
     internal GroupMembersSelection() { }
 
     internal GroupMembersSelection(GroupMembersSelection other) {
 
-        foreach (KeyValuePair<SelectionGroup, OrderedSet<Object>> kv in other) {
-            OrderedSet<Object> collection = new OrderedSet<Object>() { };
-            foreach (Object member in kv.Value) {
+        foreach (KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv in other) {
+            OrderedSet<GameObject> collection = new OrderedSet<GameObject>() { };
+            foreach (GameObject member in kv.Value) {
                 collection.Add(member);
             }
 
@@ -24,7 +24,7 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<SelectionGroup, 
     }
 //----------------------------------------------------------------------------------------------------------------------
     
-    public IEnumerator<KeyValuePair<SelectionGroup, OrderedSet<Object>>> GetEnumerator() {
+    public IEnumerator<KeyValuePair<SelectionGroup, OrderedSet<GameObject>>> GetEnumerator() {
         return m_selectedGroupMembers.GetEnumerator();
     }
 
@@ -34,9 +34,9 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<SelectionGroup, 
     
 //----------------------------------------------------------------------------------------------------------------------
     
-    internal void AddObject(SelectionGroup group, Object member) {
+    internal void AddObject(SelectionGroup group, GameObject member) {
         if (!m_selectedGroupMembers.ContainsKey(group)) {
-            m_selectedGroupMembers.Add(group, new OrderedSet<Object>(){member});
+            m_selectedGroupMembers.Add(group, new OrderedSet<GameObject>(){member});
             return;
         }
 
@@ -49,31 +49,31 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<SelectionGroup, 
     
     
     internal void Add(GroupMembersSelection otherSelection) {
-        foreach (KeyValuePair<SelectionGroup, OrderedSet<Object>> kv in otherSelection) {
+        foreach (KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv in otherSelection) {
             SelectionGroup group = kv.Key;
             AddObjects(group, kv.Value);
         }
     }
     
 
-    private void AddObjects(SelectionGroup group, IEnumerable<Object> objects) {
+    private void AddObjects(SelectionGroup group, IEnumerable<GameObject> objects) {
         
-        OrderedSet<Object> collection = null;
+        OrderedSet<GameObject> collection = null;
         if (!m_selectedGroupMembers.ContainsKey(group)) {
-            collection = new OrderedSet<Object>() { };
+            collection = new OrderedSet<GameObject>() { };
             m_selectedGroupMembers.Add(group, collection);
         } else {
             collection = m_selectedGroupMembers[group];
         }
 
-        foreach (Object m in objects) {
+        foreach (GameObject m in objects) {
             collection.Add(m);
         }
         
     }
     
 
-    internal void RemoveObject(SelectionGroup group, Object member) {
+    internal void RemoveObject(SelectionGroup group, GameObject member) {
         if (!m_selectedGroupMembers.ContainsKey(group)) {
             return;
         }
@@ -88,7 +88,7 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<SelectionGroup, 
         m_selectedGroupMembers.Remove(group);
     }
     
-    internal bool Contains(SelectionGroup group, Object member) {
+    internal bool Contains(SelectionGroup group, GameObject member) {
         if (!m_selectedGroupMembers.ContainsKey(group))
             return false;
 
@@ -99,16 +99,16 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<SelectionGroup, 
         m_selectedGroupMembers.Clear();
     }
 
-    internal Object[] ConvertMembersToArray() {
-        HashSet<Object> set = ConvertMembersToSet();
-        Object[] arr = new Object[set.Count];
+    internal GameObject[] ConvertMembersToArray() {
+        HashSet<GameObject> set = ConvertMembersToSet();
+        GameObject[]        arr = new GameObject[set.Count];
         set.CopyTo(arr);
         return arr;
     }
 
-    internal HashSet<Object> ConvertMembersToSet() {
-        HashSet<Object> set = new HashSet<Object>();
-        foreach (KeyValuePair<SelectionGroup, OrderedSet<Object>> kv in m_selectedGroupMembers) {
+    internal HashSet<GameObject> ConvertMembersToSet() {
+        HashSet<GameObject> set = new HashSet<GameObject>();
+        foreach (KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv in m_selectedGroupMembers) {
             set.UnionWith(kv.Value);
         }
 
@@ -116,8 +116,8 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<SelectionGroup, 
     }
     
 //----------------------------------------------------------------------------------------------------------------------    
-    readonly Dictionary<SelectionGroup, OrderedSet<Object>> m_selectedGroupMembers 
-        = new Dictionary<SelectionGroup, OrderedSet<Object>>();
+    readonly Dictionary<SelectionGroup, OrderedSet<GameObject>> m_selectedGroupMembers 
+        = new Dictionary<SelectionGroup, OrderedSet<GameObject>>();
     
 }
 } //end namespace
