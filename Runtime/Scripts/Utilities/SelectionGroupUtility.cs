@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Object = UnityEngine.Object;
+using UnityEngine;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -17,7 +17,7 @@ internal static class SelectionGroupUtility
         GroupMembersSelection newMembersSelection = new GroupMembersSelection(prevMembersSelection);
         RegisterUndo(targetGroup, "Move Members");
             
-        foreach (KeyValuePair<SelectionGroup, OrderedSet<Object>> kv in prevMembersSelection) {
+        foreach (KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv in prevMembersSelection) {
             SelectionGroup prevGroup = kv.Key;
             if (null == prevGroup)
                 continue;
@@ -27,7 +27,7 @@ internal static class SelectionGroupUtility
 
             RegisterUndo(prevGroup, "Move Members");
                                             
-            foreach (Object obj in kv.Value) {
+            foreach (GameObject obj in kv.Value) {
                 newMembersSelection.AddObject(targetGroup, obj);
                 targetGroup.Add(obj);
                 prevGroup.Remove(obj);
