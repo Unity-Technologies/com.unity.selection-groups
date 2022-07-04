@@ -50,18 +50,18 @@ internal class SelectionGroupUtilityTests {
     private static void AddGroupMembersToSelection(SelectionGroup group, int[] memberIndexes,
         GroupMembersSelection selection) 
     {
-        IList<Object> members = group.Members;
+        IList<GameObject> members = group.Members;
         foreach (int memberIndex in memberIndexes) {
             selection.AddObject(group, members[memberIndex]);
         }
     }
     
     private static bool GroupContainsMembers(SelectionGroup group, HashSet<string> names) {
-        IList<Object> members = group.Members;
+        IList<GameObject> members = group.Members;
         if (names.Count != members.Count) 
             return false;
             
-        foreach (Object member in members) {
+        foreach (GameObject member in members) {
             if (!names.Contains(member.name))
                 return false;
         }
@@ -73,7 +73,7 @@ internal class SelectionGroupUtilityTests {
         SelectionGroup group, HashSet<string> names) 
     {
         bool firstGroupPassed = false;
-        foreach (KeyValuePair<SelectionGroup, OrderedSet<Object>> kv in selection) {
+        foreach (KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv in selection) {
             //must contain only one group
             if (firstGroupPassed)
                 return false;

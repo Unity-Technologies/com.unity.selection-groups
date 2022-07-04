@@ -91,7 +91,7 @@ namespace Unity.SelectionGroups.Editor
                     m_selectedGroupMembers.Clear();
                     
                     foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().Groups) {
-                        foreach (Object m in group.Members) {
+                        foreach (GameObject m in group.Members) {
                             if (prevSelectedMembers.Contains(group, m))
                                 continue;
                             m_selectedGroupMembers.AddObject(group,m);

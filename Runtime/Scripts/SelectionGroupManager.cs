@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Unity.FilmInternalUtilities;
 using UnityEngine;
 using UnityEngine.Assertions;
-using Object = UnityEngine.Object;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -46,7 +44,7 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         return group;
     }
 
-    internal SelectionGroup CreateSelectionGroup(string groupName, Color color, IList<Object> members) {
+    internal SelectionGroup CreateSelectionGroup(string groupName, Color color, IList<GameObject> members) {
         SelectionGroup group = CreateSelectionGroupInternal(groupName, color);
         group.AddRange(members);
         m_sceneSelectionGroups.Add(group);
