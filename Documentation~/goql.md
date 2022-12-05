@@ -88,11 +88,12 @@ E.g.:
 ## Discriminators
 
 A discriminator is used to filter the current set by checking for the existence of a particular component, 
-material or shader.   
+material or shader, or if it is active or inactive.   
 Discriminators are specified using angle brackets and one of these codes:
 1. 't': component
 2. 'm': material
 3. 's': shader
+4. 'active': is the gameobject enabled?
 
 Examples:
 
@@ -101,6 +102,8 @@ Examples:
 |`Head<t:Collider>`  |All **GameObjects** named "Head" which also have a Collider component.|
 |`Head<m:Glow>`      |All **GameObjects** that are named "Head" and use materials named "Glow" |
 |`Head<s:Standard>`  |All **GameObjects** that are named "Head" and are using "Standard" shader. |
+|`<active:false>`    |All **GameObjects that are inactive. |
+
 
 ## Exclusions
 
