@@ -345,6 +345,9 @@ namespace Unity.GoQL
                 case "s":
                     PerformShaderDiscrimination(value, isExclusion);
                     break;
+                case "active":
+                    PerformActiveDiscrimination(value, isExclusion);
+                    break;
                 default:
                     Error = $"Unknown discrimator type: {discriminatorType}";
                     break;
@@ -382,6 +385,30 @@ namespace Unity.GoQL
             selection.Swap();
         }
 
+        void PerformActiveDiscrimination(string discriminator, bool isExclusion)
+        {
+            discriminator = discriminator.ToLower();
+            if (discriminator == "true" || discriminator == "false")
+            {
+                var desiredState = discriminator == "true";
+                foreach (var g in selection)
+                {
+
+                    var isMatch = g.activeSelf == desiredState;
+                    if (isExclusion && !isMatch)
+                        selection.Add(g);
+                    if(!isExclusion && isMatch)
+                        selection.Add(g);
+                }
+
+                selection.Swap();
+            }
+            else
+            {
+                Error = $"Valid values are true or false.";
+            }
+            
+        }
         void PerformShaderDiscrimination(string discriminator, bool isExclusion)
         {
             var matcher = MatchName(discriminator);
