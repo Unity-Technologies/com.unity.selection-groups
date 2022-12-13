@@ -46,22 +46,20 @@ namespace Unity.SelectionGroups.Editor
                 switch (Event.current.type)
                 {
                     case EventType.ValidateCommand:
-                        OnValidateCommand(Event.current);
+                        OnValidateCommand(evt);
                         break;
                     case EventType.ExecuteCommand:
-                        OnExecuteCommand(Event.current);
+                        OnExecuteCommand(evt);
                         break;
-                    case EventType.KeyDown: {
-                        if (Event.current.keyCode == (KeyCode.Delete)) {
-                            if (null != m_activeSelectionGroup) {
-                                DeleteGroup(m_activeSelectionGroup);
-                            } else {
-                                RemoveSelectedMembersFromGroup();  
-                            }
-                            evt.Use();
-                        }
+                    case EventType.KeyDown:
+                        OnKeyDown(evt);
                         break;
-                    }                
+                    case EventType.DragUpdated:
+                        OnDragUpdated(evt);
+                        break;
+                    case EventType.DragPerform:
+                        OnDragPerform(evt);
+                        break;
                 }
             }
             finally
@@ -70,6 +68,47 @@ namespace Unity.SelectionGroups.Editor
             }
 
             
+        }
+
+        private void OnDragPerform(Event evt)
+        {
+            CreateNewGroup(DragAndDrop.objectReferences);
+        }
+
+        private void OnDragUpdated(Event evt)
+        {
+            var allowDropOp = true;
+            foreach (var o in DragAndDrop.objectReferences)
+            {
+                if (!(o is GameObject))
+                {
+                    allowDropOp = false;
+                    break;
+                }
+            }
+
+            if (allowDropOp)
+                DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+            else
+                DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
+
+        }
+
+        private void OnKeyDown(Event evt)
+        {
+            if (Event.current.keyCode == (KeyCode.Delete))
+            {
+                if (null != m_activeSelectionGroup)
+                {
+                    DeleteGroup(m_activeSelectionGroup);
+                }
+                else
+                {
+                    RemoveSelectedMembersFromGroup();
+                }
+
+                evt.Use();
+            }
         }
 
         void OnExecuteCommand(Event current)

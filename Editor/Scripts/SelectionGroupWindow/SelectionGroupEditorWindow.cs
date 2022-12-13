@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -55,19 +56,23 @@ namespace Unity.SelectionGroups.Editor
             SelectionGroupManager sgManager = SelectionGroupManager.GetOrCreateInstance();
             
             int numGroups = sgManager.Groups.Count;
-            sgManager.CreateSelectionGroup($"SG_New Group {numGroups}",
-                Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f)));
+            sgManager.CreateSelectionGroup($"SG_New Group {numGroups}", RandomColor());
         }
 
-        static void CreateNewGroupFromSelection()
+        static Color RandomColor() => Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f));
+
+        static void CreateNewGroup(Object[] objects)
         {
             SelectionGroupManager sgManager = SelectionGroupManager.GetOrCreateInstance();
-            
             int numGroups = sgManager.Groups.Count;
-            SelectionGroup newGroup =sgManager.CreateSelectionGroup($"SG_New Group {numGroups}",
-                Color.HSVToRGB(Random.value, Random.Range(0.9f, 1f), Random.Range(0.9f, 1f)));
-
-            newGroup.AddRange(Selection.gameObjects);
+            SelectionGroup newGroup = sgManager.CreateSelectionGroup($"SG_New Group {numGroups}", RandomColor());
+            foreach (var obj in objects)
+            {
+                if (obj is GameObject go)
+                {
+                    newGroup.Add(go);
+                }
+            }
         }
 
         static void RegisterUndo(SelectionGroup group, string msg)

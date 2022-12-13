@@ -118,7 +118,7 @@ namespace Unity.SelectionGroups.Editor
                 menu.AddItem(new GUIContent("Create Empty Group"), false, CreateNewGroup);
                 if (Selection.gameObjects.Length > 0)
                 {
-                    menu.AddItem(new GUIContent("Create Group from Selection"), false, CreateNewGroupFromSelection);
+                    menu.AddItem(new GUIContent("Create Group from Selection"), false, () => CreateNewGroup(Selection.gameObjects));
                 }
                 else
                 {
