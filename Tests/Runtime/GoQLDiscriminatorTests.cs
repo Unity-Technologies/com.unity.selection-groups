@@ -65,6 +65,17 @@ internal class GoQLDiscriminatorTests
         Assert.AreEqual(ParseResult.UnexpectedEndOfInput, e.parseResult);
     }
     
+    [Test]
+    [UnityPlatform(RuntimePlatform.WindowsEditor, RuntimePlatform.OSXEditor, RuntimePlatform.LinuxEditor)]    
+    public void ActiveOperator() {
+        TestUtility.ExecuteGoQLAndVerify("<active:false>", 1,(Transform t) => {
+            return t.name == "DisabledObjects";
+        });
+        TestUtility.ExecuteGoQLAndVerify("<active:true>", 11,(Transform t) => {
+            return t.name != "DisabledObjects";
+        });
+    }
+    
 //----------------------------------------------------------------------------------------------------------------------
     
     const string TestScenePath = "Packages/com.unity.selection-groups/Tests/Scenes/GoQLDiscriminatorTestScene";
