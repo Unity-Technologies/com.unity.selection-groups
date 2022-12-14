@@ -18,7 +18,6 @@ internal class GoQLDescenderTests
     public IEnumerator SetUp()
     {
         Assert.IsTrue(System.IO.File.Exists($"{TestScenePath}.unity"));
-        //[TODO-sin: 2022-5-17] Reduce code
 #if UNITY_EDITOR
         yield return EditorSceneManager.LoadSceneAsyncInPlayMode($"{TestScenePath}.unity", 
             new LoadSceneParameters(LoadSceneMode.Single));
