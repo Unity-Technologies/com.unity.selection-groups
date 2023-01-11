@@ -4,10 +4,20 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [0.8.0-preview] - 2022-04-28
+## [0.8.0-preview] - 2023-01-06
+
+### Added
+* feat: implemented the IList<Object> interface in SelectionGroup 
+* feat: query active/inactive GameObjects in GoQL
+* feat: allow group creation using drag and drop
 
 ### Changed
-* TBD
+* package: upgrade min supported Unity version to 2020.3
+* change: make the members of SelectionGroup into GameObject
+* deps: use com.unity.film-internal-utilities@0.17.0-preview
+
+### Removed
+* remove: SelectionGroupConfigurationDialog class
 
 ## [0.7.4-preview] - 2022-04-15
 
