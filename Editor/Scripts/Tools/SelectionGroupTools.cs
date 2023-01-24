@@ -24,9 +24,9 @@ namespace Unity.SelectionGroups.Editor
             SceneVisibilityManager sceneVisibilityManager = SceneVisibilityManager.instance;
             bool show = (sceneVisibilityManager.IsHidden(members[0]));
             if (show) {
-                sceneVisibilityManager.Show(members, false);
+                sceneVisibilityManager.Show(members, true);
             } else {
-                sceneVisibilityManager.Hide(members, false);
+                sceneVisibilityManager.Hide(members, true);
             }
         }
 
