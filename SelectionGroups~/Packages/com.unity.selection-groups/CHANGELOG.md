@@ -4,6 +4,14 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.8.1-preview] - 2023-02-07
+
+### Changed
+* ui: change group color width to 8 pixels 
+
+### Fixed
+* fix: include descendants when toggling object visibility
+
 ## [0.8.0-preview] - 2023-01-06
 
 ### Added
