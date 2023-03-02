@@ -52,7 +52,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.package-validation-suite": {
-      "version": "0.48.0-preview",
+      "version": "0.49.0-preview",
       "depth": 0,
       "source": "registry",
       "dependencies": {
