@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Unity.FilmInternalUtilities;
 using Unity.GoQL;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -65,6 +66,8 @@ namespace Unity.SelectionGroups
         void OnEnable()
         {
             RefreshHideFlagsInEditor();
+            
+            AnalyticsSender.SendEventInEditor(new SelectionGroupEnableEvent(m_goMembers.Count, IsAutoFilled()));
             
             if (!m_registerOnEnable) 
                 return;
