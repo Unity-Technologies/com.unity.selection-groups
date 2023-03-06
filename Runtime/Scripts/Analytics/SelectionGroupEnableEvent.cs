@@ -2,18 +2,19 @@ using Unity.FilmInternalUtilities;
 
 namespace Unity.SelectionGroups {
 
-internal class SelectionGroupEnableEvent : AnalyticsEvent<SelectionGroupEnableEvent.EventData>
-{
+internal class SelectionGroupEnableEvent : AnalyticsEvent<SelectionGroupEnableEvent.EventData> {
 
-    internal struct EventData
-    {
-        public string converter;
+    internal SelectionGroupEnableEvent(int members, bool query) : base(new EventData { numMembers = members, isQuery = query }) { }
+    
+    internal struct EventData {
+        public int numMembers;
+        public bool isQuery;
     }
     
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
     
     internal override string eventName => "selectiongroups_sg_enable";
-    internal override int    maxItems  => 10;
+    internal override int    maxItems  => 1;
 
     
 }
