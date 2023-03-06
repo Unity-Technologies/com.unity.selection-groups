@@ -25,14 +25,15 @@ instead of individual **GameObjects**.
 3. [Selection Groups Window](Documentation~/selection-groups-window.md)
 
 
-## Supported Unity Versions 
-
-Unity 2019.4 or higher.
-
 ## Getting Started
 
 [Getting Started](Documentation~/index.md#getting-started)
 
+# Supported Unity Versions
 
-## License
+* Unity 2020.3.45 or higher.
+* Unity 2021.3.19 or higher.
+* Unity 2022.2.8 or higher.
+
+# License
 - [License](LICENSE.md)
