@@ -49,3 +49,9 @@ Please refer to the [installation](installation.md) page to install Selection Gr
 1. [GoQL](goql.md)
 2. [Project Settings](project-settings.md)
 3. [Selection Groups Window](selection-groups-window.md)
+
+# Supported Unity Versions 
+
+* Unity 2020.3.45 or higher.
+* Unity 2021.3.19 or higher.
+* Unity 2022.2.8 or higher.
