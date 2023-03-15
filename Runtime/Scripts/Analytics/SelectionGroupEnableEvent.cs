@@ -2,11 +2,11 @@ using Unity.FilmInternalUtilities;
 
 namespace Unity.SelectionGroups {
 
-internal class SelectionGroupEnableEvent : AnalyticsEvent<SelectionGroupEnableEvent.EventData> {
+internal class SelectionGroupEnableEvent : AnalyticsEvent {
 
     internal SelectionGroupEnableEvent(int members, bool query) : base(new EventData { numMembers = members, isQuery = query }) { }
-    
-    internal struct EventData {
+
+    private class EventData : AnalyticsEventData {
         public int numMembers;
         public bool isQuery;
     }
