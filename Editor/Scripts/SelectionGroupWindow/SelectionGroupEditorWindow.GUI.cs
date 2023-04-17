@@ -55,6 +55,7 @@ namespace Unity.SelectionGroups.Editor
             return height;
         }
 
+        private string x;
         void DrawGUI()
         {
             m_groupsToDraw = SelectionGroupManager.GetOrCreateInstance().Groups;
@@ -208,7 +209,7 @@ namespace Unity.SelectionGroups.Editor
             GUIContent     content = sceneHeaderContent;
             
             content.text = $"{group.Name}";
-
+            
             //
             const float FOLDOUT_WIDTH    = 16;
             const float COLOR_WIDTH      = 8;
@@ -241,11 +242,25 @@ namespace Unity.SelectionGroups.Editor
             
             HandleHeaderMouseEvents(rect, groupIndex);
             
-            if (isPaint) 
+        
+            Label.normal.textColor = EditorGUIUtility.isProSkin ? ProTextColor : Color.black;
+            
+            if (m_renameGroupIndex == groupIndex)
             {
-                Label.normal.textColor = EditorGUIUtility.isProSkin ? ProTextColor: Color.black;
+                GUI.SetNextControlName($"{GROUP_NAME_EDITOR}_{groupIndex}");
+                var oldName = group.Name;
+                group.Name = EditorGUI.TextField(rect, group.Name);
+                //group.Name will only be assigned the new value once the Enter key is pressed
+                if (Event.current.keyCode == KeyCode.Escape || Event.current.keyCode == KeyCode.Return)
+                {
+                    DisableGroupNameEditor();
+                }
+            } 
+            else
+            {
                 GUI.Label(rect, content, Label);
             }
+        
             
             rect.x     = toolRightAlignedX + SEPARATOR_WIDTH;
             rect.width = COLOR_WIDTH;
@@ -257,7 +272,29 @@ namespace Unity.SelectionGroups.Editor
             return rect;
         }
 
+        private void DisableGroupNameEditor()
+        {
+            EditorGUIUtility.editingTextField = false;
+            EditorApplication.delayCall += () =>
+            {
+                m_renameGroupIndex = -1;
+                Repaint();
+            };
+            Repaint();
+        }
         
+        private void EnableGroupNameEditor(int groupIndex)
+        {
+            EditorApplication.delayCall += () =>
+            {
+                m_renameGroupIndex = groupIndex;
+                EditorGUI.FocusTextInControl($"{GROUP_NAME_EDITOR}_{groupIndex}");
+                Repaint();
+            };
+            Repaint();
+        }
+
+
         void DrawTools(float rightAlignedX, float y, SelectionGroup group)
         {
             const int TOOL_X_DIFF     = 18;
@@ -384,11 +421,13 @@ namespace Unity.SelectionGroups.Editor
                     {
                         case RIGHT_MOUSE_BUTTON:
                             ShowGroupContextMenu(rect, @group.Name, @group);
+                            DisableGroupNameEditor();
                             break;
                         case LEFT_MOUSE_BUTTON:
                             m_leftMouseWasDoubleClicked = evt.clickCount > 1;
                             if (m_leftMouseWasDoubleClicked) {
                                 SelectAllGroupMembers(group);
+                                DisableGroupNameEditor();
                             }
                             break;
                     }
@@ -397,9 +436,18 @@ namespace Unity.SelectionGroups.Editor
                 case EventType.MouseUp:
                     switch (evt.button) {
                         case LEFT_MOUSE_BUTTON:
-                            if (!m_leftMouseWasDoubleClicked) {
-                                SetUnityEditorSelection(group);
-                                m_selectedGroupMembers.Clear();
+                            if (!m_leftMouseWasDoubleClicked)
+                            {
+                                if (m_activeSelectionGroup == group)
+                                {
+                                    EnableGroupNameEditor(groupIndex);
+                                }
+                                else
+                                {
+                                    SetUnityEditorSelection(group);
+                                    m_selectedGroupMembers.Clear();
+                                    DisableGroupNameEditor();
+                                }
                             }
                             break;
                     }
@@ -529,7 +577,6 @@ namespace Unity.SelectionGroups.Editor
             Event evt = Event.current;
             if (!rect.Contains(evt.mousePosition)) 
                 return;
-
             bool isControl         = evt.control;
             bool isShift           = evt.shift;
             bool isRightMouseClick = evt.button == RIGHT_MOUSE_BUTTON;
@@ -548,7 +595,7 @@ namespace Unity.SelectionGroups.Editor
                     }
 
                     SetUnityEditorSelection(null);
-                    
+                    DisableGroupNameEditor();
                     evt.Use();
                     break;
                 }
@@ -695,6 +742,7 @@ namespace Unity.SelectionGroups.Editor
         private const string DRAG_ITEM_TYPE   = "SelectionGroupsDragItemType";
         private const string DRAG_DROP_POS    = "SelectionGroupsDragDropPos";
         private const string DRAG_GROUP_INDEX = "SelectionGroupsDragGroup";
+        private const string GROUP_NAME_EDITOR = "GroupNameEditor";
         
         private const   int   GROUP_HEADER_PADDING = 3;
         static readonly Color HOVER_COLOR          = new Color32(112, 112, 112, 128);
@@ -707,8 +755,6 @@ namespace Unity.SelectionGroups.Editor
         
         private Texture2D m_inspectorLockTex;
         private Texture2D m_hiddenInSceneTex;
-        
-        
-
+        private int m_renameGroupIndex = -1;
     }
 } //end namespace
