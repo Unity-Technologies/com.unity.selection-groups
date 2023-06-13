@@ -1,0 +1,10 @@
+<UXML xmlns="UnityEngine.UIElements" editor-extension-mode="False">
+    <Button name="addGroup" text="+" />
+    <MultiColumnTreeView name="treeview" virtualization-method="DynamicHeight" reorder-mode="Animated" show-add-remove-footer="true" show-border="true" horizontal-scrolling="false">
+        <Columns>
+            <Column name="name" title="Name" width="180"/>
+            <Column name="color" title="Color" width="48"/>
+            <Column name="tools" title="Tools" width="128"/>
+        </Columns>
+    </MultiColumnTreeView>
+</UXML>
