@@ -54,7 +54,6 @@ namespace Unity.SelectionGroups.Editor
 
         static void CreateNewGroup() {
             SelectionGroupManager sgManager = SelectionGroupManager.GetOrCreateInstance();
-            
             int numGroups = sgManager.Groups.Count;
             sgManager.CreateSelectionGroup($"SG_New Group {numGroups}", RandomColor());
         }

@@ -21,53 +21,11 @@ namespace Unity.SelectionGroups.Editor
             titleContent.text = "Selection Groups";
             wantsMouseMove = true;
             
-            sceneHeaderContent     =  EditorGUIUtility.IconContent("SceneAsset Icon");
-            m_CreateDropdownContent = EditorGUIUtility.IconContent("CreateAddNew");
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
         }
 
         private void OnDisable() {
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
-        }
-
-
-        void OnGUI()
-        {
-            try
-            {
-                Profiler.BeginSample("Selection Groups Editor Window");
-                
-                Event evt = Event.current;
-                if (evt.type == EventType.Layout) return;
-                
-                SetupStyles();
-                DrawGUI();
-
-                switch (Event.current.type)
-                {
-                    case EventType.ValidateCommand:
-                        OnValidateCommand(evt);
-                        break;
-                    case EventType.ExecuteCommand:
-                        OnExecuteCommand(evt);
-                        break;
-                    case EventType.KeyDown:
-                        OnKeyDown(evt);
-                        break;
-                    case EventType.DragUpdated:
-                        OnDragUpdated(evt);
-                        break;
-                    case EventType.DragPerform:
-                        OnDragPerform(evt);
-                        break;
-                }
-            }
-            finally
-            {
-                Profiler.EndSample();
-            }
-
-            
         }
 
         private void OnDragPerform(Event evt)
