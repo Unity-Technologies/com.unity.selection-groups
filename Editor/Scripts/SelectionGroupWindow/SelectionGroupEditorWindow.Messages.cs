@@ -74,7 +74,7 @@ namespace Unity.SelectionGroups.Editor
             switch (current.commandName) {
                 case "SelectAll":
                     foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().Groups) {
-                        m_selectedGroupMembers.AddGroupMembers(group);
+                        m_selectedGroupMembers.UnionWith(group.Members.Select(m=> GroupMembership.Child(group, m)));
                     }
                     UpdateUnityEditorSelectionWithMembers();
                     current.Use();
@@ -84,16 +84,15 @@ namespace Unity.SelectionGroups.Editor
                     current.Use();
                     break;
                 case "InvertSelection":
-                    GroupMembersSelection prevSelectedMembers = new GroupMembersSelection(m_selectedGroupMembers);
+                    var prevSelectedMembers = new HashSet<GroupMembership>(m_selectedGroupMembers);
                     m_selectedGroupMembers.Clear();
                     
                     foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().Groups) {
                         foreach (GameObject m in group.Members) {
-                            if (prevSelectedMembers.Contains(group, m))
-                                continue;
-                            m_selectedGroupMembers.AddObject(group,m);
+                            m_selectedGroupMembers.Add(GroupMembership.Child(group,m));
                         }
                     }
+                    m_selectedGroupMembers.ExceptWith(prevSelectedMembers);
                     current.Use();
                     break;
             }
@@ -116,6 +115,7 @@ namespace Unity.SelectionGroups.Editor
         }
         
         private void OnUndoRedoPerformed() {
+            Refresh();
             Repaint();
         }
         

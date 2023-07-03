@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -12,6 +13,8 @@ using Object = UnityEngine.Object;
 
 namespace Unity.SelectionGroups.Editor
 {
+    
+    
     internal partial class SelectionGroupEditorWindow : EditorWindow
     {
         const string _uxmlPath = "Packages/com.unity.selection-groups/Editor/UIElements/EditorWindow/SelectionGroupEditorWindow.uxml";
@@ -54,6 +57,7 @@ namespace Unity.SelectionGroups.Editor
         {
             treeViewElement = root.Q<MultiColumnTreeView>("treeview");
             
+            treeViewElement.selectionType = SelectionType.Multiple;
             
             treeViewElement.selectionChanged += OnSelectionChanged;
             
@@ -74,12 +78,15 @@ namespace Unity.SelectionGroups.Editor
             CreateToolColumn(treeViewElement);
 
             treeViewElement.SetRootItems(TreeRoots);
+            
+            
+            
         }
-
+        
         private void Refresh()
         {
             treeViewElement.SetRootItems(TreeRoots);
-            treeViewElement.RefreshItems();
+            treeViewElement.Rebuild();
         }
         
 
@@ -99,12 +106,9 @@ namespace Unity.SelectionGroups.Editor
 
         private void OnSelectionChanged(IEnumerable<object> selection)
         {
-            Selection.objects = selection.OfType<Object>().ToArray();
-            foreach (var i in Selection.objects)
-            {
-                if (i is GameObject go && go.TryGetComponent<SelectionGroup>(out var selectionGroup))
-                    m_activeSelectionGroup = selectionGroup;
-            }
+            m_selectedGroupMembers.Clear();
+            m_selectedGroupMembers.UnionWith(selection.OfType<GroupMembership>());
+            
         }
 
         private static void CreateToolColumn(MultiColumnTreeView treeViewElement)
@@ -112,10 +116,10 @@ namespace Unity.SelectionGroups.Editor
             treeViewElement.columns[2].makeCell = () => new VisualElement() { name = "toolColumn" };
             treeViewElement.columns[2].bindCell = (element, i) =>
             {
-                var go = treeViewElement.GetItemDataForIndex<GameObject>(i);
+                var groupMembership = treeViewElement.GetItemDataForIndex<GroupMembership>(i);
                 var container = element.Q<VisualElement>("toolColumn");
 
-                if (go.TryGetComponent<SelectionGroup>(out var selectionGroup))
+                if (groupMembership.isParent && groupMembership.gameObject.TryGetComponent<SelectionGroup>(out var selectionGroup))
                 {
                     container.Clear();
                     container.style.flexDirection = FlexDirection.Row;
@@ -171,10 +175,10 @@ namespace Unity.SelectionGroups.Editor
             treeViewElement.columns[1].makeCell = () => new ColorField();
             treeViewElement.columns[1].bindCell = (element, i) =>
             {
-                var go = treeViewElement.GetItemDataForIndex<GameObject>(i);
+                var groupMembership = treeViewElement.GetItemDataForIndex<GroupMembership>(i);
                 var colorField = element.Q<ColorField>();
 
-                if (go.TryGetComponent<SelectionGroup>(out var selectionGroup))
+                if (groupMembership.isParent&& groupMembership.gameObject.TryGetComponent<SelectionGroup>(out var selectionGroup))
                 {
                     colorField.value = selectionGroup.Color;
                 }
@@ -188,60 +192,50 @@ namespace Unity.SelectionGroups.Editor
         
         private void CreateNameColumn(MultiColumnTreeView treeViewElement)
         {
-            treeViewElement.columns[0].makeCell = () => new Label();
+            
+            treeViewElement.columns[0].makeCell = () =>
+            {
+                var element = new Label();
+                element.AddManipulator(new ContextualMenuManipulator(OnContextmenu));
+                element.AddManipulator(new GameObjectDropManipulator(OnDropObjects));
+                return element;
+            };
+
             treeViewElement.columns[0].bindCell = (element, i) =>
             {
-                var go = treeViewElement.GetItemDataForIndex<GameObject>(i);
+                var groupMembership = treeViewElement.GetItemDataForIndex<GroupMembership>(i);
                 var label = element.Q<Label>();
-                label.text = go.name;
-                if (go.TryGetComponent<SelectionGroup>(out var selectionGroup))
-                {
-                    label.AddManipulator(new GameObjectDropManipulator((objects =>
-                    {
-                        selectionGroup.AddRange(objects.OfType<GameObject>());
-                        treeViewElement.SetRootItems(TreeRoots);
-                        treeViewElement.RefreshItems();
-                    })));
-                }
-
-                var parentIndex = treeViewElement.GetParentIdForIndex(i);
-                if (parentIndex > 0)
-                {
-                    label.AddManipulator(CreateContextMenuManipulator(go, parentIndex));
-                }
+                label.text = groupMembership.gameObject.name;
+                
+                element.userData = groupMembership;
             };
-        }
-
-        private IManipulator CreateContextMenuManipulator(GameObject go, int parentIndex)
-        {
-            return new ContextualMenuManipulator(ev =>
+            
+            treeViewElement.columns[0].unbindCell = (element, i) =>
             {
-                var parent = treeViewElement.GetItemDataForIndex<GameObject>(parentIndex);
-                if (parent.TryGetComponent<SelectionGroup>(out var clickedGroup))
-                {
-                    if (clickedGroup.IsAutoFilled())
-                    {
-                        ev.menu.AppendAction("(Remove from Group)", action => { }, DropdownMenuAction.Status.Disabled);
-                    }
-                    else
-                    {
-                        ev.menu.AppendAction("Remove from Group", (dda) =>
-                        {
-                            m_activeSelectionGroup = clickedGroup;
-                            m_selectedGroupMembers.Clear();
-                            m_selectedGroupMembers.AddObject(clickedGroup, go);
-                            RemoveSelectedMembersFromGroup();
-                            Refresh();
-                        }, DropdownMenuAction.AlwaysEnabled);
-                    }
-                }
-            });
+                element.userData = null;
+            };
+            
+
         }
 
-        private void GroupMemberContextMenu(ContextualMenuPopulateEvent ev)
+        private void OnContextmenu(ContextualMenuPopulateEvent ev)
         {
-            var content = new GUIContent("Remove From Group");
-            var clickedGroup = m_activeSelectionGroup;
+            var groupMembership = (GroupMembership)(ev.target as VisualElement).userData;
+            
+            if (groupMembership.isParent)
+            {
+                CreateRootLevelContextMenu(groupMembership, ev);
+            }
+            else
+            {
+                CreateMemberLevelContextMenu(groupMembership, ev);
+            }
+            ev.StopPropagation();
+        }
+
+        private void CreateMemberLevelContextMenu(GroupMembership groupMembership, ContextualMenuPopulateEvent ev)
+        {
+            var clickedGroup = groupMembership.group;
             if (clickedGroup.IsAutoFilled()) {
                 ev.menu.AppendAction("Remove from Group", action => { }, DropdownMenuAction.Status.Disabled);
             } else {
@@ -249,21 +243,63 @@ namespace Unity.SelectionGroups.Editor
             }
         }
 
-        private static IList<TreeViewItemData<GameObject>> TreeRoots
+        private void CreateRootLevelContextMenu(GroupMembership groupMembership, ContextualMenuPopulateEvent ev)
+        {
+            var menu = ev.menu;
+            var group = groupMembership.group;
+            menu.AppendAction("Select All Group Members", (dda) => {
+                SelectAllGroupMembers(group);
+            });
+            menu.AppendSeparator();
+            if (group.IsAutoFilled())
+            {
+                menu.AppendAction("Clear Group", null, DropdownMenuAction.Status.Disabled);
+            } else {
+                menu.AppendAction("Clear Group", (dda) => {
+                    m_selectedGroupMembers.RemoveWhere(i=>i.group==group);
+                    group.Clear();
+                    UpdateUnityEditorSelectionWithMembers();
+                    Refresh();
+                });
+            }
+
+            menu.AppendAction("Delete Group", (dda) => {
+                DeleteGroup(group);
+                Refresh();
+            });
+        }
+
+        private void OnDropObjects(VisualElement element, Object[] objects)
+        {
+            var index = element.userData;
+
+            if (element.userData is GroupMembership groupMembership)
+            {
+                if (groupMembership.isParent && groupMembership.gameObject.TryGetComponent<SelectionGroup>(out var selectionGroup))
+                {
+                    selectionGroup.AddRange(objects.OfType<GameObject>());
+                    treeViewElement.SetRootItems(TreeRoots);
+                    treeViewElement.RefreshItems();
+                }
+            }
+        }
+        
+
+        private static IList<TreeViewItemData<GroupMembership>> TreeRoots
         {
             get
             {
                 var selectionGroupManager = SelectionGroupManager.GetOrCreateInstance();
                 int id = 0;
-                var roots = new List<TreeViewItemData<GameObject>>(selectionGroupManager.Groups.Count);
+                var roots = new List<TreeViewItemData<GroupMembership>>(selectionGroupManager.Groups.Count);
                 foreach (var group in selectionGroupManager.Groups)
                 {
-                    var children = new List<TreeViewItemData<GameObject>>(group.Count);
+                    var children = new List<TreeViewItemData<GroupMembership>>(group.Count);
                     foreach (var groupGameObject in group)
                     {
-                        children.Add(new TreeViewItemData<GameObject>(id++, groupGameObject));
+                        children.Add(new TreeViewItemData<GroupMembership>(id++, GroupMembership.Child(group, groupGameObject)));
                     }
-                    roots.Add(new TreeViewItemData<GameObject>(id++, group.gameObject, children));
+                    roots.Add(new TreeViewItemData<GroupMembership>(id++, GroupMembership.Parent(group, group.gameObject), children));
                 }
                 return roots;
             }
@@ -304,7 +340,7 @@ namespace Unity.SelectionGroups.Editor
                 menu.AddDisabledItem(new GUIContent("Clear Group"), false);
             } else {
                 menu.AddItem(new GUIContent("Clear Group"), false, () => {
-                    m_selectedGroupMembers.RemoveGroup(group);
+                    m_selectedGroupMembers.RemoveWhere(i=>i.group==group);
                     group.Clear();
                     UpdateUnityEditorSelectionWithMembers();
                 });
@@ -318,20 +354,18 @@ namespace Unity.SelectionGroups.Editor
 
 
         private void DeleteGroup(SelectionGroup group) {
-            m_selectedGroupMembers.RemoveGroup(group);
+            Debug.Log($"Deleting {group}");
+            m_selectedGroupMembers.RemoveWhere(i=>i.group==group);
             SelectionGroupManager.GetOrCreateInstance().DeleteGroup(group);
             UpdateUnityEditorSelectionWithMembers();
-            
         }
 
         private void RemoveSelectedMembersFromGroup() {
-            
-            foreach (KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv in m_selectedGroupMembers) {
-                SelectionGroup group = kv.Key;
-                RegisterUndo(group, "Remove Member");
-                Debug.Log($"{group} {kv.Value}");
-                group.Except(kv.Value);
+            foreach (var membership in m_selectedGroupMembers) {
+                RegisterUndo(membership.group, "Remove Member");
+                membership.group.Remove(membership.gameObject);
             }
+            Refresh();
         }
         
 
@@ -341,7 +375,10 @@ namespace Unity.SelectionGroups.Editor
         }
 
         private void SelectAllGroupMembers(SelectionGroup group) {
-            m_selectedGroupMembers.AddGroupMembers(group);
+            foreach (var m in group.Members)
+            {
+                m_selectedGroupMembers.Add(GroupMembership.Child(group, m));
+            }
             UpdateUnityEditorSelectionWithMembers();
         }
         
@@ -354,17 +391,55 @@ namespace Unity.SelectionGroups.Editor
 
         //Update Editor Selection to show the properties of group members in the inspector
         private void UpdateUnityEditorSelectionWithMembers() {
-            Selection.objects = m_selectedGroupMembers.ConvertMembersToArray();
+            Selection.objects = m_selectedGroupMembers.Where(g=>!g.isParent).Select(i=>i.gameObject).ToArray();
         }
         
 
 //----------------------------------------------------------------------------------------------------------------------        
 
-        GroupMembersSelection m_selectedGroupMembers = new GroupMembersSelection();
+        private HashSet<GroupMembership> m_selectedGroupMembers = new();
 
         
         private Texture2D m_inspectorLockTex;
         private Texture2D m_hiddenInSceneTex;
         private MultiColumnTreeView treeViewElement;
+        
+        // This struct is used to store membership information about group items and groups
+        // while being used inside the context of the TreeView
+        private struct GroupMembership : IEquatable<GroupMembership>
+        {
+            public bool Equals(GroupMembership other)
+            {
+                return Equals(gameObject, other.gameObject) && Equals(group, other.group);
+            }
+
+            public override bool Equals(object obj)
+            {
+                return obj is GroupMembership other && Equals(other);
+            }
+
+            public override int GetHashCode()
+            {
+                return HashCode.Combine(gameObject, group);
+            }
+
+            public static bool operator ==(GroupMembership left, GroupMembership right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(GroupMembership left, GroupMembership right)
+            {
+                return !left.Equals(right);
+            }
+
+            public bool isParent;
+            public GameObject gameObject;
+            public SelectionGroup group;
+
+            public static GroupMembership Child(SelectionGroup group, GameObject gameObject) => new() { group=group, isParent = false, gameObject = gameObject };
+
+            public static GroupMembership Parent(SelectionGroup group, GameObject gameObject) => new() { group = group, isParent = true, gameObject = gameObject };
+        }
     }
 } //end namespace

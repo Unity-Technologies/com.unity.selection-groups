@@ -6,9 +6,9 @@ namespace Unity.SelectionGroups.Editor
 {
     public class GameObjectDropManipulator : PointerManipulator
     {
-        public event System.Action<Object[]> OnDropObject;
+        public event System.Action<VisualElement, Object[]> OnDropObject;
         
-        public GameObjectDropManipulator(System.Action<Object[]> onDropObject)
+        public GameObjectDropManipulator(System.Action<VisualElement, Object[]> onDropObject)
         {
             OnDropObject = onDropObject;
         }
@@ -59,7 +59,7 @@ namespace Unity.SelectionGroups.Editor
                 DragAndDrop.AcceptDrag();
                 evt.StopPropagation();
                 target.RemoveFromClassList("Hover");
-                OnDropObject?.Invoke(DragAndDrop.objectReferences);
+                OnDropObject?.Invoke(evt.target as VisualElement, DragAndDrop.objectReferences);
             }
         }
     }
