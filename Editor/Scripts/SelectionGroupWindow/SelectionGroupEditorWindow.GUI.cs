@@ -78,9 +78,6 @@ namespace Unity.SelectionGroups.Editor
             CreateToolColumn(treeViewElement);
 
             treeViewElement.SetRootItems(TreeRoots);
-            
-            
-            
         }
         
         private void Refresh()
@@ -92,14 +89,11 @@ namespace Unity.SelectionGroups.Editor
 
         private void OnItemsChosen(IEnumerable<object> items)
         {
-            foreach (var i in items)
+            foreach (GroupMembership i in items)
             {
-                if (i is GameObject go)
+                if (i.isParent)
                 {
-                    if (go.TryGetComponent<SelectionGroup>(out var selectionGroup))
-                    {
-                        SelectAllGroupMembers(selectionGroup);
-                    }
+                    SelectAllGroupMembers(i.group);
                 }
             }
         }
@@ -108,7 +102,7 @@ namespace Unity.SelectionGroups.Editor
         {
             m_selectedGroupMembers.Clear();
             m_selectedGroupMembers.UnionWith(selection.OfType<GroupMembership>());
-            
+            Selection.objects = m_selectedGroupMembers.Select(gm => gm.gameObject).ToArray();
         }
 
         private static void CreateToolColumn(MultiColumnTreeView treeViewElement)
@@ -198,6 +192,7 @@ namespace Unity.SelectionGroups.Editor
                 var element = new Label();
                 element.AddManipulator(new ContextualMenuManipulator(OnContextmenu));
                 element.AddManipulator(new GameObjectDropManipulator(OnDropObjects));
+                
                 return element;
             };
 
@@ -206,15 +201,17 @@ namespace Unity.SelectionGroups.Editor
                 var groupMembership = treeViewElement.GetItemDataForIndex<GroupMembership>(i);
                 var label = element.Q<Label>();
                 label.text = groupMembership.gameObject.name;
-                
                 element.userData = groupMembership;
+                
+                //This is supposed to allow persistence of foldout state during domain reloads.
+                //It does not appear to work.
+                element.parent.parent.Q<Toggle>().viewDataKey = groupMembership.group.name;
             };
             
             treeViewElement.columns[0].unbindCell = (element, i) =>
             {
                 element.userData = null;
             };
-            
 
         }
 
@@ -271,8 +268,6 @@ namespace Unity.SelectionGroups.Editor
 
         private void OnDropObjects(VisualElement element, Object[] objects)
         {
-            var index = element.userData;
-
             if (element.userData is GroupMembership groupMembership)
             {
                 if (groupMembership.isParent && groupMembership.gameObject.TryGetComponent<SelectionGroup>(out var selectionGroup))
@@ -299,7 +294,9 @@ namespace Unity.SelectionGroups.Editor
                     {
                         children.Add(new TreeViewItemData<GroupMembership>(id++, GroupMembership.Child(group, groupGameObject)));
                     }
-                    roots.Add(new TreeViewItemData<GroupMembership>(id++, GroupMembership.Parent(group, group.gameObject), children));
+                    var groupNode = new TreeViewItemData<GroupMembership>(id++, GroupMembership.Parent(group, group.gameObject), children);
+                    
+                    roots.Add(groupNode);
                 }
                 return roots;
             }
@@ -314,47 +311,7 @@ namespace Unity.SelectionGroups.Editor
             window.Repaint();
         }
 
-        void ShowGroupMemberContextMenu(SelectionGroup clickedGroup)
-        {
-            var menu = new GenericMenu();
-            var content = new GUIContent("Remove From Group");
-            if (clickedGroup.IsAutoFilled()) {
-                menu.AddDisabledItem(content,false);
-            } else {
-                menu.AddItem(content, false, () => {
-                    RemoveSelectedMembersFromGroup();
-                });
-            }
-            
-            menu.ShowAsContext();
-        }
-
-        void ShowGroupContextMenu(Rect rect, string groupName, SelectionGroup group)
-        {
-            var menu = new GenericMenu();
-            menu.AddItem(new GUIContent("Select All Group Members"), false, () => {
-                SelectAllGroupMembers(group);
-            });
-            menu.AddSeparator(string.Empty);
-            if (group.IsAutoFilled()) {
-                menu.AddDisabledItem(new GUIContent("Clear Group"), false);
-            } else {
-                menu.AddItem(new GUIContent("Clear Group"), false, () => {
-                    m_selectedGroupMembers.RemoveWhere(i=>i.group==group);
-                    group.Clear();
-                    UpdateUnityEditorSelectionWithMembers();
-                });
-            }
-
-            menu.AddItem(new GUIContent("Delete Group"), false, () => {
-                DeleteGroup(group);
-            });
-            menu.DropDown(rect);
-        }
-
-
-        private void DeleteGroup(SelectionGroup group) {
-            Debug.Log($"Deleting {group}");
+        private void DeleteGroup(SelectionGroup group) { 
             m_selectedGroupMembers.RemoveWhere(i=>i.group==group);
             SelectionGroupManager.GetOrCreateInstance().DeleteGroup(group);
             UpdateUnityEditorSelectionWithMembers();
@@ -383,13 +340,8 @@ namespace Unity.SelectionGroups.Editor
         }
         
 //----------------------------------------------------------------------------------------------------------------------        
-        
-        private void SetUnityEditorSelection(SelectionGroup group) {
-            m_activeSelectionGroup  = @group;
-            Selection.objects       = new Object[] { null == group ? null : group.gameObject };
-        }
 
-        //Update Editor Selection to show the properties of group members in the inspector
+//Update Editor Selection to show the properties of group members in the inspector
         private void UpdateUnityEditorSelectionWithMembers() {
             Selection.objects = m_selectedGroupMembers.Where(g=>!g.isParent).Select(i=>i.gameObject).ToArray();
         }
@@ -434,6 +386,7 @@ namespace Unity.SelectionGroups.Editor
             }
 
             public bool isParent;
+            public bool isExpanded;
             public GameObject gameObject;
             public SelectionGroup group;
 
