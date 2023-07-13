@@ -46,7 +46,7 @@ internal class SelectionGroupTests {
   
 //----------------------------------------------------------------------------------------------------------------------
     [Test]
-    public void FindActiveGroupMemberComponents() {
+    public void FindGroupMemberComponents() {
         //Preparation
         SelectionGroupManager groupManager = GetAndInitGroupManager();
         SelectionGroup        group        = groupManager.CreateSelectionGroup("TestGroup", Color.green);
@@ -62,6 +62,9 @@ internal class SelectionGroupTests {
         group.Add(foo.gameObject);
         group.FindMemberComponents<Light>(includeInactiveChildren:false, tempList, lights);
         Assert.AreEqual(3, lights.Count);
+
+        group.FindMemberComponents<Light>(includeInactiveChildren:true, tempList, lights);        
+        Assert.AreEqual(4, lights.Count);
         
         //Add all to the group
         group.Clear();
@@ -70,6 +73,9 @@ internal class SelectionGroupTests {
         group.Add(baz.gameObject);
         group.FindMemberComponents<Light>(includeInactiveChildren:false, tempList, lights);
         Assert.AreEqual(3, lights.Count);        
+
+        group.FindMemberComponents<Light>(includeInactiveChildren:true, tempList, lights);
+        Assert.AreEqual(4, lights.Count);        
     }
     
     
