@@ -77,14 +77,15 @@ namespace Unity.SelectionGroups.Editor
 
         private void OnDragUpdated(Event evt)
         {
-            var allowDropOp = true;
-            foreach (var o in DragAndDrop.objectReferences)
-            {
-                if (!(o is GameObject))
-                {
-                    allowDropOp = false;
-                    break;
-                }
+            var      allowDropOp = true;
+            Object[] objects     = DragAndDrop.objectReferences;
+            int      numObjects  = objects.Length;
+            for (int i = 0; i < numObjects; ++i) {
+                GameObject go = objects[i] as GameObject;
+                if (null != go)
+                    continue;
+                allowDropOp = false;
+                break;
             }
 
             if (allowDropOp)
