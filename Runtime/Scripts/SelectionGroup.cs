@@ -350,10 +350,10 @@ namespace Unity.SelectionGroups
         /// </summary>
         /// <typeparam name="T">The type of the component</typeparam>
         /// <returns>The enumerated component</returns>
-        internal IEnumerable<T> GetMemberComponents<T>() where T : Component
-        {
-            
-            foreach (GameObject go in m_goMembers) {
+        internal IEnumerable<T> GetMemberComponents<T>() where T : Component {
+            int numMembers = m_goMembers.Count;
+            for (int i = 0; i < numMembers; ++i) {
+                GameObject go = m_goMembers[i];
                 if (go == null) 
                     continue;
                 T[] components    = go.GetComponentsInChildren<T>();
@@ -361,6 +361,7 @@ namespace Unity.SelectionGroups
                 for (int j=0;j<numComponents;++j) {
                     yield return components[j];
                 }
+             
             }
         }
 
