@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using JetBrains.Annotations;
 using NUnit.Framework;
+using Unity.FilmInternalUtilities;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -42,16 +43,16 @@ namespace Unity.SelectionGroups.Editor
         static float CalculateHeight(IList<SelectionGroup> groups)
         {
             float height = EditorGUIUtility.singleLineHeight;
-            foreach (SelectionGroup @group in groups) {
+            groups.Loop((SelectionGroup group) => {
                 if (null == @group)
-                    continue;
+                    return;
                 
                 height += EditorGUIUtility.singleLineHeight + 3;
                 if (@group.AreMembersShownInWindow())
                 {
                     height += @group.Count * EditorGUIUtility.singleLineHeight;
-                }
-            }
+                }                
+            });
             return height;
         }
 
