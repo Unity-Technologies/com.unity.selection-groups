@@ -19,11 +19,11 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
 
 
     public static void UpdateQueryResults() {
-        foreach (var i in SelectionGroupManager.GetOrCreateInstance().m_sceneSelectionGroups) {
+        SelectionGroupManager.GetOrCreateInstance().m_sceneSelectionGroups.Loop((SelectionGroup i) => {
             if (!string.IsNullOrEmpty(i.Query)) {
                 i.UpdateQueryResults();
-            }
-        }
+            }            
+        });
     }
 
     internal IList<SelectionGroup> Groups => m_sceneSelectionGroups;
