@@ -370,17 +370,17 @@ namespace Unity.SelectionGroups
         /// Find components from all members of a group that have a certain type T.
         /// </summary>
         /// <typeparam name="T">The type of the component</typeparam>
-        /// <param name="includeInactive">Whether to include inactive child GameObjects in the search.</param>
+        /// <param name="includeInactiveChildren">Whether to include inactive child GameObjects in the search.</param>
         /// <param name="tempList">A caller supplied temporary list for getting components in children.</param>
         /// <param name="results">A HashSet to use for the returned results.</param>
-        internal void FindMemberComponents<T>(bool includeInactive, List<T> tempList, HashSet<T> results) where T : Component {
+        internal void FindMemberComponents<T>(bool includeInactiveChildren, List<T> tempList, HashSet<T> results) where T : Component {
             int numMembers = m_goMembers.Count;
             results.Clear();
             for (int i = 0; i < numMembers; ++i) {
                 GameObject go = m_goMembers[i];
                 if (go == null) 
                     continue;
-                go.GetComponentsInChildren<T>(includeInactive, tempList);
+                go.GetComponentsInChildren<T>(includeInactiveChildren, tempList);
                 tempList.Loop((T element) => {
                     results.Add(element);
                 });

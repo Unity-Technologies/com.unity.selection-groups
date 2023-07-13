@@ -56,12 +56,11 @@ internal class SelectionGroupTests {
         Transform foo = CreateLightObject("Foo");
         Transform bar = CreateLightObject("Bar", enable: true, foo);
         Transform baz = CreateLightObject("Baz", enable: true, bar);
-        Transform boo = CreateLightObject("Boo", enable: true, foo);
-        boo.GetComponent<Light>().enabled = false;
+        Transform boo = CreateLightObject("Boo", enable: false, foo);
         
         //Just add one to the group
         group.Add(foo.gameObject);
-        group.FindMemberComponents<Light>(includeInactive:false, tempList, lights);
+        group.FindMemberComponents<Light>(includeInactiveChildren:false, tempList, lights);
         Assert.AreEqual(3, lights.Count);
         
         //Add all to the group
@@ -69,8 +68,7 @@ internal class SelectionGroupTests {
         group.Add(foo.gameObject);
         group.Add(bar.gameObject);
         group.Add(baz.gameObject);
-        group.Add(boo.gameObject);
-        group.FindMemberComponents<Light>(includeInactive:false, tempList, lights);
+        group.FindMemberComponents<Light>(includeInactiveChildren:false, tempList, lights);
         Assert.AreEqual(3, lights.Count);        
     }
     
@@ -85,7 +83,7 @@ internal class SelectionGroupTests {
 
     private Transform CreateLightObject(string objectName, bool enable = true, Transform parent = null) {
         Light light = new GameObject(objectName).AddComponent<Light>();
-        light.enabled = enable;
+        light.gameObject.SetActive(enable);
 
         Transform t = light.transform;
         t.parent = parent;
