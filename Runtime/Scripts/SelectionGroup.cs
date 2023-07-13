@@ -336,12 +336,11 @@ namespace Unity.SelectionGroups
          private void SetMembersInternal(IEnumerable<GameObject> objects) 
          {
              m_goMembers.Clear();
-             foreach (var i in objects) 
-             {
+             objects.Loop((GameObject i) => {
                  if (i == null)
-                     continue;
+                     return;
                  m_goMembers.Add(i);
-             }
+             });
          }
 
          /// <summary>
