@@ -352,13 +352,14 @@ namespace Unity.SelectionGroups
         /// <returns>The enumerated component</returns>
         internal IEnumerable<T> GetMemberComponents<T>() where T : Component
         {
+            
             foreach (GameObject go in m_goMembers) {
                 if (go == null) 
                     continue;
                 T[] components    = go.GetComponentsInChildren<T>();
                 int numComponents = components.Length;
-                for (int i=0;i<numComponents;i++) {
-                    yield return components[i];
+                for (int j=0;j<numComponents;++j) {
+                    yield return components[j];
                 }
             }
         }
