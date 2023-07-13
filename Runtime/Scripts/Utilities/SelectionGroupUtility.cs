@@ -18,13 +18,13 @@ internal static class SelectionGroupUtility
         GroupMembersSelection newMembersSelection = new GroupMembersSelection(prevMembersSelection);
         RegisterUndo(targetGroup, "Move Members");
             
-        foreach (KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv in prevMembersSelection) {
+        prevMembersSelection.Loop((KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv) =>{
             SelectionGroup prevGroup = kv.Key;
             if (null == prevGroup)
-                continue;
+                return;
                 
             if (targetGroup == prevGroup)
-                continue;
+                return;
 
             RegisterUndo(prevGroup, "Move Members");
                                        
@@ -34,7 +34,7 @@ internal static class SelectionGroupUtility
                 prevGroup.Remove(obj);
                 newMembersSelection.RemoveObject(prevGroup, obj);
             });
-        }
+        });
 
         return newMembersSelection;
     }
