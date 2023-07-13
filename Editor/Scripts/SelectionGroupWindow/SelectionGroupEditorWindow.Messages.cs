@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Unity.FilmInternalUtilities;
 using Unity.SelectionGroups;
 using UnityEditor;
 using UnityEngine;
@@ -116,9 +117,9 @@ namespace Unity.SelectionGroups.Editor
         {
             switch (current.commandName) {
                 case "SelectAll":
-                    foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().Groups) {
-                        m_selectedGroupMembers.AddGroupMembers(group);
-                    }
+                    SelectionGroupManager.GetOrCreateInstance().Groups.Loop((SelectionGroup group) => {
+                        m_selectedGroupMembers.AddGroupMembers(group);                        
+                    });
                     UpdateUnityEditorSelectionWithMembers();
                     current.Use();
                     break;
@@ -129,14 +130,14 @@ namespace Unity.SelectionGroups.Editor
                 case "InvertSelection":
                     GroupMembersSelection prevSelectedMembers = new GroupMembersSelection(m_selectedGroupMembers);
                     m_selectedGroupMembers.Clear();
-                    
-                    foreach (SelectionGroup group in SelectionGroupManager.GetOrCreateInstance().Groups) {
-                        foreach (GameObject m in group.Members) {
+
+                    SelectionGroupManager.GetOrCreateInstance().Groups.Loop((SelectionGroup group) => {
+                        group.Members.Loop((GameObject m) => {
                             if (prevSelectedMembers.Contains(group, m))
-                                continue;
+                                return;
                             m_selectedGroupMembers.AddObject(group,m);
-                        }
-                    }
+                        });
+                    });
                     current.Use();
                     break;
             }
