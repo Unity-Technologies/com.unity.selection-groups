@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.FilmInternalUtilities;
 using UnityEngine;
 
 namespace Unity.SelectionGroups
@@ -59,10 +60,9 @@ namespace Unity.SelectionGroups
 
         public void AddRange(IEnumerable<T> objectReferences)
         {
-            foreach (var i in objectReferences)
-            {
+            objectReferences.Loop((T i) => {
                 Add(i);
-            }
+            });
         }
 
         public void Insert(int index, T item)
@@ -82,14 +82,14 @@ namespace Unity.SelectionGroups
         public void Remove(IList<T> items)
         {
             uniqueIndex.ExceptWith(items);
-            foreach(var i in items) {
+            items.Loop((T i) => {
                 this.items.Remove(i);
-            }
+            });
         }
 
         public void RemoveAt(int index)
         {
-            var item = items[index];
+            T item = items[index];
             uniqueIndex.Remove(item);
             items.RemoveAt(index);
         }
