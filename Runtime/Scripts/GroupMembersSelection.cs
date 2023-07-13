@@ -14,14 +14,14 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<SelectionGroup, 
 
     internal GroupMembersSelection(GroupMembersSelection other) {
 
-        foreach (KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv in other) {
+        other.Loop((KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv) => {
             OrderedSet<GameObject> collection = new OrderedSet<GameObject>() { };
             kv.Value.Loop((GameObject member) => {
                 collection.Add(member);
             });
 
             m_selectedGroupMembers[kv.Key] = collection;
-        }
+        });
     }
 //----------------------------------------------------------------------------------------------------------------------
     
