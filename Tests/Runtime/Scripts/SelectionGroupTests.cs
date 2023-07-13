@@ -50,8 +50,6 @@ internal class SelectionGroupTests {
         //Preparation
         SelectionGroupManager groupManager = GetAndInitGroupManager();
         SelectionGroup        group        = groupManager.CreateSelectionGroup("TestGroup", Color.green);
-        List<Light>           tempList     = new List<Light>();
-        HashSet<Light>        lights       = new HashSet<Light>();
 
         Transform foo = CreateLightObject("Foo");
         Transform bar = CreateLightObject("Bar", enable: true, foo);
@@ -60,22 +58,16 @@ internal class SelectionGroupTests {
         
         //Just add one to the group
         group.Add(foo.gameObject);
-        group.FindMemberComponents<Light>(includeInactiveChildren:false, tempList, lights);
-        Assert.AreEqual(3, lights.Count);
-
-        group.FindMemberComponents<Light>(includeInactiveChildren:true, tempList, lights);        
-        Assert.AreEqual(4, lights.Count);
+        VerifyGroupMemberComponents(group, includeInactiveChildren: false, 3);
+        VerifyGroupMemberComponents(group, includeInactiveChildren: true, 4);
         
         //Add all to the group
         group.Clear();
         group.Add(foo.gameObject);
         group.Add(bar.gameObject);
         group.Add(baz.gameObject);
-        group.FindMemberComponents<Light>(includeInactiveChildren:false, tempList, lights);
-        Assert.AreEqual(3, lights.Count);        
-
-        group.FindMemberComponents<Light>(includeInactiveChildren:true, tempList, lights);
-        Assert.AreEqual(4, lights.Count);        
+        VerifyGroupMemberComponents(group, includeInactiveChildren: false, 3);
+        VerifyGroupMemberComponents(group, includeInactiveChildren: true, 4);
     }
     
     
@@ -87,13 +79,21 @@ internal class SelectionGroupTests {
         return groupManager;
     }
 
-    private Transform CreateLightObject(string objectName, bool enable = true, Transform parent = null) {
+    private static Transform CreateLightObject(string objectName, bool enable = true, Transform parent = null) {
         Light light = new GameObject(objectName).AddComponent<Light>();
         light.gameObject.SetActive(enable);
 
         Transform t = light.transform;
         t.parent = parent;
         return t;
+    }
+
+    private static void VerifyGroupMemberComponents(SelectionGroup group, bool includeInactiveChildren, int numExpectedMembers) {
+        List<Light>    tempList = new List<Light>();
+        HashSet<Light> lights   = new HashSet<Light>();
+        group.FindMemberComponents<Light>(includeInactiveChildren, tempList, lights);
+        Assert.AreEqual(numExpectedMembers, lights.Count);
+        
     }
 }
 
