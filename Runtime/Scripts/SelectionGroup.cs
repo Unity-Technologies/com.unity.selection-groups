@@ -185,10 +185,9 @@ namespace Unity.SelectionGroups
              if (IsAutoFilled())
                  return; 
              
-             foreach (GameObject obj in objects) 
-             {
-                 Add(obj);
-             }
+             objects.Loop((GameObject obj) => {
+                 Add(obj);                 
+             });
              RemoveNullMembers();
         }
         
