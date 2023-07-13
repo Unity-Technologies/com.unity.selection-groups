@@ -657,11 +657,11 @@ namespace Unity.SelectionGroups.Editor
         }
 
         private void RemoveSelectedMembersFromGroup() {
-            foreach (KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv in m_selectedGroupMembers) {
+            m_selectedGroupMembers.Loop((KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv) => {
                 SelectionGroup group = kv.Key;
                 RegisterUndo(group, "Remove Member");
                 group.Except(kv.Value);
-            }
+            });
         }
 
         private void ClearSelectedMembers() {
