@@ -74,8 +74,10 @@ internal class SelectionGroupUtilityTests {
     private static bool SelectionContainsGroupWithMembers(GroupMembersSelection selection, 
         SelectionGroup group, HashSet<string> names) 
     {
-        bool firstGroupPassed = false;
-        foreach (KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv in selection) {
+        bool      firstGroupPassed = false;
+        using var enumerator       = selection.GetEnumerator();
+        while (enumerator.MoveNext()) {
+            KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv = enumerator.Current;
             //must contain only one group
             if (firstGroupPassed)
                 return false;
@@ -86,8 +88,12 @@ internal class SelectionGroupUtilityTests {
             
             if (group != (SelectionGroup)kv.Key)
                 return false;
-            
-            foreach (var selectedObject in kv.Value) {
+
+            using var goEnumerator = kv.Value.GetEnumerator();
+            while (goEnumerator.MoveNext()) {
+                GameObject selectedObject = goEnumerator.Current;
+                if (null == selectedObject)
+                    continue;
                 if (!names.Contains(selectedObject.name))
                     return false;
             }
