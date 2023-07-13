@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -43,6 +44,35 @@ internal class SelectionGroupTests {
     }
     
   
+//----------------------------------------------------------------------------------------------------------------------
+    [Test]
+    public void FindActiveGroupMemberComponents() {
+        //Preparation
+        SelectionGroupManager groupManager = GetAndInitGroupManager();
+        SelectionGroup        group        = groupManager.CreateSelectionGroup("TestGroup", Color.green);
+        List<Light>           tempList     = new List<Light>();
+        HashSet<Light>        lights       = new HashSet<Light>();
+
+        Transform foo = CreateLightObject("Foo");
+        Transform bar = CreateLightObject("Bar", enable: true, foo);
+        Transform baz = CreateLightObject("Baz", enable: true, bar);
+        Transform boo = CreateLightObject("Boo", enable: true, foo);
+        boo.GetComponent<Light>().enabled = false;
+        
+        //Just add one to the group
+        group.Add(foo.gameObject);
+        group.FindMemberComponents<Light>(includeInactive:false, tempList, lights);
+        Assert.AreEqual(3, lights.Count);
+        
+        //Add all to the group
+        group.Clear();
+        group.Add(foo.gameObject);
+        group.Add(bar.gameObject);
+        group.Add(baz.gameObject);
+        group.Add(boo.gameObject);
+        group.FindMemberComponents<Light>(includeInactive:false, tempList, lights);
+        Assert.AreEqual(3, lights.Count);        
+    }
     
     
 //----------------------------------------------------------------------------------------------------------------------
@@ -51,6 +81,15 @@ internal class SelectionGroupTests {
         SelectionGroupManager groupManager = SelectionGroupManager.GetOrCreateInstance();
         groupManager.ClearGroups();
         return groupManager;
+    }
+
+    private Transform CreateLightObject(string objectName, bool enable = true, Transform parent = null) {
+        Light light = new GameObject(objectName).AddComponent<Light>();
+        light.enabled = enable;
+
+        Transform t = light.transform;
+        t.parent = parent;
+        return t;
     }
 }
 
