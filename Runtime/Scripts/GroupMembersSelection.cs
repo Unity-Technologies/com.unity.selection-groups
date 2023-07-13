@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.FilmInternalUtilities;
 using UnityEngine;
 
 namespace Unity.SelectionGroups
@@ -15,9 +16,9 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<SelectionGroup, 
 
         foreach (KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv in other) {
             OrderedSet<GameObject> collection = new OrderedSet<GameObject>() { };
-            foreach (GameObject member in kv.Value) {
+            kv.Value.Loop((GameObject member) => {
                 collection.Add(member);
-            }
+            });
 
             m_selectedGroupMembers[kv.Key] = collection;
         }
@@ -49,10 +50,10 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<SelectionGroup, 
     
     
     internal void Add(GroupMembersSelection otherSelection) {
-        foreach (KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv in otherSelection) {
+        otherSelection.Loop((KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv) => {
             SelectionGroup group = kv.Key;
             AddObjects(group, kv.Value);
-        }
+        });
     }
     
 
@@ -66,9 +67,9 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<SelectionGroup, 
             collection = m_selectedGroupMembers[group];
         }
 
-        foreach (GameObject m in objects) {
+        objects.Loop((GameObject m) => {            
             collection.Add(m);
-        }
+        });
         
     }
     
@@ -108,9 +109,9 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<SelectionGroup, 
 
     internal HashSet<GameObject> ConvertMembersToSet() {
         HashSet<GameObject> set = new HashSet<GameObject>();
-        foreach (KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv in m_selectedGroupMembers) {
+        m_selectedGroupMembers.Loop((KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv) => {
             set.UnionWith(kv.Value);
-        }
+        });
 
         return set;
     }
