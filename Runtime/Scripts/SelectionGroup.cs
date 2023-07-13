@@ -349,7 +349,8 @@ namespace Unity.SelectionGroups
         /// Enumerate components from all members of a group that have a certain type T.
         /// </summary>
         /// <typeparam name="T">The type of the component</typeparam>
-        /// <returns>The enumerated component</returns>
+        /// <returns>The enumerated component</returns>        
+        [Obsolete("Use FindMemberComponents() which is optimized and returns unique Components in the group", true)]        
         internal IEnumerable<T> GetMemberComponents<T>() where T : Component {
             int numMembers = m_goMembers.Count;
             for (int i = 0; i < numMembers; ++i) {
@@ -365,6 +366,27 @@ namespace Unity.SelectionGroups
             }
         }
 
+        /// <summary>
+        /// Find components from all members of a group that have a certain type T.
+        /// </summary>
+        /// <typeparam name="T">The type of the component</typeparam>
+        /// <param name="includeInactive">Whether to include inactive child GameObjects in the search.</param>
+        /// <param name="tempList">A caller supplied temporary list for getting components in children.</param>
+        /// <param name="results">A HashSet to use for the returned results.</param>
+        internal void FindMemberComponents<T>(bool includeInactive, List<T> tempList, HashSet<T> results) where T : Component {
+            int numMembers = m_goMembers.Count;
+            results.Clear();
+            for (int i = 0; i < numMembers; ++i) {
+                GameObject go = m_goMembers[i];
+                if (go == null) 
+                    continue;
+                go.GetComponentsInChildren<T>(includeInactive, tempList);
+                tempList.Loop((T element) => {
+                    results.Add(element);
+                });
+            }
+        }
+        
         private void RemoveNullMembers() {
             for (int i = m_goMembers.Count-1; i >= 0 ; --i) {
                 if (null != m_goMembers[i])
