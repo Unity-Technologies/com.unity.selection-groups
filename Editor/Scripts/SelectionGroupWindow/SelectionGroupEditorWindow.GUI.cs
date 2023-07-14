@@ -51,7 +51,7 @@ namespace Unity.SelectionGroups.Editor
                 if (@group.AreMembersShownInWindow())
                 {
                     height += @group.Count * EditorGUIUtility.singleLineHeight;
-                }                
+                }
             });
             return height;
         }
