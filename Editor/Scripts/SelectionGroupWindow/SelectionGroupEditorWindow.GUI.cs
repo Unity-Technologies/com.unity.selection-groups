@@ -14,7 +14,7 @@ namespace Unity.SelectionGroups.Editor
     internal partial class SelectionGroupEditorWindow : EditorWindow
     {
         private const string AddGroup    = "Add Group";
-        private const int    RightMargin = 16;
+        private const int    RightMargin = 2;
         
         private GUIStyle   Label;
         private GUIContent sceneHeaderContent;
