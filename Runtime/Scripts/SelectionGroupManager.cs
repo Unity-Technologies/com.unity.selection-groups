@@ -22,7 +22,7 @@ internal class SelectionGroupManager : MonoBehaviourSingleton<SelectionGroupMana
         SelectionGroupManager.GetOrCreateInstance().m_sceneSelectionGroups.Loop((SelectionGroup i) => {
             if (!string.IsNullOrEmpty(i.Query)) {
                 i.UpdateQueryResults();
-            }            
+            }
         });
     }
 
