@@ -67,6 +67,46 @@ namespace Unity.SelectionGroups.Editor
             };
             DrawToolbar(toolbarRect);
             
+            
+            //test
+            bool  isScrollVisible = false;
+            float yTest           = toolbarRect.yMax + 2;
+            for (var i = 0; i < m_groupsToDraw.Count; i++) {
+                var group = m_groupsToDraw[i];
+                if (group == null) continue;
+                yTest += GROUP_HEADER_PADDING;
+
+                //early out if this group yMin is below window rect (not visible).
+                if ((yTest) > position.height) {
+                    break;
+                }
+
+                yTest  += EditorGUIUtility.singleLineHeight;                
+                if (m_groupsToDraw[i].AreMembersShownInWindow())
+                {
+                    foreach (GameObject m in group.Members) 
+                    {
+                        if (m == null)
+                            continue;
+                
+                        //if rect is below window, early out.
+                        if ((yTest) > position.height) {
+                            break;
+                        }
+                        yTest += EditorGUIUtility.singleLineHeight;
+                    }
+                    
+                }
+            }
+
+            if ((yTest) > position.height - 18) {
+                isScrollVisible = true;
+            }
+
+            Debug.Log("Scroll Visible: " + isScrollVisible + $" Height: {position.height}. yTest: {yTest}. LineHeight: {EditorGUIUtility.singleLineHeight}" );
+
+            //test end
+            
             var viewRect = Rect.zero;
             viewRect.y = toolbarRect.yMax + 2;
             viewRect.width = position.width-16;
