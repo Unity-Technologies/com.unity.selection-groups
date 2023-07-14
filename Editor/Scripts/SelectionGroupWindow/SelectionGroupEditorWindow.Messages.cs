@@ -118,7 +118,7 @@ namespace Unity.SelectionGroups.Editor
             switch (current.commandName) {
                 case "SelectAll":
                     SelectionGroupManager.GetOrCreateInstance().Groups.Loop((SelectionGroup group) => {
-                        m_selectedGroupMembers.AddGroupMembers(group);                        
+                        m_selectedGroupMembers.AddGroupMembers(group);
                     });
                     UpdateUnityEditorSelectionWithMembers();
                     current.Use();
