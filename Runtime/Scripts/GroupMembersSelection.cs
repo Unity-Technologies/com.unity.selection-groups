@@ -67,7 +67,7 @@ internal class GroupMembersSelection : IEnumerable<KeyValuePair<SelectionGroup, 
             collection = m_selectedGroupMembers[group];
         }
 
-        objects.Loop((GameObject m) => {            
+        objects.Loop((GameObject m) => {
             collection.Add(m);
         });
         
