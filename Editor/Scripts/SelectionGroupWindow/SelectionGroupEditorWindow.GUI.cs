@@ -14,7 +14,6 @@ namespace Unity.SelectionGroups.Editor
     internal partial class SelectionGroupEditorWindow : EditorWindow
     {
         private const string AddGroup    = "Add Group";
-        private const int    RightMargin = 2;
         
         private GUIStyle   Label;
         private GUIContent sceneHeaderContent;
@@ -116,7 +115,7 @@ namespace Unity.SelectionGroups.Editor
             var windowRect = new Rect(0, toolbarRect.yMax + 2, position.width, position.height - toolbarRect.height - 2);
             scroll = GUI.BeginScrollView(windowRect, scroll, viewRect);
             
-            Rect cursor = new Rect(0, toolbarRect.yMax + 2, position.width-RightMargin, EditorGUIUtility.singleLineHeight);
+            Rect cursor = new Rect(0, toolbarRect.yMax + 2, position.width-m_itemRightMargin, EditorGUIUtility.singleLineHeight);
 
             for (var i=0; i<m_groupsToDraw.Count; i++)
             {
@@ -263,13 +262,13 @@ namespace Unity.SelectionGroups.Editor
             Color backgroundColor = ((SelectionGroup) group == m_activeSelectionGroup) ? Color.white * 0.6f : Color.white * 0.3f;
             if (isPaint) 
             {
-                rect.width = currentViewWidth - RightMargin - COLOR_WIDTH;                
+                rect.width = currentViewWidth - m_itemRightMargin - COLOR_WIDTH;                
                 EditorGUI.DrawRect(rect, backgroundColor);
             } 
             
             //foldout and label
             float labelWidth = currentViewWidth
-                             - (COLOR_WIDTH + FOLDOUT_WIDTH + RightMargin + SEPARATOR_WIDTH);
+                             - (COLOR_WIDTH + FOLDOUT_WIDTH + m_itemRightMargin + SEPARATOR_WIDTH);
             {
                 rect.width =  FOLDOUT_WIDTH;
                 group.ShowMembersInWindow(EditorGUI.Toggle(rect, group.AreMembersShownInWindow(), EditorStyles.foldout));
@@ -753,6 +752,8 @@ namespace Unity.SelectionGroups.Editor
         private Texture2D m_inspectorLockTex;
         private Texture2D m_hiddenInSceneTex;
         
+
+        private int m_itemRightMargin = 2;
         
 
     }
