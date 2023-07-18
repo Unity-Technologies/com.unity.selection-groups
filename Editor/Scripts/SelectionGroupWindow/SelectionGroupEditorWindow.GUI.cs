@@ -82,21 +82,19 @@ namespace Unity.SelectionGroups.Editor
                     break;
                 }
 
-                yTest  += EditorGUIUtility.singleLineHeight;                
-                if (m_groupsToDraw[i].AreMembersShownInWindow())
+                yTest  += EditorGUIUtility.singleLineHeight;
+                if (!m_groupsToDraw[i].AreMembersShownInWindow()) 
+                    continue;
+                foreach (GameObject m in group.Members) 
                 {
-                    foreach (GameObject m in group.Members) 
-                    {
-                        if (m == null)
-                            continue;
+                    if (m == null)
+                        continue;
                 
-                        //if rect is below window, early out.
-                        if ((yTest) > position.height) {
-                            break;
-                        }
-                        yTest += EditorGUIUtility.singleLineHeight;
+                    //if rect is below window, early out.
+                    if ((yTest) > position.height) {
+                        break;
                     }
-                    
+                    yTest += EditorGUIUtility.singleLineHeight;
                 }
             }
 
