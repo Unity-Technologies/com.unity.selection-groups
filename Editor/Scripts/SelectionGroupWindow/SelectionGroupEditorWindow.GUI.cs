@@ -72,8 +72,8 @@ namespace Unity.SelectionGroups.Editor
             //test
             bool  isScrollVisible = false;
             float yTest           = itemStartY;
-            for (var i = 0; i < m_groupsToDraw.Count; i++) {
-                var group = m_groupsToDraw[i];
+            for (int i = 0; i < m_groupsToDraw.Count; i++) {
+                SelectionGroup group = m_groupsToDraw[i];
                 if (group == null) continue;
                 yTest += GROUP_HEADER_PADDING;
 
