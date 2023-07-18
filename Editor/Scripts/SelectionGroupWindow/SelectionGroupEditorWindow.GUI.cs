@@ -80,9 +80,8 @@ namespace Unity.SelectionGroups.Editor
             
             Rect cursor = new Rect(0, toolbarRect.yMax + 2, position.width-m_itemRightMargin, EditorGUIUtility.singleLineHeight);
 
-            for (var i=0; i<m_groupsToDraw.Count; i++)
-            {
-                var group = m_groupsToDraw[i];
+            for (int i=0; i<m_groupsToDraw.Count; i++) {
+                SelectionGroup group = m_groupsToDraw[i];
                 if (group == null) continue;
                 cursor.y += GROUP_HEADER_PADDING; 
                 
@@ -90,8 +89,7 @@ namespace Unity.SelectionGroups.Editor
                 if ((cursor.yMin - scroll.y) > position.height) break;
                 
                 cursor = DrawHeader(cursor, i);
-                if (m_groupsToDraw[i].AreMembersShownInWindow())
-                {
+                if (m_groupsToDraw[i].AreMembersShownInWindow()) {
                     cursor = DrawAllGroupMembers(cursor, group);
                 }
                 
