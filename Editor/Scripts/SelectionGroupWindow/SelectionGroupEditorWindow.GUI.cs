@@ -92,10 +92,6 @@ namespace Unity.SelectionGroups.Editor
                 cursor = DrawHeader(cursor, i);
                 if (m_groupsToDraw[i].AreMembersShownInWindow())
                 {
-                    // dropRect.yMax = rect.yMax;
-                    //early out if this group yMax is above window rect (not visible).
-                    // if (rect.yMax - scroll.y < 0)
-                        // continue;
                     cursor = DrawAllGroupMembers(cursor, group);
                 }
                 
