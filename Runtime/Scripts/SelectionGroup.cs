@@ -379,9 +379,9 @@ namespace Unity.SelectionGroups
                 if (go == null) 
                     continue;
                 go.GetComponentsInChildren<T>(includeInactiveChildren, tempList);
-                tempList.Loop((T element) => {
-                    results.Add(element);
-                });
+                for (int j = 0; j < tempList.Count; ++j) {
+                    results.Add(tempList[j]);
+                }
             }
         }
         
