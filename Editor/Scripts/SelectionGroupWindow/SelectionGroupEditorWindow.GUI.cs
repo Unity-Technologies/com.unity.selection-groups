@@ -85,14 +85,14 @@ namespace Unity.SelectionGroups.Editor
                 yTest  += EditorGUIUtility.singleLineHeight;
                 if (!m_groupsToDraw[i].AreMembersShownInWindow()) 
                     continue;
-                foreach (GameObject m in group.Members) 
-                {
-                    if (m == null)
+
+                int numMembers = group.Members.Count;
+                for (int j=0; j < numMembers; j++) {
+                    if (group.Members[j] == null)
                         continue;
-                
-                    //if rect is below window, early out.
-                    if ((yTest) > position.height) {
-                        break;
+                    
+                    if ((yTest) > position.height) { 
+                        break; //if rect is below window, early out.
                     }
                     yTest += EditorGUIUtility.singleLineHeight;
                 }
