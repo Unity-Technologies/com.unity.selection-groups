@@ -68,51 +68,14 @@ namespace Unity.SelectionGroups.Editor
             
             int itemStartY = (int)toolbarRect.yMax + 2;
             
-            
-            //test
-            bool  isScrollVisible = false;
-            float yTest           = itemStartY;
-            for (int i = 0; i < m_groupsToDraw.Count; i++) {
-                SelectionGroup group = m_groupsToDraw[i];
-                if (group == null) continue;
-                yTest += GROUP_HEADER_PADDING;
-
-                //early out if this group yMin is below window rect (not visible).
-                if ((yTest) > position.height) {
-                    break;
-                }
-
-                yTest  += EditorGUIUtility.singleLineHeight;
-                if (!m_groupsToDraw[i].AreMembersShownInWindow()) 
-                    continue;
-
-                int numMembers = group.Members.Count;
-                for (int j=0; j < numMembers; j++) {
-                    if (group.Members[j] == null)
-                        continue;
-                    
-                    if ((yTest) > position.height) { 
-                        break; //if rect is below window, early out.
-                    }
-                    yTest += EditorGUIUtility.singleLineHeight;
-                }
-            }
-
-            if ((yTest) > position.height - 18) {
-                isScrollVisible = true;
-            }
-            
+            bool  isScrollVisible = IsScrollBarVisible(itemStartY);
             m_itemRightMargin = isScrollVisible ? ITEM_RIGHT_MARGIN_WITH_SCROLLBAR : ITEM_RIGHT_MARGIN_WITHOUT_SCROLLBAR;
-
-            Debug.Log("Scroll Visible: " + isScrollVisible + $" Height: {position.height}. yTest: {yTest}. LineHeight: {EditorGUIUtility.singleLineHeight}" );
-
-            //test end
             
-            var viewRect = Rect.zero;
+            Rect viewRect = Rect.zero;
             viewRect.y      = itemStartY;
             viewRect.width  = position.width-16;
             viewRect.height = CalculateHeight(m_groupsToDraw);
-            var windowRect = new Rect(0, toolbarRect.yMax + 2, position.width, position.height - toolbarRect.height - 2);
+            Rect windowRect = new Rect(0, toolbarRect.yMax + 2, position.width, position.height - toolbarRect.height - 2);
             scroll = GUI.BeginScrollView(windowRect, scroll, viewRect);
             
             Rect cursor = new Rect(0, toolbarRect.yMax + 2, position.width-m_itemRightMargin, EditorGUIUtility.singleLineHeight);
@@ -726,8 +689,45 @@ namespace Unity.SelectionGroups.Editor
         private void UpdateUnityEditorSelectionWithMembers() {
             Selection.objects = m_selectedGroupMembers.ConvertMembersToArray();
         }
-        
 
+
+        //Using the same flow as the inspector to draw the group members.
+        private bool IsScrollBarVisible(float itemStartY) {
+            bool  isScrollVisible = false;
+            float curY            = itemStartY;
+            for (int i = 0; i < m_groupsToDraw.Count; i++) {
+                SelectionGroup group = m_groupsToDraw[i];
+                if (group == null) continue;
+                curY += GROUP_HEADER_PADDING;
+
+                //early out if this group yMin is below window rect (not visible).
+                if ((curY) > position.height) {
+                    break;
+                }
+
+                curY += EditorGUIUtility.singleLineHeight;
+                if (!m_groupsToDraw[i].AreMembersShownInWindow()) 
+                    continue;
+
+                int numMembers = group.Members.Count;
+                for (int j=0; j < numMembers; j++) {
+                    if (group.Members[j] == null)
+                        continue;
+                    
+                    if ((curY) > position.height) { 
+                        break; //if rect is below window, early out.
+                    }
+                    curY += EditorGUIUtility.singleLineHeight;
+                }
+            }
+
+            if ((curY) > position.height - EditorGUIUtility.singleLineHeight) {
+                isScrollVisible = true;
+            }
+
+            return isScrollVisible;
+        }
+        
 //----------------------------------------------------------------------------------------------------------------------        
 
         GroupMembersSelection m_selectedGroupMembers = new GroupMembersSelection();
