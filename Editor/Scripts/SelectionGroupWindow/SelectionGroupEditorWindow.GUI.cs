@@ -103,6 +103,8 @@ namespace Unity.SelectionGroups.Editor
             if ((yTest) > position.height - 18) {
                 isScrollVisible = true;
             }
+            
+            m_itemRightMargin = isScrollVisible ? ITEM_RIGHT_MARGIN_WITH_SCROLLBAR : ITEM_RIGHT_MARGIN_WITHOUT_SCROLLBAR;
 
             Debug.Log("Scroll Visible: " + isScrollVisible + $" Height: {position.height}. yTest: {yTest}. LineHeight: {EditorGUIUtility.singleLineHeight}" );
 
@@ -755,6 +757,8 @@ namespace Unity.SelectionGroups.Editor
 
         private int m_itemRightMargin = 2;
         
+        private const int ITEM_RIGHT_MARGIN_WITHOUT_SCROLLBAR = 2;
+        private const int ITEM_RIGHT_MARGIN_WITH_SCROLLBAR    = 16;
 
     }
 } //end namespace
