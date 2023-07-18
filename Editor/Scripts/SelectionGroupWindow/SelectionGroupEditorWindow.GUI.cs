@@ -67,10 +67,12 @@ namespace Unity.SelectionGroups.Editor
             };
             DrawToolbar(toolbarRect);
             
+            int itemStartY = (int)toolbarRect.yMax + 2;
+            
             
             //test
             bool  isScrollVisible = false;
-            float yTest           = toolbarRect.yMax + 2;
+            float yTest           = itemStartY;
             for (var i = 0; i < m_groupsToDraw.Count; i++) {
                 var group = m_groupsToDraw[i];
                 if (group == null) continue;
@@ -108,8 +110,8 @@ namespace Unity.SelectionGroups.Editor
             //test end
             
             var viewRect = Rect.zero;
-            viewRect.y = toolbarRect.yMax + 2;
-            viewRect.width = position.width-16;
+            viewRect.y      = itemStartY;
+            viewRect.width  = position.width-16;
             viewRect.height = CalculateHeight(m_groupsToDraw);
             var windowRect = new Rect(0, toolbarRect.yMax + 2, position.width, position.height - toolbarRect.height - 2);
             scroll = GUI.BeginScrollView(windowRect, scroll, viewRect);
