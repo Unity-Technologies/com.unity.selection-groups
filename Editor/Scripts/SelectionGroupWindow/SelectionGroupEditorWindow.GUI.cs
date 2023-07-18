@@ -14,7 +14,6 @@ namespace Unity.SelectionGroups.Editor
     internal partial class SelectionGroupEditorWindow : EditorWindow
     {
         private const string AddGroup    = "Add Group";
-        private const int    RightMargin = 16;
         
         private GUIStyle   Label;
         private GUIContent sceneHeaderContent;
@@ -67,18 +66,22 @@ namespace Unity.SelectionGroups.Editor
             };
             DrawToolbar(toolbarRect);
             
-            var viewRect = Rect.zero;
-            viewRect.y = toolbarRect.yMax + 2;
-            viewRect.width = position.width-16;
+            int itemStartY = (int)toolbarRect.yMax + 2;
+            
+            bool  isScrollVisible = IsScrollBarVisible(itemStartY);
+            m_itemRightMargin = isScrollVisible ? ITEM_RIGHT_MARGIN_WITH_SCROLLBAR : ITEM_RIGHT_MARGIN_WITHOUT_SCROLLBAR;
+            
+            Rect viewRect = Rect.zero;
+            viewRect.y      = itemStartY;
+            viewRect.width  = position.width-16;
             viewRect.height = CalculateHeight(m_groupsToDraw);
-            var windowRect = new Rect(0, toolbarRect.yMax + 2, position.width, position.height - toolbarRect.height - 2);
+            Rect windowRect = new Rect(0, toolbarRect.yMax + 2, position.width, position.height - toolbarRect.height - 2);
             scroll = GUI.BeginScrollView(windowRect, scroll, viewRect);
             
-            Rect cursor = new Rect(0, toolbarRect.yMax + 2, position.width-RightMargin, EditorGUIUtility.singleLineHeight);
+            Rect cursor = new Rect(0, toolbarRect.yMax + 2, position.width-m_itemRightMargin, EditorGUIUtility.singleLineHeight);
 
-            for (var i=0; i<m_groupsToDraw.Count; i++)
-            {
-                var group = m_groupsToDraw[i];
+            for (int i=0; i<m_groupsToDraw.Count; i++) {
+                SelectionGroup group = m_groupsToDraw[i];
                 if (group == null) continue;
                 cursor.y += GROUP_HEADER_PADDING; 
                 
@@ -86,12 +89,7 @@ namespace Unity.SelectionGroups.Editor
                 if ((cursor.yMin - scroll.y) > position.height) break;
                 
                 cursor = DrawHeader(cursor, i);
-                if (m_groupsToDraw[i].AreMembersShownInWindow())
-                {
-                    // dropRect.yMax = rect.yMax;
-                    //early out if this group yMax is above window rect (not visible).
-                    // if (rect.yMax - scroll.y < 0)
-                        // continue;
+                if (m_groupsToDraw[i].AreMembersShownInWindow()) {
                     cursor = DrawAllGroupMembers(cursor, group);
                 }
                 
@@ -221,13 +219,13 @@ namespace Unity.SelectionGroups.Editor
             Color backgroundColor = ((SelectionGroup) group == m_activeSelectionGroup) ? Color.white * 0.6f : Color.white * 0.3f;
             if (isPaint) 
             {
-                rect.width = currentViewWidth - RightMargin - COLOR_WIDTH;                
+                rect.width = currentViewWidth - m_itemRightMargin - COLOR_WIDTH;                
                 EditorGUI.DrawRect(rect, backgroundColor);
             } 
             
             //foldout and label
             float labelWidth = currentViewWidth
-                             - (COLOR_WIDTH + FOLDOUT_WIDTH + RightMargin + SEPARATOR_WIDTH);
+                             - (COLOR_WIDTH + FOLDOUT_WIDTH + m_itemRightMargin + SEPARATOR_WIDTH);
             {
                 rect.width =  FOLDOUT_WIDTH;
                 group.ShowMembersInWindow(EditorGUI.Toggle(rect, group.AreMembersShownInWindow(), EditorStyles.foldout));
@@ -685,8 +683,45 @@ namespace Unity.SelectionGroups.Editor
         private void UpdateUnityEditorSelectionWithMembers() {
             Selection.objects = m_selectedGroupMembers.ConvertMembersToArray();
         }
-        
 
+
+        //Using the same flow as the inspector to draw the group members.
+        private bool IsScrollBarVisible(float itemStartY) {
+            bool  isScrollVisible = false;
+            float curY            = itemStartY;
+            for (int i = 0; i < m_groupsToDraw.Count; i++) {
+                SelectionGroup group = m_groupsToDraw[i];
+                if (group == null) continue;
+                curY += GROUP_HEADER_PADDING;
+
+                //early out if this group yMin is below window rect (not visible).
+                if ((curY) > position.height) {
+                    break;
+                }
+
+                curY += EditorGUIUtility.singleLineHeight;
+                if (!m_groupsToDraw[i].AreMembersShownInWindow()) 
+                    continue;
+
+                int numMembers = group.Members.Count;
+                for (int j=0; j < numMembers; j++) {
+                    if (group.Members[j] == null)
+                        continue;
+                    
+                    if ((curY) > position.height) { 
+                        break; //if rect is below window, early out.
+                    }
+                    curY += EditorGUIUtility.singleLineHeight;
+                }
+            }
+
+            if ((curY) > position.height - EditorGUIUtility.singleLineHeight) {
+                isScrollVisible = true;
+            }
+
+            return isScrollVisible;
+        }
+        
 //----------------------------------------------------------------------------------------------------------------------        
 
         GroupMembersSelection m_selectedGroupMembers = new GroupMembersSelection();
@@ -711,7 +746,11 @@ namespace Unity.SelectionGroups.Editor
         private Texture2D m_inspectorLockTex;
         private Texture2D m_hiddenInSceneTex;
         
+
+        private int m_itemRightMargin = 2;
         
+        private const int ITEM_RIGHT_MARGIN_WITHOUT_SCROLLBAR = 2;
+        private const int ITEM_RIGHT_MARGIN_WITH_SCROLLBAR    = 16;
 
     }
 } //end namespace
