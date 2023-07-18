@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
+using Unity.FilmInternalUtilities;
 using UnityEngine;
 
 namespace Unity.SelectionGroups.Tests 
@@ -38,11 +39,11 @@ internal class SelectionGroupUtilityTests {
 //----------------------------------------------------------------------------------------------------------------------    
     
     private static List<GameObject> CreateGameObjects(params string[] names) {
-        List<GameObject> list = new List<GameObject>(); 
-        foreach (string name in names) {
+        List<GameObject> list = new List<GameObject>();
+        names.Loop((string name) => {
             GameObject go = new GameObject(name);
             list.Add(go);
-        }
+        });
 
         return list;
     }
@@ -51,18 +52,19 @@ internal class SelectionGroupUtilityTests {
         GroupMembersSelection selection) 
     {
         IList<GameObject> members = group.Members;
-        foreach (int memberIndex in memberIndexes) {
+        memberIndexes.Loop((int memberIndex) => {
             selection.AddObject(group, members[memberIndex]);
-        }
+        });
     }
     
     private static bool GroupContainsMembers(SelectionGroup group, HashSet<string> names) {
         IList<GameObject> members = group.Members;
         if (names.Count != members.Count) 
             return false;
-            
-        foreach (GameObject member in members) {
-            if (!names.Contains(member.name))
+
+        int numMembers = members.Count;
+        for (int i=0;i<numMembers;++i) {
+            if (!names.Contains(members[i].name))
                 return false;
         }
 
@@ -72,8 +74,10 @@ internal class SelectionGroupUtilityTests {
     private static bool SelectionContainsGroupWithMembers(GroupMembersSelection selection, 
         SelectionGroup group, HashSet<string> names) 
     {
-        bool firstGroupPassed = false;
-        foreach (KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv in selection) {
+        bool      firstGroupPassed = false;
+        using var enumerator       = selection.GetEnumerator();
+        while (enumerator.MoveNext()) {
+            KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv = enumerator.Current;
             //must contain only one group
             if (firstGroupPassed)
                 return false;
@@ -84,8 +88,12 @@ internal class SelectionGroupUtilityTests {
             
             if (group != (SelectionGroup)kv.Key)
                 return false;
-            
-            foreach (var selectedObject in kv.Value) {
+
+            using var goEnumerator = kv.Value.GetEnumerator();
+            while (goEnumerator.MoveNext()) {
+                GameObject selectedObject = goEnumerator.Current;
+                if (null == selectedObject)
+                    continue;
                 if (!names.Contains(selectedObject.name))
                     return false;
             }

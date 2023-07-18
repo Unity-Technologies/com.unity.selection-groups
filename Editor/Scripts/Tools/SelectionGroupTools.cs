@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.FilmInternalUtilities;
 using Unity.SelectionGroups;
 using UnityEditor;
 using UnityEngine;
@@ -40,13 +41,15 @@ namespace Unity.SelectionGroups.Editor
             bool isLocked = members[0].hideFlags.HasFlag(HideFlags.NotEditable);
             if (isLocked)
             {
-                foreach (GameObject obj in group.Members)
+                group.Members.Loop((GameObject obj) => {
                     obj.hideFlags &= ~HideFlags.NotEditable;
+                });
             }
             else
             {
-                foreach (Object obj in group.Members)
+                group.Members.Loop((GameObject obj) => {
                     obj.hideFlags |= HideFlags.NotEditable;
+                });
             }
         }
 

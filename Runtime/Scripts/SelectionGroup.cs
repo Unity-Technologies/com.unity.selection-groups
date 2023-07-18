@@ -185,10 +185,9 @@ namespace Unity.SelectionGroups
              if (IsAutoFilled())
                  return; 
              
-             foreach (GameObject obj in objects) 
-             {
-                 Add(obj);
-             }
+             objects.Loop((GameObject obj) => {
+                 Add(obj);                 
+             });
              RemoveNullMembers();
         }
         
@@ -337,12 +336,11 @@ namespace Unity.SelectionGroups
          private void SetMembersInternal(IEnumerable<GameObject> objects) 
          {
              m_goMembers.Clear();
-             foreach (var i in objects) 
-             {
+             objects.Loop((GameObject i) => {
                  if (i == null)
-                     continue;
+                     return;
                  m_goMembers.Add(i);
-             }
+             });
          }
 
          /// <summary>
@@ -423,12 +421,12 @@ namespace Unity.SelectionGroups
 
             if (sgVersion < (int)SGVersion.GameObject_0_8_0) {
 #pragma warning disable 612 //obsolete
-                foreach (Object obj in members) {
+                members.Loop((Object obj) => {
                     if (!(obj is GameObject go)) {
-                        continue;
+                        return;
                     }
                     m_goMembers.Add(go);
-                }
+                });
 #pragma warning restore 612
             }
             

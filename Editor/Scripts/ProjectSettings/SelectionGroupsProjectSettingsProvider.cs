@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.FilmInternalUtilities;
 using Unity.FilmInternalUtilities.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -87,9 +88,9 @@ class SelectionGroupsProjectSettingsProvider : SettingsProvider {
     
     internal void RefreshGroupHideFlagsInEditor() {
         SelectionGroupManager sgManager = SelectionGroupManager.GetOrCreateInstance();
-        foreach (SelectionGroup group in sgManager.Groups) {
+        sgManager.Groups.Loop((SelectionGroup group) => {
             group.RefreshHideFlagsInEditor();
-        }
+        });
         SelectionGroupManager.UpdateQueryResults();
         EditorApplication.RepaintHierarchyWindow();
         EditorApplication.DirtyHierarchyWindowSorting();

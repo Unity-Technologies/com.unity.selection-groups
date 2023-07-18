@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using Unity.FilmInternalUtilities;
 using Unity.FilmInternalUtilities.Editor;
 using Unity.SelectionGroups;
 using UnityEditor;
@@ -47,7 +48,7 @@ internal class SelectionGroupInspector : UnityEditor.Editor {
                 
         GUILayout.BeginVertical("box");
         GUILayout.Label("Enabled Toolbar Buttons", EditorStyles.largeLabel);
-        foreach (MethodInfo i in TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>()) {
+        TypeCache.GetMethodsWithAttribute<SelectionGroupToolAttribute>().Loop((MethodInfo i) => {
             SelectionGroupToolAttribute attr = i.GetCustomAttribute<SelectionGroupToolAttribute>();            
             repaintWindow |= EditorGUIDrawerUtility.DrawUndoableGUI(m_group, "Group Toolbar",
                 guiFunc: () => {
@@ -59,7 +60,7 @@ internal class SelectionGroupInspector : UnityEditor.Editor {
                     m_group.EnableEditorTool(attr.toolId, toolEnabled);
                 }
             );
-        }
+        });
         GUILayout.EndVertical();
         
         m_showDebug = GUILayout.Toggle(m_showDebug, "Show Debug Info", "button");

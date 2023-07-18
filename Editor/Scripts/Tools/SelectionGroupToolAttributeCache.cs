@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
+using Unity.FilmInternalUtilities;
 using Unity.SelectionGroups;
 using UnityEditor;
 
@@ -12,11 +13,11 @@ internal static class SelectionGroupToolAttributeCache {
         
         m_toolAttributeMap.Clear();
 
-        foreach (MethodInfo methodInfo in m_toolMethods) {
+        m_toolMethods.Loop((MethodInfo methodInfo) => {
             SelectionGroupToolAttribute attr = methodInfo.GetCustomAttribute<SelectionGroupToolAttribute>();
             m_toolMethodInfoMap[attr.toolId] = methodInfo;
-            m_toolAttributeMap[attr.toolId]  = attr;            
-        }
+            m_toolAttributeMap[attr.toolId]  = attr;
+        });
     }
     
 //----------------------------------------------------------------------------------------------------------------------

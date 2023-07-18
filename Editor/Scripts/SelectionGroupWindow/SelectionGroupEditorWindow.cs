@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.FilmInternalUtilities;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -66,13 +67,12 @@ namespace Unity.SelectionGroups.Editor
             SelectionGroupManager sgManager = SelectionGroupManager.GetOrCreateInstance();
             int numGroups = sgManager.Groups.Count;
             SelectionGroup newGroup = sgManager.CreateSelectionGroup($"SG_New Group {numGroups}", RandomColor());
-            foreach (var obj in objects)
-            {
-                if (obj is GameObject go)
-                {
+
+            objects.Loop((Object obj) => {
+                if (obj is GameObject go) {
                     newGroup.Add(go);
                 }
-            }
+            });
         }
 
         static void RegisterUndo(SelectionGroup group, string msg)

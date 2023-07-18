@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.FilmInternalUtilities;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -17,23 +18,23 @@ internal static class SelectionGroupUtility
         GroupMembersSelection newMembersSelection = new GroupMembersSelection(prevMembersSelection);
         RegisterUndo(targetGroup, "Move Members");
             
-        foreach (KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv in prevMembersSelection) {
+        prevMembersSelection.Loop((KeyValuePair<SelectionGroup, OrderedSet<GameObject>> kv) =>{
             SelectionGroup prevGroup = kv.Key;
             if (null == prevGroup)
-                continue;
+                return;
                 
             if (targetGroup == prevGroup)
-                continue;
+                return;
 
             RegisterUndo(prevGroup, "Move Members");
-                                            
-            foreach (GameObject obj in kv.Value) {
+                                       
+            kv.Value.Loop((GameObject obj) => {
                 newMembersSelection.AddObject(targetGroup, obj);
                 targetGroup.Add(obj);
                 prevGroup.Remove(obj);
                 newMembersSelection.RemoveObject(prevGroup, obj);
-            }
-        }
+            });
+        });
 
         return newMembersSelection;
     }
