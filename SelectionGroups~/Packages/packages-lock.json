@@ -8,12 +8,13 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.film-internal-utilities": {
-      "version": "0.19.1-preview",
+      "version": "0.19.3-preview",
       "depth": 1,
       "source": "registry",
       "dependencies": {
+        "com.unity.timeline": "1.2.18",
         "com.unity.modules.uielements": "1.0.0",
-        "com.unity.timeline": "1.2.18"
+        "com.unity.modules.imageconversion": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -81,7 +82,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.unity.film-internal-utilities": "0.19.1-preview"
+        "com.unity.film-internal-utilities": "0.19.3-preview"
       }
     },
     "com.unity.test-framework": {
@@ -100,9 +101,9 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {
+        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.director": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
-        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
       "url": "https://packages.unity.com"
