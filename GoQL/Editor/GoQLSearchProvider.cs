@@ -80,7 +80,11 @@ internal static class GoQLSearchProvider {
 
         GameObject[] objects = m_goqlMachine.Execute();
         foreach (GameObject go in objects) {
+#if UNITY_6000_4_OR_NEWER
+            SearchItem item = provider.CreateItem(context, EntityId.ToULong(go.GetEntityId()).ToString());
+#else
             SearchItem item = provider.CreateItem(go.GetInstanceID().ToString());
+#endif
             item.options = SearchItemOptions.Ellipsis |
                 SearchItemOptions.RightToLeft |
                 SearchItemOptions.Highlight;
@@ -97,8 +101,13 @@ internal static class GoQLSearchProvider {
     }
 
     private static GameObject ObjectFromItem(SearchItem item) {
+#if UNITY_6000_4_OR_NEWER
+        var entityId = EntityId.FromULong(ulong.Parse(item.id));
+        return EditorUtility.EntityIdToObject(entityId) as GameObject;
+#else
         int instanceID = Convert.ToInt32(item.id);
         return EditorUtility.InstanceIDToObject(instanceID) as GameObject;
+#endif
     }
 
     private static string GetTransformPath(Transform tform) {
